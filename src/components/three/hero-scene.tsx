@@ -11,9 +11,12 @@ function ParticleField() {
   const ref = useRef<THREE.Points>(null);
   const mousePosition = useNormalizedMousePosition();
   const prefersReducedMotion = useReducedMotion();
+  const { viewport } = useThree();
+  const isMobile = viewport.width < 6;
 
   const [positions, colors] = useMemo(() => {
-    const count = 2000;
+    // Reduce particle count on mobile for performance
+    const count = isMobile ? 800 : 2000;
     const positions = new Float32Array(count * 3);
     const colors = new Float32Array(count * 3);
 
@@ -36,7 +39,7 @@ function ParticleField() {
     }
 
     return [positions, colors];
-  }, []);
+  }, [isMobile]);
 
   useFrame((state) => {
     if (!ref.current || prefersReducedMotion) return;
@@ -71,9 +74,12 @@ function ParticleFieldNear() {
   const ref = useRef<THREE.Points>(null);
   const mousePosition = useNormalizedMousePosition();
   const prefersReducedMotion = useReducedMotion();
+  const { viewport } = useThree();
+  const isMobile = viewport.width < 6;
 
   const [positions, colors] = useMemo(() => {
-    const count = 800;
+    // Reduce particle count on mobile for performance
+    const count = isMobile ? 300 : 800;
     const positions = new Float32Array(count * 3);
     const colors = new Float32Array(count * 3);
     for (let i = 0; i < count; i++) {
@@ -90,7 +96,7 @@ function ParticleFieldNear() {
       colors[i3 + 2] = 1;
     }
     return [positions, colors];
-  }, []);
+  }, [isMobile]);
 
   useFrame((state) => {
     if (!ref.current || prefersReducedMotion) return;
@@ -324,16 +330,27 @@ function LoadingFallback() {
   );
 }
 
+// Hook to detect mobile viewport
+function useIsMobile() {
+  const { viewport } = useThree();
+  // viewport.width is in Three.js units, roughly corresponds to screen width
+  // On mobile (< 640px), viewport.width is typically < 6
+  return viewport.width < 6;
+}
+
 // Main scene component
 function Scene() {
+  const isMobile = useIsMobile();
+  
   return (
     <>
       <CameraController />
       <ambientLight intensity={0.5} />
       <ParticleField />
       <ParticleFieldNear />
-      <FlowingLines />
-      <UniversePorthole />
+      {/* Hide decorative elements on mobile for cleaner UX */}
+      {!isMobile && <FlowingLines />}
+      {!isMobile && <UniversePorthole />}
     </>
   );
 }

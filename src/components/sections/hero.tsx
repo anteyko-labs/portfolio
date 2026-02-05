@@ -55,14 +55,14 @@ export function HeroSection() {
         <HeroScene className="absolute inset-0" />
       </motion.div>
 
-      {/* Gradient blobs — умеренное неоновое свечение */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+      {/* Gradient blobs — умеренное неоновое свечение, скрыты на мобильных */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden hidden sm:block">
         <div
-          className="blob blob-accent w-[400px] h-[400px] absolute -top-32 -right-32 animate-float-blob"
+          className="blob blob-accent w-[300px] md:w-[400px] h-[300px] md:h-[400px] absolute -top-32 -right-32 animate-float-blob"
           style={{ boxShadow: "0 0 80px 20px rgba(99, 102, 241, 0.2), 0 0 140px 40px rgba(99, 102, 241, 0.08)" }}
         />
         <div
-          className="blob blob-accent-sub w-[300px] h-[300px] absolute bottom-1/4 -left-24 animate-float-blob"
+          className="blob blob-accent-sub w-[200px] md:w-[300px] h-[200px] md:h-[300px] absolute bottom-1/4 -left-24 animate-float-blob"
           style={{ animationDelay: "-5s", boxShadow: "0 0 70px 18px rgba(129, 140, 248, 0.18), 0 0 120px 35px rgba(129, 140, 248, 0.06)" }}
         />
       </div>
@@ -77,11 +77,11 @@ export function HeroSection() {
         >
           {/* Tagline — разбитая строка в стиле StrategiQ */}
           <motion.p
-            className="text-body-md sm:text-body-lg text-text-secondary tracking-[0.35em] uppercase mb-4"
+            className="text-body-sm sm:text-body-md md:text-body-lg text-text-secondary tracking-[0.12em] sm:tracking-[0.2em] md:tracking-[0.35em] uppercase mb-4"
             variants={prefersReducedMotion ? {} : { initial: { opacity: 0 }, animate: { opacity: 1, transition: { delay: 0.05 } } }}
           >
             {taglineParts.map((part, i) => (
-              <span key={i} className="inline-block mr-4 last:mr-0">
+              <span key={i} className="inline-block mr-2 sm:mr-4 last:mr-0">
                 {part}
               </span>
             ))}
@@ -188,9 +188,9 @@ export function HeroSection() {
         </motion.div>
       </div>
 
-      {/* Scroll indicator */}
+      {/* Scroll indicator — скрыт на мобильных */}
       <motion.div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden sm:block"
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1, duration: prefersReducedMotion ? 0 : 0.5 }}
