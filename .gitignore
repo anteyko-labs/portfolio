@@ -24,6 +24,9 @@
 .DS_Store
 *.pem
 
+# contact form submissions (optional: remove to commit leads)
+/data
+
 # debug
 npm-debug.log*
 yarn-debug.log*

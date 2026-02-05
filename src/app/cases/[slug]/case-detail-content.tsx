@@ -1,0 +1,548 @@
+"use client";
+
+import { useLanguage } from "@/lib/language-context";
+import { Section, SectionHeader, AnimatedItem } from "@/components/ui/section";
+import { Card } from "@/components/ui/card";
+import { CategoryBadge } from "@/components/ui/badge";
+import { ButtonLink } from "@/components/ui/link";
+import { ArtifactCard } from "@/components/ui/artifact-card";
+import { MetricPill } from "@/components/ui/metric-pill";
+import { ScrollSpyRail } from "@/components/ui/scrollspy-rail";
+import type { FlagshipCase } from "@/lib/cases-data";
+import { flagshipCases } from "@/lib/cases-data";
+import NextLink from "next/link";
+
+// Sticky Summary Rail component
+function CaseSummaryRail({ caseItem, language, t }: { caseItem: FlagshipCase; language: "en" | "ru"; t: (key: string) => string }) {
+  return (
+    <aside className="hidden lg:block fixed top-28 right-8 w-72 z-40">
+      <div className="rounded-2xl border border-border bg-bg-secondary/95 backdrop-blur-sm p-5 space-y-4">
+        {/* Category */}
+        <div>
+          <CategoryBadge category={caseItem.category} size="sm" />
+        </div>
+        
+        {/* Timeline */}
+        <div>
+          <p className="text-caption text-text-tertiary uppercase tracking-wider mb-1">
+            {language === "en" ? "Timeline" : "Сроки"}
+          </p>
+          <p className="text-body-sm text-text-primary font-medium">
+            {caseItem.timeline[language]}
+          </p>
+        </div>
+        
+        {/* Industry */}
+        <div>
+          <p className="text-caption text-text-tertiary uppercase tracking-wider mb-1">
+            {language === "en" ? "Industry" : "Индустрия"}
+          </p>
+          <p className="text-body-sm text-text-primary">
+            {caseItem.industry[language]}
+          </p>
+        </div>
+        
+        {/* Metrics */}
+        {caseItem.metrics && caseItem.metrics.length > 0 && (
+          <div>
+            <p className="text-caption text-text-tertiary uppercase tracking-wider mb-2">
+              {language === "en" ? "Key metrics" : "Ключевые метрики"}
+            </p>
+            <div className="space-y-2">
+              {caseItem.metrics.slice(0, 3).map((metric) => (
+                <div key={`rail-metric-${metric.value}`} className="flex items-baseline justify-between">
+                  <span className="text-caption text-text-secondary">{metric.label[language]}</span>
+                  <span className="text-body-sm text-accent-primary font-medium tabular-nums">{metric.value}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+        
+        {/* Divider */}
+        <div className="border-t border-border pt-4">
+          <ButtonLink href="/contact" buttonVariant="primary" size="sm" className="w-full justify-center">
+            {t("cta.primary")}
+          </ButtonLink>
+          <ButtonLink href="/contact" buttonVariant="outline" size="sm" className="w-full justify-center mt-2">
+            {t("cta.secondary")}
+          </ButtonLink>
+        </div>
+      </div>
+    </aside>
+  );
+}
+
+export function CaseDetailContent({ caseItem }: { caseItem: FlagshipCase }) {
+  const { t, language } = useLanguage();
+  
+  // Get prev/next cases for navigation
+  const currentIndex = flagshipCases.findIndex((c) => c.id === caseItem.id);
+  const prevCase = currentIndex > 0 ? flagshipCases[currentIndex - 1] : null;
+  const nextCase = currentIndex < flagshipCases.length - 1 ? flagshipCases[currentIndex + 1] : null;
+
+  const scrollItems = [
+    { id: "case-summary", label: language === "en" ? "Summary" : "Сводка" },
+    { id: "case-problem", label: language === "en" ? "Problem" : "Задача" },
+    { id: "case-constraints", label: language === "en" ? "Constraints" : "Ограничения" },
+    { id: "case-solution", label: language === "en" ? "Solution" : "Решение" },
+    { id: "case-deliverables", label: language === "en" ? "Deliverables" : "Результаты" },
+    { id: "case-artifacts", label: language === "en" ? "Artifacts" : "Артефакты" },
+    { id: "case-quality", label: language === "en" ? "Quality gates" : "Гейты качества" },
+    { id: "case-tech", label: language === "en" ? "Tech stack" : "Стек" },
+    { id: "case-outcome", label: language === "en" ? "Outcome" : "Результат" },
+    { id: "case-hardparts", label: language === "en" ? "Hard parts" : "Сложные задачи" },
+  ];
+
+  // Dynamic artifacts based on case content
+  const getArtifactsForCase = (): { title: string; subtitle: string; tone?: "primary" | "success" | "warning" }[] => {
+    const baseArtifacts = [
+      {
+        title: caseItem.artifactHint?.[language] ?? (language === "en" ? "Delivery checklist" : "Чеклист поставки"),
+        subtitle: language === "en" ? "Artifact" : "Артефакт",
+        tone: "primary" as const,
+      },
+      {
+        title: language === "en" ? "Verification report" : "Отчёт верификации",
+        subtitle: language === "en" ? "Release gate" : "Гейт релиза",
+        tone: "success" as const,
+      },
+    ];
+
+    // Case-specific artifacts
+    const caseArtifacts: Record<string, { title: string; subtitle: string; tone?: "primary" | "success" | "warning" }[]> = {
+      "web3-l1-dex": [
+        { title: "Integration Test Catalog", subtitle: "IT-01 … IT-05", tone: "primary" },
+        { title: "Pre-deployment checklist", subtitle: "47 scenarios", tone: "success" },
+        { title: "RPC / wallet matrix", subtitle: "EVMs, wallets", tone: "warning" },
+      ],
+      "utility-token-uae": [
+        { title: language === "en" ? "Compliance package" : "Compliance-пакет", subtitle: "UAE VARA", tone: "success" },
+        { title: language === "en" ? "Token mechanics spec" : "Спек механики токена", subtitle: "ERC-20", tone: "primary" },
+        { title: language === "en" ? "Admin runbook" : "Админ runbook", subtitle: "Ops guide", tone: "warning" },
+      ],
+      "enterprise-modules": [
+        { title: "KYC Flow Diagram", subtitle: "Jumio + Sumsub", tone: "primary" },
+        { title: language === "en" ? "Audit trail schema" : "Схема аудит-трейла", subtitle: "SOC 2", tone: "success" },
+        { title: language === "en" ? "Role matrix" : "Матрица ролей", subtitle: "RBAC", tone: "warning" },
+      ],
+      "geo-heatmap-backend": [
+        { title: "H3 Resolution spec", subtitle: "Geo grid", tone: "primary" },
+        { title: "API OpenAPI spec", subtitle: "REST v1", tone: "success" },
+        { title: language === "en" ? "Cache strategy doc" : "Доки по кешу", subtitle: "Redis + ClickHouse", tone: "warning" },
+      ],
+      "anti-refund-payment": [
+        { title: language === "en" ? "Deposit flow spec" : "Спек депозитного флоу", subtitle: "4 steps", tone: "primary" },
+        { title: language === "en" ? "Legal terms template" : "Шаблон юр. условий", subtitle: "Consumer protection", tone: "success" },
+      ],
+      "wallet-rpc-evm-compatibility": [
+        { title: "Wallet compatibility matrix", subtitle: "MetaMask, Rabby, WC", tone: "primary" },
+        { title: "RPC correctness suite", subtitle: "JSON-RPC tests", tone: "success" },
+        { title: language === "en" ? "Onboarding runbook" : "Runbook онбординга", subtitle: "New wallets", tone: "warning" },
+      ],
+      "release-quality-verification-framework": [
+        { title: "7-phase gate spec", subtitle: "Build → Security", tone: "primary" },
+        { title: language === "en" ? "Verification report template" : "Шаблон отчёта верификации", subtitle: "MD + PDF", tone: "success" },
+        { title: language === "en" ? "Override workflow" : "Workflow override", subtitle: "Audit trail", tone: "warning" },
+      ],
+      "startup-under-key-mvp-launch-support": [
+        { title: "MVP → Launch playbook", subtitle: "3 phases", tone: "primary" },
+        { title: language === "en" ? "Support SLA doc" : "Доки SLA поддержки", subtitle: "3 months", tone: "success" },
+        { title: language === "en" ? "IP transfer checklist" : "Чеклист передачи IP", subtitle: "Full ownership", tone: "warning" },
+      ],
+    };
+
+    return caseArtifacts[caseItem.slug] ?? baseArtifacts;
+  };
+
+  const artifacts = getArtifactsForCase();
+
+  // Use dynamic quality gates from case data, or fallback to default
+  const defaultQualityGates = [
+    { name: { en: "Build", ru: "Сборка" }, passed: true },
+    { name: { en: "Unit tests", ru: "Юнит-тесты" }, passed: true },
+    { name: { en: "Integration", ru: "Интеграция" }, passed: true },
+    { name: { en: "Contract checks", ru: "Проверки контрактов" }, passed: true },
+    { name: { en: "Env parity", ru: "Паритет окружений" }, passed: true },
+    { name: { en: "Smoke", ru: "Smoke тесты" }, passed: true },
+    { name: { en: "Security checklist", ru: "Чеклист безопасности" }, passed: true },
+  ];
+  const qualityGates = caseItem.qualityGates ?? defaultQualityGates;
+  const passedCount = qualityGates.filter((g) => g.passed).length;
+
+  return (
+    <>
+      {/* Sticky summary rail on the right (xl+) */}
+      <CaseSummaryRail caseItem={caseItem} language={language} t={t} />
+      
+      {/* Scrollspy navigation on the left */}
+      <ScrollSpyRail items={scrollItems} mode="fixed" position="left" />
+
+      {/* Hero / Summary */}
+      <Section background="primary" padding="lg" id="case-summary">
+        <div className="max-w-4xl">
+          <AnimatedItem>
+            <div className="mb-4">
+              <CategoryBadge category={caseItem.category} size="md" />
+            </div>
+            <h1 className="text-display-sm md:text-display-md font-display text-text-primary">
+              {caseItem.title[language]}
+            </h1>
+            <p className="mt-6 text-body-lg text-text-secondary">
+              {caseItem.summary[language]}
+            </p>
+            {caseItem.metrics && caseItem.metrics.length > 0 && (
+              <div className="mt-6 flex flex-wrap gap-2">
+                {caseItem.metrics.slice(0, 3).map((metric) => (
+                  <MetricPill
+                    key={`hero-metric-${metric.value}`}
+                    label={metric.label[language]}
+                    value={metric.value}
+                    tone="primary"
+                  />
+                ))}
+              </div>
+            )}
+            <div className="mt-8 flex flex-wrap gap-6 text-body-sm text-text-muted">
+              <span>
+                <strong className="text-text-secondary">
+                  {language === "en" ? "Year" : "Год"}:{" "}
+                </strong>
+                {caseItem.year}
+              </span>
+              <span>
+                <strong className="text-text-secondary">
+                  {language === "en" ? "Industry" : "Индустрия"}:{" "}
+                </strong>
+                {caseItem.industry[language]}
+              </span>
+              <span>
+                <strong className="text-text-secondary">
+                  {language === "en" ? "Timeline" : "Сроки"}:{" "}
+                </strong>
+                {caseItem.timeline[language]}
+              </span>
+            </div>
+          </AnimatedItem>
+        </div>
+      </Section>
+
+      {/* Problem */}
+      <Section background="secondary" padding="lg" id="case-problem">
+        <div className="max-w-3xl">
+          <SectionHeader
+            title={language === "en" ? "Problem" : "Задача"}
+            animate={false}
+          />
+          <AnimatedItem>
+            <p className="text-body-lg text-text-secondary">
+              {caseItem.problem[language]}
+            </p>
+          </AnimatedItem>
+        </div>
+      </Section>
+
+      {/* Constraints */}
+      <Section background="primary" padding="lg" id="case-constraints">
+        <div className="max-w-3xl">
+          <SectionHeader
+            title={language === "en" ? "Constraints" : "Ограничения"}
+            animate={false}
+          />
+          <AnimatedItem>
+            <ul className="space-y-3">
+              {caseItem.constraints[language].map((c) => (
+                <li
+                  key={`constraint-${c.slice(0, 30).replace(/\s+/g, '-')}`}
+                  className="flex items-start gap-3 text-body-md text-text-secondary"
+                >
+                  <span className="text-accent-primary mt-1">•</span>
+                  {c}
+                </li>
+              ))}
+            </ul>
+          </AnimatedItem>
+        </div>
+      </Section>
+
+      {/* Solution */}
+      <Section background="secondary" padding="lg" id="case-solution">
+        <div className="max-w-3xl">
+          <SectionHeader
+            title={language === "en" ? "Solution" : "Решение"}
+            animate={false}
+          />
+          <AnimatedItem>
+            <p className="text-body-lg text-text-secondary">
+              {caseItem.solution[language]}
+            </p>
+          </AnimatedItem>
+        </div>
+      </Section>
+
+      {/* Deliverables */}
+      <Section background="primary" padding="lg" id="case-deliverables">
+        <div className="max-w-3xl">
+          <SectionHeader
+            title={language === "en" ? "Deliverables" : "Результаты"}
+            animate={false}
+          />
+          <AnimatedItem>
+            <ul className="grid sm:grid-cols-2 gap-2">
+              {caseItem.deliverables[language].map((d) => (
+                <li
+                  key={`deliverable-${d.slice(0, 30).replace(/\s+/g, '-')}`}
+                  className="flex items-start gap-2 text-body-md text-text-secondary"
+                >
+                  <svg
+                    className="w-5 h-5 text-success shrink-0 mt-0.5"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                  {d}
+                </li>
+              ))}
+            </ul>
+          </AnimatedItem>
+        </div>
+      </Section>
+
+      {/* Artifacts */}
+      <Section background="secondary" padding="lg" id="case-artifacts">
+        <div className="max-w-3xl">
+          <SectionHeader
+            title={language === "en" ? "Artifacts" : "Артефакты"}
+            subtitle={language === "en" ? "Documents and deliverables from the project" : "Документы и результаты проекта"}
+            animate={false}
+          />
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {artifacts.map((artifact, index) => (
+              <AnimatedItem key={`artifact-${artifact.title.replace(/\s+/g, '-').toLowerCase()}-${artifact.subtitle?.replace(/\s+/g, '-').toLowerCase() ?? 'default'}`} delay={index * 0.05}>
+                <ArtifactCard
+                  title={artifact.title}
+                  subtitle={artifact.subtitle}
+                  tone={artifact.tone}
+                  icon={
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                  }
+                />
+              </AnimatedItem>
+            ))}
+          </div>
+        </div>
+      </Section>
+
+      {/* Quality gates - Interactive checklist */}
+      <Section background="primary" padding="lg" id="case-quality">
+        <div className="max-w-3xl">
+          <SectionHeader
+            title={language === "en" ? "Verification / Quality gates" : "Верификация / гейты качества"}
+            subtitle={language === "en" ? `${qualityGates.length}-phase checklist before release` : `${qualityGates.length}-фазный чеклист перед релизом`}
+            animate={false}
+          />
+          <div className="rounded-2xl border border-border bg-bg-secondary/60 p-6 relative overflow-hidden">
+            {/* Background grid */}
+            <div className="absolute inset-0 opacity-5" style={{
+              backgroundImage: `radial-gradient(circle at 1px 1px, rgba(255,255,255,0.2) 1px, transparent 0)`,
+              backgroundSize: '20px 20px',
+            }} />
+            <div className="relative space-y-3">
+              {qualityGates.map((gate, index) => (
+                <AnimatedItem key={`gate-${gate.name.en.slice(0, 20).replace(/\s+/g, '-')}`} delay={index * 0.04}>
+                  <div className={`flex items-center gap-4 p-4 rounded-xl bg-bg-tertiary/60 border border-border transition-colors group ${gate.passed ? 'hover:border-success/30' : 'hover:border-warning/30'}`}>
+                    {/* Checkbox indicator */}
+                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition-colors ${gate.passed ? 'bg-success/20 border border-success/40 group-hover:bg-success/30' : 'bg-warning/20 border border-warning/40 group-hover:bg-warning/30'}`}>
+                      {gate.passed ? (
+                        <svg className="w-4 h-4 text-success" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                        </svg>
+                      ) : (
+                        <svg className="w-4 h-4 text-warning" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                        </svg>
+                      )}
+                    </div>
+                    {/* Gate info */}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2">
+                        <span className="text-caption text-text-tertiary font-mono">
+                          {String(index + 1).padStart(2, "0")}
+                        </span>
+                        <span className="text-body-md text-text-primary font-medium">{gate.name[language]}</span>
+                      </div>
+                    </div>
+                    {/* Status */}
+                    <span className={`px-2 py-1 rounded-md text-caption font-medium ${gate.passed ? 'bg-success/10 text-success' : 'bg-warning/10 text-warning'}`}>
+                      {gate.passed 
+                        ? (language === "en" ? "Pass" : "Пройден")
+                        : (language === "en" ? "Skipped" : "Пропущен")}
+                    </span>
+                  </div>
+                </AnimatedItem>
+              ))}
+            </div>
+            {/* Summary footer */}
+            <div className="relative mt-6 pt-4 border-t border-border flex items-center justify-between">
+              <span className="text-body-sm text-text-secondary">
+                {passedCount === qualityGates.length 
+                  ? (language === "en" ? "All gates passed" : "Все гейты пройдены")
+                  : (language === "en" ? `${passedCount} of ${qualityGates.length} gates passed` : `${passedCount} из ${qualityGates.length} гейтов пройдено`)}
+              </span>
+              <div className="flex items-center gap-2">
+                <span className={`text-heading-sm font-display ${passedCount === qualityGates.length ? 'text-success' : 'text-warning'}`}>
+                  {passedCount}/{qualityGates.length}
+                </span>
+                {passedCount === qualityGates.length ? (
+                  <svg className="w-5 h-5 text-success" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                ) : (
+                  <svg className="w-5 h-5 text-warning" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                  </svg>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </Section>
+
+      {/* Tech stack */}
+      <Section background="secondary" padding="lg" id="case-tech">
+        <div className="max-w-3xl">
+          <SectionHeader
+            title={language === "en" ? "Tech stack" : "Стек технологий"}
+            animate={false}
+          />
+          <AnimatedItem>
+            <div className="flex flex-wrap gap-2">
+              {caseItem.techStack.map((tech) => (
+                <span
+                  key={tech}
+                  className="px-3 py-1.5 rounded-lg bg-bg-tertiary border border-border text-body-sm text-text-secondary"
+                >
+                  {tech}
+                </span>
+              ))}
+            </div>
+          </AnimatedItem>
+        </div>
+      </Section>
+
+      {/* Outcome */}
+      <Section background="primary" padding="lg" id="case-outcome">
+        <div className="max-w-3xl">
+          <SectionHeader
+            title={language === "en" ? "Outcome" : "Результат"}
+            animate={false}
+          />
+          <AnimatedItem>
+            <p className="text-body-lg text-text-secondary">
+              {caseItem.outcome[language]}
+            </p>
+          </AnimatedItem>
+        </div>
+      </Section>
+
+      {/* Hard parts we solved */}
+      <Section background="secondary" padding="lg" id="case-hardparts">
+        <div className="max-w-3xl">
+          <SectionHeader
+            title={
+              language === "en"
+                ? "Hard parts we solved"
+                : "Сложные задачи, которые мы решили"
+            }
+            animate={false}
+          />
+          <div className="space-y-6">
+            {caseItem.hardParts.map((hp, i) => (
+              <AnimatedItem key={`hardpart-${hp.title.en.slice(0, 20).replace(/\s+/g, '-')}`} delay={i * 0.05}>
+                <Card variant="bordered" padding="md">
+                  <h3 className="text-heading-sm font-medium text-text-primary mb-2">
+                    {hp.title[language]}
+                  </h3>
+                  <p className="text-body-md text-text-secondary">
+                    {hp.description[language]}
+                  </p>
+                </Card>
+              </AnimatedItem>
+            ))}
+          </div>
+        </div>
+      </Section>
+
+      {/* CTA */}
+      <Section background="primary" padding="lg">
+        <div className="max-w-2xl mx-auto text-center">
+          <AnimatedItem>
+            <p className="text-body-lg text-text-secondary mb-8">
+              {language === "en"
+                ? "Have a similar project? Get an estimate or book a call."
+                : "Похожий проект? Получите оценку или запишитесь на звонок."}
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <ButtonLink href="/contact" buttonVariant="primary" size="lg">
+                {t("cta.primary")}
+              </ButtonLink>
+              <ButtonLink href="/cases" buttonVariant="secondary" size="lg">
+                {language === "en" ? "View all cases" : "Все кейсы"}
+              </ButtonLink>
+            </div>
+          </AnimatedItem>
+        </div>
+      </Section>
+
+      {/* Navigation between cases */}
+      <Section background="secondary" padding="md">
+        <div className="flex items-center justify-between max-w-4xl mx-auto">
+          {/* Previous case */}
+          {prevCase ? (
+            <NextLink href={`/cases/${prevCase.slug}`} className="group flex items-center gap-3 p-4 rounded-xl border border-border bg-bg-tertiary/50 hover:border-accent-primary/30 transition-colors max-w-[45%]">
+              <svg className="w-5 h-5 text-text-tertiary group-hover:text-accent-primary transition-colors shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+              <div className="min-w-0">
+                <p className="text-caption text-text-tertiary mb-1">
+                  {language === "en" ? "Previous" : "Предыдущий"}
+                </p>
+                <p className="text-body-sm text-text-primary font-medium truncate group-hover:text-accent-primary transition-colors">
+                  {prevCase.title[language]}
+                </p>
+              </div>
+            </NextLink>
+          ) : (
+            <div />
+          )}
+
+          {/* Next case */}
+          {nextCase ? (
+            <NextLink href={`/cases/${nextCase.slug}`} className="group flex items-center gap-3 p-4 rounded-xl border border-border bg-bg-tertiary/50 hover:border-accent-primary/30 transition-colors max-w-[45%] text-right">
+              <div className="min-w-0">
+                <p className="text-caption text-text-tertiary mb-1">
+                  {language === "en" ? "Next" : "Следующий"}
+                </p>
+                <p className="text-body-sm text-text-primary font-medium truncate group-hover:text-accent-primary transition-colors">
+                  {nextCase.title[language]}
+                </p>
+              </div>
+              <svg className="w-5 h-5 text-text-tertiary group-hover:text-accent-primary transition-colors shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </NextLink>
+          ) : (
+            <div />
+          )}
+        </div>
+      </Section>
+    </>
+  );
+}
