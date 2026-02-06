@@ -24,6 +24,7 @@ export function PackagesSection() {
       <SectionHeader
         title={t("packages.title")}
         subtitle={t("packages.subtitle")}
+        eyebrow={language === "en" ? "Pricing" : "Тарифы"}
       />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 relative items-stretch">

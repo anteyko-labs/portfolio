@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import NextLink from "next/link";
+import Image from "next/image";
 import { useLanguage } from "@/lib/language-context";
 import { useReducedMotion } from "@/lib/hooks";
 import { PageHero } from "@/components/sections/page-hero";
@@ -38,9 +39,9 @@ export function CasesContent() {
     () => getCasesByCategory(filter, microCases),
     [filter]
   );
-  
-  const visibleFlagshipCases = showAllFlagship 
-    ? flagshipCases 
+
+  const visibleFlagshipCases = showAllFlagship
+    ? flagshipCases
     : flagshipCases.slice(0, INITIAL_FLAGSHIP_COUNT);
 
   return (
@@ -50,7 +51,7 @@ export function CasesContent() {
         subtitle={t("cases.subtitle")}
         eyebrow={language === "en" ? "Cases" : "Кейсы"}
         metric={{
-          value: language === "en" ? "8" : "8",
+          value: String(flagshipCases.length),
           label: language === "en" ? "flagship cases" : "ключевых кейсов",
         }}
         rightSlot={
@@ -98,16 +99,28 @@ export function CasesContent() {
                         {caseItem.artifactHint[language]}
                       </div>
                     )}
-                    <div
-                      className="absolute inset-0 opacity-15"
-                      style={{
-                        backgroundImage: `
-                          linear-gradient(to right, rgba(99,102,241,0.2) 1px, transparent 1px),
-                          linear-gradient(to bottom, rgba(99,102,241,0.2) 1px, transparent 1px)
-                        `,
-                        backgroundSize: "24px 24px",
-                      }}
-                    />
+                    {caseItem.imageUrl ? (
+                      <>
+                        <Image
+                          src={caseItem.imageUrl}
+                          alt={caseItem.title[language]}
+                          fill
+                          className="object-cover transition-transform duration-700 group-hover:scale-105"
+                        />
+                        <div className="absolute inset-0 bg-bg-primary/20 mix-blend-overlay" />
+                      </>
+                    ) : (
+                      <div
+                        className="absolute inset-0 opacity-15"
+                        style={{
+                          backgroundImage: `
+                            linear-gradient(to right, rgba(99,102,241,0.2) 1px, transparent 1px),
+                            linear-gradient(to bottom, rgba(99,102,241,0.2) 1px, transparent 1px)
+                          `,
+                          backgroundSize: "24px 24px",
+                        }}
+                      />
+                    )}
                     {/* Gradient overlay for depth */}
                     <div className="absolute inset-0 bg-gradient-to-t from-bg-secondary/80 to-transparent" />
                   </div>
@@ -152,7 +165,7 @@ export function CasesContent() {
             </AnimatedItem>
           ))}
         </div>
-        
+
         {/* Load more button */}
         {!showAllFlagship && flagshipCases.length > INITIAL_FLAGSHIP_COUNT && (
           <div className="mt-8 text-center">
@@ -161,8 +174,8 @@ export function CasesContent() {
               onClick={() => setShowAllFlagship(true)}
               className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-border bg-bg-tertiary/60 text-body-md text-text-secondary font-medium hover:text-text-primary hover:border-border-hover transition-colors"
             >
-              {language === "en" 
-                ? `Show ${flagshipCases.length - INITIAL_FLAGSHIP_COUNT} more cases` 
+              {language === "en"
+                ? `Show ${flagshipCases.length - INITIAL_FLAGSHIP_COUNT} more cases`
                 : `Показать ещё ${flagshipCases.length - INITIAL_FLAGSHIP_COUNT} кейсов`}
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />

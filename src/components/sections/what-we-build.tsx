@@ -33,7 +33,10 @@ export function WhatWeBuildSection() {
 
   return (
     <Section background="secondary" padding="lg">
-      <SectionHeader title={t("whatWeBuild.title")} />
+      <SectionHeader
+        title={t("whatWeBuild.title")}
+        eyebrow={language === "en" ? "Services" : "Услуги"}
+      />
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
         {items.map((item, index) => (

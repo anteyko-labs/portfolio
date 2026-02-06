@@ -16,6 +16,7 @@ export function FAQPreviewSection() {
         <SectionHeader
           title={t("faq.title")}
           subtitle={t("faq.subtitle")}
+          eyebrow="FAQ"
           animate={false}
         />
         <ButtonLink href="/faq" buttonVariant="outline" size="sm">

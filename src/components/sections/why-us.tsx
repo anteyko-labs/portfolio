@@ -109,7 +109,10 @@ export function WhyUsSection() {
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="blob blob-accent w-[320px] h-[320px] absolute top-1/4 -right-20 opacity-30 animate-float-blob" />
       </div>
-      <SectionHeader title={t("whyUs.title")} />
+      <SectionHeader
+        title={t("whyUs.title")}
+        eyebrow={language === "en" ? "Advantages" : "Преимущества"}
+      />
 
       {/* Игра с цифрой в строке (StrategiQ-style: 40+ projec ts) */}
       <motion.p

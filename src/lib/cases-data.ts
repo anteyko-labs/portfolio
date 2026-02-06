@@ -31,6 +31,9 @@ export interface FlagshipCase {
   outcome: { en: string; ru: string };
   hardParts: { title: { en: string; ru: string }; description: { en: string; ru: string } }[];
   qualityGates?: QualityGate[];
+  imageUrl?: string;
+  heroImage?: string;
+  screenshots?: { src: string; alt: { en: string; ru: string } }[];
 }
 
 export interface MicroCase {
@@ -41,105 +44,307 @@ export interface MicroCase {
   outcome: { en: string; ru: string };
 }
 
-export const flagshipCases: FlagshipCase[] = [
+// ORDERING RULE:
+//   1. case-1 (web3-l1-dex / ArmaDEX) is PINNED at index 0 — always first.
+//   2. New cases go at index 1 (right after case-1) so newest projects appear second.
+//   3. Older cases follow in chronological order (newest → oldest).
+const _flagshipCases: FlagshipCase[] = [
+  {
+    id: "case-13",
+    slug: "trm-oferta-registration",
+    category: "product",
+    year: 2026,
+    title: {
+      en: "TRM Oferta: online registration and public offer acceptance (end\u2011to\u2011end)",
+      ru: "TRM Oferta: онлайн\u2011регистрация и акцепт публичной оферты (end\u2011to\u2011end)",
+    },
+    summary: {
+      en: "Full product flow: registration, public offer acceptance with audit trail, PDF proof with seal/signature, admin panel. Legally compliant, mobile\u2011first.",
+      ru: "Полный продуктовый поток: регистрация, акцепт публичной оферты с аудит\u2011трейлом, PDF\u2011подтверждение с печатью/подписью, админка. Юридически корректно, mobile\u2011first.",
+    },
+    metrics: [
+      { label: { en: "Steps in UX flow", ru: "Шагов в UX\u2011потоке" }, value: "3" },
+      { label: { en: "Audit fields per record", ru: "Полей аудита на запись" }, value: "9+" },
+    ],
+    artifactHint: { en: "Offer acceptance + PDF", ru: "Акцепт оферты + PDF" },
+    industry: { en: "EdTech / Legal", ru: "EdTech / Юридические услуги" },
+    timeline: { en: "2\u00A0weeks", ru: "2\u00A0недели" },
+    problem: {
+      en: "An education company needed to collect legally binding offer acceptance from students (including minors with legal guardians) online, generate PDF confirmations with official seal and signature, and store a tamper\u2011proof audit trail\u00A0\u2014 all without manual paperwork.",
+      ru: "Образовательной компании нужно было собирать юридически обязывающий акцепт оферты от учеников (включая несовершеннолетних с законными представителями) онлайн, генерировать PDF\u2011подтверждения с печатью и подписью директора и хранить аудит\u2011трейл\u00A0\u2014 всё без бумажной работы.",
+    },
+    constraints: {
+      en: [
+        "Must handle adult and minor registration flows differently",
+        "Legal guardian must accept offer for minors (explicit checkbox + data)",
+        "PDF must include Cyrillic text, official seal, and director signature",
+        "Audit trail: IP, User\u2011Agent, timestamp, offer version, consent checkboxes",
+        "Admin panel protected by HTTP Basic Auth",
+        "Cloud PostgreSQL (Neon.tech) \u2014 no local file dependencies",
+        "Mobile\u2011first: 70%+ traffic from phones",
+      ],
+      ru: [
+        "Разные потоки регистрации для совершеннолетних и несовершеннолетних",
+        "Законный представитель подписывает оферту за несовершеннолетнего (явный чекбокс + данные)",
+        "PDF должен содержать кириллицу, печать и подпись директора",
+        "Аудит\u2011трейл: IP, User\u2011Agent, timestamp, версия оферты, галочки согласия",
+        "Админка защищена HTTP Basic Auth",
+        "Облачная PostgreSQL (Neon.tech)\u00A0\u2014 без привязки к локальным файлам",
+        "Mobile\u2011first: 70%+ трафика с телефонов",
+      ],
+    },
+    solution: {
+      en: "Built a 3\u2011step conversion flow: registration (with conditional fields for minors), offer review and acceptance (progressive disclosure of full text), and deposit instructions with WhatsApp deep\u2011link. Each step validates before proceeding. Backend stores full audit trail in cloud PostgreSQL, generates branded PDF with Cyrillic support, seal, and signature. Admin panel with Basic Auth for viewing records, downloading PDFs, and changing statuses.",
+      ru: "Построили 3\u2011шаговый конверсионный поток: регистрация (с условными полями для несовершеннолетних), ознакомление и принятие оферты (progressive disclosure полного текста), инструкции по внесению задатка с deep\u2011link в WhatsApp. Каждый шаг валидируется перед переходом. Бэкенд хранит полный аудит\u2011трейл в облачной PostgreSQL, генерирует брендированный PDF с поддержкой кириллицы, печатью и подписью. Админка с Basic Auth для просмотра записей, скачивания PDF и смены статусов.",
+    },
+    deliverables: {
+      en: [
+        "3\u2011step registration + offer acceptance flow",
+        "Conditional UX for adult vs minor registration",
+        "PDF generation with Cyrillic, seal, and director signature",
+        "Cloud PostgreSQL with full audit trail (9+ fields per record)",
+        "Admin panel with HTTP Basic Auth",
+        "WhatsApp deep\u2011link for deposit follow\u2011up",
+        "Email notifications to admin (optional SMTP)",
+        "Production deployment with public URL",
+      ],
+      ru: [
+        "3\u2011шаговый поток регистрации + акцепт оферты",
+        "Условный UX для совершеннолетних и несовершеннолетних",
+        "Генерация PDF с кириллицей, печатью и подписью директора",
+        "Облачная PostgreSQL с полным аудит\u2011трейлом (9+ полей на запись)",
+        "Админка с HTTP Basic Auth",
+        "Deep\u2011link WhatsApp для связи по задатку",
+        "Email\u2011уведомления админу (опциональный SMTP)",
+        "Деплой в продакшн с публичным URL",
+      ],
+    },
+    techStack: ["Node.js", "Express", "PostgreSQL", "Neon.tech", "PDFKit", "Tailwind CSS", "Nodemailer"],
+    outcome: {
+      en: "Launched in production. All registrations go through the digital flow\u00A0\u2014 zero paper forms. Every acceptance has a tamper\u2011proof audit record. PDFs with seal and signature are generated instantly. Admin panel lets the team manage records without developer involvement.",
+      ru: "Запущен в продакшн. Все регистрации идут через цифровой поток\u00A0\u2014 ноль бумажных форм. Каждый акцепт имеет аудит\u2011запись. PDF с печатью и подписью генерируются мгновенно. Админка позволяет команде управлять записями без участия разработчика.",
+    },
+    hardParts: [
+      {
+        title: { en: "Minor/guardian conditional flow", ru: "Условный поток для несовершеннолетних" },
+        description: {
+          en: "When student is under 18, the form dynamically adds guardian fields, a warning banner, and an explicit confirmation checkbox. The offer acceptance page also adds a separate guardian consent checkbox. All conditional data is stored in the audit trail.",
+          ru: "Когда ученик младше 18, форма динамически добавляет поля представителя, предупреждающий баннер и явный чекбокс подтверждения. На странице оферты добавляется отдельный чекбокс согласия представителя. Все условные данные хранятся в аудит\u2011трейле.",
+        },
+      },
+      {
+        title: { en: "Cyrillic PDF with seal and signature", ru: "PDF с кириллицей, печатью и подписью" },
+        description: {
+          en: "Default PDFKit doesn\u2019t render Cyrillic. Embedded a TTF font with full RU support. Positioned the company seal and director signature as images with precise rotation, scale, and coordinates\u00A0\u2014 tuned through several iterations.",
+          ru: "PDFKit по умолчанию не рендерит кириллицу. Встроили TTF\u2011шрифт с полной поддержкой RU. Позиционировали печать и подпись директора как изображения с точным поворотом, масштабом и координатами\u00A0\u2014 подобрали за несколько итераций.",
+        },
+      },
+      {
+        title: { en: "Tamper\u2011proof audit trail", ru: "Аудит\u2011трейл с защитой от подмены" },
+        description: {
+          en: "Each acceptance stores: full name, phone, guardian data (if minor), consent checkboxes, IP address, User\u2011Agent, timestamp, offer version, and record status. All fields are append\u2011only in PostgreSQL. Status changes are logged. Admin can view but not edit acceptance data.",
+          ru: "Каждый акцепт хранит: ФИО, телефон, данные представителя (если несовершеннолетний), галочки согласия, IP\u2011адрес, User\u2011Agent, timestamp, версию оферты и статус записи. Все поля append\u2011only в PostgreSQL. Смены статуса логируются. Админ может просматривать, но не редактировать данные акцепта.",
+        },
+      },
+    ],
+    qualityGates: [
+      { name: { en: "Build", ru: "Сборка" }, passed: true },
+      { name: { en: "Adult flow E2E", ru: "E2E поток совершеннолетнего" }, passed: true },
+      { name: { en: "Minor flow E2E", ru: "E2E поток несовершеннолетнего" }, passed: true },
+      { name: { en: "PDF Cyrillic rendering", ru: "Рендеринг кириллицы в PDF" }, passed: true },
+      { name: { en: "Audit trail completeness", ru: "Полнота аудит\u2011трейла" }, passed: true },
+      { name: { en: "Admin auth security", ru: "Безопасность авторизации админки" }, passed: true },
+    ],
+    imageUrl: "/images/cases/trm-oferta/step1-adult.png",
+    heroImage: "/images/cases/trm-oferta/step1-adult.png",
+    screenshots: [
+      {
+        src: "/images/cases/trm-oferta/step1-adult.png",
+        alt: {
+          en: "Step 1: Adult registration form with name and phone fields",
+          ru: "Шаг 1: Форма регистрации совершеннолетнего с полями ФИО и телефона",
+        },
+      },
+      {
+        src: "/images/cases/trm-oferta/step1-minor.png",
+        alt: {
+          en: "Step 1: Minor registration with guardian fields and warning banner",
+          ru: "Шаг 1: Регистрация несовершеннолетнего с полями представителя и предупреждением",
+        },
+      },
+      {
+        src: "/images/cases/trm-oferta/step2-oferta.png",
+        alt: {
+          en: "Step 2: Public offer review and acceptance with checkbox",
+          ru: "Шаг 2: Ознакомление и принятие публичной оферты с чекбоксом",
+        },
+      },
+      {
+        src: "/images/cases/trm-oferta/step3-deposit.png",
+        alt: {
+          en: "Step 3: Offer signed, record UUID, PDF download, WhatsApp contact",
+          ru: "Шаг 3: Оферта подписана, номер записи (UUID), скачивание PDF, связь через WhatsApp",
+        },
+      },
+    ],
+  },
   {
     id: "case-1",
     slug: "web3-l1-dex",
     category: "web3",
     year: 2025,
     title: {
-      en: "Infrastructure-grade Web3: L1 + DEX delivery",
-      ru: "Инфраструктурный Web3: L1 + DEX поставка",
+      en: "L1 blockchain with built\u2011in perpetual DEX (end\u2011to\u2011end)",
+      ru: "L1 блокчейн со встроенной DEX перпетуалов (end\u2011to\u2011end)",
     },
     summary: {
-      en: "Architecture, testing discipline, release control. Focus: predictability, reproducibility, explainability.",
-      ru: "Архитектура, тест-дисциплина, релиз-контроль. Фокус: предсказуемость, воспроизводимость, объяснимость.",
+      en: "Performance\u2011oriented Layer\u20111 on Rust with deterministic EVM, native token economics, on\u2011chain perpetual orderbook, privacy layer (Bulletproofs), and a full product suite: DEX UI, Explorer, Operator Panel, Faucet, SDK.",
+      ru: "Производительный Layer\u20111 на Rust с детерминированным EVM, экономикой нативного токена, ончейн\u2011ордербуком перпетуалов, слоем приватности (Bulletproofs) и полным продуктовым контуром: DEX UI, Explorer, Operator Panel, Faucet, SDK.",
     },
     metrics: [
-      { label: { en: "Integration scenarios", ru: "Сценариев интеграции" }, value: "47" },
-      { label: { en: "Critical incidents at launch", ru: "Критичных инцидентов при запуске" }, value: "0" },
+      { label: { en: "Rust core modules", ru: "Модулей ядра на Rust" }, value: "15+" },
+      { label: { en: "Frontend apps shipped", ru: "Отправленных фронтенд\u2011приложений" }, value: "4" },
+      { label: { en: "API endpoints", ru: "API\u2011эндпоинтов" }, value: "60+" },
     ],
-    artifactHint: { en: "IT-01…IT-05 catalog", ru: "Каталог IT-01…IT-05" },
+    artifactHint: { en: "L1 node + 4 UIs + SDK", ru: "L1 нода + 4 UI + SDK" },
     industry: { en: "Blockchain / DeFi", ru: "Блокчейн / DeFi" },
-    timeline: { en: "4 months", ru: "4\u00A0месяца" },
+    timeline: { en: "4\u00A0months", ru: "4\u00A0месяца" },
     problem: {
-      en: "The client needed a production-ready L1 blockchain with a DEX interface. Existing solutions were either too rigid or lacked the testing infrastructure required for a financial product.",
-      ru: "Клиенту требовался готовый к продакшну L1 блокчейн с DEX-интерфейсом. Существующие решения были либо слишком жёсткими, либо не имели тестовой инфраструктуры, необходимой для финансового продукта.",
+      en: "Trading latency and cost on general\u2011purpose L1s force perpetual DEX projects into off\u2011chain compromises that sacrifice verifiability. The partner needed a purpose\u2011built chain where the matching engine, margin logic, and settlement live at the protocol level\u00A0\u2014 with full EVM compatibility, a native token with hard\u2011capped economics, and governance that limits parameter changes to safe bounds.",
+      ru: "Задержки и стоимость трейдинга на универсальных L1 вынуждают DEX\u2011проекты перпетуалов уходить офчейн, жертвуя верифицируемостью. Партнёру нужен был целевой блокчейн, где матчинг, маржинальная логика и расчёты живут на уровне протокола\u00A0\u2014 с полной EVM\u2011совместимостью, нативным токеном с жёсткой экономикой и governance, ограничивающим изменения параметров безопасными границами.",
     },
     constraints: {
       en: [
-        "Must handle 1000+ TPS on testnet before mainnet",
-        "Full audit trail for all contract deployments",
-        "Multi-region RPC failover required",
-        "Team had limited blockchain experience",
+        "Deterministic execution: same input \u2192 same result (critical for batch replay and fraud proofs)",
+        "EVM compatibility: MetaMask, ethers, Hardhat, Solidity contracts must work natively",
+        "Native token accessible from EVM without ERC\u201120 wrapper (precompile 0x0a)",
+        "Perpetual DEX logic at protocol level, not in smart contracts",
+        "Privacy layer: shielded orders with cryptographic range proofs (Bulletproofs)",
+        "Governance bounded by hard\u2011coded limits\u00A0\u2014 no arbitrary parameter overrides",
+        "Full product suite: DEX terminal, block explorer, operator panel, faucet, SDK",
+        "Detailed data under NDA\u00A0\u2014 portfolio shows architecture and capabilities",
       ],
       ru: [
-        "Необходимо обрабатывать 1000+ TPS на тестнете до мейннета",
-        "Полный аудит-трейл для всех деплоев контрактов",
-        "Требуется мультирегиональный RPC failover",
-        "Команда имела ограниченный опыт в блокчейне",
+        "Детерминированное исполнение: одинаковый вход \u2192 одинаковый результат (критично для replay и fraud proof)",
+        "EVM\u2011совместимость: MetaMask, ethers, Hardhat, контракты Solidity работают нативно",
+        "Нативный токен доступен из EVM без ERC\u201120 обёртки (прекомпайл 0x0a)",
+        "Логика перпетуальной DEX на уровне протокола, а не в смарт\u2011контрактах",
+        "Слой приватности: shielded\u2011ордера с криптографическими range proof (Bulletproofs)",
+        "Изменения governance ограничены жёстко заданными лимитами\u00A0\u2014 без произвольных изменений",
+        "Полный продуктовый контур: DEX\u2011терминал, эксплорер, панель оператора, faucet, SDK",
+        "Детальные данные под NDA\u00A0\u2014 портфолио показывает архитектуру и возможности",
       ],
     },
     solution: {
-      en: "Built a modular architecture with clear boundaries between consensus, execution, and interface layers. Created an integration test catalog (IT-01 through IT-05) covering wallet flows, swap mechanics, liquidity operations, and edge cases. Implemented pre-deployment verification system with automated checks.",
-      ru: "Построили модульную архитектуру с чёткими границами между уровнями консенсуса, исполнения и интерфейса. Создали каталог интеграционных тестов (IT-01 - IT-05), покрывающий флоу кошельков, механики свопов, операции с ликвидностью и граничные случаи. Внедрили систему предеплойной верификации с автоматическими проверками.",
+      en: "Built a single\u2011binary Rust node integrating consensus, validator registry, governance, slashing, fee market, EVM executor (revm, EIP\u20111559/2930), native token state, DEX engine (orderbook, positions, trades, OHLC candles), privacy primitives (Bulletproofs), checkpoint sync, and hybrid storage. The node exposes HTTP API (60+ endpoints), JSON\u2011RPC (Ethereum\u2011compatible), and WebSocket (EVM subscriptions + DEX realtime streams). Shipped four Next.js applications: DEX trading terminal, public block explorer with contract verification, operator UI for node management/governance/staking, and testnet faucet. TypeScript SDK for third\u2011party integrations.",
+      ru: "Построили Rust\u2011ноду в одном бинарнике: консенсус, реестр валидаторов, governance, слэшинг, fee market, EVM\u2011исполнитель (revm, EIP\u20111559/2930), состояние нативного токена, DEX\u2011движок (ордербук, позиции, сделки, OHLC\u2011свечи), криптопримитивы (Bulletproofs), checkpoint sync, гибридное хранилище. Нода предоставляет HTTP API (60+ эндпоинтов), JSON\u2011RPC (Ethereum\u2011совместимый) и WebSocket (EVM\u2011подписки + DEX realtime\u2011стримы). Отправили четыре Next.js приложения: DEX\u2011терминал, эксплорер с верификацией контрактов, Operator UI для управления нодой/governance/стейкинга и тестнет\u2011фаукнет. TypeScript SDK для сторонних интеграций.",
     },
     deliverables: {
       en: [
-        "L1 node implementation with custom consensus",
-        "DEX smart contracts (AMM + order book hybrid)",
-        "Web interface with wallet integration",
-        "Integration test suite (47 scenarios)",
-        "Pre-deployment verification system",
-        "Developer onboarding documentation",
-        "RPC provider failover infrastructure",
+        "L1 node on Rust: consensus, validators, governance, slashing, fee market, sync",
+        "Deterministic EVM executor (revm) with EIP\u20111559/2930 and native token precompile",
+        "On\u2011chain perpetual DEX: orderbook, matching, positions, trades, OHLC, WebSocket streams",
+        "Privacy layer with Bulletproofs for shielded orders",
+        "Token economics: hard\u2011capped supply, epoch\u2011based emission, staking rewards",
+        "DEX Trading UI (Next.js): terminal, charts, order forms, wallet integration",
+        "Block Explorer: batches, transactions, contract verification, statistics, gas tracker",
+        "Operator Panel: node status, governance, staking, fraud proof, sync, rolling updates",
+        "Testnet Faucet with MetaMask integration",
+        "TypeScript SDK for HTTP API and DEX integration",
+        "Solidity contracts + Hardhat deployment scripts",
+        "CI/CD, Prometheus/Grafana, OpenTelemetry, Nginx rate limiting",
       ],
       ru: [
-        "Реализация L1 ноды с кастомным консенсусом",
-        "Смарт-контракты DEX (гибрид AMM + ордербук)",
-        "Веб-интерфейс с интеграцией кошельков",
-        "Набор интеграционных тестов (47 сценариев)",
-        "Система предеплойной верификации",
-        "Документация для адаптации разработчиков",
-        "Инфраструктура RPC failover",
+        "L1 нода на Rust: консенсус, валидаторы, governance, слэшинг, fee market, синхронизация",
+        "Детерминированный EVM\u2011исполнитель (revm) с EIP\u20111559/2930 и прекомпайлом нативного токена",
+        "Ончейн DEX перпетуалов: ордербук, матчинг, позиции, сделки, OHLC, WebSocket\u2011стримы",
+        "Слой приватности на Bulletproofs для shielded\u2011ордеров",
+        "Токеномика: жёсткий supply cap, эмиссия по эпохам, награды за стейкинг",
+        "DEX Trading UI (Next.js): терминал, графики, формы ордеров, интеграция кошельков",
+        "Эксплорер: батчи, транзакции, верификация контрактов, статистика, gas tracker",
+        "Operator Panel: статус ноды, governance, стейкинг, fraud proof, sync, rolling updates",
+        "Тестнет\u2011фаукнет с интеграцией MetaMask",
+        "TypeScript SDK для HTTP API и DEX\u2011интеграции",
+        "Solidity\u2011контракты + скрипты деплоя Hardhat",
+        "CI/CD, Prometheus/Grafana, OpenTelemetry, rate limiting Nginx",
       ],
     },
-    techStack: ["Rust", "Solidity", "React", "TypeScript", "PostgreSQL", "Redis", "Docker", "Kubernetes"],
+    techStack: [
+      "Rust", "Tokio", "revm", "SQLx", "PostgreSQL",
+      "Solidity", "Hardhat", "OpenZeppelin",
+      "Next.js 14", "React 18", "Tailwind", "Zustand", "TanStack Query",
+      "TypeScript", "ethers v6",
+      "Prometheus", "Grafana", "OpenTelemetry",
+      "Bulletproofs", "secp256k1", "blake3",
+    ],
     outcome: {
-      en: "Mainnet launched with zero critical incidents in first 3 months. Test suite caught 12 potential issues before they reached production. Onboarding time for new developers reduced from 2 weeks to 3 days.",
-      ru: "Мейннет запущен без критических инцидентов в первые 3\u00A0месяца. Тестовый набор выявил 12\u00A0потенциальных проблем до продакшна. Время адаптации новых разработчиков сократилось с 2\u00A0недель до 3\u00A0дней.",
+      en: "Testnet Alpha deployed and running: 7 active validators, 1.6M+ finalized batches, 99%+ success rate. Full product suite operational: DEX terminal with realtime orderbook, block explorer with contract verification and gas tracker, operator panel with governance/staking/fraud proof controls, working faucet. Batches processed every ~2\u00A0seconds with sub\u2011250ms commit latency. Architecture, test coverage, and operational tooling at production\u2011grade level.",
+      ru: "Testnet Alpha развёрнут и работает: 7 активных валидаторов, 1,6M+ финализированных батчей, 99%+ успешность. Полный продуктовый контур функционирует: DEX\u2011терминал с realtime\u2011ордербуком, эксплорер с верификацией контрактов и gas tracker, панель оператора с governance/стейкинг/fraud proof, рабочий фаукнет. Батчи каждые ~2\u00A0с с латентностью <250\u00A0мс. Архитектура, тесты и операционные инструменты на уровне продакшна.",
     },
     hardParts: [
       {
-        title: { en: "Integration Test Catalog", ru: "Каталог интеграционных тестов" },
+        title: { en: "Deterministic EVM with native token bridge", ru: "Детерминированный EVM с мостом нативного токена" },
         description: {
-          en: "Created IT-01 through IT-05 covering wallet connection edge cases, swap slippage scenarios, liquidity removal under load, and cross-chain bridge verification.",
-          ru: "Создали IT-01 - IT-05, покрывающие граничные случаи подключения кошельков, сценарии slippage при свопах, удаление ликвидности под нагрузкой и верификацию кросс-чейн моста.",
+          en: "EVM execution must be fully deterministic for batch replay and fraud proofs. We run revm with EIP\u20111559/2930 support and expose the native token via a precompile at address 0x0a (balanceOf, transfer, totalSupply)\u00A0\u2014 no ERC\u201120 wrapper duplication. Every state transition is reproducible across nodes.",
+          ru: "Исполнение EVM полностью детерминировано для replay батчей и fraud proof. Используем revm с EIP\u20111559/2930 и предоставляем нативный токен через прекомпайл по адресу 0x0a (balanceOf, transfer, totalSupply)\u00A0\u2014 без дублирования ERC\u201120. Каждый переход состояния воспроизводим на всех нодах.",
         },
       },
       {
-        title: { en: "RPC Provider Strategy", ru: "Стратегия RPC провайдеров" },
+        title: { en: "Protocol\u2011level perpetual DEX engine", ru: "DEX\u2011движок перпетуалов на уровне протокола" },
         description: {
-          en: "Built automatic failover between 3 RPC providers with health checks, latency monitoring, and graceful degradation. Users never see connection errors.",
-          ru: "Построили автоматический failover между 3 RPC провайдерами с проверками здоровья, мониторингом латентности и graceful degradation. Пользователи никогда не видят ошибок подключения.",
+          en: "Orderbook, matching, positions, margin calculations, and trade settlement live inside the node binary, finalized by the same consensus as regular transactions. WebSocket streams deliver realtime updates to the UI. Shielded orders use Bulletproofs for cryptographic range proofs.",
+          ru: "Ордербук, матчинг, позиции, расчёт маржи и расчёты сделок живут внутри бинарника ноды и финализируются тем же консенсусом. WebSocket\u2011стримы доставляют realtime\u2011обновления в UI. Shielded\u2011ордера используют Bulletproofs для криптографических range proof.",
         },
       },
       {
-        title: { en: "Wallet Compatibility Matrix", ru: "Матрица совместимости кошельков" },
+        title: { en: "Governance within hard bounds", ru: "Governance в жёстких границах" },
         description: {
-          en: "Documented and tested behavior across MetaMask, WalletConnect, Coinbase Wallet, and hardware wallets. Each has quirks; we handle them all.",
-          ru: "Задокументировали и протестировали поведение на MetaMask, WalletConnect, Coinbase Wallet и аппаратных кошельках. У каждого свои особенности — мы обрабатываем все.",
+          en: "Protocol parameters can be changed through on\u2011chain proposals, but only within pre\u2011defined bounds hard\u2011coded into the node. Prevents governance attacks while preserving flexibility. Quorum 33%, regular >50%, critical >67%. Slashing is irreversible\u00A0\u2014 governance cannot rollback penalties.",
+          ru: "Параметры протокола можно менять через ончейн\u2011предложения, но только в заранее вшитых границах. Предотвращает governance\u2011атаки, сохраняя гибкость. Кворум 33%, обычный порог >50%, критический >67%. Слэшинг необратим\u00A0\u2014 governance не может откатить штрафы.",
+        },
+      },
+      {
+        title: { en: "Four production\u2011grade frontends", ru: "Четыре фронтенда продакшн\u2011уровня" },
+        description: {
+          en: "DEX Trading UI with realtime charts, orderbook depth, and wallet connection. ArmaScan explorer with contract verification via solc, gas tracker with cost calculator, and data export. Operator Panel for node monitoring, governance, staking, fraud proof, sync, and rolling updates. Faucet with MetaMask auto\u2011fill and rate limiting.",
+          ru: "DEX Trading UI с realtime\u2011графиками, глубиной стакана и подключением кошелька. Эксплорер ArmaScan с верификацией контрактов через solc, gas tracker с калькулятором стоимости и экспортом. Operator Panel для мониторинга ноды, governance, стейкинга, fraud proof, sync и rolling updates. Фаукнет с автозаполнением MetaMask и rate limiting.",
         },
       },
     ],
     qualityGates: [
-      { name: { en: "Build", ru: "Сборка" }, passed: true },
-      { name: { en: "Unit tests", ru: "Юнит-тесты" }, passed: true },
-      { name: { en: "Integration tests (IT-01–IT-05)", ru: "Интеграционные тесты (IT-01–IT-05)" }, passed: true },
-      { name: { en: "Contract verification", ru: "Верификация контрактов" }, passed: true },
-      { name: { en: "Testnet deployment", ru: "Деплой на тестнет" }, passed: true },
-      { name: { en: "Wallet compatibility", ru: "Совместимость кошельков" }, passed: true },
-      { name: { en: "Security audit", ru: "Аудит безопасности" }, passed: true },
+      { name: { en: "Rust build (all features)", ru: "Сборка Rust (все фичи)" }, passed: true },
+      { name: { en: "EVM determinism tests", ru: "Тесты детерминизма EVM" }, passed: true },
+      { name: { en: "Consensus & finality tests", ru: "Тесты консенсуса и финалити" }, passed: true },
+      { name: { en: "Governance / slashing invariants", ru: "Инварианты governance / слэшинга" }, passed: true },
+      { name: { en: "DEX orderbook & margin rules", ru: "Ордербук DEX и маржинальные правила" }, passed: true },
+      { name: { en: "Privacy / Bulletproofs correctness", ru: "Корректность Bulletproofs" }, passed: true },
+      { name: { en: "Wallet compatibility (MetaMask, ethers)", ru: "Совместимость кошельков (MetaMask, ethers)" }, passed: true },
+      { name: { en: "Testnet Alpha deployment", ru: "Деплой Testnet Alpha" }, passed: true },
+    ],
+    imageUrl: "/images/cases/armadex/dex-trading.png",
+    heroImage: "/images/cases/armadex/operator-overview.png",
+    screenshots: [
+      { src: "/images/cases/armadex/dex-trading.png", alt: { en: "DEX Trading Terminal: orderbook, price chart, buy/sell forms, market list", ru: "DEX\u2011терминал: ордербук, ценовой график, формы покупки/продажи, список рынков" } },
+      { src: "/images/cases/armadex/markets.png", alt: { en: "Markets: all trading pairs with price, volume, and action buttons", ru: "Рынки: торговые пары с ценой, объёмом и кнопками действий" } },
+      { src: "/images/cases/armadex/explorer-blocks.png", alt: { en: "Block Explorer: batch list with hash, transactions, timestamp, status", ru: "Эксплорер: список батчей с хешем, транзакциями, временем и статусом" } },
+      { src: "/images/cases/armadex/network-statistics.png", alt: { en: "Network Statistics: block height, TPS, total batches, success rate", ru: "Статистика сети: высота блока, TPS, всего батчей, процент успеха" } },
+      { src: "/images/cases/armadex/gas-tracker.png", alt: { en: "Gas Tracker: gas price, average usage, network activity chart", ru: "Gas Tracker: цена газа, среднее использование, график активности" } },
+      { src: "/images/cases/armadex/gas-calculator.png", alt: { en: "Gas Calculator: transaction type estimation and cost formula", ru: "Калькулятор газа: оценка типов транзакций и формула стоимости" } },
+      { src: "/images/cases/armadex/verify-contract.png", alt: { en: "Verify Contract: Solidity source submission for bytecode verification", ru: "Верификация контракта: отправка Solidity\u2011кода для проверки байткода" } },
+      { src: "/images/cases/armadex/developer-portal.png", alt: { en: "Developer Portal: Remix IDE, Faucet, RPC, Chain ID, deployment docs", ru: "Портал разработчика: Remix IDE, Faucet, RPC, Chain ID, доки деплоя" } },
+      { src: "/images/cases/armadex/operator-overview.png", alt: { en: "Operator Panel: node overview, block height, role, latency, verification", ru: "Панель оператора: обзор ноды, высота блока, роль, латентность" } },
+      { src: "/images/cases/armadex/dex-orderbook.png", alt: { en: "Operator DEX: price chart, asks/bids, last price, spread, depth", ru: "Ордербук DEX: график цены, asks/bids, последняя цена, спред, глубина" } },
+      { src: "/images/cases/armadex/network-overview.png", alt: { en: "Network Overview: chain params, activity metrics, health status", ru: "Обзор сети: параметры чейна, метрики, статус здоровья" } },
+      { src: "/images/cases/armadex/governance.png", alt: { en: "Governance: create proposals, validator management, voting", ru: "Governance: создание предложений, управление валидаторами, голосование" } },
+      { src: "/images/cases/armadex/staking.png", alt: { en: "Staking: validators with stake, delegation, voting power", ru: "Стейкинг: валидаторы со стейком, делегированием, voting power" } },
+      { src: "/images/cases/armadex/fraud-proof.png", alt: { en: "Fraud Proof: batch verification, valid/fraudulent counts", ru: "Fraud Proof: верификация батчей, счётчики валидных/мошеннических" } },
+      { src: "/images/cases/armadex/sync-status.png", alt: { en: "Sync Status: progress, current height, latest checkpoint", ru: "Статус синхронизации: прогресс, текущая высота, чекпоинт" } },
+      { src: "/images/cases/armadex/rolling-updates.png", alt: { en: "Rolling Updates: version management, admin auth", ru: "Rolling Updates: управление версиями, аутентификация" } },
+      { src: "/images/cases/armadex/evm-registrations.png", alt: { en: "EVM Registrations: address\u2011to\u2011trader mapping, balances", ru: "EVM\u2011регистрации: маппинг адресов к трейдерам, балансы" } },
+      { src: "/images/cases/armadex/register-validator.png", alt: { en: "Register Validator: ID, public key, stake, signature", ru: "Регистрация валидатора: ID, публичный ключ, стейк, подпись" } },
+      { src: "/images/cases/armadex/faucet.png", alt: { en: "Faucet: request test tokens, MetaMask integration", ru: "Фаукнет: запрос тестовых токенов, интеграция MetaMask" } },
+      { src: "/images/cases/armadex/recent-activity.png", alt: { en: "Explorer: recent activity, network info, stats", ru: "Эксплорер: активность, информация о сети, статистика" } },
+      { src: "/images/cases/armadex/peer-network.png", alt: { en: "Peer Network: connected peers discovery and monitoring", ru: "Peer Network: обнаружение и мониторинг пиров" } },
     ],
   },
   {
@@ -421,6 +626,7 @@ export const flagshipCases: FlagshipCase[] = [
       { name: { en: "API contract tests", ru: "Тесты API контрактов" }, passed: true },
       { name: { en: "Rate limiting verification", ru: "Проверка rate limiting" }, passed: true },
     ],
+    imageUrl: "/images/cases/thumbnails/heatmap.png",
   },
   {
     id: "case-5",
@@ -511,6 +717,7 @@ export const flagshipCases: FlagshipCase[] = [
       { name: { en: "Mobile responsiveness", ru: "Мобильная адаптивность" }, passed: true },
       { name: { en: "Email delivery tests", ru: "Тесты доставки email" }, passed: true },
     ],
+    imageUrl: "/images/cases/thumbnails/fintech-deposit.png",
   },
   {
     id: "case-6",
@@ -1190,6 +1397,12 @@ export const flagshipCases: FlagshipCase[] = [
     ],
   },
 ];
+
+// Pin ArmaDEX (case-1 / web3-l1-dex) to index 0; everything else keeps its order.
+const PINNED_SLUG = "web3-l1-dex";
+const _pinned = _flagshipCases.find((c) => c.slug === PINNED_SLUG);
+const _rest = _flagshipCases.filter((c) => c.slug !== PINNED_SLUG);
+export const flagshipCases: FlagshipCase[] = _pinned ? [_pinned, ..._rest] : _flagshipCases;
 
 export const microCases: MicroCase[] = [
   {

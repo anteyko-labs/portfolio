@@ -2,6 +2,7 @@
 
 import { ReactNode } from "react";
 import { motion } from "framer-motion";
+import Image from "next/image";
 import { useReducedMotion } from "@/lib/hooks";
 import { Section, AnimatedItem } from "@/components/ui/section";
 
@@ -17,6 +18,7 @@ interface PageHeroProps {
   metric?: PageHeroMetric;
   rightSlot?: ReactNode;
   align?: "left" | "center";
+  backgroundImage?: string;
 }
 
 export function PageHero({
@@ -26,6 +28,7 @@ export function PageHero({
   metric,
   rightSlot,
   align = "center",
+  backgroundImage,
 }: PageHeroProps) {
   const prefersReducedMotion = useReducedMotion();
   const isSplit = Boolean(rightSlot);
@@ -35,6 +38,20 @@ export function PageHero({
     <Section background="primary" padding="lg" className="relative overflow-hidden">
       {/* Tech background: grid + blobs + noise */}
       <div className="absolute inset-0 pointer-events-none page-hero-grid" aria-hidden />
+
+      {backgroundImage && (
+        <div className="absolute inset-0 z-0">
+          <Image
+            src={backgroundImage}
+            alt=""
+            fill
+            className="object-cover opacity-40 mix-blend-overlay"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-bg-primary via-bg-primary/50 to-transparent" />
+        </div>
+      )}
+
       <div className="absolute inset-0 pointer-events-none page-hero-noise" aria-hidden />
       <div className="absolute inset-0 pointer-events-none">
         <div className={`blob blob-accent w-[320px] h-[320px] absolute -top-16 -right-16 opacity-30 ${prefersReducedMotion ? "" : "animate-float-blob"}`} />

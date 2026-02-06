@@ -42,6 +42,14 @@ export const translations = {
       en: "End-to-end development: websites, MVPs, and complex startup products.",
       ru: "Разработка под ключ: сайты, MVP и сложные стартап-продукты.",
     },
+    titleAccent: {
+      en: "End-to-end development:",
+      ru: "Разработка под ключ:",
+    },
+    titleRest: {
+      en: "websites, MVPs, and complex startup products.",
+      ru: "сайты, MVP и сложные стартап\u2011продукты.",
+    },
     heroMetric: {
       en: "48h",
       ru: "48\u00A0ч",

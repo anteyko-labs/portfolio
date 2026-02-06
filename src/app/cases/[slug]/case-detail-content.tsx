@@ -7,7 +7,9 @@ import { CategoryBadge } from "@/components/ui/badge";
 import { ButtonLink } from "@/components/ui/link";
 import { ArtifactCard } from "@/components/ui/artifact-card";
 import { MetricPill } from "@/components/ui/metric-pill";
+import { PageHero } from "@/components/sections/page-hero";
 import { ScrollSpyRail } from "@/components/ui/scrollspy-rail";
+import Image from "next/image";
 import type { FlagshipCase } from "@/lib/cases-data";
 import { flagshipCases } from "@/lib/cases-data";
 import NextLink from "next/link";
@@ -21,7 +23,7 @@ function CaseSummaryRail({ caseItem, language, t }: { caseItem: FlagshipCase; la
         <div>
           <CategoryBadge category={caseItem.category} size="sm" />
         </div>
-        
+
         {/* Timeline */}
         <div>
           <p className="text-caption text-text-tertiary uppercase tracking-wider mb-1">
@@ -31,7 +33,7 @@ function CaseSummaryRail({ caseItem, language, t }: { caseItem: FlagshipCase; la
             {caseItem.timeline[language]}
           </p>
         </div>
-        
+
         {/* Industry */}
         <div>
           <p className="text-caption text-text-tertiary uppercase tracking-wider mb-1">
@@ -41,7 +43,7 @@ function CaseSummaryRail({ caseItem, language, t }: { caseItem: FlagshipCase; la
             {caseItem.industry[language]}
           </p>
         </div>
-        
+
         {/* Metrics */}
         {caseItem.metrics && caseItem.metrics.length > 0 && (
           <div>
@@ -58,7 +60,7 @@ function CaseSummaryRail({ caseItem, language, t }: { caseItem: FlagshipCase; la
             </div>
           </div>
         )}
-        
+
         {/* Divider */}
         <div className="border-t border-border pt-4">
           <ButtonLink href="/contact" buttonVariant="primary" size="sm" className="w-full justify-center">
@@ -75,11 +77,13 @@ function CaseSummaryRail({ caseItem, language, t }: { caseItem: FlagshipCase; la
 
 export function CaseDetailContent({ caseItem }: { caseItem: FlagshipCase }) {
   const { t, language } = useLanguage();
-  
+
   // Get prev/next cases for navigation
   const currentIndex = flagshipCases.findIndex((c) => c.id === caseItem.id);
   const prevCase = currentIndex > 0 ? flagshipCases[currentIndex - 1] : null;
   const nextCase = currentIndex < flagshipCases.length - 1 ? flagshipCases[currentIndex + 1] : null;
+
+  const hasScreenshots = caseItem.screenshots && caseItem.screenshots.length > 0;
 
   const scrollItems = [
     { id: "case-summary", label: language === "en" ? "Summary" : "Сводка" },
@@ -87,6 +91,7 @@ export function CaseDetailContent({ caseItem }: { caseItem: FlagshipCase }) {
     { id: "case-constraints", label: language === "en" ? "Constraints" : "Ограничения" },
     { id: "case-solution", label: language === "en" ? "Solution" : "Решение" },
     { id: "case-deliverables", label: language === "en" ? "Deliverables" : "Результаты" },
+    ...(hasScreenshots ? [{ id: "case-screenshots", label: language === "en" ? "Screenshots" : "Скриншоты" }] : []),
     { id: "case-artifacts", label: language === "en" ? "Artifacts" : "Артефакты" },
     { id: "case-quality", label: language === "en" ? "Quality gates" : "Гейты качества" },
     { id: "case-tech", label: language === "en" ? "Tech stack" : "Стек" },
@@ -112,9 +117,10 @@ export function CaseDetailContent({ caseItem }: { caseItem: FlagshipCase }) {
     // Case-specific artifacts
     const caseArtifacts: Record<string, { title: string; subtitle: string; tone?: "primary" | "success" | "warning" }[]> = {
       "web3-l1-dex": [
-        { title: "Integration Test Catalog", subtitle: "IT-01 … IT-05", tone: "primary" },
-        { title: "Pre-deployment checklist", subtitle: "47 scenarios", tone: "success" },
-        { title: "RPC / wallet matrix", subtitle: "EVMs, wallets", tone: "warning" },
+        { title: language === "en" ? "L1 Rust Node" : "L1 нода на Rust", subtitle: language === "en" ? "15+ core modules" : "15+ модулей ядра", tone: "primary" },
+        { title: language === "en" ? "DEX Engine" : "DEX\u2011движок", subtitle: language === "en" ? "Orderbook + Bulletproofs" : "Ордербук + Bulletproofs", tone: "success" },
+        { title: language === "en" ? "4 Frontend Apps" : "4 фронтенда", subtitle: "DEX UI, Explorer, Operator, Faucet", tone: "warning" },
+        { title: "TypeScript SDK", subtitle: language === "en" ? "HTTP API + DEX integration" : "HTTP API + DEX\u2011интеграция", tone: "primary" },
       ],
       "utility-token-uae": [
         { title: language === "en" ? "Compliance package" : "Compliance-пакет", subtitle: "UAE VARA", tone: "success" },
@@ -150,6 +156,12 @@ export function CaseDetailContent({ caseItem }: { caseItem: FlagshipCase }) {
         { title: language === "en" ? "Support SLA doc" : "Доки SLA поддержки", subtitle: "3 months", tone: "success" },
         { title: language === "en" ? "IP transfer checklist" : "Чеклист передачи IP", subtitle: "Full ownership", tone: "warning" },
       ],
+      "trm-oferta-registration": [
+        { title: language === "en" ? "3-step UX flow" : "3-шаговый UX-поток", subtitle: language === "en" ? "Registration → Offer → Deposit" : "Регистрация → Оферта → Задаток", tone: "primary" },
+        { title: language === "en" ? "PDF with seal & signature" : "PDF с печатью и подписью", subtitle: "PDFKit + Cyrillic TTF", tone: "success" },
+        { title: language === "en" ? "Audit trail schema" : "Схема аудит-трейла", subtitle: language === "en" ? "9+ fields per record" : "9+ полей на запись", tone: "warning" },
+        { title: language === "en" ? "Admin panel" : "Админка", subtitle: "HTTP Basic Auth", tone: "primary" },
+      ],
     };
 
     return caseArtifacts[caseItem.slug] ?? baseArtifacts;
@@ -174,36 +186,34 @@ export function CaseDetailContent({ caseItem }: { caseItem: FlagshipCase }) {
     <>
       {/* Sticky summary rail on the right (xl+) */}
       <CaseSummaryRail caseItem={caseItem} language={language} t={t} />
-      
+
       {/* Scrollspy navigation on the left */}
       <ScrollSpyRail items={scrollItems} mode="fixed" position="left" />
 
       {/* Hero / Summary */}
-      <Section background="primary" padding="lg" id="case-summary">
-        <div className="max-w-4xl">
-          <AnimatedItem>
-            <div className="mb-4">
-              <CategoryBadge category={caseItem.category} size="md" />
+      <PageHero
+        title={caseItem.title[language]}
+        subtitle={caseItem.summary[language]}
+        eyebrow={language === "en" ? "Case Study" : "Кейс"}
+        backgroundImage={caseItem.heroImage}
+        rightSlot={
+          caseItem.metrics && caseItem.metrics.length > 0 ? (
+            <div className="hidden lg:block space-y-4">
+              {caseItem.metrics.slice(0, 3).map((metric) => (
+                <div key={`hero-right-${metric.value}`} className="bg-bg-secondary/40 backdrop-blur-sm p-4 rounded-xl border border-white/5">
+                  <p className="text-display-xs text-accent-primary font-bold">{metric.value}</p>
+                  <p className="text-body-sm text-text-secondary">{metric.label[language]}</p>
+                </div>
+              ))}
             </div>
-            <h1 className="text-display-sm md:text-display-md font-display text-text-primary">
-              {caseItem.title[language]}
-            </h1>
-            <p className="mt-6 text-body-lg text-text-secondary">
-              {caseItem.summary[language]}
-            </p>
-            {caseItem.metrics && caseItem.metrics.length > 0 && (
-              <div className="mt-6 flex flex-wrap gap-2">
-                {caseItem.metrics.slice(0, 3).map((metric) => (
-                  <MetricPill
-                    key={`hero-metric-${metric.value}`}
-                    label={metric.label[language]}
-                    value={metric.value}
-                    tone="primary"
-                  />
-                ))}
-              </div>
-            )}
-            <div className="mt-8 flex flex-wrap gap-6 text-body-sm text-text-muted">
+          ) : undefined
+        }
+      />
+
+      <Section background="primary" padding="none" id="case-summary-meta">
+        <div className="max-w-4xl px-6 lg:px-12 py-8">
+          <AnimatedItem>
+            <div className="flex flex-wrap gap-6 text-body-sm text-text-muted">
               <span>
                 <strong className="text-text-secondary">
                   {language === "en" ? "Year" : "Год"}:{" "}
@@ -313,8 +323,52 @@ export function CaseDetailContent({ caseItem }: { caseItem: FlagshipCase }) {
         </div>
       </Section>
 
+      {/* Screenshots / UX Flow */}
+      {hasScreenshots && (
+        <Section background="secondary" padding="lg" id="case-screenshots">
+          <div className="max-w-5xl">
+            <SectionHeader
+              title={language === "en" ? "Screenshots / UX Flow" : "Скриншоты / UX\u2011поток"}
+              subtitle={
+                language === "en"
+                  ? "Step-by-step walkthrough of the product interface"
+                  : "Пошаговый обзор интерфейса продукта"
+              }
+              animate={false}
+            />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {caseItem.screenshots!.map((screenshot, index) => (
+                <AnimatedItem key={`screenshot-${index}`} delay={index * 0.08}>
+                  <div className="group rounded-2xl border border-border bg-bg-tertiary/40 overflow-hidden transition-all hover:border-accent-primary/30 hover:shadow-lg hover:shadow-accent-primary/5">
+                    {/* Step indicator */}
+                    <div className="px-5 pt-4 pb-2 flex items-center gap-3">
+                      <span className="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-accent-primary/15 text-accent-primary text-caption font-bold font-mono">
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                      <p className="text-body-sm text-text-secondary line-clamp-1">
+                        {screenshot.alt[language]}
+                      </p>
+                    </div>
+                    {/* Screenshot image */}
+                    <div className="relative aspect-[16/10] mx-3 mb-3 rounded-xl overflow-hidden border border-border/50 bg-white">
+                      <Image
+                        src={screenshot.src}
+                        alt={screenshot.alt[language]}
+                        fill
+                        className="object-cover object-top transition-transform duration-500 group-hover:scale-[1.02]"
+                        sizes="(max-width: 768px) 100vw, 50vw"
+                      />
+                    </div>
+                  </div>
+                </AnimatedItem>
+              ))}
+            </div>
+          </div>
+        </Section>
+      )}
+
       {/* Artifacts */}
-      <Section background="secondary" padding="lg" id="case-artifacts">
+      <Section background={hasScreenshots ? "primary" : "secondary"} padding="lg" id="case-artifacts">
         <div className="max-w-3xl">
           <SectionHeader
             title={language === "en" ? "Artifacts" : "Артефакты"}
@@ -381,7 +435,7 @@ export function CaseDetailContent({ caseItem }: { caseItem: FlagshipCase }) {
                     </div>
                     {/* Status */}
                     <span className={`px-2 py-1 rounded-md text-caption font-medium ${gate.passed ? 'bg-success/10 text-success' : 'bg-warning/10 text-warning'}`}>
-                      {gate.passed 
+                      {gate.passed
                         ? (language === "en" ? "Pass" : "Пройден")
                         : (language === "en" ? "Skipped" : "Пропущен")}
                     </span>
@@ -392,7 +446,7 @@ export function CaseDetailContent({ caseItem }: { caseItem: FlagshipCase }) {
             {/* Summary footer */}
             <div className="relative mt-6 pt-4 border-t border-border flex items-center justify-between">
               <span className="text-body-sm text-text-secondary">
-                {passedCount === qualityGates.length 
+                {passedCount === qualityGates.length
                   ? (language === "en" ? "All gates passed" : "Все гейты пройдены")
                   : (language === "en" ? `${passedCount} of ${qualityGates.length} gates passed` : `${passedCount} из ${qualityGates.length} гейтов пройдено`)}
               </span>

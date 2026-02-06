@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import NextLink from "next/link";
+import Image from "next/image";
 import { useLanguage } from "@/lib/language-context";
 import { Section, SectionHeader, AnimatedItem } from "@/components/ui/section";
 import { TiltCard } from "@/components/ui/tilt-card";
@@ -18,6 +19,7 @@ export function FeaturedCasesSection() {
         <SectionHeader
           title={t("cases.title")}
           subtitle={t("cases.subtitle")}
+          eyebrow={language === "en" ? "Portfolio" : "Портфолио"}
           animate={false}
         />
         <ButtonLink href="/cases" buttonVariant="outline" size="sm">
@@ -133,14 +135,29 @@ export function FeaturedCasesSection() {
                   className="h-full overflow-hidden"
                 >
                   <div className={`relative ${cardHeights} bg-gradient-to-br from-bg-tertiary via-bg-elevated to-bg-secondary overflow-hidden`}>
-                    {!isFeatured && (
-                      <div className="absolute inset-0 opacity-30">
-                        <div className="absolute top-4 right-4 w-32 h-32 rounded-full bg-accent-primary/20 blur-3xl" />
-                        <div className="absolute bottom-4 left-4 w-24 h-24 rounded-full bg-accent-secondary/20 blur-2xl" />
-                      </div>
+                    {caseItem.imageUrl ? (
+                      <>
+                        <Image
+                          src={caseItem.imageUrl}
+                          alt={caseItem.title[language]}
+                          fill
+                          className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                          sizes={isFeatured ? "(max-width: 768px) 100vw, 66vw" : "(max-width: 768px) 100vw, 33vw"}
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-bg-secondary/90 via-bg-secondary/30 to-transparent" />
+                      </>
+                    ) : (
+                      <>
+                        {!isFeatured && (
+                          <div className="absolute inset-0 opacity-30">
+                            <div className="absolute top-4 right-4 w-32 h-32 rounded-full bg-accent-primary/20 blur-3xl" />
+                            <div className="absolute bottom-4 left-4 w-24 h-24 rounded-full bg-accent-secondary/20 blur-2xl" />
+                          </div>
+                        )}
+                        {backgroundByIndex()}
+                      </>
                     )}
-                    {backgroundByIndex()}
-                    <div className="absolute top-4 left-4">
+                    <div className="absolute top-4 left-4 z-10">
                       <CategoryBadge category={caseItem.category} />
                     </div>
                   </div>

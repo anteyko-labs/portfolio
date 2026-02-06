@@ -38,6 +38,7 @@ export function ProcessPreviewSection() {
         <SectionHeader
           title={t("process.title")}
           subtitle={t("process.subtitle")}
+          eyebrow={language === "en" ? "Process" : "Процесс"}
           animate={false}
         />
         <ButtonLink href="/process" buttonVariant="outline" size="sm">

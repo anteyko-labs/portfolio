@@ -86,41 +86,64 @@ Section.displayName = "Section";
 interface SectionHeaderProps {
   title: string;
   subtitle?: string;
+  eyebrow?: string;
   align?: "left" | "center";
   animate?: boolean;
+  size?: "default" | "lg";
 }
 
 export function SectionHeader({
   title,
   subtitle,
+  eyebrow,
   align = "left",
   animate = true,
+  size = "default",
 }: SectionHeaderProps) {
   const prefersReducedMotion = useReducedMotion();
 
   const alignClasses = align === "center" ? "text-center mx-auto" : "";
 
   const content = (
-    <>
+    <div className={clsx("relative", alignClasses)}>
+      {/* Eyebrow label */}
+      {eyebrow && (
+        <div className={clsx(
+          "flex items-center gap-3 mb-4",
+          align === "center" && "justify-center"
+        )}>
+          <span className="w-8 h-px bg-accent-primary" />
+          <span className="text-caption font-medium uppercase tracking-[0.15em] text-accent-primary">
+            {eyebrow}
+          </span>
+          {align !== "center" && <span className="flex-1 h-px bg-border/50" />}
+        </div>
+      )}
+
+      {/* Title */}
       <h2
         className={clsx(
-          "text-display-sm md:text-display-md text-text-primary font-display",
-          alignClasses
+          "font-display font-semibold tracking-tight text-text-primary",
+          size === "lg"
+            ? "text-display-md md:text-display-lg"
+            : "text-display-sm md:text-display-md"
         )}
       >
         {title}
       </h2>
+
+      {/* Subtitle */}
       {subtitle && (
         <p
           className={clsx(
-            "mt-4 text-body-lg text-text-secondary max-w-2xl",
-            alignClasses
+            "mt-4 md:mt-5 text-body-lg md:text-body-lg text-text-secondary max-w-2xl leading-relaxed",
+            align === "center" && "mx-auto"
           )}
         >
           {subtitle}
         </p>
       )}
-    </>
+    </div>
   );
 
   if (!animate || prefersReducedMotion) {
