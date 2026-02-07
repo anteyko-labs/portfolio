@@ -67,9 +67,9 @@ export function PageHero({
             <AnimatedItem>
               <NextLink
                 href={backLink.href}
-                className="inline-flex items-center gap-2 text-body-sm text-text-secondary hover:text-accent-primary transition-colors mb-4 group text-left"
+                className="inline-flex items-center gap-2 text-body-sm font-medium text-text-primary bg-bg-secondary/80 backdrop-blur-sm border border-border/60 rounded-lg px-3.5 py-2 hover:bg-bg-tertiary hover:border-accent-primary/40 hover:text-accent-primary transition-all duration-200 mb-6 group text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary"
               >
-                <svg className="w-4 h-4 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
                 {backLink.label}
