@@ -171,7 +171,7 @@ export function ServicesContent() {
                 {/* CTA Button - always at bottom */}
                 <div className="pt-6 mt-6 border-t border-border/30">
                   <ButtonLink 
-                    href="/contact" 
+                    href={`/contact?package=${pkg.id}`}
                     buttonVariant={pkg.id === "web3-addon" ? "primary" : "secondary"} 
                     size="md"
                     className="w-full justify-center"

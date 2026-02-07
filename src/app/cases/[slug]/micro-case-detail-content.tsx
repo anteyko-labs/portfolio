@@ -60,6 +60,7 @@ export function MicroCaseDetailContent({ caseItem }: MicroCaseDetailContentProps
         title={caseItem.title[language]}
         subtitle={caseItem.what[language]}
         eyebrow={language === "en" ? "Micro Case" : "Микро-кейс"}
+        backLink={{ href: "/cases", label: language === "en" ? "All Cases" : "Все кейсы" }}
         rightSlot={
           <div className="rounded-2xl border border-border bg-bg-secondary/80 backdrop-blur-sm p-6">
             <div className="flex items-center gap-3 mb-4">

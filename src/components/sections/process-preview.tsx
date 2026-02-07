@@ -48,6 +48,7 @@ export function ProcessPreviewSection() {
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
+            aria-hidden="true"
           >
             <path
               strokeLinecap="round"
@@ -78,9 +79,9 @@ export function ProcessPreviewSection() {
                 viewport={{ once: true, margin: "-20px" }}
                 variants={stepVariants(index)}
                 transition={{ duration: 0.45, delay: index * 0.08, ease: [0.25, 0.46, 0.45, 0.94] }}
-                whileHover={prefersReducedMotion ? undefined : { y: -2 }}
+                /* No hover lift — these cards are not interactive */
               >
-                <div className={`relative h-full rounded-2xl p-6 border border-border hover:border-border-hover transition-all duration-300 card-gradient-border overflow-hidden flex flex-col ${stepAccent(index)} ${stepBg(index)}`}>
+                <div className={`relative h-full rounded-2xl p-6 border border-border transition-all duration-300 overflow-hidden flex flex-col ${stepAccent(index)} ${stepBg(index)}`}>
                   {/* Per-step decorative elements */}
                   {index === 0 && (
                     <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-accent-primary/15 to-transparent rounded-bl-3xl pointer-events-none" aria-hidden />
@@ -102,7 +103,7 @@ export function ProcessPreviewSection() {
                         </div>
                       ) : index === 3 ? (
                         <div className="w-12 h-12 rounded-xl bg-success/15 border border-success/40 flex items-center justify-center">
-                          <svg className="w-6 h-6 text-success" fill="currentColor" viewBox="0 0 20 20">
+                          <svg className="w-6 h-6 text-success" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
                             <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                           </svg>
                         </div>

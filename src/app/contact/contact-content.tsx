@@ -65,19 +65,21 @@ export function ContactContent() {
   }, [formData]);
 
   useEffect(() => {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved) as typeof formData;
-        setFormData((prev) => ({ ...prev, ...parsed }));
-      } catch {
-        localStorage.removeItem(STORAGE_KEY);
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved) as typeof formData;
+          setFormData((prev) => ({ ...prev, ...parsed }));
+        } catch {
+          localStorage.removeItem(STORAGE_KEY);
+        }
       }
-    }
+    } catch { /* localStorage unavailable */ }
   }, []);
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(formData));
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(formData)); } catch { /* quota / private */ }
   }, [formData]);
 
   const updateField = (field: keyof typeof formData, value: string) => {
@@ -91,6 +93,10 @@ export function ContactContent() {
     REQUIRED_FIELDS.forEach((field) => {
       if (!formData[field]) nextErrors[field] = requiredMessage;
     });
+    // Email format validation
+    if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      nextErrors.email = language === "en" ? "Invalid email format" : "Неверный формат email";
+    }
     if (Object.keys(nextErrors).length > 0) {
       setErrors(nextErrors);
       return;
@@ -98,9 +104,12 @@ export function ContactContent() {
     setErrors({});
     setStatus("sending");
     try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 15_000);
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        signal: controller.signal,
         body: JSON.stringify({
           projectType: formData.projectType,
           stage: formData.stage,
@@ -112,12 +121,14 @@ export function ContactContent() {
           website: formData.website,
         }),
       });
+      clearTimeout(timeoutId);
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
         throw new Error(data.error || "Request failed");
       }
       setStatus("success");
       setFormData(initialFormState);
+      try { localStorage.removeItem(STORAGE_KEY); } catch { /* ignore */ }
     } catch {
       setStatus("error");
     }
@@ -165,14 +176,12 @@ export function ContactContent() {
               {language === "en" ? "Submit another request" : "Отправить ещё заявку"}
             </button>
             <a
-              href="https://calendly.com/anteyko/scoping-call" // TODO: Replace with real Calendly URL
-              target="_blank"
-              rel="noopener noreferrer"
+              href="mailto:hello@anteyko.com?subject=Scoping%20Call%20Request"
               className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl border border-border text-body-sm text-text-secondary hover:text-text-primary transition-colors"
             >
               {t("cta.secondary")}
-              <svg className="w-3 h-3 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              <svg className="w-3 h-3 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
               </svg>
             </a>
           </div>
@@ -199,6 +208,10 @@ export function ContactContent() {
               </div>
                 <div className="h-2 rounded-full bg-bg-tertiary overflow-hidden">
                 <div
+                  role="progressbar"
+                  aria-valuenow={completion}
+                  aria-valuemin={0}
+                  aria-valuemax={100}
                   className="h-full bg-gradient-to-r from-accent-primary to-accent-secondary transition-all duration-300 ease-out"
                   style={{ width: `${completion}%` }}
                 />
@@ -234,10 +247,10 @@ export function ContactContent() {
                 error={errors.projectType}
               />
 
-              <div>
-                <label className="block text-body-sm font-medium text-text-secondary mb-3">
+              <fieldset>
+                <legend className="block text-body-sm font-medium text-text-secondary mb-3">
                   {t("contact.form.stage")}
-                </label>
+                </legend>
                 <RadioGroup
                   name="stage"
                   options={stageOptions(t)}
@@ -246,12 +259,12 @@ export function ContactContent() {
                   columns={2}
                   error={errors.stage}
                 />
-              </div>
+              </fieldset>
 
-              <div>
-                <label className="block text-body-sm font-medium text-text-secondary mb-3">
+              <fieldset>
+                <legend className="block text-body-sm font-medium text-text-secondary mb-3">
                   {t("contact.form.timeline")}
-                </label>
+                </legend>
                 <RadioGroup
                   name="timeline"
                   options={timelineOptions(t)}
@@ -260,12 +273,12 @@ export function ContactContent() {
                   columns={3}
                   error={errors.timeline}
                 />
-              </div>
+              </fieldset>
 
-              <div>
-                <label className="block text-body-sm font-medium text-text-secondary mb-3">
+              <fieldset>
+                <legend className="block text-body-sm font-medium text-text-secondary mb-3">
                   {t("contact.form.budget")}
-                </label>
+                </legend>
                 <RadioGroup
                   name="budget"
                   options={budgetOptions(t)}
@@ -274,7 +287,7 @@ export function ContactContent() {
                   columns={4}
                   error={errors.budget}
                 />
-              </div>
+              </fieldset>
 
               <Input
                 label={t("contact.form.name")}
@@ -340,9 +353,7 @@ export function ContactContent() {
               </p>
               <div className="flex justify-center">
                 <a
-                  href="https://calendly.com/anteyko/scoping-call" // TODO: Replace with real Calendly URL
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href="mailto:hello@anteyko.com?subject=Scoping%20Call%20Request"
                   className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-bg-secondary border border-border text-body-sm text-accent-primary font-medium hover:border-accent-primary/30 hover:text-accent-secondary transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary"
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>

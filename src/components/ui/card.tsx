@@ -30,7 +30,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
   ({ variant = "default", hover = false, padding = "md", children, className, ...props }, ref) => {
     const prefersReducedMotion = useReducedMotion();
 
-    const baseClasses = "rounded-2xl overflow-hidden transition-all duration-300";
+    const baseClasses = "rounded-2xl overflow-clip transition-all duration-300";
 
     const hoverClasses = hover
       ? "hover:shadow-card-hover hover:border-border-hover cursor-pointer"

@@ -115,17 +115,21 @@ export function ScrollSpyRail({ items, className, mode = "sticky", position = "r
                   <a
                     key={item.id}
                     href={`#${item.id}`}
-                    className={clsx(
-                      "relative rounded-full transition-all duration-200",
-                      isActive
-                        ? "w-2.5 h-2.5 bg-accent-primary shadow-[0_0_8px_rgba(99,102,241,0.5)]"
-                        : i <= activeIndex
-                          ? "w-1.5 h-1.5 bg-accent-primary/40 hover:bg-accent-primary/70"
-                          : "w-1.5 h-1.5 bg-text-tertiary/30 hover:bg-text-tertiary/60"
-                    )}
+                    className="relative flex items-center justify-center w-[44px] h-[44px] -mx-[18px]"
                     title={item.label}
                     aria-label={item.label}
-                  />
+                  >
+                    <span
+                      className={clsx(
+                        "block rounded-full transition-all duration-200",
+                        isActive
+                          ? "w-2.5 h-2.5 bg-accent-primary shadow-[0_0_8px_rgba(99,102,241,0.5)]"
+                          : i <= activeIndex
+                            ? "w-1.5 h-1.5 bg-accent-primary/40"
+                            : "w-1.5 h-1.5 bg-text-tertiary/30"
+                      )}
+                    />
+                  </a>
                 );
               })}
             </nav>

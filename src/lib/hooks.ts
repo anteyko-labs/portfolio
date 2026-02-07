@@ -101,17 +101,25 @@ export function useInView(options?: IntersectionObserverInit) {
   const ref = useRef<HTMLElement>(null);
   const [isInView, setIsInView] = useState(false);
 
+  // Serialize options to a stable key to avoid infinite re-renders
+  const optionsKey = JSON.stringify({
+    root: null,
+    rootMargin: options?.rootMargin ?? "0px",
+    threshold: options?.threshold ?? 0,
+  });
+
   useEffect(() => {
     const element = ref.current;
     if (!element) return;
 
+    const parsed = JSON.parse(optionsKey) as IntersectionObserverInit;
     const observer = new IntersectionObserver(([entry]) => {
       setIsInView(entry.isIntersecting);
-    }, options);
+    }, parsed);
 
     observer.observe(element);
     return () => observer.disconnect();
-  }, [options]);
+  }, [optionsKey]);
 
   return { ref, isInView };
 }

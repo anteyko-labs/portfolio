@@ -11,8 +11,9 @@ const inter = Inter({
 
 const syne = Syne({
   variable: "--font-cabinet",
-  subsets: ["latin"],
+  subsets: ["latin", "latin-ext"],
   display: "swap",
+  fallback: ["Inter", "system-ui", "sans-serif"],
 });
 
 const jetbrainsMono = JetBrains_Mono({
@@ -104,7 +105,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" className="dark" suppressHydrationWarning>
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="icon" href="/icon.svg" type="image/svg+xml" />
@@ -133,9 +134,18 @@ export default function RootLayout({
         className={`${inter.variable} ${syne.variable} ${jetbrainsMono.variable} font-sans antialiased`}
       >
         <LanguageProvider>
+          {/* Skip to content — WCAG 2.4.1 */}
+          <a
+            href="#main-content"
+            className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[9999] focus:px-4 focus:py-2 focus:bg-accent-primary focus:text-white focus:rounded-lg focus:text-body-sm focus:font-medium"
+          >
+            Skip to main content
+          </a>
           {/* Noise overlay for texture */}
           <div className="noise-overlay" aria-hidden="true" />
-          {children}
+          <main id="main-content">
+            {children}
+          </main>
         </LanguageProvider>
       </body>
     </html>

@@ -75,9 +75,21 @@ export function FAQContent() {
 
   const handleCopy = async (id: string) => {
     const url = `${window.location.origin}/faq#${id}`;
-    await navigator.clipboard.writeText(url);
-    setCopiedId(id);
-    setTimeout(() => setCopiedId(null), 1500);
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopiedId(id);
+      setTimeout(() => setCopiedId(null), 1500);
+    } catch {
+      // Fallback for browsers that don't support clipboard API
+      const textArea = document.createElement("textarea");
+      textArea.value = url;
+      textArea.style.position = "fixed";
+      textArea.style.left = "-9999px";
+      document.body.appendChild(textArea);
+      textArea.select();
+      try { document.execCommand("copy"); setCopiedId(id); setTimeout(() => setCopiedId(null), 1500); } catch { /* ignore */ }
+      document.body.removeChild(textArea);
+    }
   };
 
   const highlight = (text: string) => {
@@ -119,6 +131,7 @@ export function FAQContent() {
                   key={cat.value}
                   type="button"
                   onClick={() => setCategory(cat.value)}
+                  aria-pressed={category === cat.value}
                   className={`px-3 py-1.5 rounded-full text-caption border transition-colors ${
                     category === cat.value
                       ? "border-accent-primary/40 bg-accent-primary/10 text-accent-primary"

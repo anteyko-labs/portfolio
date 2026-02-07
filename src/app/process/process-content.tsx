@@ -84,7 +84,7 @@ export function ProcessContent() {
           >
             {steps.map((step, index) => (
               <motion.div key={step.number} variants={stepVariants(index)} id={`process-step-${step.number}`}>
-                <div className={`relative flex flex-col md:flex-row gap-8 md:gap-12 rounded-2xl p-8 md:p-10 transition-shadow duration-300 hover:shadow-glow-sm ${stepCardClass(index)}`}>
+                <div className={`relative flex flex-col md:flex-row gap-8 md:gap-12 rounded-2xl p-8 md:p-10 ${stepCardClass(index)}`}>
                   {/* Decorative per-step */}
                   {index === 0 && <div className="absolute top-0 left-0 w-32 h-1 bg-gradient-to-r from-accent-primary to-transparent rounded-r-full" aria-hidden />}
                   {index === 1 && <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-accent-primary/15 to-transparent rounded-bl-2xl" aria-hidden />}

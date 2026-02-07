@@ -14,9 +14,9 @@ interface LinkProps extends NextLinkProps {
 }
 
 const variants = {
-  default: "text-text-secondary hover:text-text-primary transition-colors",
-  nav: "text-text-secondary hover:text-text-primary transition-colors font-medium",
-  footer: "text-text-tertiary hover:text-text-secondary transition-colors text-body-sm",
+  default: "text-text-secondary hover:text-text-primary transition-colors underline underline-offset-4",
+  nav: "text-text-secondary hover:text-text-primary transition-colors font-medium underline underline-offset-4",
+  footer: "text-text-tertiary hover:text-text-secondary transition-colors text-body-sm underline underline-offset-4",
   underline:
     "text-accent-primary hover:text-accent-secondary transition-colors underline underline-offset-4",
 };
@@ -41,6 +41,7 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
+            aria-hidden="true"
           >
             <path
               strokeLinecap="round"

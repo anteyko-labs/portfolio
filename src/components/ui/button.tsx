@@ -92,6 +92,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           className
         )}
         disabled={disabled || isLoading}
+        aria-busy={isLoading || undefined}
         {...motionProps}
         {...(props as HTMLMotionProps<"button">)}
       >
@@ -121,7 +122,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         )}
         <span
           className={clsx(
-            "flex items-center gap-inherit",
+            "flex items-center gap-[inherit]",
             isLoading && "invisible"
           )}
         >

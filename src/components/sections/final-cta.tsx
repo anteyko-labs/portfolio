@@ -54,6 +54,7 @@ export function FinalCTASection() {
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
+                      aria-hidden="true"
                     >
                       <path
                         strokeLinecap="round"
@@ -69,8 +70,8 @@ export function FinalCTASection() {
                 </ButtonLink>
               </MagneticButton>
               <MagneticButton className="inline-flex">
-                <ButtonLink href="/contact" buttonVariant="secondary" size="lg">
-                  {t("cta.secondary")}
+                <ButtonLink href="/cases" buttonVariant="secondary" size="lg">
+                  {language === "en" ? "View our work" : "Смотреть кейсы"}
                 </ButtonLink>
               </MagneticButton>
             </div>
@@ -82,6 +83,7 @@ export function FinalCTASection() {
                 className="w-6 h-6 text-success shrink-0"
                 fill="currentColor"
                 viewBox="0 0 20 20"
+                aria-hidden="true"
               >
                 <path
                   fillRule="evenodd"

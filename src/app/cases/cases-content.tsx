@@ -105,6 +105,7 @@ export function CasesContent() {
                           src={caseItem.imageUrl}
                           alt={caseItem.title[language]}
                           fill
+                          sizes="(max-width: 768px) 100vw, 50vw"
                           className="object-cover transition-transform duration-700 group-hover:scale-105"
                         />
                         <div className="absolute inset-0 bg-bg-primary/20 mix-blend-overlay" />
@@ -150,6 +151,7 @@ export function CasesContent() {
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
+                        aria-hidden="true"
                       >
                         <path
                           strokeLinecap="round"
@@ -168,16 +170,16 @@ export function CasesContent() {
 
         {/* Load more button */}
         {!showAllFlagship && flagshipCases.length > INITIAL_FLAGSHIP_COUNT && (
-          <div className="mt-8 text-center">
+          <div className="mt-8 text-center" aria-live="polite">
             <button
               type="button"
               onClick={() => setShowAllFlagship(true)}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-border bg-bg-tertiary/60 text-body-md text-text-secondary font-medium hover:text-text-primary hover:border-border-hover transition-colors"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-border bg-bg-tertiary/60 text-body-md text-text-secondary font-medium hover:text-text-primary hover:border-border-hover transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary rounded-xl"
             >
               {language === "en"
                 ? `Show ${flagshipCases.length - INITIAL_FLAGSHIP_COUNT} more cases`
                 : `Показать ещё ${flagshipCases.length - INITIAL_FLAGSHIP_COUNT} кейсов`}
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
               </svg>
             </button>
@@ -199,7 +201,23 @@ export function CasesContent() {
           />
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" aria-live="polite">
+          {filteredMicro.length === 0 && (
+            <div className="col-span-full text-center py-12">
+              <p className="text-body-lg text-text-secondary">
+                {language === "en"
+                  ? "No micro cases match this filter."
+                  : "Нет микро-кейсов по выбранному фильтру."}
+              </p>
+              <button
+                type="button"
+                onClick={() => setFilter("all")}
+                className="mt-4 text-body-sm text-accent-primary hover:text-accent-secondary transition-colors"
+              >
+                {language === "en" ? "Show all" : "Показать все"}
+              </button>
+            </div>
+          )}
           {filteredMicro.map((item, index) => (
             <AnimatedItem key={item.id} delay={Math.min(index * 0.02, 0.3)}>
               <NextLink href={`/cases/${item.id}`} className="block h-full">
@@ -221,7 +239,7 @@ export function CasesContent() {
                         initial={false}
                         whileHover={{ x: 2 }}
                       >
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                         </svg>
                       </motion.span>

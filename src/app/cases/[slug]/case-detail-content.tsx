@@ -17,7 +17,7 @@ import NextLink from "next/link";
 // Sticky Summary Rail component
 function CaseSummaryRail({ caseItem, language, t }: { caseItem: FlagshipCase; language: "en" | "ru"; t: (key: string) => string }) {
   return (
-    <aside className="hidden lg:block fixed top-28 right-8 w-72 z-40">
+    <aside className="hidden 2xl:block fixed top-28 right-8 w-72 z-40">
       <div className="rounded-2xl border border-border bg-bg-secondary/95 backdrop-blur-sm p-5 space-y-4">
         {/* Category */}
         <div>
@@ -123,9 +123,12 @@ export function CaseDetailContent({ caseItem }: { caseItem: FlagshipCase }) {
         { title: "TypeScript SDK", subtitle: language === "en" ? "HTTP API + DEX integration" : "HTTP API + DEX\u2011интеграция", tone: "primary" },
       ],
       "utility-token-uae": [
-        { title: language === "en" ? "Compliance package" : "Compliance-пакет", subtitle: "UAE VARA", tone: "success" },
-        { title: language === "en" ? "Token mechanics spec" : "Спек механики токена", subtitle: "ERC-20", tone: "primary" },
-        { title: language === "en" ? "Admin runbook" : "Админ runbook", subtitle: "Ops guide", tone: "warning" },
+        { title: language === "en" ? "Security Audit Report" : "Отчёт security\u2011аудита", subtitle: "SECURITY_AUDIT_REPORT", tone: "success" },
+        { title: language === "en" ? "NFT Tier Contracts" : "NFT\u2011контракты уровней", subtitle: "Bronze / Silver / Gold / Platinum", tone: "primary" },
+        { title: language === "en" ? "Admin Panel Guide" : "Гайд админ\u2011панели", subtitle: "ADMIN_CAPABILITIES_REPORT", tone: "warning" },
+        { title: language === "en" ? "Deployment Reports" : "Отчёты деплоя", subtitle: language === "en" ? "Production readiness" : "Готовность к production", tone: "primary" },
+        { title: language === "en" ? "Staking Flow Spec" : "Спека стейкинг\u2011flow", subtitle: language === "en" ? "Benefit-based, no yield" : "Benefit\u2011based, без доходности", tone: "success" },
+        { title: language === "en" ? "Voucher System Docs" : "Документация ваучеров", subtitle: language === "en" ? "NFT-gated access" : "NFT\u2011gated доступ", tone: "warning" },
       ],
       "enterprise-modules": [
         { title: "KYC Flow Diagram", subtitle: "Jumio + Sumsub", tone: "primary" },
@@ -155,6 +158,21 @@ export function CaseDetailContent({ caseItem }: { caseItem: FlagshipCase }) {
         { title: "MVP → Launch playbook", subtitle: "3 phases", tone: "primary" },
         { title: language === "en" ? "Support SLA doc" : "Доки SLA поддержки", subtitle: "3 months", tone: "success" },
         { title: language === "en" ? "IP transfer checklist" : "Чеклист передачи IP", subtitle: "Full ownership", tone: "warning" },
+      ],
+      "multi-location-restaurant-management": [
+        { title: language === "en" ? "RBAC Model (4 roles)" : "RBAC\u2011модель (4 роли)", subtitle: language === "en" ? "Chef / Employee / Accountant / Owner" : "Шеф / Сотрудник / Бухгалтер / Владелец", tone: "primary" },
+        { title: language === "en" ? "Cost Calculation Engine" : "Движок расчёта себестоимости", subtitle: language === "en" ? "Ingredients → Rolls → Sets" : "Ингредиенты → Роллы → Сеты", tone: "success" },
+        { title: language === "en" ? "Accounting Module" : "Модуль бухгалтерии", subtitle: "Excel + ZIP export", tone: "warning" },
+        { title: language === "en" ? "Audit Trail System" : "Система аудит\u2011трейла", subtitle: language === "en" ? "Action / Object / Old→New / Role" : "Действие / Объект / Было→Стало / Роль", tone: "primary" },
+        { title: language === "en" ? "Analytics Dashboard" : "Дашборд аналитики", subtitle: "Chart.js", tone: "success" },
+      ],
+      "asset-tokenization-platform": [
+        { title: language === "en" ? "KYC Verification Pipeline" : "Пайплайн KYC\u2011верификации", subtitle: language === "en" ? "4-status flow" : "4\u2011статусный flow", tone: "primary" },
+        { title: language === "en" ? "Private Sale State Machine" : "State machine Private Sale", subtitle: language === "en" ? "Limits + safe transitions" : "Лимиты + безопасные переходы", tone: "success" },
+        { title: language === "en" ? "RBAC Access Control" : "RBAC\u2011контроль доступа", subtitle: "User / Admin / Ops", tone: "warning" },
+        { title: language === "en" ? "Audit Trail System" : "Система аудит\u2011трейла", subtitle: language === "en" ? "Who, when, what" : "Кто, когда, что", tone: "primary" },
+        { title: language === "en" ? "Token Issuance Contracts" : "Контракты выпуска токенов", subtitle: "EVM\u2011compatible", tone: "success" },
+        { title: language === "en" ? "Stakeholder Documentation" : "Документация для стейкхолдеров", subtitle: language === "en" ? "Features + roadmap + system" : "Функции + roadmap + система", tone: "warning" },
       ],
       "trm-oferta-registration": [
         { title: language === "en" ? "3-step UX flow" : "3-шаговый UX-поток", subtitle: language === "en" ? "Registration → Offer → Deposit" : "Регистрация → Оферта → Задаток", tone: "primary" },
@@ -195,16 +213,29 @@ export function CaseDetailContent({ caseItem }: { caseItem: FlagshipCase }) {
         title={caseItem.title[language]}
         subtitle={caseItem.summary[language]}
         eyebrow={language === "en" ? "Case Study" : "Кейс"}
+        backLink={{ href: "/cases", label: language === "en" ? "All Cases" : "Все кейсы" }}
         backgroundImage={caseItem.heroImage}
         rightSlot={
           caseItem.metrics && caseItem.metrics.length > 0 ? (
-            <div className="hidden lg:block space-y-4">
-              {caseItem.metrics.slice(0, 3).map((metric) => (
-                <div key={`hero-right-${metric.value}`} className="bg-bg-secondary/40 backdrop-blur-sm p-4 rounded-xl border border-white/5">
-                  <p className="text-display-xs text-accent-primary font-bold">{metric.value}</p>
-                  <p className="text-body-sm text-text-secondary">{metric.label[language]}</p>
-                </div>
-              ))}
+            <div className="space-y-4">
+              {/* Mobile: horizontal compact metrics */}
+              <div className="flex flex-wrap gap-3 lg:hidden">
+                {caseItem.metrics.slice(0, 4).map((metric) => (
+                  <div key={`hero-mobile-${metric.value}`} className="bg-bg-secondary/40 backdrop-blur-sm px-3 py-2 rounded-lg border border-white/5 flex items-baseline gap-2">
+                    <span className="text-heading-sm text-accent-primary font-bold">{metric.value}</span>
+                    <span className="text-caption text-text-secondary">{metric.label[language]}</span>
+                  </div>
+                ))}
+              </div>
+              {/* Desktop: vertical stacked metrics */}
+              <div className="hidden lg:block space-y-4">
+                {caseItem.metrics.slice(0, 3).map((metric) => (
+                  <div key={`hero-right-${metric.value}`} className="bg-bg-secondary/40 backdrop-blur-sm p-4 rounded-xl border border-white/5">
+                    <p className="text-display-xs text-accent-primary font-bold">{metric.value}</p>
+                    <p className="text-body-sm text-text-secondary">{metric.label[language]}</p>
+                  </div>
+                ))}
+              </div>
             </div>
           ) : undefined
         }
@@ -308,6 +339,7 @@ export function CaseDetailContent({ caseItem }: { caseItem: FlagshipCase }) {
                     className="w-5 h-5 text-success shrink-0 mt-0.5"
                     fill="currentColor"
                     viewBox="0 0 20 20"
+                    aria-hidden="true"
                   >
                     <path
                       fillRule="evenodd"
@@ -383,7 +415,7 @@ export function CaseDetailContent({ caseItem }: { caseItem: FlagshipCase }) {
                   subtitle={artifact.subtitle}
                   tone={artifact.tone}
                   icon={
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
                   }
@@ -415,11 +447,11 @@ export function CaseDetailContent({ caseItem }: { caseItem: FlagshipCase }) {
                     {/* Checkbox indicator */}
                     <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition-colors ${gate.passed ? 'bg-success/20 border border-success/40 group-hover:bg-success/30' : 'bg-warning/20 border border-warning/40 group-hover:bg-warning/30'}`}>
                       {gate.passed ? (
-                        <svg className="w-4 h-4 text-success" fill="currentColor" viewBox="0 0 20 20">
+                        <svg className="w-4 h-4 text-success" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
                           <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                         </svg>
                       ) : (
-                        <svg className="w-4 h-4 text-warning" fill="currentColor" viewBox="0 0 20 20">
+                        <svg className="w-4 h-4 text-warning" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
                           <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
                         </svg>
                       )}
@@ -455,11 +487,11 @@ export function CaseDetailContent({ caseItem }: { caseItem: FlagshipCase }) {
                   {passedCount}/{qualityGates.length}
                 </span>
                 {passedCount === qualityGates.length ? (
-                  <svg className="w-5 h-5 text-success" fill="currentColor" viewBox="0 0 20 20">
+                  <svg className="w-5 h-5 text-success" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                   </svg>
                 ) : (
-                  <svg className="w-5 h-5 text-warning" fill="currentColor" viewBox="0 0 20 20">
+                  <svg className="w-5 h-5 text-warning" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
                     <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
                   </svg>
                 )}
@@ -561,7 +593,7 @@ export function CaseDetailContent({ caseItem }: { caseItem: FlagshipCase }) {
           {/* Previous case */}
           {prevCase ? (
             <NextLink href={`/cases/${prevCase.slug}`} className="group flex items-center gap-3 p-4 rounded-xl border border-border bg-bg-tertiary/50 hover:border-accent-primary/30 transition-colors max-w-[45%]">
-              <svg className="w-5 h-5 text-text-tertiary group-hover:text-accent-primary transition-colors shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 text-text-tertiary group-hover:text-accent-primary transition-colors shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
               <div className="min-w-0">
@@ -588,7 +620,7 @@ export function CaseDetailContent({ caseItem }: { caseItem: FlagshipCase }) {
                   {nextCase.title[language]}
                 </p>
               </div>
-              <svg className="w-5 h-5 text-text-tertiary group-hover:text-accent-primary transition-colors shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 text-text-tertiary group-hover:text-accent-primary transition-colors shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
             </NextLink>

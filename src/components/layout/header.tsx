@@ -27,6 +27,7 @@ export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const mobileMenuRef = useFocusTrap(isMobileMenuOpen);
+  const menuTriggerRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -37,8 +38,11 @@ export function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Close mobile menu on escape
-  useKeyboardNavigation(() => setIsMobileMenuOpen(false));
+  // Close mobile menu on escape & restore focus
+  useKeyboardNavigation(() => {
+    setIsMobileMenuOpen(false);
+    menuTriggerRef.current?.focus();
+  });
 
   // Prevent body scroll when mobile menu is open
   useEffect(() => {
@@ -90,7 +94,8 @@ export function Header() {
                   className={clsx(
                     "px-4 py-2 text-body-sm font-medium rounded-lg",
                     "text-text-secondary hover:text-text-primary",
-                    "transition-all duration-200 hover:-translate-y-0.5"
+                    "transition-all duration-200 hover:-translate-y-0.5",
+                    "focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary"
                   )}
                 >
                   {t(`nav.${item.key}`)}
@@ -107,7 +112,8 @@ export function Header() {
                   "px-3 py-2 text-body-sm font-medium rounded-lg",
                   "text-text-secondary hover:text-text-primary",
                   "border border-border hover:border-border-hover",
-                  "transition-all duration-200"
+                  "transition-all duration-200",
+                  "focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary"
                 )}
                 aria-label={`Switch to ${language === "en" ? "Russian" : "English"}`}
               >
@@ -128,15 +134,19 @@ export function Header() {
 
             {/* Mobile Menu Button */}
             <button
+              ref={menuTriggerRef}
               onClick={() => setIsMobileMenuOpen(true)}
-              className="lg:hidden p-2 text-text-secondary hover:text-text-primary transition-colors"
+              className="lg:hidden p-2.5 -mr-2.5 text-text-secondary hover:text-text-primary transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary rounded-lg"
               aria-label="Open menu"
+              aria-expanded={isMobileMenuOpen}
+              aria-controls="mobile-menu"
             >
               <svg
                 className="w-6 h-6"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
+                aria-hidden="true"
               >
                 <path
                   strokeLinecap="round"
@@ -161,12 +171,16 @@ export function Header() {
               exit={{ opacity: 0 }}
               transition={{ duration: prefersReducedMotion ? 0 : 0.2 }}
               className="fixed inset-0 z-50 bg-bg-primary/90 backdrop-blur-xl lg:hidden"
-              onClick={() => setIsMobileMenuOpen(false)}
+              onClick={() => {
+                setIsMobileMenuOpen(false);
+                menuTriggerRef.current?.focus();
+              }}
             />
 
             {/* Menu Content */}
             <motion.div
               ref={mobileMenuRef}
+              id="mobile-menu"
               role="dialog"
               aria-modal="true"
               aria-label="Menu"
@@ -180,8 +194,11 @@ export function Header() {
                 {/* Close Button */}
                 <div className="flex justify-end">
                   <button
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="p-2 text-text-secondary hover:text-text-primary transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-secondary rounded-lg"
+                    onClick={() => {
+                      setIsMobileMenuOpen(false);
+                      menuTriggerRef.current?.focus();
+                    }}
+                    className="p-2.5 -mr-2.5 text-text-secondary hover:text-text-primary transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-secondary rounded-lg"
                     aria-label="Close menu"
                   >
                     <svg
@@ -189,6 +206,7 @@ export function Header() {
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
+                      aria-hidden="true"
                     >
                       <path
                         strokeLinecap="round"

@@ -20,24 +20,27 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     setMounted(true);
-    const stored = localStorage.getItem(STORAGE_KEY) as Language | null;
     let lang: Language = "en";
-    if (stored && (stored === "en" || stored === "ru")) {
-      setLanguageState(stored);
-      lang = stored;
-    } else {
-      const browserLang = navigator.language.toLowerCase();
-      if (browserLang.startsWith("ru")) {
-        setLanguageState("ru");
-        lang = "ru";
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY) as Language | null;
+      if (stored && (stored === "en" || stored === "ru")) {
+        lang = stored;
+      } else {
+        const browserLang = navigator?.language?.toLowerCase() ?? "";
+        if (browserLang.startsWith("ru")) {
+          lang = "ru";
+        }
       }
+    } catch {
+      // localStorage unavailable (Safari private, etc.)
     }
+    setLanguageState(lang);
     document.documentElement.lang = lang;
   }, []);
 
   const setLanguage = useCallback((lang: Language) => {
     setLanguageState(lang);
-    localStorage.setItem(STORAGE_KEY, lang);
+    try { localStorage.setItem(STORAGE_KEY, lang); } catch { /* quota / private browsing */ }
     document.documentElement.lang = lang;
   }, []);
 

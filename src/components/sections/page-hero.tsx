@@ -3,6 +3,7 @@
 import { ReactNode } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import NextLink from "next/link";
 import { useReducedMotion } from "@/lib/hooks";
 import { Section, AnimatedItem } from "@/components/ui/section";
 
@@ -19,6 +20,7 @@ interface PageHeroProps {
   rightSlot?: ReactNode;
   align?: "left" | "center";
   backgroundImage?: string;
+  backLink?: { href: string; label: string };
 }
 
 export function PageHero({
@@ -29,6 +31,7 @@ export function PageHero({
   rightSlot,
   align = "center",
   backgroundImage,
+  backLink,
 }: PageHeroProps) {
   const prefersReducedMotion = useReducedMotion();
   const isSplit = Boolean(rightSlot);
@@ -60,6 +63,20 @@ export function PageHero({
 
       <div className={`relative ${isSplit ? "grid gap-10 lg:grid-cols-[1.2fr_0.8fr] items-center" : "max-w-3xl mx-auto"}`}>
         <div className={isSplit ? "max-w-3xl" : ""}>
+          {backLink && (
+            <AnimatedItem>
+              <NextLink
+                href={backLink.href}
+                className="inline-flex items-center gap-2 text-body-sm text-text-secondary hover:text-accent-primary transition-colors mb-4 group text-left"
+              >
+                <svg className="w-4 h-4 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                {backLink.label}
+              </NextLink>
+            </AnimatedItem>
+          )}
+
           {eyebrow && (
             <AnimatedItem>
               <p className={`text-caption uppercase tracking-[0.35em] text-text-tertiary ${alignClasses}`}>

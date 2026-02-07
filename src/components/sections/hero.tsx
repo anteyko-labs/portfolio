@@ -12,12 +12,17 @@ import { fadeInUp, staggerContainer } from "@/lib/motion";
 // Dynamic import for 3D scene with SSR disabled
 const HeroScene = dynamic(
   () => import("@/components/three/hero-scene").then((mod) => mod.HeroScene),
-  { ssr: false }
+  {
+    ssr: false,
+    loading: () => (
+      <div className="absolute inset-0 bg-gradient-to-br from-bg-primary via-bg-secondary to-bg-primary" />
+    ),
+  }
 );
 
 export function HeroSection() {
   const router = useRouter();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const prefersReducedMotion = useReducedMotion();
   const tagline = t("hero.tagline");
   const taglineParts = tagline.split(/\s*·\s*/);
@@ -29,7 +34,7 @@ export function HeroSection() {
   const sceneFilter = useTransform(sceneBlur, (v) => `blur(${v}px)`);
 
   return (
-    <section className="relative min-h-[90vh] flex items-center overflow-hidden">
+    <section className="relative min-h-[90dvh] flex items-center overflow-hidden">
       {/* 3D Background — reduced opacity for better text contrast */}
       <motion.div
         className="absolute inset-0"
@@ -152,9 +157,9 @@ export function HeroSection() {
               <Button
                 variant="outline"
                 size="lg"
-                onClick={() => router.push("/contact")}
+                onClick={() => router.push("/cases")}
               >
-                {t("cta.secondary")}
+                {language === "en" ? "View our work" : "Смотреть кейсы"}
               </Button>
             </MagneticButton>
           </motion.div>
