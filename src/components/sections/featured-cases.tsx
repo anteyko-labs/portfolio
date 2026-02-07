@@ -140,11 +140,12 @@ export function FeaturedCasesSection() {
                         <Image
                           src={caseItem.imageUrl}
                           alt={caseItem.title[language]}
-                          fill
-                          className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                          width={800}
+                          height={450}
+                          className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
                           sizes={isFeatured ? "(max-width: 768px) 100vw, 66vw" : "(max-width: 768px) 100vw, 33vw"}
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-bg-secondary/90 via-bg-secondary/30 to-transparent" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-bg-secondary/80 via-transparent to-transparent" />
                       </>
                     ) : (
                       <>

@@ -100,17 +100,14 @@ export function CasesContent() {
                       </div>
                     )}
                     {caseItem.imageUrl ? (
-                      <>
-                        <Image
-                          src={caseItem.imageUrl}
-                          alt={caseItem.title[language]}
-                          fill
-                          sizes="(max-width: 768px) 100vw, 50vw"
-                          className="object-cover transition-transform duration-700 group-hover:scale-105"
-                          style={{ zIndex: 1 }}
-                        />
-                        <div className="absolute inset-0 bg-bg-primary/10 z-[2]" />
-                      </>
+                      <Image
+                        src={caseItem.imageUrl}
+                        alt={caseItem.title[language]}
+                        width={800}
+                        height={450}
+                        sizes="(max-width: 768px) 100vw, 50vw"
+                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      />
                     ) : (
                       <div
                         className="absolute inset-0 opacity-15"
@@ -124,7 +121,7 @@ export function CasesContent() {
                       />
                     )}
                     {/* Gradient overlay for depth */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-bg-secondary/90 via-bg-secondary/20 to-transparent z-[3]" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-bg-secondary/80 via-transparent to-transparent" />
                   </div>
                   <div className="p-6 pb-8 md:p-8 md:pb-10">
                     <h2 className="text-heading-lg font-medium text-text-primary mb-2 group-hover:text-accent-primary transition-colors">
