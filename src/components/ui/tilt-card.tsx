@@ -53,7 +53,7 @@ export function TiltCard({
     <motion.div
       ref={ref}
       className={clsx(
-        "group rounded-2xl overflow-hidden transition-shadow duration-300 cursor-pointer",
+        "group rounded-2xl transition-shadow duration-300 cursor-pointer",
         "hover:shadow-card-hover hover:border-border-hover",
         hoverGradientBorder &&
           "hover:shadow-[0_0_0_1px_rgba(99,102,241,0.25),0_0_24px_-4px_rgba(99,102,241,0.2),0_8px_40px_-8px_rgba(0,0,0,0.6)]",
@@ -86,7 +86,7 @@ export function TiltCard({
           className={clsx(
             cardFaceClasses,
             paddings[padding],
-            "relative z-10 h-full rounded-2xl [backface-visibility:hidden]"
+            "relative z-10 h-full rounded-2xl overflow-hidden [backface-visibility:hidden]"
           )}
           style={{
             backfaceVisibility: "hidden",
@@ -102,7 +102,7 @@ export function TiltCard({
               aria-hidden
             />
           )}
-          <div className="relative z-10" style={{ transform: "translateZ(20px)" }}>
+          <div className="relative z-10" style={{ transform: "translateZ(0)" }}>
             {children}
           </div>
         </div>

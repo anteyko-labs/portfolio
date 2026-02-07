@@ -107,8 +107,9 @@ export function CasesContent() {
                           fill
                           sizes="(max-width: 768px) 100vw, 50vw"
                           className="object-cover transition-transform duration-700 group-hover:scale-105"
+                          style={{ zIndex: 1 }}
                         />
-                        <div className="absolute inset-0 bg-bg-primary/20 mix-blend-overlay" />
+                        <div className="absolute inset-0 bg-bg-primary/10 z-[2]" />
                       </>
                     ) : (
                       <div
@@ -123,7 +124,7 @@ export function CasesContent() {
                       />
                     )}
                     {/* Gradient overlay for depth */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-bg-secondary/80 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-bg-secondary/90 via-bg-secondary/20 to-transparent z-[3]" />
                   </div>
                   <div className="p-6 pb-8 md:p-8 md:pb-10">
                     <h2 className="text-heading-lg font-medium text-text-primary mb-2 group-hover:text-accent-primary transition-colors">
