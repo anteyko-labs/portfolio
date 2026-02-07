@@ -315,45 +315,51 @@ export function CaseDetailContent({ caseItem }: { caseItem: FlagshipCase }) {
           />
           {(() => {
             const solutionText = caseItem.solution[language];
-            // Detect structured solution: contains labeled sections like "DESIGN:", "BACKEND:", "iOS APP:", etc.
-            const sectionPattern = /(?:^|\.\s+)((?:DESIGN|FRONTEND|BACKEND|ФРОНТЕНД|БЭКЕНД|ДИЗАЙН|iOS[- ]APP|iOS[- ]ПРИЛОЖЕНИЕ|CHEF EXPERIENCE|ОПЫТ ПОВАРА|API[- ](?:LAYER|СЛОЙ))(?:\s*\([^)]*\))?)\s*:\s*/gi;
-            const hasStructuredSections = sectionPattern.test(solutionText);
 
-            if (hasStructuredSections) {
-              // Split into labeled blocks
-              const splitPattern = /(?:^|\.\s+)((?:DESIGN|FRONTEND|BACKEND|ФРОНТЕНД|БЭКЕНД|ДИЗАЙН|iOS[- ]APP|iOS[- ]ПРИЛОЖЕНИЕ|CHEF EXPERIENCE|ОПЫТ ПОВАРА|API[- ](?:LAYER|СЛОЙ))(?:\s*\([^)]*\))?)\s*:\s*/gi;
-              const parts: { heading: string; body: string }[] = [];
-              let lastIndex = 0;
+            // Section label keywords (handles regular hyphen, non-breaking hyphen \u2011, and space)
+            const LABELS = [
+              "DESIGN", "FRONTEND", "BACKEND",
+              "ФРОНТЕНД", "БЭКЕНД", "ДИЗАЙН",
+              "iOS[\\s\\-\u2011]APP", "iOS[\\s\\-\u2011]ПРИЛОЖЕНИЕ",
+              "CHEF EXPERIENCE", "ОПЫТ ПОВАРА",
+              "API[\\s\\-\u2011]LAYER", "API[\\s\\-\u2011]СЛОЙ",
+            ];
+            const labelGroup = LABELS.join("|");
+            // Match: LABEL (optional parenthetical): — preceded by ". " or start of string
+            const sectionRe = new RegExp(
+              `(?:^|[.!]\\s+)((?:${labelGroup})(?:\\s*\\([^)]*\\))?)\\s*:\\s*`,
+              "gi"
+            );
+
+            // Collect all match positions
+            const allMatches: { heading: string; fullMatchStart: number; bodyStart: number }[] = [];
+            let m;
+            while ((m = sectionRe.exec(solutionText)) !== null) {
+              allMatches.push({
+                heading: m[1].trim(),
+                fullMatchStart: m.index,
+                bodyStart: m.index + m[0].length,
+              });
+            }
+
+            if (allMatches.length >= 2) {
+              // Extract intro (text before first section label)
+              const firstLabelStart = allMatches[0].fullMatchStart;
               let intro = "";
-              let match;
-
-              // Reset regex
-              splitPattern.lastIndex = 0;
-              const firstMatch = splitPattern.exec(solutionText);
-              if (firstMatch && firstMatch.index > 0) {
-                intro = solutionText.slice(0, firstMatch.index).replace(/\.\s*$/, "").trim();
+              if (firstLabelStart > 0) {
+                intro = solutionText.slice(0, firstLabelStart).replace(/[.\s]+$/, "").trim();
               }
 
-              // Re-run to get all sections
-              splitPattern.lastIndex = 0;
-              const allMatches: { heading: string; startBody: number }[] = [];
-              while ((match = splitPattern.exec(solutionText)) !== null) {
-                allMatches.push({
-                  heading: match[1].trim(),
-                  startBody: match.index + match[0].length,
-                });
-              }
-
-              for (let i = 0; i < allMatches.length; i++) {
-                const start = allMatches[i].startBody;
-                const end = i + 1 < allMatches.length
-                  ? solutionText.lastIndexOf(".", allMatches[i + 1].startBody - 1) + 1 || allMatches[i + 1].startBody
+              // Extract each section body (from bodyStart to the next label's fullMatchStart)
+              const parts = allMatches.map((match, i) => {
+                const bodyEnd = i + 1 < allMatches.length
+                  ? allMatches[i + 1].fullMatchStart
                   : solutionText.length;
-                parts.push({
-                  heading: allMatches[i].heading,
-                  body: solutionText.slice(start, end).trim(),
-                });
-              }
+                let body = solutionText.slice(match.bodyStart, bodyEnd).replace(/[.\s]+$/, "").trim();
+                // Remove trailing period-space before next section
+                body = body.replace(/\.\s*$/, "").trim();
+                return { heading: match.heading, body: body + "." };
+              });
 
               // Icons for section headings
               const sectionIcon = (heading: string) => {
@@ -368,10 +374,10 @@ export function CaseDetailContent({ caseItem }: { caseItem: FlagshipCase }) {
               };
 
               return (
-                <div className="space-y-4">
+                <div className="space-y-5">
                   {intro && (
                     <AnimatedItem>
-                      <p className="text-body-lg text-text-secondary mb-6">{intro}.</p>
+                      <p className="text-body-lg text-text-primary font-medium">{intro}.</p>
                     </AnimatedItem>
                   )}
                   <div className="grid gap-4">
@@ -379,7 +385,7 @@ export function CaseDetailContent({ caseItem }: { caseItem: FlagshipCase }) {
                       <AnimatedItem key={i} delay={i * 0.08}>
                         <div className="rounded-xl border border-border bg-bg-primary/60 p-5 md:p-6">
                           <div className="flex items-center gap-3 mb-3">
-                            <span className="text-lg" aria-hidden="true">{sectionIcon(part.heading)}</span>
+                            <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-accent-primary/10 text-base" aria-hidden="true">{sectionIcon(part.heading)}</span>
                             <h3 className="text-heading-sm font-semibold text-text-primary uppercase tracking-wider">
                               {part.heading}
                             </h3>
@@ -395,8 +401,7 @@ export function CaseDetailContent({ caseItem }: { caseItem: FlagshipCase }) {
               );
             }
 
-            // Fallback: simple paragraph for non-structured solutions
-            // Split by sentences for readability (4-5 sentences per paragraph)
+            // Fallback: split long text into readable paragraphs (4 sentences each)
             const sentences = solutionText.split(/(?<=\.)\s+/);
             if (sentences.length <= 5) {
               return (
