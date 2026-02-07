@@ -308,16 +308,119 @@ export function CaseDetailContent({ caseItem }: { caseItem: FlagshipCase }) {
 
       {/* Solution */}
       <Section background="secondary" padding="lg" id="case-solution">
-        <div className="max-w-3xl">
+        <div className="max-w-4xl">
           <SectionHeader
             title={language === "en" ? "Solution" : "Решение"}
             animate={false}
           />
-          <AnimatedItem>
-            <p className="text-body-lg text-text-secondary">
-              {caseItem.solution[language]}
-            </p>
-          </AnimatedItem>
+          {(() => {
+            const solutionText = caseItem.solution[language];
+            // Detect structured solution: contains labeled sections like "DESIGN:", "BACKEND:", "iOS APP:", etc.
+            const sectionPattern = /(?:^|\.\s+)((?:DESIGN|FRONTEND|BACKEND|ФРОНТЕНД|БЭКЕНД|ДИЗАЙН|iOS[- ]APP|iOS[- ]ПРИЛОЖЕНИЕ|CHEF EXPERIENCE|ОПЫТ ПОВАРА|API[- ](?:LAYER|СЛОЙ))(?:\s*\([^)]*\))?)\s*:\s*/gi;
+            const hasStructuredSections = sectionPattern.test(solutionText);
+
+            if (hasStructuredSections) {
+              // Split into labeled blocks
+              const splitPattern = /(?:^|\.\s+)((?:DESIGN|FRONTEND|BACKEND|ФРОНТЕНД|БЭКЕНД|ДИЗАЙН|iOS[- ]APP|iOS[- ]ПРИЛОЖЕНИЕ|CHEF EXPERIENCE|ОПЫТ ПОВАРА|API[- ](?:LAYER|СЛОЙ))(?:\s*\([^)]*\))?)\s*:\s*/gi;
+              const parts: { heading: string; body: string }[] = [];
+              let lastIndex = 0;
+              let intro = "";
+              let match;
+
+              // Reset regex
+              splitPattern.lastIndex = 0;
+              const firstMatch = splitPattern.exec(solutionText);
+              if (firstMatch && firstMatch.index > 0) {
+                intro = solutionText.slice(0, firstMatch.index).replace(/\.\s*$/, "").trim();
+              }
+
+              // Re-run to get all sections
+              splitPattern.lastIndex = 0;
+              const allMatches: { heading: string; startBody: number }[] = [];
+              while ((match = splitPattern.exec(solutionText)) !== null) {
+                allMatches.push({
+                  heading: match[1].trim(),
+                  startBody: match.index + match[0].length,
+                });
+              }
+
+              for (let i = 0; i < allMatches.length; i++) {
+                const start = allMatches[i].startBody;
+                const end = i + 1 < allMatches.length
+                  ? solutionText.lastIndexOf(".", allMatches[i + 1].startBody - 1) + 1 || allMatches[i + 1].startBody
+                  : solutionText.length;
+                parts.push({
+                  heading: allMatches[i].heading,
+                  body: solutionText.slice(start, end).trim(),
+                });
+              }
+
+              // Icons for section headings
+              const sectionIcon = (heading: string) => {
+                const h = heading.toUpperCase();
+                if (h.includes("DESIGN") || h.includes("ДИЗАЙН")) return "🎨";
+                if (h.includes("FRONTEND") || h.includes("ФРОНТЕНД")) return "⚛️";
+                if (h.includes("BACKEND") || h.includes("БЭКЕНД")) return "⚙️";
+                if (h.includes("IOS")) return "📱";
+                if (h.includes("CHEF") || h.includes("ПОВАР")) return "👨‍🍳";
+                if (h.includes("API")) return "🔌";
+                return "📦";
+              };
+
+              return (
+                <div className="space-y-4">
+                  {intro && (
+                    <AnimatedItem>
+                      <p className="text-body-lg text-text-secondary mb-6">{intro}.</p>
+                    </AnimatedItem>
+                  )}
+                  <div className="grid gap-4">
+                    {parts.map((part, i) => (
+                      <AnimatedItem key={i} delay={i * 0.08}>
+                        <div className="rounded-xl border border-border bg-bg-primary/60 p-5 md:p-6">
+                          <div className="flex items-center gap-3 mb-3">
+                            <span className="text-lg" aria-hidden="true">{sectionIcon(part.heading)}</span>
+                            <h3 className="text-heading-sm font-semibold text-text-primary uppercase tracking-wider">
+                              {part.heading}
+                            </h3>
+                          </div>
+                          <p className="text-body-md text-text-secondary leading-relaxed">
+                            {part.body}
+                          </p>
+                        </div>
+                      </AnimatedItem>
+                    ))}
+                  </div>
+                </div>
+              );
+            }
+
+            // Fallback: simple paragraph for non-structured solutions
+            // Split by sentences for readability (4-5 sentences per paragraph)
+            const sentences = solutionText.split(/(?<=\.)\s+/);
+            if (sentences.length <= 5) {
+              return (
+                <AnimatedItem>
+                  <p className="text-body-lg text-text-secondary leading-relaxed">{solutionText}</p>
+                </AnimatedItem>
+              );
+            }
+
+            const paragraphs: string[] = [];
+            for (let i = 0; i < sentences.length; i += 4) {
+              paragraphs.push(sentences.slice(i, i + 4).join(" "));
+            }
+
+            return (
+              <div className="space-y-4">
+                {paragraphs.map((para, i) => (
+                  <AnimatedItem key={i} delay={i * 0.06}>
+                    <p className="text-body-lg text-text-secondary leading-relaxed">{para}</p>
+                  </AnimatedItem>
+                ))}
+              </div>
+            );
+          })()}
         </div>
       </Section>
 
