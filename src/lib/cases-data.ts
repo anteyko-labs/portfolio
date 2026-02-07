@@ -34,6 +34,8 @@ export interface FlagshipCase {
   imageUrl?: string;
   heroImage?: string;
   screenshots?: { src: string; alt: { en: string; ru: string } }[];
+  /** Screenshot display mode: "desktop" (16/10, 2 cols) | "mobile" (9/19, 3-4 cols). Default: "desktop" */
+  screenshotLayout?: "desktop" | "mobile";
 }
 
 export interface MicroCase {
@@ -1341,6 +1343,7 @@ const _flagshipCases: FlagshipCase[] = [
     ],
     imageUrl: "/images/cases/localfood/feed-main.png",
     heroImage: "/images/cases/localfood/feed-main.png",
+    screenshotLayout: "mobile",
     screenshots: [
       // ── Onboarding & Auth ──
       { src: "/images/cases/localfood/onboarding.png", alt: { en: "Onboarding — 'Order delicious food from neighbors' welcome screen with LocalFood branding", ru: "Онбординг — приветственный экран «Заказывайте вкусную еду от соседей» с брендингом LocalFood" } },

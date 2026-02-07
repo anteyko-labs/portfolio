@@ -368,33 +368,51 @@ export function CaseDetailContent({ caseItem }: { caseItem: FlagshipCase }) {
               }
               animate={false}
             />
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {caseItem.screenshots!.map((screenshot, index) => (
-                <AnimatedItem key={`screenshot-${index}`} delay={index * 0.08}>
-                  <div className="group rounded-2xl border border-border bg-bg-tertiary/40 overflow-hidden transition-all hover:border-accent-primary/30 hover:shadow-lg hover:shadow-accent-primary/5">
-                    {/* Step indicator */}
-                    <div className="px-5 pt-4 pb-2 flex items-center gap-3">
-                      <span className="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-accent-primary/15 text-accent-primary text-caption font-bold font-mono">
-                        {String(index + 1).padStart(2, "0")}
-                      </span>
-                      <p className="text-body-sm text-text-secondary line-clamp-1">
-                        {screenshot.alt[language]}
-                      </p>
-                    </div>
-                    {/* Screenshot image */}
-                    <div className="relative aspect-[16/10] mx-3 mb-3 rounded-xl overflow-hidden border border-border/50 bg-white">
-                      <Image
-                        src={screenshot.src}
-                        alt={screenshot.alt[language]}
-                        fill
-                        className="object-cover object-top transition-transform duration-500 group-hover:scale-[1.02]"
-                        sizes="(max-width: 768px) 100vw, 50vw"
-                      />
-                    </div>
-                  </div>
-                </AnimatedItem>
-              ))}
-            </div>
+            {(() => {
+              const isMobileLayout = caseItem.screenshotLayout === "mobile";
+              const gridCols = isMobileLayout
+                ? "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4"
+                : "grid-cols-1 md:grid-cols-2";
+              const aspectClass = isMobileLayout
+                ? "aspect-[9/19]"
+                : "aspect-[16/10]";
+              const objectClass = isMobileLayout
+                ? "object-contain"
+                : "object-cover object-top";
+              const bgClass = isMobileLayout
+                ? "bg-bg-primary"
+                : "bg-white";
+
+              return (
+                <div className={`grid ${gridCols} gap-4 md:gap-6`}>
+                  {caseItem.screenshots!.map((screenshot, index) => (
+                    <AnimatedItem key={`screenshot-${index}`} delay={Math.min(index * 0.04, 0.5)}>
+                      <div className="group rounded-2xl border border-border bg-bg-tertiary/40 overflow-hidden transition-all hover:border-accent-primary/30 hover:shadow-lg hover:shadow-accent-primary/5">
+                        {/* Step indicator */}
+                        <div className={`px-3 ${isMobileLayout ? "pt-3 pb-1.5" : "px-5 pt-4 pb-2"} flex items-center gap-2`}>
+                          <span className={`inline-flex items-center justify-center ${isMobileLayout ? "w-5 h-5 text-[10px]" : "w-7 h-7 text-caption"} rounded-lg bg-accent-primary/15 text-accent-primary font-bold font-mono shrink-0`}>
+                            {String(index + 1).padStart(2, "0")}
+                          </span>
+                          <p className={`${isMobileLayout ? "text-[11px] leading-tight" : "text-body-sm"} text-text-secondary line-clamp-1`}>
+                            {screenshot.alt[language]}
+                          </p>
+                        </div>
+                        {/* Screenshot image */}
+                        <div className={`relative ${aspectClass} ${isMobileLayout ? "mx-2 mb-2" : "mx-3 mb-3"} rounded-xl overflow-hidden border border-border/50 ${bgClass}`}>
+                          <Image
+                            src={screenshot.src}
+                            alt={screenshot.alt[language]}
+                            fill
+                            className={`${objectClass} transition-transform duration-500 group-hover:scale-[1.02]`}
+                            sizes={isMobileLayout ? "(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw" : "(max-width: 768px) 100vw, 50vw"}
+                          />
+                        </div>
+                      </div>
+                    </AnimatedItem>
+                  ))}
+                </div>
+              );
+            })()}
           </div>
         </Section>
       )}
