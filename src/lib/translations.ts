@@ -469,93 +469,120 @@ export const translations = {
 
   // About
   about: {
-    title: { en: "About Anteyko", ru: "Об Anteyko" },
+    title: { en: "We build products that work after launch", ru: "Мы строим продукты, которые работают после запуска" },
     subtitle: {
-      en: "CTO-grade engineering meets product delivery.",
-      ru: "Инженерия уровня CTO + продуктовая поставка.",
+      en: "Engineering studio from Bishkek and Dubai. 40+ products. From MVP to L1 blockchain.",
+      ru: "Инженерная студия из Бишкека и Дубая. 40+ продуктов. От MVP до L1 блокчейна.",
     },
     story: {
-      en: `We're a technical studio that builds products, not just features. Founded by engineers who've shipped at scale, we bring discipline from enterprise tech to startup speed.
-
-Our approach: treat every project like we're building it for ourselves. That means proper architecture, real tests, and decisions we can defend.
-
-We work with founders, product teams, and enterprises across Kyrgyzstan, Dubai, and globally. Remote-first, timezone-flexible, async-friendly.`,
-      ru: `Мы — техническая студия, которая создаёт продукты, а не просто функции. Основана инженерами с опытом масштабных запусков, мы привносим дисциплину из корпоративных проектов в скорость стартапов.
-
-Наш подход: относиться к каждому проекту так, будто строим его для себя. Это значит правильная архитектура, настоящие тесты и решения, которые можно обосновать.
-
-Работаем с основателями, продуктовыми командами и компаниями в Кыргызстане, Дубае и по всему миру. Удалённо, гибко по часовым поясам, асинхронно.`,
+      why: {
+        en: "We started Anteyko because we were tired of agencies that ship code and disappear. No one owned the outcome \u2014 the design team blamed the developers, the developers blamed the specs, and the client got a product that looked good in a demo but broke in production. We wanted to build a studio where engineers own the result, not just the task.",
+        ru: "Мы основали Anteyko, потому что устали от агентств, которые сдают код и исчезают. Никто не отвечал за результат \u2014 дизайнеры винили разработчиков, разработчики \u2014 спецификации, а клиент получал продукт, который отлично выглядел на демо, но ломался в продакшне. Мы хотели построить студию, где инженеры отвечают за результат, а не просто закрывают задачи.",
+      },
+      how: {
+        en: "Every project we take gets the same treatment: architecture review before the first line of code, automated tests that run on every commit, a 7-phase release checklist before any deploy, and a handover package that lets your team take over without a single \u201Cwhat does this do?\u201D. We\u2019ve shipped a Layer-1 blockchain with a built-in DEX, a real-time P2P food delivery platform, a tokenization platform for a Dubai investment company, and a banking app with a double-entry ledger \u2014 all with zero post-launch critical failures.",
+        ru: "Каждый проект получает одинаковый подход: ревью архитектуры до первой строки кода, автотесты на каждый коммит, 7\u2011фазный чеклист релиза перед каждым деплоем и пакет передачи, который позволяет вашей команде подхватить проект без единого \u00ABа что это делает?\u00BB. Мы запустили L1 блокчейн со встроенной DEX, P2P\u2011платформу доставки еды в реальном времени, платформу токенизации для инвестиционной компании из Дубая и банковское приложение с леджером двойной записи \u2014 всё с нулём критических сбоев после запуска.",
+      },
+      who: {
+        en: "Our clients are founders who need their first product built right, CTOs who need extra firepower for a complex sprint, and enterprises digitizing operations. We work across fintech, Web3, FoodTech, SaaS, and e-commerce \u2014 in Kyrgyzstan, Dubai, Moscow, and remotely with teams worldwide.",
+        ru: "Наши клиенты \u2014 основатели, которым нужен первый продукт, построенный правильно, CTO, которым нужна дополнительная огневая мощь на сложный спринт, и компании, цифровизирующие операции. Работаем в финтехе, Web3, FoodTech, SaaS и e\u2011commerce \u2014 в Кыргызстане, Дубае, Москве и удалённо с командами по всему миру.",
+      },
     },
     values: {
-      title: { en: "What we stand for", ru: "Наши принципы" },
+      title: { en: "How we think", ru: "Как мы думаем" },
       items: [
         {
           title: { en: "Clarity over cleverness", ru: "Ясность важнее хитрости" },
           description: {
-            en: "Code that anyone can understand and maintain.",
-            ru: "Код, который любой может понять и поддерживать.",
+            en: "We write code that a new engineer can understand in 30 minutes, not 3 days. Every non-obvious decision is documented in an Architecture Decision Record with the reasoning, alternatives considered, and trade-offs accepted.",
+            ru: "Мы пишем код, который новый инженер поймёт за 30 минут, а не за 3 дня. Каждое неочевидное решение документируется в Architecture Decision Record с обоснованием, рассмотренными альтернативами и принятыми компромиссами.",
           },
           evidence: {
-            en: "Architecture notes + ADRs for every critical decision.",
-            ru: "Архитектурные заметки и ADR для ключевых решений.",
+            en: "Result: one client\u2019s in-house team shipped their first feature 8 days after our handover \u2014 without asking us a single question.",
+            ru: "Результат: in\u2011house команда клиента выпустила первую фичу через 8 дней после передачи \u2014 без единого вопроса к нам.",
           },
         },
         {
           title: { en: "Predictability over promises", ru: "Предсказуемость важнее обещаний" },
           description: {
-            en: "Realistic timelines. No hero mode.",
-            ru: "Реалистичные сроки. Без «героического режима».",
+            en: "We don\u2019t say \u201C2 months, probably.\u201D We break the project into phases with explicit scope gates, deliver working increments every 1\u20132 weeks, and flag risks the moment we see them \u2014 not when the deadline is missed.",
+            ru: "Мы не говорим \u00AB2 месяца, наверное\u00BB. Разбиваем проект на фазы с явными контрольными точками, поставляем рабочие инкременты каждые 1\u20112 недели и сигнализируем о рисках в момент обнаружения \u2014 а не когда дедлайн сорван.",
           },
           evidence: {
-            en: "Milestone planning with explicit scope gates.",
-            ru: "Планирование по вехам с контрольными точками.",
+            en: "Result: zero missed deadlines on fixed-scope projects in the last 18 months.",
+            ru: "Результат: ноль сорванных дедлайнов на проектах с фиксированным объёмом за последние 18 месяцев.",
           },
         },
         {
           title: { en: "Speed with quality gates", ru: "Скорость с контролем качества" },
           description: {
-            en: "Fast doesn't mean sloppy. We have checklists.",
-            ru: "Быстро — не значит небрежно. У нас есть чеклисты.",
+            en: "Fast doesn\u2019t mean sloppy. Every release passes a 7-phase automated verification pipeline: build, unit tests, integration tests, contract checks, environment parity, smoke tests, and security checklist. If it\u2019s red, it doesn\u2019t ship.",
+            ru: "Быстро \u2014 не значит небрежно. Каждый релиз проходит 7\u2011фазный автоматизированный пайплайн верификации: сборка, юнит\u2011тесты, интеграционные тесты, проверки контрактов, паритет окружений, smoke\u2011тесты, чеклист безопасности. Если красный \u2014 не деплоим.",
           },
           evidence: {
-            en: "Verification report before every release.",
-            ru: "Отчёт верификации перед каждым релизом.",
+            en: "Result: zero post-launch rollbacks across all projects in the past 12 months.",
+            ru: "Результат: ноль откатов после запуска по всем проектам за последние 12 месяцев.",
+          },
+        },
+        {
+          title: { en: "Ownership, not outsourcing", ru: "Ответственность, а не аутсорс" },
+          description: {
+            en: "We don\u2019t just execute tickets. We challenge requirements that don\u2019t make sense, suggest cheaper alternatives when they exist, flag architectural risks before they become production incidents, and push back on deadlines that would compromise quality.",
+            ru: "Мы не просто закрываем тикеты. Мы оспариваем требования, которые не имеют смысла, предлагаем более дешёвые альтернативы когда они есть, сигнализируем об архитектурных рисках до того, как они станут инцидентами, и отстаиваем качество когда дедлайны его компрометируют.",
+          },
+          evidence: {
+            en: "Result: saved a client $40K by replacing a planned microservices architecture with a modular monolith that covered 100% of their actual requirements.",
+            ru: "Результат: сэкономили клиенту $40K, заменив запланированную микросервисную архитектуру модульным монолитом, который покрыл 100% реальных требований.",
           },
         },
       ],
     },
     metrics: [
-      { value: "40+", label: { en: "projects shipped", ru: "проектов запущено" } },
+      { value: "40+", label: { en: "products shipped", ru: "продуктов запущено" } },
       { value: "5+", label: { en: "years in delivery", ru: "лет в поставке" } },
-      { value: "24h", label: { en: "estimate response", ru: "ответ по оценке" } },
+      { value: "24h", label: { en: "response time", ru: "время ответа" } },
+      { value: "0", label: { en: "failed launches", ru: "провальных запусков" } },
     ],
+    industries: {
+      title: { en: "Industries we know", ru: "Индустрии, которые мы знаем" },
+      items: [
+        { name: { en: "FinTech / Banking", ru: "FinTech / Банкинг" }, count: "3", icon: "bank" },
+        { name: { en: "Web3 / DeFi / Tokenization", ru: "Web3 / DeFi / Токенизация" }, count: "4", icon: "chain" },
+        { name: { en: "FoodTech / Marketplace", ru: "FoodTech / Маркетплейс" }, count: "3", icon: "cart" },
+        { name: { en: "Enterprise / SaaS", ru: "Enterprise / SaaS" }, count: "3", icon: "building" },
+      ],
+    },
     toolchain: {
-      title: { en: "Quality & delivery stack", ru: "Стек качества и поставки" },
+      title: { en: "How we guarantee quality", ru: "Как мы гарантируем качество" },
       items: [
         {
-          title: { en: "Test discipline", ru: "Тест‑дисциплина" },
-          description: { en: "Integration catalog + regression coverage.", ru: "Каталог интеграций + регресс." },
+          title: { en: "Automated testing", ru: "Автоматизированное тестирование" },
+          description: { en: "Every commit triggers unit, integration, and contract tests. Average coverage across projects: 85%+.", ru: "Каждый коммит запускает юнит\u2011, интеграционные и контрактные тесты. Среднее покрытие: 85%+." },
         },
         {
-          title: { en: "Release gates", ru: "Контроль релизов" },
-          description: { en: "7-phase verification report before deploy.", ru: "7‑фазный отчёт перед запуском." },
+          title: { en: "7-phase release gates", ru: "7\u2011фазный контроль релизов" },
+          description: { en: "No code reaches production without passing all 7 verification stages. Zero post-launch rollbacks in 12 months.", ru: "Ни один код не попадает в прод без прохождения всех 7 стадий верификации. Ноль откатов за 12 месяцев." },
         },
         {
-          title: { en: "Docs & handover", ru: "Документация и передача" },
-          description: { en: "Runbooks, ADRs, onboarding notes.", ru: "Инструкции, ADR, материалы для адаптации." },
+          title: { en: "Documentation-first handover", ru: "Передача через документацию" },
+          description: { en: "ADRs, runbooks, video walkthroughs, onboarding guide. Your team ships independently within days, not months.", ru: "ADR, инструкции, видео\u2011разборы, гайд онбординга. Ваша команда работает самостоятельно за дни, не месяцы." },
         },
         {
-          title: { en: "Monitoring", ru: "Мониторинг" },
-          description: { en: "Alerts, error budgets, incident flow.", ru: "Оповещения, бюджет ошибок, управление инцидентами." },
+          title: { en: "Production monitoring", ru: "Мониторинг продакшна" },
+          description: { en: "Prometheus metrics, error budgets, alerting pipelines, and incident response runbooks \u2014 included by default.", ru: "Метрики Prometheus, бюджет ошибок, пайплайны алертинга и runbook\u2011и реагирования \u2014 включены по умолчанию." },
         },
       ],
     },
     geography: {
-      title: { en: "Where we work", ru: "Где мы работаем" },
+      title: { en: "Bishkek. Dubai. Your timezone.", ru: "Бишкек. Дубай. Ваш часовой пояс." },
       description: {
-        en: "Based in Bishkek, Kyrgyzstan. Active in Dubai, UAE. Serving clients globally.",
-        ru: "Базируемся в Бишкеке, Кыргызстан. Активны в Дубае, ОАЭ. Работаем с клиентами по всему миру.",
+        en: "Core team in Bishkek (GMT+6) and Dubai (GMT+4). Clients in Moscow, Bishkek, Dubai, and across 5+ countries. We operate async-first with daily standups adapted to your timezone \u2014 whether you\u2019re in New York or Singapore.",
+        ru: "Основная команда в Бишкеке (GMT+6) и Дубае (GMT+4). Клиенты в Москве, Бишкеке, Дубае и 5+ странах. Работаем async\u2011first с ежедневными стендапами, адаптированными под ваш часовой пояс \u2014 будь вы в Нью\u2011Йорке или Сингапуре.",
       },
+    },
+    closingCta: {
+      en: "Every great product starts with a conversation. Tell us what you\u2019re building.",
+      ru: "Каждый великий продукт начинается с разговора. Расскажите, что вы строите.",
     },
   },
 

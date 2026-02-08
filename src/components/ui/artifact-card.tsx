@@ -44,10 +44,10 @@ export function ArtifactCard({
       >
         {icon}
       </div>
-      <div className="min-w-0">
-        <p className="font-mono text-body-sm text-text-primary font-medium">{title}</p>
+      <div className="min-w-0 overflow-hidden">
+        <p className="text-body-sm text-text-primary font-medium break-words hyphens-auto">{title}</p>
         {subtitle && (
-          <p className="font-mono text-caption text-text-muted mt-0.5">{subtitle}</p>
+          <p className="font-mono text-caption text-text-muted mt-0.5 truncate">{subtitle}</p>
         )}
         {meta && <p className="text-caption text-text-tertiary mt-2">{meta}</p>}
       </div>
