@@ -243,8 +243,8 @@ export function AboutContent() {
                 </p>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                   {[
-                    { city: language === "en" ? "Bishkek" : "Бишкек", role: language === "en" ? "HQ" : "Штаб", tz: "GMT+6" },
-                    { city: language === "en" ? "Dubai" : "Дубай", role: language === "en" ? "Office" : "Офис", tz: "GMT+4" },
+                    { city: language === "en" ? "Dubai" : "Дубай", role: language === "en" ? "HQ" : "Штаб", tz: "GMT+4" },
+                    { city: language === "en" ? "Bishkek" : "Бишкек", role: language === "en" ? "Office" : "Офис", tz: "GMT+6" },
                     { city: language === "en" ? "Moscow" : "Москва", role: language === "en" ? "Clients" : "Клиенты", tz: "GMT+3" },
                     { city: language === "en" ? "Remote" : "Удалённо", role: language === "en" ? "Worldwide" : "По миру", tz: "Async" },
                   ].map((loc) => (
