@@ -3,9 +3,15 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const THRESHOLD = 1350; // distance in px to start effect
 const SPARK_COUNT = 24;
 const ACCENT = "99, 102, 241"; // accent-primary RGB
+
+// Thresholds as fractions of viewport height:
+// Effect starts when footer logo is within START_VH of header logo
+const START_VH = 1.6;
+// Fusion fires when footer logo is within FUSE_VH of header logo
+// (on desktop ~900px viewport: 0.65 * 900 = 585px — footer well visible)
+const FUSE_VH = 0.65;
 
 export function LogoFusionEffect() {
   const [intensity, setIntensity] = useState(0); // 0..1
@@ -31,18 +37,33 @@ export function LogoFusionEffect() {
     // Distance between bottom of header logo and top of footer logo
     const dist = fRect.top - hRect.bottom;
 
-    if (dist < THRESHOLD && dist > 0) {
-      const raw = 1 - dist / THRESHOLD;
-      setIntensity(Math.min(1, raw * raw)); // easeIn curve
-      setFused(false);
-    } else if (dist <= 0) {
+    // Dynamic thresholds based on viewport height —
+    // ensures the effect works on any screen size
+    const vh = window.innerHeight;
+    const threshold = vh * START_VH;  // beam starts appearing
+    const fusionDist = vh * FUSE_VH;  // fusion fires here
+
+    if (dist <= 0) {
+      // Literal overlap (very short pages / mobile)
       setIntensity(1);
       if (!fused) {
         setFused(true);
-        // Auto-reset fusion after burst
         clearTimeout(fusedTimeoutRef.current);
         fusedTimeoutRef.current = setTimeout(() => setFused(false), 2000);
       }
+    } else if (dist <= fusionDist) {
+      // Close enough — fire fusion (desktop/tablet reach this point)
+      setIntensity(1);
+      if (!fused) {
+        setFused(true);
+        clearTimeout(fusedTimeoutRef.current);
+        fusedTimeoutRef.current = setTimeout(() => setFused(false), 2000);
+      }
+    } else if (dist < threshold) {
+      // Approaching — ramp up beam intensity
+      const raw = 1 - (dist - fusionDist) / (threshold - fusionDist);
+      setIntensity(Math.min(1, raw * raw)); // easeIn curve
+      setFused(false);
     } else {
       setIntensity(0);
       setFused(false);
