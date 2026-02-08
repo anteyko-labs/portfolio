@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import NextLink from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import clsx from "clsx";
@@ -80,9 +81,16 @@ export function Header() {
             {/* Logo */}
             <NextLink
               href="/"
-              className="relative z-10 text-xl font-display font-bold text-text-primary tracking-tight"
+              className="relative z-10 flex items-center"
             >
-              Anteyko
+              <Image
+                src="/images/anteyko-logo.png"
+                alt="Anteyko"
+                width={120}
+                height={28}
+                className="h-6 md:h-7 w-auto brightness-90 hover:brightness-100 transition-all"
+                priority
+              />
             </NextLink>
 
             {/* Desktop Navigation */}

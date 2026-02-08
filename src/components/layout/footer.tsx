@@ -1,6 +1,7 @@
 "use client";
 
 import NextLink from "next/link";
+import Image from "next/image";
 import { useLanguage } from "@/lib/language-context";
 import { ButtonLink } from "@/components/ui/link";
 
@@ -24,11 +25,14 @@ export function Footer() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8">
             {/* Brand Column */}
             <div className="lg:col-span-5">
-              <NextLink
-                href="/"
-                className="inline-block text-2xl font-display font-bold text-text-primary tracking-tight"
-              >
-                Anteyko
+              <NextLink href="/" className="inline-block">
+                <Image
+                  src="/images/anteyko-logo.png"
+                  alt="Anteyko"
+                  width={140}
+                  height={32}
+                  className="h-7 w-auto brightness-90 hover:brightness-100 transition-all"
+                />
               </NextLink>
               <p className="mt-4 text-body-md text-text-secondary max-w-sm">
                 {t("footer.tagline")}
