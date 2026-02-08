@@ -6,12 +6,19 @@ import { motion, AnimatePresence } from "framer-motion";
 const SPARK_COUNT = 24;
 const ACCENT = "99, 102, 241"; // accent-primary RGB
 
-// Thresholds as fractions of viewport height:
-// Effect starts when footer logo is within START_VH of header logo
-const START_VH = 1.6;
-// Fusion fires when footer logo is within FUSE_VH of header logo
-// (on desktop ~900px viewport: 0.65 * 900 = 585px — footer well visible)
-const FUSE_VH = 0.65;
+// Mobile breakpoint — below this width, logos CAN physically touch,
+// so we use the original "literal overlap" fusion trigger.
+const MOBILE_BREAKPOINT = 768;
+
+// Desktop/tablet thresholds (viewport-relative):
+// Logos can't physically touch on large screens, so we fire fusion
+// when footer logo is close enough visually.
+const START_VH = 1.6;   // beam starts appearing
+const FUSE_VH = 0.65;   // fusion fires
+
+// Mobile thresholds (fixed px):
+// Beam starts earlier, fusion only on literal overlap (dist <= 0).
+const MOBILE_THRESHOLD = 1350;
 
 export function LogoFusionEffect() {
   const [intensity, setIntensity] = useState(0); // 0..1
@@ -36,37 +43,55 @@ export function LogoFusionEffect() {
 
     // Distance between bottom of header logo and top of footer logo
     const dist = fRect.top - hRect.bottom;
+    const isMobile = window.innerWidth < MOBILE_BREAKPOINT;
 
-    // Dynamic thresholds based on viewport height —
-    // ensures the effect works on any screen size
-    const vh = window.innerHeight;
-    const threshold = vh * START_VH;  // beam starts appearing
-    const fusionDist = vh * FUSE_VH;  // fusion fires here
-
-    if (dist <= 0) {
-      // Literal overlap (very short pages / mobile)
-      setIntensity(1);
-      if (!fused) {
-        setFused(true);
-        clearTimeout(fusedTimeoutRef.current);
-        fusedTimeoutRef.current = setTimeout(() => setFused(false), 2000);
+    if (isMobile) {
+      // ── MOBILE: original design — fusion on literal touch (dist <= 0) ──
+      if (dist < MOBILE_THRESHOLD && dist > 0) {
+        const raw = 1 - dist / MOBILE_THRESHOLD;
+        setIntensity(Math.min(1, raw * raw)); // easeIn curve
+        setFused(false);
+      } else if (dist <= 0) {
+        // Logos touching — fire fusion!
+        setIntensity(1);
+        if (!fused) {
+          setFused(true);
+          clearTimeout(fusedTimeoutRef.current);
+          fusedTimeoutRef.current = setTimeout(() => setFused(false), 2000);
+        }
+      } else {
+        setIntensity(0);
+        setFused(false);
       }
-    } else if (dist <= fusionDist) {
-      // Close enough — fire fusion (desktop/tablet reach this point)
-      setIntensity(1);
-      if (!fused) {
-        setFused(true);
-        clearTimeout(fusedTimeoutRef.current);
-        fusedTimeoutRef.current = setTimeout(() => setFused(false), 2000);
-      }
-    } else if (dist < threshold) {
-      // Approaching — ramp up beam intensity
-      const raw = 1 - (dist - fusionDist) / (threshold - fusionDist);
-      setIntensity(Math.min(1, raw * raw)); // easeIn curve
-      setFused(false);
     } else {
-      setIntensity(0);
-      setFused(false);
+      // ── DESKTOP / TABLET: viewport-relative thresholds ──
+      // Logos can't physically touch, so fire fusion when close enough visually
+      const vh = window.innerHeight;
+      const threshold = vh * START_VH;
+      const fusionDist = vh * FUSE_VH;
+
+      if (dist <= 0) {
+        setIntensity(1);
+        if (!fused) {
+          setFused(true);
+          clearTimeout(fusedTimeoutRef.current);
+          fusedTimeoutRef.current = setTimeout(() => setFused(false), 2000);
+        }
+      } else if (dist <= fusionDist) {
+        setIntensity(1);
+        if (!fused) {
+          setFused(true);
+          clearTimeout(fusedTimeoutRef.current);
+          fusedTimeoutRef.current = setTimeout(() => setFused(false), 2000);
+        }
+      } else if (dist < threshold) {
+        const raw = 1 - (dist - fusionDist) / (threshold - fusionDist);
+        setIntensity(Math.min(1, raw * raw));
+        setFused(false);
+      } else {
+        setIntensity(0);
+        setFused(false);
+      }
     }
 
     rafRef.current = requestAnimationFrame(tick);
