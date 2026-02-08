@@ -121,7 +121,7 @@ export default function RootLayout({
               url: "https://anteyko.com",
               description:
                 "End-to-end product development studio. Design, frontend, backend, admin panels, integrations, infrastructure. Web2 + Web3. Based in Kyrgyzstan & Dubai.",
-              email: "hello@anteyko.com",
+              email: "labs@anteyko.com",
               address: [
                 { "@type": "PostalAddress", addressLocality: "Bishkek", addressCountry: "KG" },
                 { "@type": "PostalAddress", addressLocality: "Dubai", addressCountry: "AE" },

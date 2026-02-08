@@ -28,8 +28,8 @@ export default function PrivacyPage() {
             </p>
             <p>
               For questions about your data, contact us at{" "}
-              <a href="mailto:hello@anteyko.com" className="text-accent-primary hover:text-accent-secondary">
-                hello@anteyko.com
+              <a href="mailto:labs@anteyko.com" className="text-accent-primary hover:text-accent-secondary">
+                labs@anteyko.com
               </a>
               .
             </p>

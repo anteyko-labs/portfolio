@@ -29,8 +29,8 @@ export default function TermsPage() {
             <p>
               For specific agreements (NDA, SOW, contracts), terms are defined in the respective documents.
               Contact us at{" "}
-              <a href="mailto:hello@anteyko.com" className="text-accent-primary hover:text-accent-secondary">
-                hello@anteyko.com
+              <a href="mailto:labs@anteyko.com" className="text-accent-primary hover:text-accent-secondary">
+                labs@anteyko.com
               </a>{" "}
               for questions.
             </p>

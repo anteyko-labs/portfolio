@@ -176,7 +176,7 @@ export function ContactContent() {
               {language === "en" ? "Submit another request" : "Отправить ещё заявку"}
             </button>
             <a
-              href="mailto:hello@anteyko.com?subject=Scoping%20Call%20Request"
+              href="mailto:labs@anteyko.com?subject=Scoping%20Call%20Request"
               className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl border border-border text-body-sm text-text-secondary hover:text-text-primary transition-colors"
             >
               {t("cta.secondary")}
@@ -353,7 +353,7 @@ export function ContactContent() {
               </p>
               <div className="flex justify-center">
                 <a
-                  href="mailto:hello@anteyko.com?subject=Scoping%20Call%20Request"
+                  href="mailto:labs@anteyko.com?subject=Scoping%20Call%20Request"
                   className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-bg-secondary border border-border text-body-sm text-accent-primary font-medium hover:border-accent-primary/30 hover:text-accent-secondary transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary"
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
