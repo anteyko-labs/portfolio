@@ -90,7 +90,7 @@ export function Header() {
             {/* Logo */}
             <NextLink
               href="/"
-              className="relative z-10 flex items-center"
+              className="relative z-10 flex items-center py-3"
               data-logo="header"
             >
               <Image

@@ -117,7 +117,7 @@ export function HeroSection() {
 
           {/* Main Headline — word-by-word reveal */}
           <motion.h1
-            className="text-[2.25rem] sm:text-display-lg lg:text-display-xl font-display font-bold leading-[1.1] tracking-tight text-balance"
+            className="text-[1.75rem] sm:text-[2.25rem] md:text-display-lg lg:text-display-xl font-display font-bold leading-[1.1] tracking-tight text-balance"
             variants={prefersReducedMotion ? {} : fadeInUp}
           >
             {t("hero.titleAccent").split(" ").map((word, i) => (

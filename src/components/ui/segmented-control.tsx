@@ -26,7 +26,7 @@ export function SegmentedControl({
   return (
     <div
       className={clsx(
-        "relative inline-flex items-center rounded-2xl border border-border bg-bg-secondary/80 p-1",
+        "relative inline-flex items-center rounded-2xl border border-border bg-bg-secondary/80 p-1 overflow-x-auto max-w-full scrollbar-hide",
         className
       )}
       role="tablist"
@@ -42,7 +42,7 @@ export function SegmentedControl({
             aria-selected={isActive}
             onClick={() => onChange(option.value)}
             className={clsx(
-              "relative z-10 px-4 py-2 text-body-sm font-medium rounded-xl transition-colors",
+              "relative z-10 px-3 sm:px-4 py-2.5 text-body-sm font-medium rounded-xl transition-colors whitespace-nowrap",
               isActive ? "text-text-primary" : "text-text-secondary hover:text-text-primary"
             )}
           >

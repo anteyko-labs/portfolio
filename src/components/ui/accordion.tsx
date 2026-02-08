@@ -104,7 +104,7 @@ export function AccordionItem({
               transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
               className="overflow-hidden"
             >
-              <div className={clsx("px-5 pb-5 md:px-6 md:pb-6", number && "pl-[4.5rem] md:pl-[5rem]")}>
+              <div className={clsx("px-5 pb-5 md:px-6 md:pb-6", number && "pl-14 md:pl-[5rem]")}>
                 <div className="text-text-secondary text-body-md leading-relaxed">
                   {children}
                 </div>

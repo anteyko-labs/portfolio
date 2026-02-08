@@ -18,7 +18,7 @@ export function SearchInput({ value, onChange, placeholder, className }: SearchI
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
         className={clsx(
-          "w-full px-11 py-3 rounded-xl bg-bg-secondary text-text-primary",
+          "w-full px-11 py-3.5 rounded-xl bg-bg-secondary text-text-primary",
           "border border-border placeholder:text-text-muted",
           "focus:outline-none focus:border-accent-primary focus:ring-1 focus:ring-accent-primary/30"
         )}

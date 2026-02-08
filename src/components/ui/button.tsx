@@ -43,7 +43,7 @@ const variants: Record<ButtonVariant, string> = {
 };
 
 const sizes: Record<ButtonSize, string> = {
-  sm: "px-4 py-2 text-body-sm gap-1.5",
+  sm: "px-4 py-2.5 text-body-sm gap-1.5",
   md: "px-6 py-3 text-body-md gap-2",
   lg: "px-8 py-4 text-body-lg gap-2.5",
 };

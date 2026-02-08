@@ -57,8 +57,8 @@ export function PageHero({
 
       <div className="absolute inset-0 pointer-events-none page-hero-noise" aria-hidden />
       <div className="absolute inset-0 pointer-events-none">
-        <div className={`blob blob-accent w-[320px] h-[320px] absolute -top-16 -right-16 opacity-30 ${prefersReducedMotion ? "" : "animate-float-blob"}`} />
-        <div className={`blob blob-accent-sub w-[260px] h-[260px] absolute bottom-0 -left-10 opacity-25 ${prefersReducedMotion ? "" : "animate-float-blob"}`} style={prefersReducedMotion ? {} : { animationDelay: "-6s" }} />
+        <div className={`blob blob-accent w-[200px] h-[200px] sm:w-[320px] sm:h-[320px] absolute -top-16 -right-16 opacity-30 ${prefersReducedMotion ? "" : "animate-float-blob"}`} />
+        <div className={`blob blob-accent-sub w-[160px] h-[160px] sm:w-[260px] sm:h-[260px] absolute bottom-0 -left-10 opacity-25 ${prefersReducedMotion ? "" : "animate-float-blob"}`} style={prefersReducedMotion ? {} : { animationDelay: "-6s" }} />
       </div>
 
       <div className={`relative ${isSplit ? "grid gap-10 lg:grid-cols-[1.2fr_0.8fr] items-center" : "max-w-3xl mx-auto"}`}>
@@ -86,7 +86,7 @@ export function PageHero({
           )}
 
           <AnimatedItem delay={0.05}>
-            <h1 className={`mt-4 text-display-sm md:text-display-md font-display text-text-primary ${alignClasses}`}>
+            <h1 className={`mt-4 text-heading-xl sm:text-display-sm md:text-display-md font-display text-text-primary ${alignClasses}`}>
               {title}
             </h1>
           </AnimatedItem>

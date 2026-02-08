@@ -242,7 +242,7 @@ export function CaseDetailContent({ caseItem }: { caseItem: FlagshipCase }) {
       />
 
       <Section background="primary" padding="none" id="case-summary-meta">
-        <div className="max-w-4xl px-6 lg:px-12 py-8">
+        <div className="max-w-4xl px-0 lg:px-12 py-8">
           <AnimatedItem>
             <div className="flex flex-wrap gap-6 text-body-sm text-text-muted">
               <span>
@@ -746,10 +746,10 @@ export function CaseDetailContent({ caseItem }: { caseItem: FlagshipCase }) {
       })()}
 
       <Section background="secondary" padding="md">
-        <div className="flex items-center justify-between max-w-4xl mx-auto">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 max-w-4xl mx-auto">
           {/* Previous case */}
           {prevCase ? (
-            <NextLink href={`/cases/${prevCase.slug}`} className="group flex items-center gap-3 p-4 rounded-xl border border-border bg-bg-tertiary/50 hover:border-accent-primary/30 transition-colors max-w-[45%]">
+            <NextLink href={`/cases/${prevCase.slug}`} className="group flex items-center gap-3 p-4 rounded-xl border border-border bg-bg-tertiary/50 hover:border-accent-primary/30 transition-colors w-full sm:max-w-[45%]">
               <svg className="w-5 h-5 text-text-tertiary group-hover:text-accent-primary transition-colors shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
@@ -768,7 +768,7 @@ export function CaseDetailContent({ caseItem }: { caseItem: FlagshipCase }) {
 
           {/* Next case */}
           {nextCase ? (
-            <NextLink href={`/cases/${nextCase.slug}`} className="group flex items-center gap-3 p-4 rounded-xl border border-border bg-bg-tertiary/50 hover:border-accent-primary/30 transition-colors max-w-[45%] text-right">
+            <NextLink href={`/cases/${nextCase.slug}`} className="group flex items-center gap-3 p-4 rounded-xl border border-border bg-bg-tertiary/50 hover:border-accent-primary/30 transition-colors w-full sm:max-w-[45%] sm:ml-auto text-right">
               <div className="min-w-0">
                 <p className="text-caption text-text-tertiary mb-1">
                   {language === "en" ? "Next" : "Следующий"}

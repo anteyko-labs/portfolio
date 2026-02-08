@@ -28,10 +28,10 @@ export function ProcessContent() {
 
   const stepCardClass = (index: number) => {
     const base = "bg-bg-tertiary border border-border";
-    if (index === 0) return `${base} pl-8 md:pl-10 border-l-4 border-l-accent-primary`;
+    if (index === 0) return `${base} pl-5 md:pl-10 border-l-4 border-l-accent-primary`;
     if (index === 1) return `${base} ring-1 ring-accent-primary/20`;
     if (index === 2) return `${base} pt-8 border-t-4 border-t-accent-primary md:pt-10`;
-    return `${base} pl-8 md:pl-10 border-l-4 border-l-success/50`;
+    return `${base} pl-5 md:pl-10 border-l-4 border-l-success/50`;
   };
 
   return (
@@ -71,7 +71,7 @@ export function ProcessContent() {
         <div className="grid lg:grid-cols-[0.35fr_0.65fr] gap-10">
           <ScrollProgressRail items={navItems} />
           <motion.div
-            className="space-y-20 md:space-y-28"
+            className="space-y-12 md:space-y-28"
             initial="initial"
             whileInView="animate"
             viewport={{ once: true, margin: "-50px" }}
@@ -84,7 +84,7 @@ export function ProcessContent() {
           >
             {steps.map((step, index) => (
               <motion.div key={step.number} variants={stepVariants(index)} id={`process-step-${step.number}`}>
-                <div className={`relative flex flex-col md:flex-row gap-8 md:gap-12 rounded-2xl p-8 md:p-10 ${stepCardClass(index)}`}>
+                <div className={`relative flex flex-col md:flex-row gap-6 md:gap-12 rounded-2xl p-5 md:p-10 ${stepCardClass(index)}`}>
                   {/* Decorative per-step */}
                   {index === 0 && <div className="absolute top-0 left-0 w-32 h-1 bg-gradient-to-r from-accent-primary to-transparent rounded-r-full" aria-hidden />}
                   {index === 1 && <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-accent-primary/15 to-transparent rounded-bl-2xl" aria-hidden />}

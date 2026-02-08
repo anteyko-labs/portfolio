@@ -216,7 +216,7 @@ export function ServicesContent() {
         </div>
 
         {/* CTA section */}
-        <div className="mt-12 p-8 rounded-2xl border border-border bg-bg-secondary/60 text-center">
+        <div className="mt-12 p-5 sm:p-8 rounded-2xl border border-border bg-bg-secondary/60 text-center">
           <h3 className="text-heading-lg font-medium text-text-primary mb-2">
             {language === "en" ? "Not sure which package fits?" : "Не уверены, какой пакет подходит?"}
           </h3>

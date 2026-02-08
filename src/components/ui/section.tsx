@@ -25,9 +25,9 @@ const paddings: Record<NonNullable<SectionProps["padding"]>, string> = {
   none: "",
   sm: "py-12 md:py-16",
   md: "py-16 md:py-24",
-  lg: "py-24 md:py-32",
-  xl: "py-32 md:py-40",
-  "xl-top": "pt-32 md:pt-40 pb-24 md:pb-32",
+  lg: "py-16 sm:py-24 md:py-32",
+  xl: "py-20 sm:py-32 md:py-40",
+  "xl-top": "pt-20 sm:pt-32 md:pt-40 pb-16 sm:pb-24 md:pb-32",
   compact: "py-16 md:py-20",
 };
 

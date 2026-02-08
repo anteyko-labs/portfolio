@@ -10,7 +10,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 const baseInputClasses = `
-  w-full px-4 py-3
+  w-full px-4 py-3.5
   bg-bg-secondary text-text-primary
   border border-border rounded-xl
   placeholder:text-text-muted

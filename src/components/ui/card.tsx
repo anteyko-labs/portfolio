@@ -23,7 +23,7 @@ const paddings = {
   none: "",
   sm: "p-4",
   md: "p-6",
-  lg: "p-8",
+  lg: "p-5 sm:p-8",
 };
 
 export const Card = forwardRef<HTMLDivElement, CardProps>(

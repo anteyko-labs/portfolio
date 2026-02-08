@@ -13,7 +13,7 @@ export function FinalCTASection() {
       {/* Background: grid + blobs + noise */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none final-cta-bg-grid" aria-hidden />
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-accent-primary/10 blur-3xl animate-float-blob" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] sm:w-[600px] sm:h-[600px] rounded-full bg-accent-primary/10 blur-2xl sm:blur-3xl animate-float-blob" />
         <div className="blob blob-accent w-[400px] h-[400px] absolute -top-20 left-1/4 opacity-40 animate-float-blob" style={{ animationDelay: "-3s" }} />
         <div className="blob blob-accent-sub w-[300px] h-[300px] absolute bottom-0 right-1/4 opacity-30 animate-float-blob" style={{ animationDelay: "-7s" }} />
         {/* Large blob right side (desktop) for asymmetry */}
@@ -26,7 +26,7 @@ export function FinalCTASection() {
         {Array.from({ length: 30 }).map((_, i) => (
           <div
             key={i}
-            className="particle"
+            className="particle hidden sm:block"
             style={{
               "--left": `${5 + (i * 37) % 90}%`,
               "--delay": `${(i * 0.7) % 12}s`,
@@ -43,7 +43,7 @@ export function FinalCTASection() {
         {/* Left: content (asymmetric on desktop) */}
         <div className="max-w-xl lg:max-w-2xl lg:text-left">
           <AnimatedItem>
-            <h2 className="text-display-sm md:text-display-md font-display text-text-primary leading-tight">
+            <h2 className="text-heading-xl sm:text-display-sm md:text-display-md font-display text-text-primary leading-tight">
               {t("cta.finalLine1")}
               <br />
               <span className="text-text-secondary font-normal">{t("cta.finalLine2")}</span>
