@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const THRESHOLD = 380; // distance in px to start effect
+const THRESHOLD = 650; // distance in px to start effect
 const SPARK_COUNT = 24;
 const ACCENT = "99, 102, 241"; // accent-primary RGB
 
