@@ -15,8 +15,8 @@ export const translations = {
   // CTAs
   cta: {
     primary: {
-      en: "Get an estimate in 48\u00A0hours",
-      ru: "Получить оценку за 48\u00A0часов",
+      en: "Get an estimate in 24\u00A0hours",
+      ru: "Получить оценку за 24\u00A0часа",
     },
     secondary: {
       en: "Book a 20-min scoping call",
@@ -26,7 +26,7 @@ export const translations = {
     viewAll: { en: "View all", ru: "Смотреть все" },
     finalLine1: { en: "We don't want briefs.", ru: "Нам не нужны брифы." },
     finalLine2: { en: "We want problems. That's where the magic happens.", ru: "Нам нужны задачи. Там и рождается результат." },
-    finalAction: { en: "Get an estimate in 48\u00A0hours", ru: "Получить оценку за 48\u00A0часов" },
+    finalAction: { en: "Get an estimate in 24\u00A0hours", ru: "Получить оценку за 24\u00A0часа" },
     learnMore: { en: "Learn more", ru: "Подробнее" },
     getStarted: { en: "Get started", ru: "Начать" },
     sendRequest: { en: "Send request", ru: "Отправить заявку" },
@@ -51,8 +51,8 @@ export const translations = {
       ru: "сайты, MVP и сложные стартап\u2011продукты.",
     },
     heroMetric: {
-      en: "48h",
-      ru: "48\u00A0ч",
+      en: "24h",
+      ru: "24\u00A0ч",
     },
     heroMetricLabel: {
       en: "estimate response",
@@ -524,7 +524,7 @@ We work with founders, product teams, and enterprises across Kyrgyzstan, Dubai, 
     metrics: [
       { value: "40+", label: { en: "projects shipped", ru: "проектов запущено" } },
       { value: "5+", label: { en: "years in delivery", ru: "лет в поставке" } },
-      { value: "48h", label: { en: "estimate response", ru: "ответ по оценке" } },
+      { value: "24h", label: { en: "estimate response", ru: "ответ по оценке" } },
     ],
     toolchain: {
       title: { en: "Quality & delivery stack", ru: "Стек качества и поставки" },
@@ -560,8 +560,8 @@ We work with founders, product teams, and enterprises across Kyrgyzstan, Dubai, 
   contact: {
     title: { en: "Let's talk", ru: "Давайте поговорим" },
     subtitle: {
-      en: "Tell us about your project. We'll get back within 48 hours.",
-      ru: "Расскажите о проекте. Ответим в течение 48\u00A0часов.",
+      en: "Tell us about your project. We'll get back within 24 hours.",
+      ru: "Расскажите о проекте. Ответим в течение 24\u00A0часов.",
     },
     progressLabel: { en: "Brief completion", ru: "Заполнение брифа" },
     nextSteps: {
@@ -573,7 +573,7 @@ We work with founders, product teams, and enterprises across Kyrgyzstan, Dubai, 
         },
         {
           title: { en: "We send an estimate", ru: "Мы отправляем оценку" },
-          description: { en: "Usually within 48 hours.", ru: "Обычно в течение 48\u00A0часов." },
+          description: { en: "Usually within 24 hours.", ru: "Обычно в течение 24\u00A0часов." },
         },
         {
           title: { en: "Optional scoping call", ru: "Опциональный созвон" },
@@ -618,8 +618,8 @@ We work with founders, product teams, and enterprises across Kyrgyzstan, Dubai, 
     success: {
       title: { en: "Request received", ru: "Заявка получена" },
       description: {
-        en: "We'll review your project and get back within 48 hours with next steps.",
-        ru: "Мы рассмотрим ваш проект и ответим в течение 48\u00A0часов с дальнейшими шагами.",
+        en: "We'll review your project and get back within 24 hours with next steps.",
+        ru: "Мы рассмотрим ваш проект и ответим в течение 24\u00A0часов с дальнейшими шагами.",
       },
       next: {
         en: "What you can expect next",

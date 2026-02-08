@@ -224,8 +224,8 @@ export function FAQContent() {
               </p>
               <p className="text-body-sm text-text-secondary mb-6">
                 {language === "en"
-                  ? "We respond within 48 hours. No bots, real engineers."
-                  : "Отвечаем в течение 48 часов. Без ботов, живые инженеры."}
+                  ? "We respond within 24 hours. No bots, real engineers."
+                  : "Отвечаем в течение 24 часов. Без ботов, живые инженеры."}
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <a

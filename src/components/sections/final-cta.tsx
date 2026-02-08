@@ -36,8 +36,8 @@ export function FinalCTASection() {
           <AnimatedItem delay={0.1}>
             <p className="mt-6 text-body-lg text-text-secondary">
               {language === "en"
-                ? "Tell us about your project. We'll review it and get back with an estimate within 48 hours."
-                : "Расскажите о вашем проекте. Мы рассмотрим его и вернёмся с оценкой в течение 48 часов."}
+                ? "Tell us about your project. We'll review it and get back with an estimate within 24 hours."
+                : "Расскажите о вашем проекте. Мы рассмотрим его и вернёмся с оценкой в течение 24 часов."}
             </p>
           </AnimatedItem>
 

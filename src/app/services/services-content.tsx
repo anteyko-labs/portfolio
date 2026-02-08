@@ -62,7 +62,7 @@ export function ServicesContent() {
         subtitle={t("packages.subtitle")}
         eyebrow={language === "en" ? "Services" : "Услуги"}
         metric={{
-          value: language === "en" ? "48h" : "48ч",
+          value: language === "en" ? "24h" : "24ч",
           label: language === "en" ? "estimate response" : "ответ по оценке",
         }}
         rightSlot={
