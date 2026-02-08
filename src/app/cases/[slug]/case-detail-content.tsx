@@ -511,6 +511,7 @@ export function CaseDetailContent({ caseItem }: { caseItem: FlagshipCase }) {
                             src={screenshot.src}
                             alt={screenshot.alt[language]}
                             fill
+                            loading={index < 8 ? "eager" : "lazy"}
                             className={`${objectClass} transition-transform duration-500 group-hover:scale-[1.02]`}
                             sizes={isMobileLayout ? "(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw" : "(max-width: 768px) 100vw, 50vw"}
                           />
@@ -714,6 +715,36 @@ export function CaseDetailContent({ caseItem }: { caseItem: FlagshipCase }) {
       </Section>
 
       {/* Navigation between cases */}
+      {/* Related Cases */}
+      {(() => {
+        const related = flagshipCases
+          .filter((c) => c.id !== caseItem.id && c.category === caseItem.category)
+          .slice(0, 3);
+        if (related.length === 0) return null;
+        return (
+          <Section background="primary" padding="lg">
+            <div className="max-w-4xl mx-auto">
+              <h2 className="text-heading-lg font-display text-text-primary mb-6">
+                {language === "en" ? "Related Cases" : "Похожие кейсы"}
+              </h2>
+              <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
+                {related.map((rc) => (
+                  <NextLink key={rc.id} href={`/cases/${rc.slug}`} className="group block">
+                    <div className="rounded-xl border border-border bg-bg-secondary/60 p-5 hover:border-accent-primary/30 hover:bg-bg-secondary transition-all h-full">
+                      <CategoryBadge category={rc.category} size="sm" />
+                      <h3 className="text-heading-sm font-medium text-text-primary mt-3 mb-2 group-hover:text-accent-primary transition-colors line-clamp-2">
+                        {rc.title[language]}
+                      </h3>
+                      <p className="text-body-sm text-text-secondary line-clamp-2">{rc.summary[language]}</p>
+                    </div>
+                  </NextLink>
+                ))}
+              </div>
+            </div>
+          </Section>
+        );
+      })()}
+
       <Section background="secondary" padding="md">
         <div className="flex items-center justify-between max-w-4xl mx-auto">
           {/* Previous case */}

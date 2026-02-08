@@ -116,9 +116,19 @@ export function ServicesContent() {
                           </Badge>
                         )}
                       </div>
-                      <p className="mt-1 text-body-sm text-text-muted">
-                        {pkg.timeline[language]}
-                      </p>
+                      <div className="mt-1 flex items-center gap-3">
+                        <p className="text-body-sm text-text-muted">
+                          {pkg.timeline[language]}
+                        </p>
+                        {"startingPrice" in pkg && (
+                          <>
+                            <span className="text-text-tertiary">·</span>
+                            <p className="text-body-sm font-medium text-accent-primary">
+                              {(pkg as unknown as { startingPrice: { en: string; ru: string } }).startingPrice[language]}
+                            </p>
+                          </>
+                        )}
+                      </div>
                     </div>
                   </div>
 

@@ -178,8 +178,11 @@ export function FeaturedCasesSection() {
                         {backgroundByIndex()}
                       </>
                     )}
-                    <div className="absolute top-4 left-4 z-10">
+                    <div className="absolute top-4 left-4 z-10 flex items-center gap-2">
                       <CategoryBadge category={caseItem.category} />
+                      <span className="px-2 py-0.5 rounded-md bg-bg-primary/70 backdrop-blur-sm border border-border/40 text-caption font-mono text-text-tertiary">
+                        {caseItem.year}
+                      </span>
                     </div>
                   </div>
 

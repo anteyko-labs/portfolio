@@ -63,8 +63,8 @@ export const translations = {
       ru: "Дизайн, фронтенд, backend, админ-панели, интеграции, инфраструктура и запуск. Web2 + Web3 — в одном цикле поставки.",
     },
     trustLine: {
-      en: "Milestone-based delivery. Transparent updates. NDA on request.",
-      ru: "Работаем по этапам. Прозрачная отчётность. NDA по запросу.",
+      en: "40+ projects delivered. Dubai & Kyrgyzstan. Milestone-based. NDA on request.",
+      ru: "40+ проектов. Дубай и Кыргызстан. Работаем по этапам. NDA по запросу.",
     },
   },
 
@@ -166,6 +166,7 @@ export const translations = {
       {
         id: "launch-site",
         title: { en: "Launch Site", ru: "Быстрый старт" },
+        startingPrice: { en: "From $3k", ru: "От $3k" },
         timeline: { en: "7–14 days", ru: "7–14\u00A0дней" },
         description: {
           en: "Landing page or corporate site that converts. Design, development, deployment.",
@@ -199,6 +200,7 @@ export const translations = {
       {
         id: "mvp-sprint",
         title: { en: "MVP Sprint", ru: "MVP-спринт" },
+        startingPrice: { en: "From $10k", ru: "От $10k" },
         timeline: { en: "3–6 weeks", ru: "3–6\u00A0недель" },
         description: {
           en: "Working product with core features. Validate your idea with real users.",
@@ -234,6 +236,7 @@ export const translations = {
       {
         id: "startup-key",
         title: { en: "Startup Under Key", ru: "Стартап под ключ" },
+        startingPrice: { en: "From $30k", ru: "От $30k" },
         timeline: { en: "6–12+ weeks", ru: "6–12+\u00A0недель" },
         description: {
           en: "Full product build with complex features, integrations, and scale considerations.",
