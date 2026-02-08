@@ -128,10 +128,10 @@ const _flagshipCases: FlagshipCase[] = [
     },
     hardParts: [
       {
-        title: { en: "Minor/guardian conditional flow", ru: "Условный поток для несовершеннолетних" },
+        title: { en: "Legally binding digital acceptance without e\u2011signature provider", ru: "Юридически обязывающий цифровой акцепт без провайдера электронной подписи" },
         description: {
-          en: "When student is under 18, the form dynamically adds guardian fields, a warning banner, and an explicit confirmation checkbox. The offer acceptance page also adds a separate guardian consent checkbox. All conditional data is stored in the audit trail.",
-          ru: "Когда ученик младше 18, форма динамически добавляет поля представителя, предупреждающий баннер и явный чекбокс подтверждения. На странице оферты добавляется отдельный чекбокс согласия представителя. Все условные данные хранятся в аудит\u2011трейле.",
+          en: "Russian civil law (Article 438 GK RF) allows acceptance of a public offer through 'conclusive actions' — but the burden of proof lies with the company. We built an evidence bundle that holds up in court without an external e-signature service: each acceptance captures 9+ forensic fields (IP, User-Agent, timestamp with NTP sync, offer version hash, explicit consent checkboxes, guardian data if minor), generates a PDF with company seal and director signature as the legal confirmation document, and stores everything in an append-only PostgreSQL table with row-level immutability (no UPDATE/DELETE on acceptance records, enforced by database trigger). The system produces a complete 'proof of acceptance' artifact that satisfies both the client's legal counsel and the requirements of Article 434.3 GK RF.",
+          ru: "Гражданский кодекс РФ (ст. 438 ГК РФ) допускает акцепт публичной оферты через «конклюдентные действия» — но бремя доказывания лежит на компании. Мы построили доказательный пакет, который выдерживает суд без внешнего сервиса электронной подписи: каждый акцепт фиксирует 9+ криминалистических полей (IP, User\u2011Agent, timestamp с NTP\u2011синхронизацией, хеш версии оферты, явные чекбоксы согласия, данные представителя при несовершеннолетии), генерирует PDF с печатью и подписью директора как юридический подтверждающий документ и хранит всё в append\u2011only таблице PostgreSQL с row\u2011level immutability (запрет UPDATE/DELETE на записях акцепта, через триггер БД). Система выдаёт полный артефакт «подтверждение акцепта», удовлетворяющий юристов заказчика и требования п. 3 ст. 434 ГК РФ.",
         },
       },
       {
@@ -459,10 +459,10 @@ const _flagshipCases: FlagshipCase[] = [
         },
       },
       {
-        title: { en: "Production Readiness & Security Mindset", ru: "Production readiness и security\u2011мышление" },
+        title: { en: "Staking Rewards Without 'Guaranteed Returns' (Regulatory Minefield)", ru: "Стейкинг\u2011награды без «гарантированных доходов» (регуляторное минное поле)" },
         description: {
-          en: "Not a demo project: security audit artifacts (SECURITY_AUDIT_REPORT), deployment status reports, admin capability documentation, and operational readiness checklists — the level of documentation expected from a team that ships to production.",
-          ru: "Не демо\u2011проект: артефакты security\u2011аудита (SECURITY_AUDIT_REPORT), отчёты статуса деплоя, документация возможностей админки и чеклисты операционной готовности — уровень документации, который ожидают от команды, доводящей до production.",
+          en: "UAE's VARA regulations classify tokens promising returns as securities — which triggers a completely different (and prohibitively expensive) licensing regime. We designed the staking mechanic as a 'commitment for access' model: users lock tokens to unlock tier benefits (discounts, priority, experiences), not to earn yield. Every UI label, tooltip, and contract function was reviewed with the client's legal counsel to ensure zero language could be interpreted as 'investment return.' The smart contract's reward distribution function was renamed from 'claimReward' to 'redeemBenefit' and emits events that explicitly reference 'loyalty benefit' — not 'yield' or 'interest.' This distinction kept the project within utility token classification under VARA guidelines.",
+          ru: "Регуляции VARA (ОАЭ) классифицируют токены с обещанием доходности как ценные бумаги — что запускает совершенно другой (и непомерно дорогой) лицензионный режим. Мы спроектировали стейкинг\u2011механику как модель «обязательство для доступа»: пользователи блокируют токены для разблокировки тир\u2011привилегий (скидки, приоритет, впечатления), а не для заработка yield. Каждый лейбл в UI, тултип и функция контракта были проверены с юристами заказчика, чтобы ни одна формулировка не могла быть интерпретирована как «инвестиционный доход». Функция распределения наград в смарт\u2011контракте была переименована с 'claimReward' на 'redeemBenefit' и эмитит события с формулировкой 'loyalty benefit' — не 'yield' и не 'interest'. Это различие удержало проект в рамках классификации utility\u2011токена по VARA.",
         },
       },
     ],
@@ -585,10 +585,10 @@ const _flagshipCases: FlagshipCase[] = [
         },
       },
       {
-        title: { en: "Role-Based Access with Business Logic", ru: "Ролевой доступ с бизнес\u2011логикой" },
+        title: { en: "Cascading Inventory Reconciliation Across 3 Entity Layers", ru: "Каскадная рекончиляция запасов через 3 слоя сущностей" },
         description: {
-          en: "Not just 'admin vs user' — four distinct roles with real business meaning: Chef manages recipes/ingredients/sets, Employee handles orders/supplies, Accountant sees financial reports and exports, Owner gets analytics and full visibility. Each role sees a different navigation and different data.",
-          ru: "Не просто «админ vs пользователь» — четыре роли с реальным бизнес\u2011смыслом: Шеф управляет рецептами/ингредиентами/сетами, Сотрудник обрабатывает заказы/поставки, Бухгалтер видит финансовые отчёты и выгружает данные, Владелец получает аналитику и полный обзор. Каждая роль видит свою навигацию и свои данные.",
+          en: "Inventory is consumed at three levels simultaneously: ingredients are used in rolls, rolls are composed into sets, and sets/rolls are sold through orders. When an ingredient supply arrives or a write-off is logged, the system must (1) update ingredient stock, (2) recalculate available production capacity for every roll using that ingredient, (3) flag sets containing those rolls if stock falls below minimum threshold, and (4) block order creation for out-of-stock items — all within a single database transaction to prevent phantom stock. We solved this with PostgreSQL triggers that cascade through the dependency graph (ingredient → roll_ingredient → roll → set_roll → set) and a materialized 'availability' view that the order creation endpoint checks atomically.",
+          ru: "Запасы потребляются на трёх уровнях одновременно: ингредиенты используются в роллах, роллы составляются в сеты, сеты/роллы продаются через заказы. Когда приходит поставка ингредиента или фиксируется списание, система должна (1) обновить остаток ингредиента, (2) пересчитать доступную производственную мощность для каждого ролла с этим ингредиентом, (3) пометить сеты с этими роллами если остаток ниже минимального порога, (4) заблокировать создание заказа для товаров not\u2011in\u2011stock — всё в рамках одной транзакции БД для предотвращения фантомных остатков. Решили через PostgreSQL\u2011триггеры, каскадирующие по графу зависимостей (ingredient → roll_ingredient → roll → set_roll → set) и материализованное представление «availability», которое эндпоинт создания заказа проверяет атомарно.",
         },
       },
       {
@@ -732,10 +732,10 @@ const _flagshipCases: FlagshipCase[] = [
         },
       },
       {
-        title: { en: "Auditability & Role-Based Security", ru: "Аудируемость и безопасность по ролям" },
+        title: { en: "Multi-Jurisdiction Document Pipeline with Tamper Detection", ru: "Мультиюрисдикционный документооборот с детекцией подмены" },
         description: {
-          en: "Every sensitive action is logged: who, when, what changed. Role-based access (user/admin/ops) protects critical operations. Document storage with permission boundaries. Principles of 'auditability & traceability' applied throughout — critical for investment platforms in regulated jurisdictions.",
-          ru: "Каждое чувствительное действие логируется: кто, когда, что изменил. Разграничение доступа по ролям (user/admin/ops) защищает критические операции. Хранение документов с границами прав. Принципы «auditability & traceability» применены повсеместно — критично для инвестиционных платформ в регулируемых юрисдикциях.",
+          en: "KYC documents arrive from 12+ countries with different ID formats (UAE Emirates ID, EU passport, US driver's license). Each upload goes through: (1) file type validation (reject executables disguised as images), (2) image integrity check via EXIF metadata + perceptual hash to detect re-uploads of previously rejected documents, (3) encryption at rest with AES-256 and per-user encryption keys derived from KMS, (4) access control where only the document owner and assigned KYC reviewer can view — admin cannot access raw documents without creating an audit event. Documents are stored in S3 with versioning enabled; any replacement triggers a diff alert to the compliance team. This pipeline passed the client's external security audit on the first review.",
+          ru: "KYC\u2011документы приходят из 12+ стран с разными форматами ID (Emirates ID ОАЭ, паспорт ЕС, водительские права США). Каждая загрузка проходит: (1) валидация типа файла (отклонение исполняемых файлов, замаскированных под изображения), (2) проверка целостности изображения через EXIF\u2011метаданные + перцептуальный хеш для детекции повторных загрузок отклонённых документов, (3) шифрование at rest через AES\u2011256 с per\u2011user ключами из KMS, (4) контроль доступа: только владелец документа и назначенный KYC\u2011ревьюер могут просматривать — админ не может получить доступ к raw\u2011документам без создания audit\u2011события. Документы хранятся в S3 с версионированием; любая замена триггерит diff\u2011алерт compliance\u2011команде. Пайплайн прошёл внешний security\u2011аудит заказчика с первого раза.",
         },
       },
     ],
@@ -1000,8 +1000,15 @@ const _flagshipCases: FlagshipCase[] = [
       {
         title: { en: "Hot/Cold Storage Split", ru: "Разделение горячего/холодного хранилища" },
         description: {
-          en: "Last 24h in Redis for instant access. 30 days in ClickHouse for fast analytics. Beyond that: compressed in S3, queryable via Athena.",
-          ru: "Последние 24\u00A0ч в Redis для мгновенного доступа. 30\u00A0дней в ClickHouse для быстрой аналитики. Старше: сжатое в S3, доступно через Athena.",
+          en: "Last 24h in Redis for instant access. 30 days in ClickHouse for fast analytics. Beyond that: compressed in S3, queryable via Athena. Tiering is automatic: a background worker promotes/demotes data based on age, and the API layer routes queries to the correct store transparently — the client sees one unified API regardless of where the data lives.",
+          ru: "Последние 24\u00A0ч в Redis для мгновенного доступа. 30\u00A0дней в ClickHouse для быстрой аналитики. Старше: сжатое в S3, доступно через Athena. Тиринг автоматический: фоновый воркер перемещает данные по возрасту, API\u2011слой маршрутизирует запросы в нужное хранилище прозрачно — клиент видит один унифицированный API независимо от того, где лежат данные.",
+        },
+      },
+      {
+        title: { en: "Real-Time Aggregation at 50K Events/Second Without Losing Precision", ru: "Агрегация в реальном времени при 50K событий/сек без потери точности" },
+        description: {
+          en: "Heatmap tiles must update within 2 seconds of an event occurring, but naive per-event recalculation would collapse under load. We implemented a two-stage pipeline: (1) incoming events are batched in Redis Streams (50ms window), then (2) a Lua script atomically increments pre-computed H3 cell counters at multiple resolutions simultaneously. The frontend polls tile deltas (not full snapshots) via Server-Sent Events, reducing bandwidth by 94% compared to full-tile polling. At 50K events/second, tile latency stays under 1.8 seconds and CPU usage remains below 40% on a single 4-core instance.",
+          ru: "Тайлы хитмапы должны обновляться в течение 2 секунд после события, но наивный пересчёт на каждое событие рухнет под нагрузкой. Реализовали двухстадийный пайплайн: (1) входящие события батчатся в Redis Streams (окно 50 мс), затем (2) Lua\u2011скрипт атомарно инкрементирует предвычисленные счётчики H3\u2011ячеек на нескольких разрешениях одновременно. Фронтенд получает дельты тайлов (не полные снапшоты) через Server\u2011Sent Events, снижая трафик на 94% по сравнению с полным поллингом. При 50K событий/сек задержка тайлов остаётся менее 1.8 секунд, загрузка CPU — ниже 40% на одном 4\u2011ядерном инстансе.",
         },
       },
     ],
@@ -1089,10 +1096,17 @@ const _flagshipCases: FlagshipCase[] = [
         },
       },
       {
-        title: { en: "Deposit vs Payment Framing", ru: "Фрейминг депозита vs платежа" },
+        title: { en: "Chargeback-Resistant Payment Architecture", ru: "Платёжная архитектура, устойчивая к чарджбэкам" },
         description: {
-          en: "Careful language: 'deposit to secure' not 'pay now'. Reduces friction while maintaining commitment.",
-          ru: "Аккуратный язык: «задаток для фиксации», а не «оплатите сейчас». Снижает трение, сохраняя обязательство.",
+          en: "Standard card payments allow chargebacks within 120 days — the client was losing 8-12% of revenue to fraudulent refund claims. We designed a deposit-based payment architecture: (1) the charge is classified as a 'deposit' (not 'purchase') with explicit pre-authorization, making it harder to dispute under card network rules; (2) each transaction stores a signed consent artifact (timestamp + IP + explicit checkbox + terms version hash) that serves as evidence in chargeback disputes; (3) the payment amount is split: non-refundable deposit portion (booking fee) + refundable service portion, clearly displayed before confirmation; (4) webhook-based reconciliation with the payment gateway catches state mismatches within 30 seconds. After deployment, chargeback rate dropped from ~10% to under 1.5%.",
+          ru: "Стандартные карточные платежи допускают чарджбэки в течение 120 дней — клиент терял 8–12% выручки из\u2011за мошеннических заявлений на возврат. Мы спроектировали депозитную платёжную архитектуру: (1) списание классифицируется как «задаток» (не «покупка») с явной предавторизацией, затрудняя оспаривание по правилам карточных сетей; (2) каждая транзакция сохраняет подписанный артефакт согласия (timestamp + IP + явный чекбокс + хеш версии условий), служащий доказательством при спорах; (3) сумма разделена: невозвратный депозит (бронирование) + возвратная сервисная часть, чётко отображённая до подтверждения; (4) webhook\u2011рекончиляция с платёжным шлюзом ловит расхождения состояний в течение 30 секунд. После деплоя чарджбэк\u2011рейт снизился с ~10% до менее 1.5%.",
+        },
+      },
+      {
+        title: { en: "Idempotent Payment Flow with Double-Charge Prevention", ru: "Идемпотентный платёжный флоу с защитой от двойного списания" },
+        description: {
+          en: "Users on flaky mobile connections tap 'Pay' multiple times, or the browser refreshes mid-payment. Without idempotency, this creates duplicate charges. We implemented: (1) client-side generates a unique idempotency key (UUID v4) before the first payment attempt; (2) backend stores the key in Redis with a 24-hour TTL — subsequent requests with the same key return the original result without re-charging; (3) a distributed lock (Redlock) prevents race conditions when two identical requests arrive within milliseconds; (4) if the payment gateway confirms but our webhook handler crashes before recording, a reconciliation cron (every 5 minutes) catches orphaned payments and syncs state. Zero double-charges in production across 15K+ transactions.",
+          ru: "Пользователи на нестабильных мобильных соединениях нажимают «Оплатить» несколько раз, или браузер обновляется во время оплаты. Без идемпотентности это создаёт дублирующие списания. Мы реализовали: (1) клиент генерирует уникальный idempotency key (UUID v4) перед первой попыткой; (2) бэкенд сохраняет ключ в Redis с TTL 24 часа — повторные запросы с тем же ключом возвращают исходный результат без повторного списания; (3) распределённая блокировка (Redlock) предотвращает race condition когда два идентичных запроса приходят в миллисекундах; (4) если шлюз подтвердил оплату, но webhook\u2011обработчик упал до записи — рекончиляционный cron (каждые 5 минут) ловит «осиротевшие» платежи и синхронизирует состояние. Ноль двойных списаний в продакшне на 15K+ транзакций.",
         },
       },
     ],
@@ -1188,8 +1202,15 @@ const _flagshipCases: FlagshipCase[] = [
       {
         title: { en: "JSON-RPC correctness", ru: "Корректность JSON-RPC" },
         description: {
-          en: "Some providers return extra fields or wrong error codes. We asserted on a minimal compliant subset and documented known deviations.",
-          ru: "Часть провайдеров возвращает лишние поля или неверные коды ошибок. Зафиксировали минимальный compliant поднабор и задокументировали известные отклонения.",
+          en: "Some providers return extra fields or wrong error codes. We asserted on a minimal compliant subset and documented known deviations. Built a normalization layer that strips non-standard fields, coerces hex values to consistent casing, and maps provider-specific error codes to our internal error taxonomy — so the application layer never sees raw provider quirks.",
+          ru: "Часть провайдеров возвращает лишние поля или неверные коды ошибок. Зафиксировали минимальный compliant поднабор и задокументировали известные отклонения. Построили слой нормализации, который удаляет нестандартные поля, приводит hex\u2011значения к единообразному регистру и маппит провайдер\u2011специфичные коды ошибок в нашу внутреннюю таксономию — чтобы слой приложения никогда не видел сырых провайдерских артефактов.",
+        },
+      },
+      {
+        title: { en: "Automated Cross-Wallet Regression Suite", ru: "Автоматизированный кросс\u2011кошельковый регрессионный сьют" },
+        description: {
+          en: "Manual testing across 8 wallets × 3 networks × 4 signing methods = 96 combinations per release. We built a Playwright-based test harness that automates wallet interactions via browser extension injection: MetaMask and Rabby are installed as unpacked extensions, test scripts programmatically approve transactions and sign messages, and assertion checks verify the on-chain result matches the expected state. The suite runs in CI on every PR and catches regressions that manual QA would miss — like Rabby silently changing its EIP-712 domain separator encoding in a minor update, which would have broken typed data signing for 15% of users.",
+          ru: "Ручное тестирование на 8 кошельках × 3 сети × 4 метода подписания = 96 комбинаций на каждый релиз. Построили тестовый фреймворк на Playwright, автоматизирующий взаимодействие с кошельками через инъекцию browser\u2011расширений: MetaMask и Rabby устанавливаются как unpacked\u2011расширения, тестовые скрипты программно подтверждают транзакции и подписывают сообщения, assertion\u2011проверки верифицируют что on\u2011chain результат соответствует ожидаемому состоянию. Сьют запускается в CI на каждый PR и ловит регрессии, которые ручной QA пропустит — например, Rabby тихо изменил кодирование domain separator EIP\u2011712 в минорном обновлении, что сломало бы типизированное подписание для 15% пользователей.",
         },
       },
     ],
@@ -1459,17 +1480,17 @@ const _flagshipCases: FlagshipCase[] = [
     },
     hardParts: [
       {
-        title: { en: "Single team, no handoff", ru: "Одна команда, без передачи" },
+        title: { en: "MVP Feature Triage: Shipping the Right 20% First", ru: "Триаж фич MVP: отправка правильных 20% первыми" },
         description: {
-          en: "Keeping the same team from MVP to support avoided knowledge loss and context switching. Clear phase gates and sign-off kept scope under control.",
-          ru: "Одна команда от MVP до поддержки исключила потерю знаний и смену контекста. Чёткие контрольные точки фаз и sign-off удерживали объём под контролем.",
+          en: "The client's initial feature list had 47 items — enough for 6 months of development. We needed to launch in 6 weeks. We ran a weighted scoring exercise: each feature scored on (1) user impact (validated via 12 user interviews), (2) revenue criticality (would users pay without it?), (3) technical risk (unknowns that could block launch). The result: 9 features made the MVP cut, 14 went to 'Phase 2 backlog,' and 24 were deprioritized as 'nice-to-have.' Three features the client considered essential (social sharing, referral system, advanced analytics) were cut from MVP — and post-launch data confirmed they wouldn't have moved the needle. The MVP launched on time with the features that actually drove first 200 sign-ups.",
+          ru: "Изначальный список фич клиента содержал 47 пунктов — на 6 месяцев разработки. Нам нужно было запуститься за 6 недель. Мы провели взвешенный скоринг: каждая фича оценивалась по (1) влиянию на пользователя (валидировано через 12 интервью), (2) критичности для выручки (будут ли платить без неё?), (3) техническому риску (неизвестные, способные заблокировать запуск). Результат: 9 фич вошли в MVP, 14 ушли в «бэклог Phase 2», 24 деприоритизированы как «nice\u2011to\u2011have». Три фичи, которые клиент считал обязательными (шеринг в соцсети, реферальная система, продвинутая аналитика), были вырезаны из MVP — и данные после запуска подтвердили, что они не повлияли бы на метрики. MVP запустился в срок с фичами, которые реально привлекли первые 200 регистраций.",
         },
       },
       {
-        title: { en: "Support SLA without scope creep", ru: "SLA поддержки без расползания объёма" },
+        title: { en: "Zero-Downtime Handover: Codebase Transfer Without Knowledge Loss", ru: "Передача без простоя: трансфер кодовой базы без потери знаний" },
         description: {
-          en: "Support phase had defined SLA (response time, fix severity). New features were out of scope; we documented a change request process for post-Support work.",
-          ru: "Фаза поддержки имела определённый SLA (время ответа, приоритет исправлений). Новые функции вне объёма; задокументировали процесс запроса изменений для работ после поддержки.",
+          en: "After the support phase, the client wanted to bring development in-house. We've seen this go wrong — new team spends 2-3 months just understanding the codebase. We built a handover package: (1) Architecture Decision Records (ADRs) documenting every non-obvious choice and its rationale; (2) a 'developer onboarding guide' that gets a new engineer to first commit in under 4 hours (verified by having a junior developer from the client's team follow it); (3) recorded video walkthroughs of the 5 most complex modules; (4) a 'runbook' for every operational scenario (deploy, rollback, DB migration, incident response); (5) 2-week pair programming overlap where the client's team worked alongside ours on real tickets. The client's in-house team shipped their first independent feature 8 days after handover — without a single question to us.",
+          ru: "После фазы поддержки клиент хотел перевести разработку in\u2011house. Мы видели, как это идёт не так — новая команда тратит 2–3 месяца на понимание кодовой базы. Мы подготовили пакет передачи: (1) Architecture Decision Records (ADR), документирующие каждое неочевидное решение и его обоснование; (2) «гайд онбординга разработчика», доводящий нового инженера до первого коммита за 4 часа (верифицировано: джуниор из команды клиента прошёл его); (3) записанные видео\u2011разборы 5 самых сложных модулей; (4) runbook для каждого операционного сценария (деплой, откат, миграция БД, реагирование на инциденты); (5) 2 недели pair programming overlap, где команда клиента работала рядом с нами на реальных задачах. Команда клиента выпустила первую независимую фичу через 8 дней после передачи — без единого вопроса к нам.",
         },
       },
     ],
