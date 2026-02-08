@@ -1211,7 +1211,7 @@ const _flagshipCases: FlagshipCase[] = [
       { name: { en: "Mobile responsiveness", ru: "Мобильная адаптивность" }, passed: true },
       { name: { en: "Email delivery tests", ru: "Тесты доставки email" }, passed: true },
     ],
-    imageUrl: "/images/cases/thumbnails/fintech-deposit.png",
+    imageUrl: "/images/cases/deposit-ux/step3-deposit-payment.png",
     heroImage: "/images/cases/deposit-ux/step1-start.png",
     screenshots: [
       { src: "/images/cases/deposit-ux/step1-start.png", alt: { en: "Step 1 — Start: trial lesson booking with clear how-it-works instructions", ru: "Шаг 1 — Старт: запись на пробный урок с понятными инструкциями «Как это работает»" } },
