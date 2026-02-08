@@ -73,10 +73,11 @@ export const metadata: Metadata = {
       "Design, frontend, backend, admin panels, integrations, infrastructure, and launch. Web2 + Web3 — in one delivery loop.",
     images: [
       {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
+        url: "https://www.anteyko.com/og-image.png",
+        width: 1024,
+        height: 682,
         alt: "Anteyko — Product Development Studio",
+        type: "image/jpeg",
       },
     ],
   },
@@ -85,7 +86,7 @@ export const metadata: Metadata = {
     title: "Anteyko — End-to-end Product Development Studio",
     description:
       "Design, frontend, backend, admin panels, integrations, infrastructure, and launch. Web2 + Web3 — in one delivery loop.",
-    images: ["/og-image.png"],
+    images: ["https://www.anteyko.com/og-image.png"],
   },
   robots: {
     index: true,
