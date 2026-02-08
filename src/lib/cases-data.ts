@@ -194,7 +194,7 @@ const _flagshipCases: FlagshipCase[] = [
     id: "case-1",
     slug: "web3-l1-dex",
     category: "web3",
-    year: 2025,
+    year: 2025, // development 2025–2026
     title: {
       en: "L1 blockchain with built\u2011in perpetual DEX (end\u2011to\u2011end)",
       ru: "L1 блокчейн со встроенной DEX перпетуалов (end\u2011to\u2011end)",
@@ -204,11 +204,11 @@ const _flagshipCases: FlagshipCase[] = [
       ru: "Производительный Layer\u20111 на Rust с детерминированным EVM, экономикой нативного токена, ончейн\u2011ордербуком перпетуалов, слоем приватности (Bulletproofs) и полным продуктовым контуром: DEX UI, Explorer, Operator Panel, Faucet, SDK.",
     },
     metrics: [
-      { label: { en: "Rust core modules", ru: "Модулей ядра на Rust" }, value: "15+" },
+      { label: { en: "Rust core modules", ru: "Модулей ядра на Rust" }, value: "25+" },
       { label: { en: "Frontend apps shipped", ru: "Отправленных фронтенд\u2011приложений" }, value: "4" },
-      { label: { en: "API endpoints", ru: "API\u2011эндпоинтов" }, value: "60+" },
+      { label: { en: "API endpoints", ru: "API\u2011эндпоинтов" }, value: "90+" },
     ],
-    artifactHint: { en: "L1 node + 4 UIs + SDK", ru: "L1 нода + 4 UI + SDK" },
+    artifactHint: { en: "L1 node + 4 UIs + 2 SDKs", ru: "L1 нода + 4 UI + 2 SDK" },
     industry: { en: "Blockchain / DeFi", ru: "Блокчейн / DeFi" },
     timeline: { en: "4\u00A0months", ru: "4\u00A0месяца" },
     problem: {
@@ -238,12 +238,12 @@ const _flagshipCases: FlagshipCase[] = [
       ],
     },
     solution: {
-      en: "Built a single\u2011binary Rust node integrating consensus, validator registry, governance, slashing, fee market, EVM executor (revm, EIP\u20111559/2930), native token state, DEX engine (orderbook, positions, trades, OHLC candles), privacy primitives (Bulletproofs), checkpoint sync, and hybrid storage. The node exposes HTTP API (60+ endpoints), JSON\u2011RPC (Ethereum\u2011compatible), and WebSocket (EVM subscriptions + DEX realtime streams). Shipped four Next.js applications: DEX trading terminal, public block explorer with contract verification, operator UI for node management/governance/staking, and testnet faucet. TypeScript SDK for third\u2011party integrations.",
-      ru: "Построили Rust\u2011ноду в одном бинарнике: консенсус, реестр валидаторов, governance, слэшинг, fee market, EVM\u2011исполнитель (revm, EIP\u20111559/2930), состояние нативного токена, DEX\u2011движок (ордербук, позиции, сделки, OHLC\u2011свечи), криптопримитивы (Bulletproofs), checkpoint sync, гибридное хранилище. Нода предоставляет HTTP API (60+ эндпоинтов), JSON\u2011RPC (Ethereum\u2011совместимый) и WebSocket (EVM\u2011подписки + DEX realtime\u2011стримы). Отправили четыре Next.js приложения: DEX\u2011терминал, эксплорер с верификацией контрактов, Operator UI для управления нодой/governance/стейкинга и тестнет\u2011фаукнет. TypeScript SDK для сторонних интеграций.",
+      en: "Built a single\u2011binary Rust node (25+ core modules) integrating consensus, validator registry, governance, slashing, fee market, EVM executor (revm, EIP\u20111559/2930 + BN256 pairing precompiles EIP\u2011196/197 for full Ethereum precompile compatibility), native token state, DEX engine (orderbook, positions, trades, OHLC candles), privacy primitives (Bulletproofs), checkpoint sync, and hybrid storage. The node exposes 90+ HTTP endpoints, JSON\u2011RPC (Ethereum\u2011compatible), and WebSocket (EVM subscriptions + DEX realtime streams). Shipped four Next.js applications: DEX trading terminal, public block explorer with contract verification, operator UI for node management/governance/staking, and testnet faucet. Two TypeScript SDKs: @armadex/sdk (explorer/contracts) + DEX SDK (trading integration).",
+      ru: "Построили Rust\u2011ноду в одном бинарнике (25+ модулей ядра): консенсус, реестр валидаторов, governance, слэшинг, fee market, EVM\u2011исполнитель (revm, EIP\u20111559/2930 + прекомпайлы BN256 pairing EIP\u2011196/197 для полной совместимости с прекомпайлами Ethereum), состояние нативного токена, DEX\u2011движок (ордербук, позиции, сделки, OHLC\u2011свечи), криптопримитивы (Bulletproofs), checkpoint sync, гибридное хранилище. Нода предоставляет 90+ HTTP\u2011эндпоинтов, JSON\u2011RPC (Ethereum\u2011совместимый) и WebSocket (EVM\u2011подписки + DEX realtime\u2011стримы). Отправили четыре Next.js приложения: DEX\u2011терминал, эксплорер с верификацией контрактов, Operator UI для управления нодой/governance/стейкинга и тестнет\u2011фаукнет. Два TypeScript SDK: @armadex/sdk (эксплорер/контракты) + DEX SDK (трейдинг\u2011интеграция).",
     },
     deliverables: {
       en: [
-        "L1 node on Rust: consensus, validators, governance, slashing, fee market, sync",
+        "L1 node on Rust: 25+ core modules, consensus, validators, governance, slashing, fee market, sync (62 integration test suites)",
         "Deterministic EVM executor (revm) with EIP\u20111559/2930 and native token precompile",
         "On\u2011chain perpetual DEX: orderbook, matching, positions, trades, OHLC, WebSocket streams",
         "Privacy layer with Bulletproofs for shielded orders",
@@ -252,12 +252,12 @@ const _flagshipCases: FlagshipCase[] = [
         "Block Explorer: batches, transactions, contract verification, statistics, gas tracker",
         "Operator Panel: node status, governance, staking, fraud proof, sync, rolling updates",
         "Testnet Faucet with MetaMask integration",
-        "TypeScript SDK for HTTP API and DEX integration",
+        "2 TypeScript SDKs: @armadex/sdk (explorer/contracts) + DEX SDK (trading integration)",
         "Solidity contracts + Hardhat deployment scripts",
-        "CI/CD, Prometheus/Grafana, OpenTelemetry, Nginx rate limiting",
+        "CI/CD, Prometheus/Grafana, OpenTelemetry, Nginx rate limiting (77 automation scripts, 28 documentation files)",
       ],
       ru: [
-        "L1 нода на Rust: консенсус, валидаторы, governance, слэшинг, fee market, синхронизация",
+        "L1 нода на Rust: 25+ модулей ядра, консенсус, валидаторы, governance, слэшинг, fee market, синхронизация (62 интеграционных теста)",
         "Детерминированный EVM\u2011исполнитель (revm) с EIP\u20111559/2930 и прекомпайлом нативного токена",
         "Ончейн DEX перпетуалов: ордербук, матчинг, позиции, сделки, OHLC, WebSocket\u2011стримы",
         "Слой приватности на Bulletproofs для shielded\u2011ордеров",
@@ -266,9 +266,9 @@ const _flagshipCases: FlagshipCase[] = [
         "Эксплорер: батчи, транзакции, верификация контрактов, статистика, gas tracker",
         "Operator Panel: статус ноды, governance, стейкинг, fraud proof, sync, rolling updates",
         "Тестнет\u2011фаукнет с интеграцией MetaMask",
-        "TypeScript SDK для HTTP API и DEX\u2011интеграции",
+        "2 TypeScript SDK: @armadex/sdk (эксплорер/контракты) + DEX SDK (трейдинг\u2011интеграция)",
         "Solidity\u2011контракты + скрипты деплоя Hardhat",
-        "CI/CD, Prometheus/Grafana, OpenTelemetry, rate limiting Nginx",
+        "CI/CD, Prometheus/Grafana, OpenTelemetry, rate limiting Nginx (77 скриптов автоматизации, 28 файлов документации)",
       ],
     },
     techStack: [
@@ -280,15 +280,15 @@ const _flagshipCases: FlagshipCase[] = [
       "Bulletproofs", "secp256k1", "blake3",
     ],
     outcome: {
-      en: "Testnet Alpha deployed and running: 7 active validators, 1.6M+ finalized batches, 99%+ success rate. Full product suite operational: DEX terminal with realtime orderbook, block explorer with contract verification and gas tracker, operator panel with governance/staking/fraud proof controls, working faucet. Batches processed every ~2\u00A0seconds with sub\u2011250ms commit latency. Architecture, test coverage, and operational tooling at production\u2011grade level.",
-      ru: "Testnet Alpha развёрнут и работает: 7 активных валидаторов, 1,6M+ финализированных батчей, 99%+ успешность. Полный продуктовый контур функционирует: DEX\u2011терминал с realtime\u2011ордербуком, эксплорер с верификацией контрактов и gas tracker, панель оператора с governance/стейкинг/fraud proof, рабочий фаукнет. Батчи каждые ~2\u00A0с с латентностью <250\u00A0мс. Архитектура, тесты и операционные инструменты на уровне продакшна.",
+      en: "Testnet Alpha deployed and running: 7 active validators, 1.6M+ finalized batches (as of testnet alpha), 99%+ success rate. Full product suite operational across 90+ API endpoints: DEX terminal with realtime orderbook, block explorer with contract verification and gas tracker, operator panel with governance/staking/fraud proof controls, working faucet. Batches processed every ~2\u00A0seconds with sub\u2011250ms commit latency. 62 integration test suites, 77 automation scripts, 28 documentation files. Architecture, test coverage, and operational tooling at production\u2011grade level.",
+      ru: "Testnet Alpha развёрнут и работает: 7 активных валидаторов, 1,6M+ финализированных батчей (на момент testnet alpha), 99%+ успешность. Полный продуктовый контур функционирует через 90+ API\u2011эндпоинтов: DEX\u2011терминал с realtime\u2011ордербуком, эксплорер с верификацией контрактов и gas tracker, панель оператора с governance/стейкинг/fraud proof, рабочий фаукнет. Батчи каждые ~2\u00A0с с латентностью <250\u00A0мс. 62 интеграционных теста, 77 скриптов автоматизации, 28 файлов документации. Архитектура, тесты и операционные инструменты на уровне продакшна.",
     },
     hardParts: [
       {
         title: { en: "Deterministic EVM with native token bridge", ru: "Детерминированный EVM с мостом нативного токена" },
         description: {
-          en: "EVM execution must be fully deterministic for batch replay and fraud proofs. We run revm with EIP\u20111559/2930 support and expose the native token via a precompile at address 0x0a (balanceOf, transfer, totalSupply)\u00A0\u2014 no ERC\u201120 wrapper duplication. Every state transition is reproducible across nodes.",
-          ru: "Исполнение EVM полностью детерминировано для replay батчей и fraud proof. Используем revm с EIP\u20111559/2930 и предоставляем нативный токен через прекомпайл по адресу 0x0a (balanceOf, transfer, totalSupply)\u00A0\u2014 без дублирования ERC\u201120. Каждый переход состояния воспроизводим на всех нодах.",
+          en: "EVM execution must be fully deterministic for batch replay and fraud proofs. We run revm with EIP\u20111559/2930 support, BN256 pairing precompiles (EIP\u2011196/197) for full Ethereum precompile compatibility, and expose the native token via a custom precompile at address 0x0a (balanceOf, transfer, totalSupply)\u00A0\u2014 no ERC\u201120 wrapper duplication. Every state transition is reproducible across nodes.",
+          ru: "Исполнение EVM полностью детерминировано для replay батчей и fraud proof. Используем revm с EIP\u20111559/2930, прекомпайлами BN256 pairing (EIP\u2011196/197) для полной совместимости с прекомпайлами Ethereum и предоставляем нативный токен через кастомный прекомпайл по адресу 0x0a (balanceOf, transfer, totalSupply)\u00A0\u2014 без дублирования ERC\u201120. Каждый переход состояния воспроизводим на всех нодах.",
         },
       },
       {
