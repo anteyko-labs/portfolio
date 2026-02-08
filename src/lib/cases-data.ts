@@ -1363,7 +1363,6 @@ const _flagshipCases: FlagshipCase[] = [
       { name: { en: "UAT with Moscow test group", ru: "UAT с тестовой группой в Москве" }, passed: true },
     ],
     imageUrl: "/images/cases/localfood/feed-main.png",
-    heroImage: "/images/cases/localfood/feed-main.png",
     screenshotLayout: "mobile",
     screenshots: [
       // ── Onboarding & Auth ──

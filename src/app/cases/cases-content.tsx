@@ -100,14 +100,32 @@ export function CasesContent() {
                       </div>
                     )}
                     {caseItem.imageUrl ? (
-                      <Image
-                        src={caseItem.imageUrl}
-                        alt={caseItem.title[language]}
-                        width={800}
-                        height={450}
-                        sizes="(max-width: 768px) 100vw, 50vw"
-                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                      />
+                      caseItem.screenshotLayout === "mobile" ? (
+                        /* Mobile screenshot: phone mockup centered on gradient bg */
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <div className="absolute inset-0 bg-gradient-to-br from-bg-tertiary via-bg-elevated to-bg-primary" />
+                          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 rounded-full bg-accent-primary/10 blur-3xl" />
+                          <div className="relative w-[100px] md:w-[120px] h-[90%] rounded-2xl overflow-hidden border-2 border-white/10 shadow-2xl shadow-black/40 transition-transform duration-700 group-hover:scale-105">
+                            <Image
+                              src={caseItem.imageUrl}
+                              alt={caseItem.title[language]}
+                              width={390}
+                              height={844}
+                              sizes="120px"
+                              className="w-full h-full object-cover object-top"
+                            />
+                          </div>
+                        </div>
+                      ) : (
+                        <Image
+                          src={caseItem.imageUrl}
+                          alt={caseItem.title[language]}
+                          width={800}
+                          height={450}
+                          sizes="(max-width: 768px) 100vw, 50vw"
+                          className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        />
+                      )
                     ) : (
                       <div
                         className="absolute inset-0 opacity-15"

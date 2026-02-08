@@ -136,17 +136,37 @@ export function FeaturedCasesSection() {
                 >
                   <div className={`relative ${cardHeights} bg-gradient-to-br from-bg-tertiary via-bg-elevated to-bg-secondary overflow-hidden`}>
                     {caseItem.imageUrl ? (
-                      <>
-                        <Image
-                          src={caseItem.imageUrl}
-                          alt={caseItem.title[language]}
-                          width={800}
-                          height={450}
-                          className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
-                          sizes={isFeatured ? "(max-width: 768px) 100vw, 66vw" : "(max-width: 768px) 100vw, 33vw"}
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-bg-secondary/80 via-transparent to-transparent" />
-                      </>
+                      caseItem.screenshotLayout === "mobile" ? (
+                        <>
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <div className="absolute inset-0 bg-gradient-to-br from-bg-tertiary via-bg-elevated to-bg-primary" />
+                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 rounded-full bg-accent-primary/10 blur-3xl" />
+                            <div className={`relative ${isFeatured ? "w-[130px]" : "w-[100px]"} h-[85%] rounded-2xl overflow-hidden border-2 border-white/10 shadow-2xl shadow-black/40 transition-transform duration-700 group-hover:scale-105`}>
+                              <Image
+                                src={caseItem.imageUrl}
+                                alt={caseItem.title[language]}
+                                width={390}
+                                height={844}
+                                sizes="130px"
+                                className="w-full h-full object-cover object-top"
+                              />
+                            </div>
+                          </div>
+                          <div className="absolute inset-0 bg-gradient-to-t from-bg-secondary/80 via-transparent to-transparent" />
+                        </>
+                      ) : (
+                        <>
+                          <Image
+                            src={caseItem.imageUrl}
+                            alt={caseItem.title[language]}
+                            width={800}
+                            height={450}
+                            className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                            sizes={isFeatured ? "(max-width: 768px) 100vw, 66vw" : "(max-width: 768px) 100vw, 33vw"}
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-bg-secondary/80 via-transparent to-transparent" />
+                        </>
+                      )
                     ) : (
                       <>
                         {!isFeatured && (
