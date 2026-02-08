@@ -23,12 +23,20 @@ export function CustomCursor() {
     };
 
     const onOver = (e: MouseEvent) => {
-      const target = (e.target as HTMLElement).closest("[data-cursor]");
-      if (target) {
-        setLabel(target.getAttribute("data-cursor") || "");
-      } else {
-        setLabel("");
+      const el = e.target as HTMLElement;
+      // Explicit data-cursor label takes priority
+      const dataCursor = el.closest("[data-cursor]");
+      if (dataCursor) {
+        setLabel(dataCursor.getAttribute("data-cursor") || "");
+        return;
       }
+      // Buttons and submit inputs get "Tap"
+      const btn = el.closest("button, [role='button'], input[type='submit']");
+      if (btn) {
+        setLabel("Tap");
+        return;
+      }
+      setLabel("");
     };
 
     window.addEventListener("mousemove", onMove);
