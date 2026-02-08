@@ -88,7 +88,7 @@ export function Header() {
                 alt="Anteyko"
                 width={100}
                 height={24}
-                className="h-5 md:h-[22px] w-auto brightness-90 hover:brightness-100 transition-all"
+                className="h-5 w-auto brightness-90 hover:brightness-100 transition-all"
                 priority
               />
             </NextLink>
