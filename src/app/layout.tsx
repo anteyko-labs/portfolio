@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, JetBrains_Mono, Syne } from "next/font/google";
 import "./globals.css";
 import { LanguageProvider } from "@/lib/language-context";
+import { LogoFusionEffect } from "@/components/effects/logo-fusion";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -143,6 +144,7 @@ export default function RootLayout({
           </a>
           {/* Noise overlay for texture */}
           <div className="noise-overlay" aria-hidden="true" />
+          <LogoFusionEffect />
           <main id="main-content">
             {children}
           </main>

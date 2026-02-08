@@ -82,6 +82,7 @@ export function Header() {
             <NextLink
               href="/"
               className="relative z-10 flex items-center"
+              data-logo="header"
             >
               <Image
                 src="/images/anteyko-logo.png"

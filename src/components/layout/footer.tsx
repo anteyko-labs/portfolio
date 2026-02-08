@@ -25,7 +25,7 @@ export function Footer() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8">
             {/* Brand Column */}
             <div className="lg:col-span-5">
-              <NextLink href="/" className="inline-block">
+              <NextLink href="/" className="inline-block" data-logo="footer">
                 <Image
                   src="/images/anteyko-logo.png"
                   alt="Anteyko"
