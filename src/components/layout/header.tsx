@@ -86,9 +86,9 @@ export function Header() {
               <Image
                 src="/images/anteyko-logo.png"
                 alt="Anteyko"
-                width={120}
-                height={28}
-                className="h-6 md:h-7 w-auto brightness-90 hover:brightness-100 transition-all"
+                width={100}
+                height={24}
+                className="h-5 md:h-[22px] w-auto brightness-90 hover:brightness-100 transition-all"
                 priority
               />
             </NextLink>

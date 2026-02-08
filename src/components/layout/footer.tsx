@@ -29,9 +29,9 @@ export function Footer() {
                 <Image
                   src="/images/anteyko-logo.png"
                   alt="Anteyko"
-                  width={140}
-                  height={32}
-                  className="h-7 w-auto brightness-90 hover:brightness-100 transition-all"
+                  width={100}
+                  height={24}
+                  className="h-5 w-auto brightness-90 hover:brightness-100 transition-all"
                 />
               </NextLink>
               <p className="mt-4 text-body-md text-text-secondary max-w-sm">
