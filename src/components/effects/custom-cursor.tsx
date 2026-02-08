@@ -20,31 +20,32 @@ export function CustomCursor() {
       if (isTouchRef.current) return;
       cursorX.set(e.clientX);
       cursorY.set(e.clientY);
-    };
 
-    const onOver = (e: MouseEvent) => {
-      const el = e.target as HTMLElement;
+      // Check what's under the cursor
+      const el = document.elementFromPoint(e.clientX, e.clientY) as HTMLElement | null;
+      if (!el) { setLabel(""); return; }
+
       // Explicit data-cursor label takes priority
       const dataCursor = el.closest("[data-cursor]");
       if (dataCursor) {
         setLabel(dataCursor.getAttribute("data-cursor") || "");
         return;
       }
-      // Buttons and submit inputs get "Tap"
-      const btn = el.closest("button, [role='button'], input[type='submit']");
+
+      // Buttons get "Tap"
+      const btn = el.closest("button") || el.closest("[role='button']") || el.closest("input[type='submit']");
       if (btn) {
         setLabel("Tap");
         return;
       }
+
       setLabel("");
     };
 
     window.addEventListener("mousemove", onMove);
-    document.addEventListener("mouseover", onOver);
 
     return () => {
       window.removeEventListener("mousemove", onMove);
-      document.removeEventListener("mouseover", onOver);
       window.removeEventListener("touchstart", onTouch);
     };
   }, [cursorX, cursorY]);
@@ -57,8 +58,8 @@ export function CustomCursor() {
       style={{ x: cursorX, y: cursorY, opacity: label ? 1 : 0 }}
     >
       <motion.div
-        className="relative flex items-center justify-center rounded-full bg-accent-primary/90 backdrop-blur-sm shadow-lg shadow-accent-primary/30"
-        style={{ translateX: 12, translateY: -12 }}
+        className="flex items-center justify-center rounded-full bg-accent-primary/90 backdrop-blur-sm shadow-lg shadow-accent-primary/30"
+        style={{ translateX: 14, translateY: -20 }}
         initial={{ scale: 0, opacity: 0 }}
         animate={{
           scale: label ? 1 : 0,
