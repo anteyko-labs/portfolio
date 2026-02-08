@@ -6,16 +6,13 @@ import { useReducedMotion } from "@/lib/hooks";
 
 export function CustomCursor() {
   const prefersReducedMotion = useReducedMotion();
-  const [visible, setVisible] = useState(false);
-  const [hoverText, setHoverText] = useState("");
-  const [isHovering, setIsHovering] = useState(false);
+  const [label, setLabel] = useState("");
   const isTouchRef = useRef(false);
 
-  const cursorX = useSpring(0, { stiffness: 300, damping: 28 });
-  const cursorY = useSpring(0, { stiffness: 300, damping: 28 });
+  const cursorX = useSpring(0, { stiffness: 250, damping: 22 });
+  const cursorY = useSpring(0, { stiffness: 250, damping: 22 });
 
   useEffect(() => {
-    // Detect touch device
     const onTouch = () => { isTouchRef.current = true; };
     window.addEventListener("touchstart", onTouch, { once: true });
 
@@ -23,71 +20,47 @@ export function CustomCursor() {
       if (isTouchRef.current) return;
       cursorX.set(e.clientX);
       cursorY.set(e.clientY);
-      if (!visible) setVisible(true);
     };
 
-    const onLeave = () => setVisible(false);
-    const onEnter = () => { if (!isTouchRef.current) setVisible(true); };
-
-    window.addEventListener("mousemove", onMove);
-    document.addEventListener("mouseleave", onLeave);
-    document.addEventListener("mouseenter", onEnter);
-
-    // Detect hover targets
     const onOver = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      const interactive = target.closest("a, button, [role='button'], [data-cursor]");
-      if (interactive) {
-        setIsHovering(true);
-        const label = interactive.getAttribute("data-cursor") || "";
-        setHoverText(label);
+      const target = (e.target as HTMLElement).closest("[data-cursor]");
+      if (target) {
+        setLabel(target.getAttribute("data-cursor") || "");
       } else {
-        setIsHovering(false);
-        setHoverText("");
+        setLabel("");
       }
     };
 
+    window.addEventListener("mousemove", onMove);
     document.addEventListener("mouseover", onOver);
 
     return () => {
       window.removeEventListener("mousemove", onMove);
-      document.removeEventListener("mouseleave", onLeave);
-      document.removeEventListener("mouseenter", onEnter);
       document.removeEventListener("mouseover", onOver);
       window.removeEventListener("touchstart", onTouch);
     };
-  }, [cursorX, cursorY, visible]);
+  }, [cursorX, cursorY]);
 
-  if (prefersReducedMotion || typeof window === "undefined") return null;
+  if (prefersReducedMotion) return null;
 
   return (
     <motion.div
-      className="fixed pointer-events-none z-[9999] mix-blend-difference"
-      style={{
-        x: cursorX,
-        y: cursorY,
-        opacity: visible ? 1 : 0,
-      }}
+      className="fixed pointer-events-none z-[9999]"
+      style={{ x: cursorX, y: cursorY, opacity: label ? 1 : 0 }}
     >
       <motion.div
-        className="relative flex items-center justify-center rounded-full bg-white"
-        style={{ translateX: "-50%", translateY: "-50%" }}
+        className="relative flex items-center justify-center rounded-full bg-accent-primary/90 backdrop-blur-sm shadow-lg shadow-accent-primary/30"
+        style={{ translateX: 12, translateY: -12 }}
+        initial={{ scale: 0, opacity: 0 }}
         animate={{
-          width: isHovering ? 64 : 12,
-          height: isHovering ? 64 : 12,
+          scale: label ? 1 : 0,
+          opacity: label ? 1 : 0,
         }}
-        transition={{ type: "spring", stiffness: 400, damping: 25 }}
+        transition={{ type: "spring", stiffness: 400, damping: 20 }}
       >
-        {hoverText && isHovering && (
-          <motion.span
-            className="text-[10px] font-bold uppercase tracking-wider text-black"
-            initial={{ opacity: 0, scale: 0.5 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            {hoverText}
-          </motion.span>
-        )}
+        <span className="px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider text-white whitespace-nowrap">
+          {label}
+        </span>
       </motion.div>
     </motion.div>
   );
