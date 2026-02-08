@@ -29,10 +29,13 @@ const timelineOptions = (t: (k: string) => string) => [
 ];
 
 const budgetOptions = (t: (k: string) => string) => [
+  { value: "micro", label: t("contact.form.budgets.micro") },
   { value: "small", label: t("contact.form.budgets.small") },
   { value: "medium", label: t("contact.form.budgets.medium") },
   { value: "large", label: t("contact.form.budgets.large") },
   { value: "enterprise", label: t("contact.form.budgets.enterprise") },
+  { value: "custom", label: t("contact.form.budgets.custom") },
+  { value: "unsure", label: t("contact.form.budgets.unsure") },
 ];
 
 const STORAGE_KEY = "anteyko-contact-form";
