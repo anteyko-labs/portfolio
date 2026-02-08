@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useRef } from "react";
+import { useCountUp, useInViewOnce } from "@/lib/animation-hooks";
 import { useLanguage } from "@/lib/language-context";
 import { PageHero } from "@/components/sections/page-hero";
 import { Section, SectionHeader, AnimatedItem } from "@/components/ui/section";
@@ -55,10 +56,16 @@ const industryIcons: Record<string, React.ReactNode> = {
   ),
 };
 
+function MetricCounter({ value, inView }: { value: string; inView: boolean }) {
+  const display = useCountUp(value, inView);
+  return <>{display}</>;
+}
+
 export function AboutContent() {
   const { t, translations, language } = useLanguage();
   const about = translations.about;
   const metrics = about.metrics;
+  const [metricsRef, metricsInView] = useInViewOnce(0.4);
 
   const principleIcons = useMemo(() => [
     <ClarityIcon key="clarity" />,
@@ -103,11 +110,11 @@ export function AboutContent() {
             <p className="relative text-caption uppercase tracking-wider text-text-tertiary mb-4">
               {language === "en" ? "Track record" : "Послужной список"}
             </p>
-            <div className="relative grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div ref={metricsRef} className="relative grid grid-cols-2 sm:grid-cols-4 gap-4">
               {metrics.map((metric) => (
                 <div key={metric.value} className="text-center">
                   <div className="text-2xl sm:text-3xl font-display font-bold text-accent-primary tabular-nums">
-                    {metric.value}
+                    <MetricCounter value={metric.value} inView={metricsInView} />
                   </div>
                   <div className="text-caption text-text-secondary mt-1">
                     {metric.label[language]}
@@ -171,7 +178,7 @@ export function AboutContent() {
               {industries.items.map((ind) => (
                 <div
                   key={ind.icon}
-                  className="rounded-xl border border-border bg-bg-tertiary/60 p-5 text-center hover:border-accent-primary/30 transition-colors"
+                  className="rounded-xl border border-border bg-bg-tertiary/60 p-5 text-center hover:border-accent-primary/30 hover:-translate-y-1 hover:shadow-lg hover:shadow-accent-primary/5 transition-all duration-300"
                 >
                   <div className="w-10 h-10 rounded-lg bg-accent-primary/10 border border-accent-primary/20 flex items-center justify-center mx-auto mb-3 text-accent-primary">
                     {industryIcons[ind.icon]}

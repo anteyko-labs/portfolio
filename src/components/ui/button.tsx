@@ -24,6 +24,7 @@ const variants: Record<ButtonVariant, string> = {
     hover:bg-accent-secondary
     shadow-glow-sm hover:shadow-glow-md
     border border-accent-primary/50
+    btn-shimmer
   `,
   secondary: `
     bg-bg-elevated text-text-primary

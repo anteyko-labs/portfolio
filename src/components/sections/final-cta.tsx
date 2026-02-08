@@ -21,6 +21,23 @@ export function FinalCTASection() {
         <div className="hidden lg:block absolute bottom-0 left-0 w-[280px] h-[280px] rounded-full bg-accent-secondary/20 blur-2xl -translate-x-1/4 animate-float-blob" style={{ animationDelay: "-2s" }} />
       </div>
       <div className="absolute inset-0 pointer-events-none final-cta-noise" aria-hidden />
+      {/* Floating particles */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden>
+        {Array.from({ length: 30 }).map((_, i) => (
+          <div
+            key={i}
+            className="particle"
+            style={{
+              "--left": `${5 + (i * 37) % 90}%`,
+              "--delay": `${(i * 0.7) % 12}s`,
+              "--duration": `${8 + (i % 6) * 2}s`,
+              "--size": `${2 + (i % 3)}px`,
+              "--drift": `${-30 + (i % 7) * 10}px`,
+              "--opacity": `${0.2 + (i % 4) * 0.1}`,
+            } as React.CSSProperties}
+          />
+        ))}
+      </div>
 
       <div className="relative flex flex-col lg:flex-row lg:items-center lg:justify-between lg:gap-16">
         {/* Left: content (asymmetric on desktop) */}

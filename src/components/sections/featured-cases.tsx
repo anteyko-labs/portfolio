@@ -124,6 +124,7 @@ export function FeaturedCasesSection() {
               <NextLink
                 href={`/cases/${caseItem.slug}`}
                 className="block h-full group rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-secondary"
+                data-cursor="View"
               >
                 <TiltCard
                   padding="none"

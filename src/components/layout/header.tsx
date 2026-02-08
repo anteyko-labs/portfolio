@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import NextLink from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useSpring } from "framer-motion";
 import clsx from "clsx";
 import { useLanguage } from "@/lib/language-context";
 import { useReducedMotion, useKeyboardNavigation, useFocusTrap } from "@/lib/hooks";
@@ -61,8 +61,17 @@ export function Header() {
     setLanguage(language === "en" ? "ru" : "en");
   };
 
+  // Scroll progress
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
+
   return (
     <>
+      {/* Scroll progress bar */}
+      <motion.div
+        className="fixed top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-accent-primary via-accent-secondary to-accent-primary z-[51] origin-left"
+        style={{ scaleX }}
+      />
       <header
         className={clsx(
           "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
@@ -101,13 +110,14 @@ export function Header() {
                   key={item.key}
                   href={item.href}
                   className={clsx(
-                    "px-4 py-2 text-body-sm font-medium rounded-lg",
+                    "relative px-4 py-2 text-body-sm font-medium rounded-lg group",
                     "text-text-secondary hover:text-text-primary",
                     "transition-all duration-200 hover:-translate-y-0.5",
                     "focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary"
                   )}
                 >
                   {t(`nav.${item.key}`)}
+                  <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[2px] bg-accent-primary rounded-full transition-all duration-300 group-hover:w-2/3" />
                 </NextLink>
               ))}
             </nav>

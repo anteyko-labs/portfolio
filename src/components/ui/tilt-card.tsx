@@ -75,6 +75,14 @@ export function TiltCard({
         }}
         transition={{ type: "spring", stiffness: 300, damping: 25 }}
       >
+        {/* Cursor-following glow */}
+        <div
+          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10 rounded-2xl"
+          style={{
+            background: `radial-gradient(circle at ${(mouse.x + 1) * 50}% ${(mouse.y + 1) * 50}%, rgba(99,102,241,0.12) 0%, transparent 60%)`,
+          }}
+          aria-hidden
+        />
         {noiseHover && (
           <div
             className="absolute inset-0 opacity-0 group-hover:opacity-[var(--noise-opacity)] transition-opacity duration-300 pointer-events-none rounded-2xl z-20"

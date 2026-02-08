@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { useLanguage } from "@/lib/language-context";
 import { useReducedMotion } from "@/lib/hooks";
+import { useCountUp, useInViewOnce } from "@/lib/animation-hooks";
 import { Section, SectionHeader, AnimatedItem } from "@/components/ui/section";
 import { slideInLeft, slideInRight } from "@/lib/motion";
 
@@ -104,6 +105,9 @@ const icons = [
 export function WhyUsSection() {
   const { t, translations, language } = useLanguage();
   const prefersReducedMotion = useReducedMotion();
+  const [counterRef, counterInView] = useInViewOnce(0.5);
+  const count40 = useCountUp("40+", counterInView);
+  const count5 = useCountUp("5+", counterInView);
 
   const items = translations.whyUs.items;
 
@@ -121,15 +125,16 @@ export function WhyUsSection() {
 
       {/* Игра с цифрой в строке (StrategiQ-style: 40+ projec ts) */}
       <motion.p
+        ref={counterRef as React.Ref<HTMLParagraphElement>}
         className="text-center text-body-lg text-text-secondary mb-10"
         initial={{ opacity: 0, y: 8 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.4 }}
       >
-        <span className="gradient-text font-semibold">40+</span>{" "}
+        <span className="gradient-text font-semibold">{count40}</span>{" "}
         {language === "en" ? "projects" : "проектов"} ·{" "}
-        <span className="gradient-text font-semibold">5+</span>{" "}
+        <span className="gradient-text font-semibold">{count5}</span>{" "}
         {language === "en" ? "years" : "лет"}
       </motion.p>
 
