@@ -13,6 +13,41 @@ export interface ContactSubmission {
   message: string;
 }
 
+// Human-readable labels for form values
+const PROJECT_TYPES: Record<string, string> = {
+  website: "Сайт / Лендинг",
+  mvp: "MVP",
+  product: "Полный продукт",
+  web3: "Web3 модуль",
+};
+
+const STAGES: Record<string, string> = {
+  idea: "Только идея",
+  design: "Есть дизайн",
+  mvp: "Есть MVP",
+  launch: "Нужна помощь с запуском",
+};
+
+const TIMELINES: Record<string, string> = {
+  urgent: "Срочно (2 недели)",
+  normal: "1–2 месяца",
+  relaxed: "3+ месяца",
+};
+
+const BUDGETS: Record<string, string> = {
+  micro: "До $5k",
+  small: "$5k – $15k",
+  medium: "$15k – $30k",
+  large: "$30k – $75k",
+  enterprise: "$75k – $200k",
+  custom: "$200k+",
+  unsure: "Обсудим",
+};
+
+function label(map: Record<string, string>, key: string): string {
+  return map[key] || key;
+}
+
 function formatTelegramMessage(s: ContactSubmission): string {
   const lines = [
     `🔔 Новая заявка с anteyko.com`,
@@ -21,10 +56,10 @@ function formatTelegramMessage(s: ContactSubmission): string {
     `📧 Email: ${s.email}`,
   ];
 
-  if (s.projectType) lines.push(`📦 Тип проекта: ${s.projectType}`);
-  if (s.stage) lines.push(`🚀 Стадия: ${s.stage}`);
-  if (s.timeline) lines.push(`⏱ Сроки: ${s.timeline}`);
-  if (s.budget) lines.push(`💰 Бюджет: ${s.budget}`);
+  if (s.projectType) lines.push(`📦 Тип проекта: ${label(PROJECT_TYPES, s.projectType)}`);
+  if (s.stage) lines.push(`🚀 Стадия: ${label(STAGES, s.stage)}`);
+  if (s.timeline) lines.push(`⏱ Сроки: ${label(TIMELINES, s.timeline)}`);
+  if (s.budget) lines.push(`💰 Бюджет: ${label(BUDGETS, s.budget)}`);
 
   if (s.message) {
     lines.push(``);
@@ -33,7 +68,7 @@ function formatTelegramMessage(s: ContactSubmission): string {
   }
 
   lines.push(``);
-  lines.push(`🕐 ${new Date().toISOString()}`);
+  lines.push(`🕐 ${new Date().toLocaleString("ru-RU", { timeZone: "Asia/Bishkek", dateStyle: "short", timeStyle: "short" })} (Бишкек)`);
 
   return lines.join("\n");
 }
@@ -43,8 +78,6 @@ async function sendTelegram(text: string): Promise<boolean> {
     console.error("❌ Telegram credentials missing. BOT_TOKEN:", !!TELEGRAM_BOT_TOKEN, "CHAT_ID:", !!TELEGRAM_CHAT_ID);
     return false;
   }
-
-  console.log("📤 Sending to Telegram, chat_id:", TELEGRAM_CHAT_ID);
 
   const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
 
