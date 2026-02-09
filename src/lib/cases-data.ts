@@ -163,29 +163,57 @@ const _flagshipCases: FlagshipCase[] = [
       {
         src: "/images/cases/trm-oferta/step1-adult.png",
         alt: {
-          en: "Step 1: Adult registration form with name and phone fields",
-          ru: "Шаг 1: Форма регистрации совершеннолетнего с полями ФИО и телефона",
+          en: "Step 1: Adult registration — age toggle, full name & phone fields",
+          ru: "Шаг 1: Регистрация совершеннолетнего — переключатель возраста, ФИО и телефон",
+        },
+      },
+      {
+        src: "/images/cases/trm-oferta/step2-oferta-collapsed.png",
+        alt: {
+          en: "Step 2: Public offer review (collapsed) — company info, acceptance checkbox",
+          ru: "Шаг 2: Условия оферты (свёрнуто) — информация о компании, чекбокс акцепта",
+        },
+      },
+      {
+        src: "/images/cases/trm-oferta/step2-oferta-expanded.png",
+        alt: {
+          en: "Step 2: Public offer full text expanded — scrollable legal document",
+          ru: "Шаг 2: Полный текст оферты развёрнут — скроллируемый юридический документ",
+        },
+      },
+      {
+        src: "/images/cases/trm-oferta/step3-signed-adult.png",
+        alt: {
+          en: "Step 3: Offer signed (adult) — success confirmation, UUID, PDF download, student data summary",
+          ru: "Шаг 3: Оферта подписана (совершеннолетний) — подтверждение, номер записи (UUID), скачивание PDF, итоговые данные",
         },
       },
       {
         src: "/images/cases/trm-oferta/step1-minor.png",
         alt: {
-          en: "Step 1: Minor registration with guardian fields and warning banner",
-          ru: "Шаг 1: Регистрация несовершеннолетнего с полями представителя и предупреждением",
+          en: "Step 1: Minor registration — guardian name & phone, consent checkbox, warning banner",
+          ru: "Шаг 1: Регистрация несовершеннолетнего — ФИО и телефон представителя, чекбокс согласия, предупреждение",
         },
       },
       {
-        src: "/images/cases/trm-oferta/step2-oferta.png",
+        src: "/images/cases/trm-oferta/step2-oferta-minor.png",
         alt: {
-          en: "Step 2: Public offer review and acceptance with checkbox",
-          ru: "Шаг 2: Ознакомление и принятие публичной оферты с чекбоксом",
+          en: "Step 2: Offer for minor — expanded text, dual checkboxes (student + guardian acceptance)",
+          ru: "Шаг 2: Оферта несовершеннолетнего — развёрнутый текст, двойной чекбокс (ученик + представитель)",
         },
       },
       {
-        src: "/images/cases/trm-oferta/step3-deposit.png",
+        src: "/images/cases/trm-oferta/step3-signed-minor.png",
         alt: {
-          en: "Step 3: Offer signed, record UUID, PDF download, WhatsApp contact",
-          ru: "Шаг 3: Оферта подписана, номер записи (UUID), скачивание PDF, связь через WhatsApp",
+          en: "Step 3: Offer signed (minor) — success, PDF, student & guardian data summary",
+          ru: "Шаг 3: Оферта подписана (несовершеннолетний) — подтверждение, PDF, данные ученика и представителя",
+        },
+      },
+      {
+        src: "/images/cases/trm-oferta/admin-panel.png",
+        alt: {
+          en: "Admin panel — signed offers table with status, PDF export, confirm/reject actions",
+          ru: "Админ-панель — таблица подписанных оферт со статусами, PDF-экспорт, подтверждение/отклонение",
         },
       },
     ],
