@@ -15,21 +15,21 @@ export interface ContactSubmission {
 
 function formatTelegramMessage(s: ContactSubmission): string {
   const lines = [
-    `🔔 *Новая заявка с anteyko.com*`,
+    `🔔 Новая заявка с anteyko.com`,
     ``,
-    `👤 *Имя:* ${escapeMarkdown(s.name)}`,
-    `📧 *Email:* ${escapeMarkdown(s.email)}`,
+    `👤 Имя: ${s.name}`,
+    `📧 Email: ${s.email}`,
   ];
 
-  if (s.projectType) lines.push(`📦 *Тип проекта:* ${escapeMarkdown(s.projectType)}`);
-  if (s.stage) lines.push(`🚀 *Стадия:* ${escapeMarkdown(s.stage)}`);
-  if (s.timeline) lines.push(`⏱ *Сроки:* ${escapeMarkdown(s.timeline)}`);
-  if (s.budget) lines.push(`💰 *Бюджет:* ${escapeMarkdown(s.budget)}`);
+  if (s.projectType) lines.push(`📦 Тип проекта: ${s.projectType}`);
+  if (s.stage) lines.push(`🚀 Стадия: ${s.stage}`);
+  if (s.timeline) lines.push(`⏱ Сроки: ${s.timeline}`);
+  if (s.budget) lines.push(`💰 Бюджет: ${s.budget}`);
 
   if (s.message) {
     lines.push(``);
-    lines.push(`💬 *Сообщение:*`);
-    lines.push(escapeMarkdown(s.message));
+    lines.push(`💬 Сообщение:`);
+    lines.push(s.message);
   }
 
   lines.push(``);
@@ -38,35 +38,39 @@ function formatTelegramMessage(s: ContactSubmission): string {
   return lines.join("\n");
 }
 
-function escapeMarkdown(text: string): string {
-  return text.replace(/([_*\[\]()~`>#+\-=|{}.!])/g, "\\$1");
-}
-
 async function sendTelegram(text: string): Promise<boolean> {
   if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
-    console.error("Telegram credentials not configured");
+    console.error("❌ Telegram credentials missing. BOT_TOKEN:", !!TELEGRAM_BOT_TOKEN, "CHAT_ID:", !!TELEGRAM_CHAT_ID);
     return false;
   }
+
+  console.log("📤 Sending to Telegram, chat_id:", TELEGRAM_CHAT_ID);
 
   const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
 
-  const res = await fetch(url, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      chat_id: TELEGRAM_CHAT_ID,
-      text,
-      parse_mode: "MarkdownV2",
-    }),
-  });
+  try {
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        chat_id: TELEGRAM_CHAT_ID,
+        text,
+      }),
+    });
 
-  if (!res.ok) {
-    const err = await res.text();
-    console.error("Telegram API error:", err);
+    const data = await res.json();
+
+    if (!res.ok) {
+      console.error("❌ Telegram API error:", res.status, JSON.stringify(data));
+      return false;
+    }
+
+    console.log("✅ Telegram message sent, message_id:", data.result?.message_id);
+    return true;
+  } catch (err) {
+    console.error("❌ Telegram fetch error:", err);
     return false;
   }
-
-  return true;
 }
 
 export async function POST(request: NextRequest) {
@@ -104,7 +108,7 @@ export async function POST(request: NextRequest) {
     const sent = await sendTelegram(formatTelegramMessage(submission));
 
     if (!sent) {
-      console.warn("Telegram delivery failed, but lead is logged above");
+      console.warn("⚠️ Telegram delivery failed — lead logged above");
     }
 
     return NextResponse.json({ success: true }, { status: 200 });
