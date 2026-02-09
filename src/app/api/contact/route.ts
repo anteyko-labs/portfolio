@@ -1,9 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { writeFile, readFile, mkdir } from "fs/promises";
-import path from "path";
 
-const DATA_DIR = path.join(process.cwd(), "data");
-const LEADS_FILE = path.join(DATA_DIR, "leads.json");
+const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || "";
+const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID || "";
 
 export interface ContactSubmission {
   projectType: string;
@@ -13,37 +11,62 @@ export interface ContactSubmission {
   name: string;
   email: string;
   message: string;
-  createdAt: string;
 }
 
-async function ensureDataDir() {
-  try {
-    await mkdir(DATA_DIR, { recursive: true });
-  } catch {
-    // already exists
+function formatTelegramMessage(s: ContactSubmission): string {
+  const lines = [
+    `🔔 *Новая заявка с anteyko.com*`,
+    ``,
+    `👤 *Имя:* ${escapeMarkdown(s.name)}`,
+    `📧 *Email:* ${escapeMarkdown(s.email)}`,
+  ];
+
+  if (s.projectType) lines.push(`📦 *Тип проекта:* ${escapeMarkdown(s.projectType)}`);
+  if (s.stage) lines.push(`🚀 *Стадия:* ${escapeMarkdown(s.stage)}`);
+  if (s.timeline) lines.push(`⏱ *Сроки:* ${escapeMarkdown(s.timeline)}`);
+  if (s.budget) lines.push(`💰 *Бюджет:* ${escapeMarkdown(s.budget)}`);
+
+  if (s.message) {
+    lines.push(``);
+    lines.push(`💬 *Сообщение:*`);
+    lines.push(escapeMarkdown(s.message));
   }
+
+  lines.push(``);
+  lines.push(`🕐 ${new Date().toISOString()}`);
+
+  return lines.join("\n");
 }
 
-async function readLeads(): Promise<ContactSubmission[]> {
-  try {
-    const raw = await readFile(LEADS_FILE, "utf-8");
-    const data = JSON.parse(raw);
-    return Array.isArray(data) ? data : [];
-  } catch {
-    return [];
+function escapeMarkdown(text: string): string {
+  return text.replace(/([_*\[\]()~`>#+\-=|{}.!])/g, "\\$1");
+}
+
+async function sendTelegram(text: string): Promise<boolean> {
+  if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
+    console.error("Telegram credentials not configured");
+    return false;
   }
-}
 
-async function appendLead(submission: Omit<ContactSubmission, "createdAt">) {
-  await ensureDataDir();
-  const leads = await readLeads();
-  const newLead: ContactSubmission = {
-    ...submission,
-    createdAt: new Date().toISOString(),
-  };
-  leads.push(newLead);
-  await writeFile(LEADS_FILE, JSON.stringify(leads, null, 2), "utf-8");
-  return newLead;
+  const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+
+  const res = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      chat_id: TELEGRAM_CHAT_ID,
+      text,
+      parse_mode: "MarkdownV2",
+    }),
+  });
+
+  if (!res.ok) {
+    const err = await res.text();
+    console.error("Telegram API error:", err);
+    return false;
+  }
+
+  return true;
 }
 
 export async function POST(request: NextRequest) {
@@ -55,15 +78,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: true }, { status: 200 });
     }
 
-    const {
-      projectType,
-      stage,
-      timeline,
-      budget,
-      name,
-      email,
-      message,
-    } = body;
+    const { projectType, stage, timeline, budget, name, email, message } = body;
 
     if (!name || !email) {
       return NextResponse.json(
@@ -72,7 +87,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const submission = {
+    const submission: ContactSubmission = {
       projectType: String(projectType || ""),
       stage: String(stage || ""),
       timeline: String(timeline || ""),
@@ -82,7 +97,16 @@ export async function POST(request: NextRequest) {
       message: String(message || "").trim(),
     };
 
-    await appendLead(submission);
+    // Log to Vercel Function Logs as backup
+    console.log("📩 New lead:", JSON.stringify(submission));
+
+    // Send to Telegram
+    const sent = await sendTelegram(formatTelegramMessage(submission));
+
+    if (!sent) {
+      console.warn("Telegram delivery failed, but lead is logged above");
+    }
+
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (e) {
     console.error("Contact form error:", e);
