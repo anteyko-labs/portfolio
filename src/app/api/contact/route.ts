@@ -35,12 +35,12 @@ const TIMELINES: Record<string, string> = {
 };
 
 const BUDGETS: Record<string, string> = {
-  micro: "До $5k",
-  small: "$5k – $15k",
-  medium: "$15k – $30k",
-  large: "$30k – $75k",
-  enterprise: "$75k – $200k",
-  custom: "$200k+",
+  micro: "До $1k",
+  small: "$1k – $3k",
+  medium: "$3k – $5k",
+  large: "$5k – $10k",
+  enterprise: "$10k – $25k",
+  custom: "$25k+",
   unsure: "Обсудим",
 };
 

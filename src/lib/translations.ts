@@ -166,7 +166,7 @@ export const translations = {
       {
         id: "launch-site",
         title: { en: "Launch Site", ru: "Быстрый старт" },
-        startingPrice: { en: "From $3k", ru: "От $3k" },
+        startingPrice: { en: "From $800", ru: "От $800" },
         timeline: { en: "7–14 days", ru: "7–14\u00A0дней" },
         description: {
           en: "Landing page or corporate site that converts. Design, development, deployment.",
@@ -200,7 +200,7 @@ export const translations = {
       {
         id: "mvp-sprint",
         title: { en: "MVP Sprint", ru: "MVP-спринт" },
-        startingPrice: { en: "From $10k", ru: "От $10k" },
+        startingPrice: { en: "From $3k", ru: "От $3k" },
         timeline: { en: "3–6 weeks", ru: "3–6\u00A0недель" },
         description: {
           en: "Working product with core features. Validate your idea with real users.",
@@ -236,7 +236,7 @@ export const translations = {
       {
         id: "startup-key",
         title: { en: "Startup Under Key", ru: "Стартап под ключ" },
-        startingPrice: { en: "From $30k", ru: "От $30k" },
+        startingPrice: { en: "From $5k", ru: "От $5k" },
         timeline: { en: "6–12+ weeks", ru: "6–12+\u00A0недель" },
         description: {
           en: "Full product build with complex features, integrations, and scale considerations.",
@@ -274,6 +274,7 @@ export const translations = {
       {
         id: "web3-addon",
         title: { en: "Web3 Add-on", ru: "Web3-модуль" },
+        startingPrice: { en: "From $3k", ru: "От $3k" },
         timeline: { en: "Modular", ru: "Модульно" },
         description: {
           en: "Blockchain modules for existing or new products. Wallets, tokens, DeFi.",
@@ -634,12 +635,12 @@ export const translations = {
       },
       budget: { en: "Budget range", ru: "Бюджет" },
       budgets: {
-        micro: { en: "Up to $5k", ru: "До $5k" },
-        small: { en: "$5k – $15k", ru: "$5k – $15k" },
-        medium: { en: "$15k – $30k", ru: "$15k – $30k" },
-        large: { en: "$30k – $75k", ru: "$30k – $75k" },
-        enterprise: { en: "$75k – $200k", ru: "$75k – $200k" },
-        custom: { en: "$200k+", ru: "$200k+" },
+        micro: { en: "Up to $1k", ru: "До $1k" },
+        small: { en: "$1k – $3k", ru: "$1k – $3k" },
+        medium: { en: "$3k – $5k", ru: "$3k – $5k" },
+        large: { en: "$5k – $10k", ru: "$5k – $10k" },
+        enterprise: { en: "$10k – $25k", ru: "$10k – $25k" },
+        custom: { en: "$25k+", ru: "$25k+" },
         unsure: { en: "Let\u2019s discuss", ru: "Обсудим" },
       },
       name: { en: "Name", ru: "Имя" },
