@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useLanguage } from "@/lib/language-context";
 import { Section, SectionHeader, AnimatedItem } from "@/components/ui/section";
 import { Card } from "@/components/ui/card";
@@ -9,6 +10,7 @@ import { ArtifactCard } from "@/components/ui/artifact-card";
 import { MetricPill } from "@/components/ui/metric-pill";
 import { PageHero } from "@/components/sections/page-hero";
 import { ScrollSpyRail } from "@/components/ui/scrollspy-rail";
+import { Lightbox } from "@/components/ui/lightbox";
 import Image from "next/image";
 import type { FlagshipCase } from "@/lib/cases-data";
 import { flagshipCases } from "@/lib/cases-data";
@@ -77,6 +79,13 @@ function CaseSummaryRail({ caseItem, language, t }: { caseItem: FlagshipCase; la
 
 export function CaseDetailContent({ caseItem }: { caseItem: FlagshipCase }) {
   const { t, language } = useLanguage();
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
+
+  const openLightbox = (index: number) => {
+    setLightboxIndex(index);
+    setLightboxOpen(true);
+  };
 
   // Get prev/next cases for navigation
   const currentIndex = flagshipCases.findIndex((c) => c.id === caseItem.id);
@@ -505,8 +514,14 @@ export function CaseDetailContent({ caseItem }: { caseItem: FlagshipCase }) {
                             {screenshot.alt[language]}
                           </p>
                         </div>
-                        {/* Screenshot image */}
-                        <div className={`relative ${aspectClass} ${isMobileLayout ? "mx-2 mb-2" : "mx-3 mb-3"} rounded-xl overflow-hidden border border-border/50 ${bgClass}`}>
+                        {/* Screenshot image — click to open fullscreen */}
+                        <button
+                          type="button"
+                          onClick={() => openLightbox(index)}
+                          className={`block relative ${aspectClass} ${isMobileLayout ? "mx-2 mb-2" : "mx-3 mb-3"} rounded-xl overflow-hidden border border-border/50 ${bgClass} cursor-zoom-in`}
+                          style={{ width: isMobileLayout ? "calc(100% - 1rem)" : "calc(100% - 1.5rem)" }}
+                          aria-label={`${language === "en" ? "View fullscreen" : "Открыть на весь экран"}: ${screenshot.alt[language]}`}
+                        >
                           <Image
                             src={screenshot.src}
                             alt={screenshot.alt[language]}
@@ -515,7 +530,16 @@ export function CaseDetailContent({ caseItem }: { caseItem: FlagshipCase }) {
                             className={`${objectClass} transition-transform duration-500 group-hover:scale-[1.02]`}
                             sizes={isMobileLayout ? "(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw" : "(max-width: 768px) 100vw, 50vw"}
                           />
-                        </div>
+                          {/* Fullscreen hint overlay */}
+                          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
+                            <span className="bg-black/60 backdrop-blur-sm text-white text-caption px-3 py-1.5 rounded-lg flex items-center gap-1.5">
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+                              </svg>
+                              {language === "en" ? "Fullscreen" : "На весь экран"}
+                            </span>
+                          </div>
+                        </button>
                       </div>
                     </AnimatedItem>
                   ))}
@@ -786,6 +810,16 @@ export function CaseDetailContent({ caseItem }: { caseItem: FlagshipCase }) {
           )}
         </div>
       </Section>
+
+      {/* Fullscreen lightbox for screenshots */}
+      {hasScreenshots && (
+        <Lightbox
+          images={caseItem.screenshots!.map((s) => ({ src: s.src, alt: s.alt[language] }))}
+          initialIndex={lightboxIndex}
+          open={lightboxOpen}
+          onClose={() => setLightboxOpen(false)}
+        />
+      )}
     </>
   );
 }

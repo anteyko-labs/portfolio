@@ -157,60 +157,60 @@ const _flagshipCases: FlagshipCase[] = [
       { name: { en: "Audit trail completeness", ru: "Полнота аудит\u2011трейла" }, passed: true },
       { name: { en: "Admin auth security", ru: "Безопасность авторизации админки" }, passed: true },
     ],
-    imageUrl: "/images/cases/trm-oferta/step1-adult.png",
-    heroImage: "/images/cases/trm-oferta/step1-adult.png",
+    imageUrl: "/images/cases/trm-oferta/step1-adult.jpg",
+    heroImage: "/images/cases/trm-oferta/step1-adult.jpg",
     screenshots: [
       {
-        src: "/images/cases/trm-oferta/step1-adult.png",
+        src: "/images/cases/trm-oferta/step1-adult.jpg",
         alt: {
           en: "Step 1: Adult registration — age toggle, full name, phone number",
           ru: "Шаг 1: Регистрация совершеннолетнего — выбор возраста, ФИО, телефон",
         },
       },
       {
-        src: "/images/cases/trm-oferta/step2-oferta-collapsed.png",
+        src: "/images/cases/trm-oferta/step2-oferta-collapsed.jpg",
         alt: {
           en: "Step 2: Public offer preview — company info, acceptance checkbox",
           ru: "Шаг 2: Превью публичной оферты — данные компании, чекбокс принятия",
         },
       },
       {
-        src: "/images/cases/trm-oferta/step2-oferta-expanded.png",
+        src: "/images/cases/trm-oferta/step2-oferta-expanded.jpg",
         alt: {
           en: "Step 2: Public offer full text expanded — scrollable legal document",
           ru: "Шаг 2: Полный текст оферты развёрнут — прокручиваемый юридический документ",
         },
       },
       {
-        src: "/images/cases/trm-oferta/step3-signed-adult.png",
+        src: "/images/cases/trm-oferta/step3-signed-adult.jpg",
         alt: {
           en: "Step 3: Offer signed — confirmation, record UUID, PDF download, student data summary",
           ru: "Шаг 3: Оферта подписана — подтверждение, номер записи (UUID), скачивание PDF, сводка данных",
         },
       },
       {
-        src: "/images/cases/trm-oferta/step1-minor.png",
+        src: "/images/cases/trm-oferta/step1-minor.jpg",
         alt: {
           en: "Step 1: Minor registration — guardian fields, warning banner, consent checkbox",
           ru: "Шаг 1: Регистрация несовершеннолетнего — поля представителя, предупреждение, чекбокс согласия",
         },
       },
       {
-        src: "/images/cases/trm-oferta/step2-oferta-minor.png",
+        src: "/images/cases/trm-oferta/step2-oferta-minor.jpg",
         alt: {
           en: "Step 2: Minor offer — expanded text, dual consent checkboxes (student + guardian)",
           ru: "Шаг 2: Оферта несовершеннолетнего — развёрнутый текст, двойной чекбокс (ученик + представитель)",
         },
       },
       {
-        src: "/images/cases/trm-oferta/step3-signed-minor.png",
+        src: "/images/cases/trm-oferta/step3-signed-minor.jpg",
         alt: {
           en: "Step 3: Minor offer signed — confirmation with student and guardian data, PDF download",
           ru: "Шаг 3: Оферта несовершеннолетнего подписана — подтверждение с данными ученика и представителя, PDF",
         },
       },
       {
-        src: "/images/cases/trm-oferta/admin-panel.png",
+        src: "/images/cases/trm-oferta/admin-panel.jpg",
         alt: {
           en: "Admin panel: signed offers table — date, student, phone, guardian, status, actions (PDF, approve, reject)",
           ru: "Админ‑панель: таблица подписанных оферт — дата, ученик, телефон, представитель, статус, действия (PDF, подтвердить, отклонить)",
