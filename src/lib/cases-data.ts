@@ -163,7 +163,7 @@ const _flagshipCases: FlagshipCase[] = [
       {
         src: "/images/cases/trm-oferta/step1-adult.png",
         alt: {
-          en: "Step 1: Adult registration — age toggle, full name & phone fields",
+          en: "Step 1: Adult registration — age toggle, full name and phone number fields",
           ru: "Шаг 1: Регистрация совершеннолетнего — переключатель возраста, ФИО и телефон",
         },
       },
@@ -171,49 +171,49 @@ const _flagshipCases: FlagshipCase[] = [
         src: "/images/cases/trm-oferta/step2-oferta-collapsed.png",
         alt: {
           en: "Step 2: Public offer review (collapsed) — company info, acceptance checkbox",
-          ru: "Шаг 2: Условия оферты (свёрнуто) — информация о компании, чекбокс акцепта",
+          ru: "Шаг 2: Условия оферты (свёрнуто) — информация о компании, чекбокс принятия",
         },
       },
       {
         src: "/images/cases/trm-oferta/step2-oferta-expanded.png",
         alt: {
-          en: "Step 2: Public offer full text expanded — scrollable legal document",
-          ru: "Шаг 2: Полный текст оферты развёрнут — скроллируемый юридический документ",
+          en: "Step 2: Public offer review (expanded) — full legal text with scrollable area",
+          ru: "Шаг 2: Условия оферты (развёрнуто) — полный текст документа с прокруткой",
         },
       },
       {
         src: "/images/cases/trm-oferta/step3-signed-adult.png",
         alt: {
-          en: "Step 3: Offer signed (adult) — success confirmation, UUID, PDF download, student data summary",
-          ru: "Шаг 3: Оферта подписана (совершеннолетний) — подтверждение, номер записи (UUID), скачивание PDF, итоговые данные",
+          en: "Step 3: Offer signed — success state, record UUID, PDF download, student data summary",
+          ru: "Шаг 3: Оферта подписана — успешное завершение, номер записи (UUID), скачивание PDF, сводка данных",
         },
       },
       {
         src: "/images/cases/trm-oferta/step1-minor.png",
         alt: {
-          en: "Step 1: Minor registration — guardian name & phone, consent checkbox, warning banner",
-          ru: "Шаг 1: Регистрация несовершеннолетнего — ФИО и телефон представителя, чекбокс согласия, предупреждение",
+          en: "Step 1 (minor): Registration with guardian fields, warning banner, and representative consent",
+          ru: "Шаг 1 (несовершеннолетний): Регистрация с полями представителя, предупреждением и согласием",
         },
       },
       {
         src: "/images/cases/trm-oferta/step2-oferta-minor.png",
         alt: {
-          en: "Step 2: Offer for minor — expanded text, dual checkboxes (student + guardian acceptance)",
-          ru: "Шаг 2: Оферта несовершеннолетнего — развёрнутый текст, двойной чекбокс (ученик + представитель)",
+          en: "Step 2 (minor): Offer acceptance with dual checkboxes — student and legal guardian consent",
+          ru: "Шаг 2 (несовершеннолетний): Принятие оферты с двумя чекбоксами — согласие ученика и представителя",
         },
       },
       {
         src: "/images/cases/trm-oferta/step3-signed-minor.png",
         alt: {
-          en: "Step 3: Offer signed (minor) — success, PDF, student & guardian data summary",
-          ru: "Шаг 3: Оферта подписана (несовершеннолетний) — подтверждение, PDF, данные ученика и представителя",
+          en: "Step 3 (minor): Offer signed — PDF download, student and guardian data summary",
+          ru: "Шаг 3 (несовершеннолетний): Оферта подписана — скачивание PDF, данные ученика и представителя",
         },
       },
       {
         src: "/images/cases/trm-oferta/admin-panel.png",
         alt: {
-          en: "Admin panel — signed offers table with status, PDF export, confirm/reject actions",
-          ru: "Админ-панель — таблица подписанных оферт со статусами, PDF-экспорт, подтверждение/отклонение",
+          en: "Admin panel: registrations table with status, PDF export, approve/reject actions",
+          ru: "Админ-панель: таблица регистраций со статусами, экспорт PDF, действия подтверждения/отклонения",
         },
       },
     ],
