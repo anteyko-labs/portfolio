@@ -163,57 +163,57 @@ const _flagshipCases: FlagshipCase[] = [
       {
         src: "/images/cases/trm-oferta/step1-adult.png",
         alt: {
-          en: "Step 1: Adult registration — age toggle, full name and phone number fields",
-          ru: "Шаг 1: Регистрация совершеннолетнего — переключатель возраста, ФИО и телефон",
+          en: "Step 1: Adult registration — age toggle, full name, phone number",
+          ru: "Шаг 1: Регистрация совершеннолетнего — выбор возраста, ФИО, телефон",
         },
       },
       {
         src: "/images/cases/trm-oferta/step2-oferta-collapsed.png",
         alt: {
-          en: "Step 2: Public offer review (collapsed) — company info, acceptance checkbox",
-          ru: "Шаг 2: Условия оферты (свёрнуто) — информация о компании, чекбокс принятия",
+          en: "Step 2: Public offer preview — company info, acceptance checkbox",
+          ru: "Шаг 2: Превью публичной оферты — данные компании, чекбокс принятия",
         },
       },
       {
         src: "/images/cases/trm-oferta/step2-oferta-expanded.png",
         alt: {
-          en: "Step 2: Public offer review (expanded) — full legal text with scrollable area",
-          ru: "Шаг 2: Условия оферты (развёрнуто) — полный текст документа с прокруткой",
+          en: "Step 2: Public offer full text expanded — scrollable legal document",
+          ru: "Шаг 2: Полный текст оферты развёрнут — прокручиваемый юридический документ",
         },
       },
       {
         src: "/images/cases/trm-oferta/step3-signed-adult.png",
         alt: {
-          en: "Step 3: Offer signed — success state, record UUID, PDF download, student data summary",
-          ru: "Шаг 3: Оферта подписана — успешное завершение, номер записи (UUID), скачивание PDF, сводка данных",
+          en: "Step 3: Offer signed — confirmation, record UUID, PDF download, student data summary",
+          ru: "Шаг 3: Оферта подписана — подтверждение, номер записи (UUID), скачивание PDF, сводка данных",
         },
       },
       {
         src: "/images/cases/trm-oferta/step1-minor.png",
         alt: {
-          en: "Step 1 (minor): Registration with guardian fields, warning banner, and representative consent",
-          ru: "Шаг 1 (несовершеннолетний): Регистрация с полями представителя, предупреждением и согласием",
+          en: "Step 1: Minor registration — guardian fields, warning banner, consent checkbox",
+          ru: "Шаг 1: Регистрация несовершеннолетнего — поля представителя, предупреждение, чекбокс согласия",
         },
       },
       {
         src: "/images/cases/trm-oferta/step2-oferta-minor.png",
         alt: {
-          en: "Step 2 (minor): Offer acceptance with dual checkboxes — student and legal guardian consent",
-          ru: "Шаг 2 (несовершеннолетний): Принятие оферты с двумя чекбоксами — согласие ученика и представителя",
+          en: "Step 2: Minor offer — expanded text, dual consent checkboxes (student + guardian)",
+          ru: "Шаг 2: Оферта несовершеннолетнего — развёрнутый текст, двойной чекбокс (ученик + представитель)",
         },
       },
       {
         src: "/images/cases/trm-oferta/step3-signed-minor.png",
         alt: {
-          en: "Step 3 (minor): Offer signed — PDF download, student and guardian data summary",
-          ru: "Шаг 3 (несовершеннолетний): Оферта подписана — скачивание PDF, данные ученика и представителя",
+          en: "Step 3: Minor offer signed — confirmation with student and guardian data, PDF download",
+          ru: "Шаг 3: Оферта несовершеннолетнего подписана — подтверждение с данными ученика и представителя, PDF",
         },
       },
       {
         src: "/images/cases/trm-oferta/admin-panel.png",
         alt: {
-          en: "Admin panel: registrations table with status, PDF export, approve/reject actions",
-          ru: "Админ-панель: таблица регистраций со статусами, экспорт PDF, действия подтверждения/отклонения",
+          en: "Admin panel: signed offers table — date, student, phone, guardian, status, actions (PDF, approve, reject)",
+          ru: "Админ‑панель: таблица подписанных оферт — дата, ученик, телефон, представитель, статус, действия (PDF, подтвердить, отклонить)",
         },
       },
     ],
