@@ -39,6 +39,7 @@ Options:
   --currency     som | usd (default: som)
   --valid-days   Срок действия в днях (default: 14)
   --intro        Персональный вступительный текст (опц., до 500 символов)
+  --brief        Описание задачи клиента — рендерится как "Что мы поняли" (опц., до 1500 символов)
   --note         Заметка только для тебя (опц.)
   --token        Свой кастомный токен вместо случайного (опц.)
 
@@ -101,6 +102,9 @@ data[token] = {
   validUntil,
   ...(args.intro && typeof args.intro === 'string'
     ? { intro: args.intro.slice(0, 500) }
+    : {}),
+  ...(args.brief && typeof args.brief === 'string'
+    ? { brief: args.brief.slice(0, 1500) }
     : {}),
   ...(args.note && typeof args.note === 'string' ? { note: args.note } : {}),
 };

@@ -789,6 +789,105 @@
   }
 }
 
+/* ── Brief (что мы поняли) ── */
+.briefText {
+  font-size: 14px;
+  color: #333;
+  line-height: 1.7;
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+/* ── Showcase case ── */
+.caseLink {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  background: #f8f8f6;
+  border: 1px solid #ebebe6;
+  border-radius: 12px;
+  text-decoration: none;
+  color: #111;
+  transition: border-color 0.15s, transform 0.15s, background 0.15s;
+}
+
+.caseLink:hover {
+  border-color: #2563eb;
+  background: #fff;
+  transform: translateY(-1px);
+}
+
+.caseBody {
+  flex: 1;
+  min-width: 0;
+}
+
+.caseTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111;
+  margin-bottom: 4px;
+}
+
+.caseDesc {
+  font-size: 13px;
+  color: #666;
+  line-height: 1.5;
+}
+
+.caseArrow {
+  font-size: 22px;
+  color: #888;
+  flex-shrink: 0;
+}
+
+/* ── Legal info footer ── */
+.legalInfo {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+  padding: 1.25rem 1.5rem;
+  background: #fff;
+  border: 1px solid #f0f0ec;
+  border-radius: 12px;
+  font-size: 11px;
+  color: #888;
+  line-height: 1.7;
+}
+
+@media (max-width: 760px) {
+  .legalInfo {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+.legalLabel {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #bbb;
+  margin-bottom: 6px;
+}
+
+.legalCol strong {
+  color: #444;
+  font-weight: 600;
+}
+
+.legalLink {
+  color: #888;
+  text-decoration: none;
+}
+
+.legalLink:hover {
+  color: #2563eb;
+  text-decoration: underline;
+}
+
 /* ── Print / PDF ── */
 @media print {
   .page {
@@ -828,8 +927,16 @@
   .guarantee,
   .testimonial,
   .faqItem,
-  .subsection {
+  .subsection,
+  .caseLink,
+  .legalInfo {
     break-inside: avoid;
+  }
+  .legalInfo {
+    color: #555;
+  }
+  .legalLink {
+    color: #555;
   }
   .faqQuestion::after {
     display: none;

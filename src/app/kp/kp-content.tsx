@@ -18,6 +18,9 @@ import {
   FAQ_ITEMS,
   GUARANTEE_TITLE,
   GUARANTEE_TEXT,
+  LEGAL_INFO,
+  CONTACT_INFO,
+  SHOWCASE_CASES,
 } from '@/lib/kp-data';
 import {
   Icon,
@@ -38,6 +41,7 @@ export type KPContentProps = {
   validUntil?: string;
   slug?: string;
   intro?: string;
+  brief?: string;
 };
 
 function formatDate(iso?: string): string | null {
@@ -58,7 +62,9 @@ export default function KPContent({
   validUntil,
   slug,
   intro,
+  brief,
 }: KPContentProps) {
+  const showcaseCase = SHOWCASE_CASES[template.id];
   const documentId = useMemo(() => docId(client), [client]);
 
   const today = useMemo(
@@ -138,6 +144,13 @@ export default function KPContent({
           <div className={styles.intro}>
             <div className={styles.introLabel}>Персонально для вас</div>
             <p className={styles.introText}>{intro}</p>
+          </div>
+        )}
+
+        {brief && (
+          <div className={styles.section}>
+            <div className={styles.sectionLabel}>Что мы поняли из вашей задачи</div>
+            <p className={styles.briefText}>{brief}</p>
           </div>
         )}
 
@@ -305,6 +318,24 @@ export default function KPContent({
           </div>
         </div>
 
+        {showcaseCase && (
+          <div className={styles.section}>
+            <div className={styles.sectionLabel}>Похожий проект из портфолио</div>
+            <a
+              href={showcaseCase.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.caseLink}
+            >
+              <div className={styles.caseBody}>
+                <div className={styles.caseTitle}>{showcaseCase.title}</div>
+                <div className={styles.caseDesc}>{showcaseCase.description}</div>
+              </div>
+              <div className={styles.caseArrow} aria-hidden="true">→</div>
+            </a>
+          </div>
+        )}
+
         <div className={styles.section}>
           <div className={styles.sectionLabel}>Как работаем</div>
           <div className={styles.timeline}>
@@ -366,7 +397,7 @@ export default function KPContent({
         <div className={styles.verify}>
           <div className={styles.verifyLeft}>
             Документ <strong>{documentId}</strong> подготовлен{' '}
-            <a href="https://anteyko.com" className={styles.verifyLink}>
+            <a href={CONTACT_INFO.websiteUrl} className={styles.verifyLink}>
               Anteyko Labs
             </a>
             {client ? <> для <strong>{client}</strong></> : null}.
@@ -376,9 +407,42 @@ export default function KPContent({
               : <>Срок действия предложения — 14 дней с момента отправки.</>}
           </div>
           <div>
-            <a href="https://anteyko.com/contact" className={styles.verifyLink}>
-              anteyko.com/contact
+            <a href={`${CONTACT_INFO.websiteUrl}/contact`} className={styles.verifyLink}>
+              {CONTACT_INFO.website}/contact
             </a>
+          </div>
+        </div>
+
+        <div className={styles.legalInfo}>
+          <div className={styles.legalCol}>
+            <div className={styles.legalLabel}>Исполнитель</div>
+            <div><strong>{LEGAL_INFO.name}</strong></div>
+            <div>ИНН: {LEGAL_INFO.inn}</div>
+            <div>{LEGAL_INFO.city}</div>
+          </div>
+          <div className={styles.legalCol}>
+            <div className={styles.legalLabel}>Банк</div>
+            <div>{LEGAL_INFO.bank}</div>
+            <div>БИК: {LEGAL_INFO.bik}</div>
+            <div>Р/с ({LEGAL_INFO.accountCurrency}): {LEGAL_INFO.account}</div>
+          </div>
+          <div className={styles.legalCol}>
+            <div className={styles.legalLabel}>Связь</div>
+            <div>
+              <a href={`mailto:${CONTACT_INFO.email}`} className={styles.legalLink}>
+                {CONTACT_INFO.email}
+              </a>
+            </div>
+            <div>
+              <a href={CONTACT_INFO.telegramUrl} target="_blank" rel="noopener noreferrer" className={styles.legalLink}>
+                {CONTACT_INFO.telegram}
+              </a>
+            </div>
+            <div>
+              <a href={CONTACT_INFO.websiteUrl} className={styles.legalLink}>
+                {CONTACT_INFO.website}
+              </a>
+            </div>
           </div>
         </div>
 

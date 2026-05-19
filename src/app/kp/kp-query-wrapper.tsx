@@ -14,6 +14,7 @@ export default function KPQueryWrapper() {
   const client = clientRaw.slice(0, 80);
   const template = getTemplate(templateRaw);
   const intro = searchParams.get('intro')?.slice(0, 500) || undefined;
+  const brief = searchParams.get('brief')?.slice(0, 1500) || undefined;
 
   return (
     <KPContent
@@ -21,6 +22,7 @@ export default function KPQueryWrapper() {
       currency={currency}
       template={template}
       intro={intro}
+      brief={brief}
     />
   );
 }

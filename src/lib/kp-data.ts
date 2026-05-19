@@ -1,6 +1,29 @@
 // Общие данные для всех КП — оплата, FAQ, гарантия, что входит и т.д.
 // Если что-то нужно сделать template-specific — добавляй в kp-templates.ts.
 
+import type { TemplateId } from './kp-templates';
+
+export type ShowcaseCase = {
+  title: string;
+  url: string;
+  description: string;
+};
+
+// Похожий проект по теме — показываем клиенту реальный кейс из портфолио.
+// Можно сделать разные кейсы для разных шаблонов по мере накопления.
+const TRM_CASE: ShowcaseCase = {
+  title: 'TRM Oferta — регистрация и подписание оферты',
+  url: 'https://www.anteyko.com/cases/trm-oferta-registration',
+  description:
+    'Юридически обязывающий цифровой акцепт без e-signature провайдера: PDF с кириллицей, печатью и подписью, аудит-трейл с защитой от подмены.',
+};
+
+export const SHOWCASE_CASES: Record<TemplateId, ShowcaseCase | null> = {
+  courses: TRM_CASE,
+  saas: TRM_CASE,
+  mvp: TRM_CASE,
+};
+
 export type Testimonial = {
   quote: string;
   author: string;
@@ -84,3 +107,23 @@ export const GUARANTEE_TITLE = 'Гарантия по срокам';
 
 export const GUARANTEE_TEXT =
   'Если просрочиваем больше 5 рабочих дней по нашей вине — компенсируем 10% от стоимости пакета. Если задержка с вашей стороны (контент, доступы, согласования) — сдвигаем сроки без штрафа и без дополнительной оплаты.';
+
+// Юридические реквизиты компании — отображаются мелким шрифтом в самом низу КП.
+export const LEGAL_INFO = {
+  name: 'ОсОО «Антейко»',
+  inn: '01306202310152',
+  city: 'г. Бишкек, Кыргызстан',
+  bank: 'ОАО «Бакай Банк»',
+  bik: '124029',
+  account: '1240020001254942',
+  accountCurrency: 'KGS',
+};
+
+// Контакты для клиента.
+export const CONTACT_INFO = {
+  email: 'labs@anteyko.com',
+  telegram: '@Anteyko_labs',
+  telegramUrl: 'https://t.me/Anteyko_labs',
+  website: 'anteyko.com',
+  websiteUrl: 'https://anteyko.com',
+};
