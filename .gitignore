@@ -25,7 +25,8 @@
 *.pem
 
 # contact form submissions (optional: remove to commit leads)
-/data
+/data/*
+!/data/kp-clients.json
 
 # debug
 npm-debug.log*

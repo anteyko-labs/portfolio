@@ -1,0 +1,489 @@
+/* Anteyko KP Page — CSS Module */
+
+.toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+}
+
+.pdfBtn {
+  background: #fff;
+  color: #111;
+  border: 1px solid #e8e8e4;
+  border-radius: 10px;
+  padding: 8px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: border-color 0.15s, transform 0.15s;
+}
+
+.pdfBtn:hover {
+  border-color: #111;
+}
+
+.pdfBtn:active {
+  transform: translateY(1px);
+}
+
+.page {
+  min-height: 100vh;
+  background: #f8f8f6;
+  padding: 3rem 1rem;
+  font-family: 'Inter', system-ui, sans-serif;
+  color: #111;
+}
+
+.container {
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+/* ── Header ── */
+.header {
+  background: #fff;
+  border: 1px solid #e8e8e4;
+  border-radius: 16px;
+  padding: 2.5rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.headerAccent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: #111;
+}
+
+.logoRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.logo {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: #999;
+  text-transform: uppercase;
+}
+
+.docMeta {
+  font-size: 11px;
+  color: #bbb;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  letter-spacing: 0.05em;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: #111;
+  margin: 0 0 1rem;
+  letter-spacing: -0.02em;
+}
+
+.clientLine {
+  font-size: 13px;
+  color: #2563eb;
+  background: #eff6ff;
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+.subtitle {
+  font-size: 16px;
+  color: #666;
+  line-height: 1.7;
+  margin: 0;
+  max-width: 580px;
+}
+
+@media (max-width: 640px) {
+  .title {
+    font-size: 22px;
+  }
+  .header {
+    padding: 1.75rem;
+  }
+}
+
+/* ── Section ── */
+.section {
+  background: #fff;
+  border: 1px solid #e8e8e4;
+  border-radius: 16px;
+  padding: 1.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.sectionLabel {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #bbb;
+  margin-bottom: 1.25rem;
+}
+
+/* ── Features Grid ── */
+.featuresGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+}
+
+.featureCard {
+  background: #f8f8f6;
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+
+.featureIcon {
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+
+.featureTitle {
+  font-size: 13px;
+  font-weight: 600;
+  color: #111;
+  margin-bottom: 3px;
+}
+
+.featureSub {
+  font-size: 12px;
+  color: #888;
+}
+
+/* ── Plans Grid ── */
+.plansGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 760px) {
+  .plansGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.plan {
+  background: #fff;
+  border: 1px solid #e8e8e4;
+  border-radius: 16px;
+  padding: 1.5rem;
+}
+
+.planFeatured {
+  border: 2px solid #2563eb;
+}
+
+.planBadge {
+  display: inline-block;
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+.planName {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #999;
+  margin-bottom: 6px;
+}
+
+.planPrice {
+  font-size: 22px;
+  font-weight: 700;
+  color: #111;
+  letter-spacing: -0.02em;
+  margin-bottom: 4px;
+}
+
+.planTime {
+  font-size: 12px;
+  color: #888;
+  margin-bottom: 16px;
+}
+
+.planDivider {
+  border: none;
+  border-top: 1px solid #f0f0ec;
+  margin: 14px 0;
+}
+
+.planFeatures {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1rem;
+}
+
+.planFeatureItem {
+  font-size: 13px;
+  color: #444;
+  padding: 5px 0;
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  line-height: 1.4;
+}
+
+.planFeatureMuted {
+  color: #bbb;
+}
+
+.planFeatureIcon {
+  font-size: 13px;
+  flex-shrink: 0;
+  margin-top: 1px;
+  color: #22c55e;
+  font-weight: 600;
+}
+
+.planFeatureMuted .planFeatureIcon {
+  color: #ccc;
+}
+
+.planBtn {
+  display: block;
+  width: 100%;
+  padding: 11px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 10px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: opacity 0.15s;
+  box-sizing: border-box;
+}
+
+.planBtn:hover {
+  opacity: 0.85;
+}
+
+.planBtnPrimary {
+  background: #111;
+  color: #fff;
+  border: none;
+}
+
+.planBtnSecondary {
+  background: transparent;
+  color: #111;
+  border: 1px solid #ddd;
+}
+
+/* ── Why Grid ── */
+.whyGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.whyItem {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.whyIcon {
+  font-size: 20px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.whyTitle {
+  font-size: 13px;
+  font-weight: 600;
+  color: #111;
+  margin-bottom: 4px;
+}
+
+.whyDesc {
+  font-size: 13px;
+  color: #777;
+  line-height: 1.5;
+}
+
+/* ── Timeline ── */
+.timeline {
+  display: flex;
+  flex-direction: column;
+}
+
+.tlRow {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 10px 0;
+  border-bottom: 1px solid #f0f0ec;
+}
+
+.tlRowLast {
+  border-bottom: none;
+}
+
+.tlStep {
+  background: #f8f8f6;
+  border-radius: 8px;
+  padding: 4px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #888;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.tlDesc {
+  font-size: 13px;
+  color: #666;
+  line-height: 1.5;
+}
+
+.tlDesc strong {
+  color: #111;
+  font-weight: 600;
+}
+
+/* ── Footer CTA ── */
+.footer {
+  background: #111;
+  border-radius: 16px;
+  padding: 1.75rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.footerTitle {
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.footerSub {
+  font-size: 13px;
+  color: #888;
+}
+
+.footerBtn {
+  background: #fff;
+  color: #111;
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: opacity 0.15s;
+}
+
+.footerBtn:hover {
+  opacity: 0.9;
+}
+
+/* ── Verification Footer ── */
+.verify {
+  margin-top: 1.5rem;
+  padding: 1rem 1.25rem;
+  border: 1px dashed #d4d4d0;
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  font-size: 11px;
+  color: #888;
+  line-height: 1.6;
+}
+
+.verifyLeft strong {
+  color: #444;
+  font-weight: 600;
+}
+
+.verifyLink {
+  color: #2563eb;
+  text-decoration: none;
+}
+
+.verifyLink:hover {
+  text-decoration: underline;
+}
+
+/* ── Print / PDF ── */
+@media print {
+  .page {
+    background: #fff;
+    padding: 0;
+  }
+  .noPrint {
+    display: none !important;
+  }
+  .header,
+  .section,
+  .plan,
+  .footer,
+  .verify {
+    break-inside: avoid;
+    box-shadow: none;
+  }
+  .plansGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .footer {
+    background: #f8f8f6;
+    color: #111;
+    border: 1px solid #e8e8e4;
+  }
+  .footerTitle {
+    color: #111;
+  }
+  .footerSub {
+    color: #444;
+  }
+  .footerBtn {
+    background: #111;
+    color: #fff;
+  }
+}
+
+@media print {
+  :global(.noise-overlay) {
+    display: none !important;
+  }
+  :global(body > div[style*="position: fixed"]),
+  :global(body > svg) {
+    display: none !important;
+  }
+}
+
+@page {
+  size: A4;
+  margin: 1.2cm;
+}
