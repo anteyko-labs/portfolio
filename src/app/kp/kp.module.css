@@ -16,6 +16,9 @@
   font-weight: 600;
   cursor: pointer;
   font-family: inherit;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   transition: border-color 0.15s, transform 0.15s;
 }
 
@@ -153,8 +156,16 @@
 }
 
 .featureIcon {
-  font-size: 20px;
-  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: #fff;
+  color: #111;
+  margin-bottom: 10px;
+  border: 1px solid #ebebe6;
 }
 
 .featureTitle {
@@ -222,6 +233,9 @@
 }
 
 .planTime {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
   font-size: 12px;
   color: #888;
   margin-bottom: 16px;
@@ -309,9 +323,15 @@
 }
 
 .whyIcon {
-  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: #f8f8f6;
+  color: #111;
   flex-shrink: 0;
-  margin-top: 2px;
 }
 
 .whyTitle {
@@ -607,10 +627,17 @@
 }
 
 .subsectionTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   font-size: 13px;
   font-weight: 600;
   color: #111;
   margin-bottom: 10px;
+}
+
+.subsectionTitle svg {
+  color: #2563eb;
 }
 
 .paymentList {
@@ -703,9 +730,15 @@
 }
 
 .guaranteeIcon {
-  font-size: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: #fde68a;
+  color: #78350f;
   flex-shrink: 0;
-  line-height: 1;
 }
 
 .guaranteeTitle {
@@ -735,6 +768,9 @@
   font-weight: 600;
   text-decoration: none;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   z-index: 100;
   transition: transform 0.15s, box-shadow 0.15s;
 }

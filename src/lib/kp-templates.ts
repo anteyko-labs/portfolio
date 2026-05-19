@@ -1,3 +1,5 @@
+import type { IconId } from '@/app/kp/icons';
+
 export type Currency = 'som' | 'usd';
 export type TemplateId = 'courses' | 'saas' | 'mvp';
 
@@ -14,7 +16,7 @@ export type Plan = {
 };
 
 export type FeatureCard = {
-  icon: string;
+  iconId: IconId;
   title: string;
   sub: string;
 };
@@ -36,24 +38,24 @@ export type KPTemplate = {
   techStack: string[];
 };
 
-export const WHY_ITEMS = [
+export const WHY_ITEMS: { iconId: IconId; title: string; desc: string }[] = [
   {
-    icon: '⌨',
+    iconId: 'code',
     title: 'Опыт в Web2 и Web3',
     desc: 'Разрабатываем сложные системы от мобильных приложений до блокчейн-протоколов',
   },
   {
-    icon: '🌐',
+    iconId: 'globe',
     title: 'Понимаем рынок СНГ',
     desc: 'Бишкек, Казахстан, Россия — знаем локальные платёжные решения',
   },
   {
-    icon: '🛡',
+    iconId: 'shield',
     title: 'Фиксированная цена',
     desc: 'Договариваемся о стоимости до старта. Никаких сюрпризов в конце',
   },
   {
-    icon: '🔄',
+    iconId: 'refresh',
     title: 'Поддержка после сдачи',
     desc: 'Первый месяц поддержки включён в любой пакет',
   },
@@ -66,10 +68,10 @@ const COURSES: KPTemplate = {
   subtitle:
     'Полная автоматизация: от оплаты до последнего урока. Ваши ученики покупают, проходят курс и получают результат — без вашего участия.',
   features: [
-    { icon: '💬', title: 'Telegram бот', sub: 'Продажа и доставка уроков' },
-    { icon: '💳', title: 'Приём оплат', sub: 'Stripe + локальные СНГ' },
-    { icon: '🖥', title: 'Админ-панель', sub: 'Управление курсом' },
-    { icon: '📊', title: 'Аналитика', sub: 'Прогресс каждого ученика' },
+    { iconId: 'message', title: 'Telegram бот', sub: 'Продажа и доставка уроков' },
+    { iconId: 'credit-card', title: 'Приём оплат', sub: 'Stripe + локальные СНГ' },
+    { iconId: 'monitor', title: 'Админ-панель', sub: 'Управление курсом' },
+    { iconId: 'chart', title: 'Аналитика', sub: 'Прогресс каждого ученика' },
   ],
   plans: [
     {
@@ -148,10 +150,10 @@ const SAAS: KPTemplate = {
   subtitle:
     'Готовый продукт под подписку: лендинг, авторизация, оплата через Stripe и личный кабинет. Запуск за 3–6 недель.',
   features: [
-    { icon: '🚀', title: 'Лендинг', sub: 'Конверсионная страница' },
-    { icon: '🔐', title: 'Авторизация', sub: 'Email + OAuth' },
-    { icon: '💳', title: 'Биллинг', sub: 'Stripe Subscriptions' },
-    { icon: '📈', title: 'Дашборд', sub: 'Личный кабинет' },
+    { iconId: 'rocket', title: 'Лендинг', sub: 'Конверсионная страница' },
+    { iconId: 'lock', title: 'Авторизация', sub: 'Email + OAuth' },
+    { iconId: 'credit-card', title: 'Биллинг', sub: 'Stripe Subscriptions' },
+    { iconId: 'trending-up', title: 'Дашборд', sub: 'Личный кабинет' },
   ],
   plans: [
     {
@@ -230,10 +232,10 @@ const MVP: KPTemplate = {
   subtitle:
     'От идеи до работающего продукта: дизайн, фронтенд, бэкенд, авторизация и админка. Готовое решение, которое можно показать инвесторам и пользователям.',
   features: [
-    { icon: '🎨', title: 'Дизайн', sub: 'UI/UX под продукт' },
-    { icon: '⚛', title: 'Frontend', sub: 'React / Next.js' },
-    { icon: '⚙', title: 'Backend', sub: 'API + база данных' },
-    { icon: '🛠', title: 'Админка', sub: 'Управление контентом' },
+    { iconId: 'brush', title: 'Дизайн', sub: 'UI/UX под продукт' },
+    { iconId: 'atom', title: 'Frontend', sub: 'React / Next.js' },
+    { iconId: 'gear', title: 'Backend', sub: 'API + база данных' },
+    { iconId: 'wrench', title: 'Админка', sub: 'Управление контентом' },
   ],
   plans: [
     {

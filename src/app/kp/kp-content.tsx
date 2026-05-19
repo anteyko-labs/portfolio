@@ -19,6 +19,15 @@ import {
   GUARANTEE_TITLE,
   GUARANTEE_TEXT,
 } from '@/lib/kp-data';
+import {
+  Icon,
+  DownloadIcon,
+  MessageIcon,
+  CreditCardIcon,
+  ClipboardIcon,
+  ShieldIcon,
+  ClockIcon,
+} from './icons';
 
 const TELEGRAM_LINK = 'https://t.me/Anteyko_labs';
 
@@ -105,7 +114,7 @@ export default function KPContent({
             className={styles.pdfBtn}
             aria-label="Скачать PDF"
           >
-            ⬇ Скачать PDF
+            <DownloadIcon size={14} /> Скачать PDF
           </button>
         </div>
 
@@ -137,7 +146,9 @@ export default function KPContent({
           <div className={styles.featuresGrid}>
             {template.features.map((f) => (
               <div key={f.title} className={styles.featureCard}>
-                <div className={styles.featureIcon}>{f.icon}</div>
+                <div className={styles.featureIcon}>
+                  <Icon id={f.iconId} size={20} />
+                </div>
                 <div className={styles.featureTitle}>{f.title}</div>
                 <div className={styles.featureSub}>{f.sub}</div>
               </div>
@@ -181,7 +192,9 @@ export default function KPContent({
               )}
               <div className={styles.planName}>{plan.name}</div>
               <div className={styles.planPrice}>{formatPrice(plan.priceSom, currency)}</div>
-              <div className={styles.planTime}>⏱ {plan.time}</div>
+              <div className={styles.planTime}>
+                <ClockIcon size={13} /> {plan.time}
+              </div>
               <hr className={styles.planDivider} />
               <ul className={styles.planFeatures}>
                 {plan.features.map((f) => (
@@ -249,7 +262,10 @@ export default function KPContent({
           </div>
 
           <div className={styles.subsection}>
-            <div className={styles.subsectionTitle}>💳 Условия оплаты</div>
+            <div className={styles.subsectionTitle}>
+              <CreditCardIcon size={16} />
+              Условия оплаты
+            </div>
             <ul className={styles.paymentList}>
               {PAYMENT_TERMS.map((p) => (
                 <li key={p.label}>
@@ -260,7 +276,10 @@ export default function KPContent({
           </div>
 
           <div className={styles.subsection}>
-            <div className={styles.subsectionTitle}>📋 Что нужно от вас</div>
+            <div className={styles.subsectionTitle}>
+              <ClipboardIcon size={16} />
+              Что нужно от вас
+            </div>
             <ul className={styles.detailsList}>
               {FROM_CLIENT.map((item) => (
                 <li key={item}>{item}</li>
@@ -274,7 +293,9 @@ export default function KPContent({
           <div className={styles.whyGrid}>
             {WHY_ITEMS.map((item) => (
               <div key={item.title} className={styles.whyItem}>
-                <div className={styles.whyIcon}>{item.icon}</div>
+                <div className={styles.whyIcon}>
+                  <Icon id={item.iconId} size={22} />
+                </div>
                 <div>
                   <div className={styles.whyTitle}>{item.title}</div>
                   <div className={styles.whyDesc}>{item.desc}</div>
@@ -316,7 +337,9 @@ export default function KPContent({
         </div>
 
         <div className={styles.guarantee}>
-          <div className={styles.guaranteeIcon}>🛡</div>
+          <div className={styles.guaranteeIcon}>
+            <ShieldIcon size={28} />
+          </div>
           <div>
             <div className={styles.guaranteeTitle}>{GUARANTEE_TITLE}</div>
             <p className={styles.guaranteeText}>{GUARANTEE_TEXT}</p>
@@ -368,7 +391,8 @@ export default function KPContent({
         className={`${styles.stickyCta} ${styles.noPrint}`}
         aria-label="Обсудить проект в Telegram"
       >
-        💬 Обсудить
+        <MessageIcon size={14} />
+        Обсудить
       </a>
     </div>
   );
