@@ -38,12 +38,14 @@ Options:
   --template     courses | saas | mvp (default: courses)
   --currency     som | usd (default: som)
   --valid-days   Срок действия в днях (default: 14)
+  --intro        Персональный вступительный текст (опц., до 500 символов)
   --note         Заметка только для тебя (опц.)
   --token        Свой кастомный токен вместо случайного (опц.)
 
 Examples:
   npm run kp:new -- --client "ACME Corp" --template courses --currency som
   npm run kp:new -- --client "Asel" --template saas --currency usd --valid-days 21
+  npm run kp:new -- --client "Алибек" --intro "Привет, Алибек. Это предложение для запуска вашего курса по фронтенду."
 `);
 }
 
@@ -97,6 +99,9 @@ data[token] = {
   currency,
   template,
   validUntil,
+  ...(args.intro && typeof args.intro === 'string'
+    ? { intro: args.intro.slice(0, 500) }
+    : {}),
   ...(args.note && typeof args.note === 'string' ? { note: args.note } : {}),
 };
 

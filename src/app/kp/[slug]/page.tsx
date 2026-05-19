@@ -10,6 +10,7 @@ type ClientEntry = {
   template: string;
   validUntil?: string;
   note?: string;
+  intro?: string;
 };
 
 const CLIENTS = clients as Record<string, ClientEntry | string>;
@@ -62,6 +63,7 @@ export default async function KPSlugPage({
       template={template}
       validUntil={entry.validUntil}
       slug={slug}
+      intro={entry.intro}
     />
   );
 }

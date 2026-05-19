@@ -33,6 +33,7 @@ export type KPTemplate = {
   features: FeatureCard[];
   plans: Plan[];
   timeline: TimelineRow[];
+  techStack: string[];
 };
 
 export const WHY_ITEMS = [
@@ -129,6 +130,15 @@ const COURSES: KPTemplate = {
     { step: 'Дни 6–12', desc: 'Админ-панель и аналитика', sub: 'управление контентом, дашборд' },
     { step: 'Финал', desc: 'Деплой + сдача', sub: 'передаём доступы, объясняем как пользоваться' },
   ],
+  techStack: [
+    'Node.js + TypeScript',
+    'PostgreSQL',
+    'Telegram Bot API (Telegraf)',
+    'Stripe + PayBox',
+    'Retool (админка)',
+    'Metabase (аналитика)',
+    'Vercel + Railway',
+  ],
 };
 
 const SAAS: KPTemplate = {
@@ -202,6 +212,15 @@ const SAAS: KPTemplate = {
     { step: 'Недели 4–5', desc: 'Фичи продукта', sub: 'основной функционал, админка' },
     { step: 'Финал', desc: 'Деплой и сдача', sub: 'передаём доступы, документация, поддержка' },
   ],
+  techStack: [
+    'Next.js 15 + React 19',
+    'TypeScript + PostgreSQL + Prisma',
+    'Stripe Subscriptions API',
+    'NextAuth.js (Email + OAuth)',
+    'Mixpanel / Amplitude',
+    'Retool (админка)',
+    'Vercel + Supabase',
+  ],
 };
 
 const MVP: KPTemplate = {
@@ -274,6 +293,15 @@ const MVP: KPTemplate = {
     { step: 'Недели 2–3', desc: 'Backend и API', sub: 'база, авторизация, основные эндпоинты' },
     { step: 'Недели 4–6', desc: 'Frontend и UI', sub: 'верстаем экраны, подключаем API' },
     { step: 'Финал', desc: 'Тестирование и сдача', sub: 'фиксим баги, передаём проект' },
+  ],
+  techStack: [
+    'Next.js + React + TypeScript',
+    'PostgreSQL + Prisma',
+    'API Routes (REST / tRPC)',
+    'Cloudinary (медиа)',
+    'Retool (админка)',
+    'Vercel + Supabase',
+    'Sentry (мониторинг)',
   ],
 };
 

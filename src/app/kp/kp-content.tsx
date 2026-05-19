@@ -9,6 +9,16 @@ import {
   type Currency,
   type KPTemplate,
 } from '@/lib/kp-templates';
+import {
+  TESTIMONIALS,
+  PAYMENT_TERMS,
+  INCLUDED,
+  NOT_INCLUDED,
+  FROM_CLIENT,
+  FAQ_ITEMS,
+  GUARANTEE_TITLE,
+  GUARANTEE_TEXT,
+} from '@/lib/kp-data';
 
 const TELEGRAM_LINK = 'https://t.me/anteyko';
 
@@ -18,6 +28,7 @@ export type KPContentProps = {
   template: KPTemplate;
   validUntil?: string;
   slug?: string;
+  intro?: string;
 };
 
 function formatDate(iso?: string): string | null {
@@ -37,6 +48,7 @@ export default function KPContent({
   template,
   validUntil,
   slug,
+  intro,
 }: KPContentProps) {
   const documentId = useMemo(() => docId(client), [client]);
 
@@ -75,7 +87,11 @@ export default function KPContent({
   }, [client, currency, documentId, slug, template.id]);
 
   const handlePrint = () => {
-    if (typeof window !== 'undefined') window.print();
+    if (typeof window === 'undefined') return;
+    document.querySelectorAll<HTMLDetailsElement>('details').forEach((d) => {
+      d.open = true;
+    });
+    window.print();
   };
 
   return (
@@ -109,6 +125,13 @@ export default function KPContent({
           <p className={styles.subtitle}>{template.subtitle}</p>
         </div>
 
+        {intro && (
+          <div className={styles.intro}>
+            <div className={styles.introLabel}>Персонально для вас</div>
+            <p className={styles.introText}>{intro}</p>
+          </div>
+        )}
+
         <div className={styles.section}>
           <div className={styles.sectionLabel}>Что вы получаете</div>
           <div className={styles.featuresGrid}>
@@ -121,6 +144,28 @@ export default function KPContent({
             ))}
           </div>
         </div>
+
+        {TESTIMONIALS.length > 0 && (
+          <div className={styles.section}>
+            <div className={styles.sectionLabel}>Отзывы клиентов</div>
+            <div className={styles.testimonialsGrid}>
+              {TESTIMONIALS.map((t, i) => (
+                <div key={i} className={styles.testimonial}>
+                  <p className={styles.testimonialQuote}>“{t.quote}”</p>
+                  <div className={styles.testimonialAuthor}>
+                    {t.initials && (
+                      <div className={styles.testimonialAvatar}>{t.initials}</div>
+                    )}
+                    <div>
+                      <div className={styles.testimonialName}>{t.author}</div>
+                      <div className={styles.testimonialRole}>{t.role}</div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         <div className={styles.sectionLabel} style={{ marginBottom: '1rem' }}>
           Выберите пакет
@@ -168,6 +213,63 @@ export default function KPContent({
         </div>
 
         <div className={styles.section}>
+          <div className={styles.sectionLabel}>Технологии</div>
+          <div className={styles.techGrid}>
+            {template.techStack.map((tech) => (
+              <span key={tech} className={styles.techChip}>{tech}</span>
+            ))}
+          </div>
+        </div>
+
+        <div className={styles.section}>
+          <div className={styles.sectionLabel}>Условия проекта</div>
+          <div className={styles.detailsGrid}>
+            <div className={styles.detailsCol}>
+              <div className={styles.detailsTitle}>
+                <span className={styles.detailsIcon} aria-hidden="true">✓</span>
+                Что входит в цену
+              </div>
+              <ul className={styles.detailsList}>
+                {INCLUDED.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </div>
+            <div className={styles.detailsCol}>
+              <div className={styles.detailsTitle}>
+                <span className={`${styles.detailsIcon} ${styles.detailsIconMuted}`} aria-hidden="true">—</span>
+                Не входит
+              </div>
+              <ul className={`${styles.detailsList} ${styles.detailsListMuted}`}>
+                {NOT_INCLUDED.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          <div className={styles.subsection}>
+            <div className={styles.subsectionTitle}>💳 Условия оплаты</div>
+            <ul className={styles.paymentList}>
+              {PAYMENT_TERMS.map((p) => (
+                <li key={p.label}>
+                  <strong>{p.label}:</strong> {p.schedule}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className={styles.subsection}>
+            <div className={styles.subsectionTitle}>📋 Что нужно от вас</div>
+            <ul className={styles.detailsList}>
+              {FROM_CLIENT.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        <div className={styles.section}>
           <div className={styles.sectionLabel}>Почему Anteyko</div>
           <div className={styles.whyGrid}>
             {WHY_ITEMS.map((item) => (
@@ -198,6 +300,26 @@ export default function KPContent({
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+
+        <div className={styles.section}>
+          <div className={styles.sectionLabel}>Частые вопросы</div>
+          <div className={styles.faqList}>
+            {FAQ_ITEMS.map((item) => (
+              <details key={item.q} className={styles.faqItem}>
+                <summary className={styles.faqQuestion}>{item.q}</summary>
+                <p className={styles.faqAnswer}>{item.a}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+
+        <div className={styles.guarantee}>
+          <div className={styles.guaranteeIcon}>🛡</div>
+          <div>
+            <div className={styles.guaranteeTitle}>{GUARANTEE_TITLE}</div>
+            <p className={styles.guaranteeText}>{GUARANTEE_TEXT}</p>
           </div>
         </div>
 
@@ -238,6 +360,16 @@ export default function KPContent({
         </div>
 
       </div>
+
+      <a
+        href={TELEGRAM_LINK}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={`${styles.stickyCta} ${styles.noPrint}`}
+        aria-label="Обсудить проект в Telegram"
+      >
+        💬 Обсудить
+      </a>
     </div>
   );
 }

@@ -1,3 +1,3 @@
 {
-  "_README": "Маппинг token → данные КП. Token — длинная случайная строка в URL (/kp/<token>). Поля: client (имя клиента), currency (som|usd), template (courses|saas|mvp), validUntil (ISO дата, опц.), note (заметка только для тебя, опц.). Чтобы добавить нового клиента, используй: npm run kp:new -- --client \"Имя\" --template courses --currency som"
+  "_README": "Маппинг token → данные КП. Token — длинная случайная строка в URL (/kp/<token>). Поля: client (имя), currency (som|usd), template (courses|saas|mvp), validUntil (ISO дата, опц.), intro (персональное вступление, опц., до 500 символов), note (заметка для тебя, опц.). Создавай через: npm run kp:new -- --client \"Имя\" --intro \"Текст...\" --template courses --currency som"
 }
