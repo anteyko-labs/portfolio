@@ -282,11 +282,39 @@ export default function KPContent({
         </div>
 
         <div className={styles.section}>
-          <div className={styles.sectionLabel}>Технологии</div>
-          <div className={styles.techGrid}>
-            {template.techStack.map((tech) => (
-              <span key={tech} className={styles.techChip}>{tech}</span>
+          <div className={styles.sectionLabel}>Технологии и архитектура</div>
+          <p className={styles.techIntro}>
+            Production-grade стек. Каждый компонент выбран осознанно — типизация
+            end-to-end, идемпотентные webhooks, observability с первого дня.
+          </p>
+          <div className={styles.techGroups}>
+            {template.techStack.map((category) => (
+              <div key={category.label} className={styles.techCategory}>
+                <div className={styles.techCategoryLabel}>{category.label}</div>
+                <div className={styles.techCategoryItems}>
+                  {category.items.map((item) => (
+                    <div key={item.name} className={styles.techItem}>
+                      <span className={styles.techItemName}>{item.name}</span>
+                      {item.note && (
+                        <span className={styles.techItemNote}>— {item.note}</span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
             ))}
+          </div>
+
+          <div className={styles.subsection}>
+            <div className={styles.subsectionTitle}>
+              <ShieldIcon size={16} />
+              Принципы разработки
+            </div>
+            <ul className={styles.principlesList}>
+              {template.techPrinciples.map((p) => (
+                <li key={p}>{p}</li>
+              ))}
+            </ul>
           </div>
         </div>
 

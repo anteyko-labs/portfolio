@@ -27,6 +27,16 @@ export type TimelineRow = {
   sub: string;
 };
 
+export type TechItem = {
+  name: string;
+  note?: string;
+};
+
+export type TechCategory = {
+  label: string;
+  items: TechItem[];
+};
+
 export type KPTemplate = {
   id: TemplateId;
   title: string;
@@ -35,7 +45,8 @@ export type KPTemplate = {
   features: FeatureCard[];
   plans: Plan[];
   timeline: TimelineRow[];
-  techStack: string[];
+  techStack: TechCategory[];
+  techPrinciples: string[];
 };
 
 export const WHY_ITEMS: { iconId: IconId; title: string; desc: string }[] = [
@@ -133,13 +144,76 @@ const COURSES: KPTemplate = {
     { step: 'Финал', desc: 'Деплой + сдача', sub: 'передаём доступы, объясняем как пользоваться' },
   ],
   techStack: [
-    'Node.js + TypeScript',
-    'PostgreSQL',
-    'Telegram Bot API (Telegraf)',
-    'Stripe + PayBox',
-    'Retool (админка)',
-    'Metabase (аналитика)',
-    'Vercel + Railway',
+    {
+      label: 'Bot & Frontend',
+      items: [
+        { name: 'Telegraf 4.x', note: 'TypeScript SDK для Telegram Bot API' },
+        { name: 'Scenes & Sessions', note: 'многошаговые диалоги, состояние пользователя' },
+        { name: 'Telegram Web App', note: 'опц. — интерактивные мини-приложения' },
+      ],
+    },
+    {
+      label: 'Backend & API',
+      items: [
+        { name: 'Node.js 22 LTS', note: 'ESM modules, native fetch' },
+        { name: 'TypeScript 5.6 (strict)', note: 'noImplicitAny, end-to-end типы' },
+        { name: 'Fastify 5', note: 'низколатентный HTTP-сервер' },
+        { name: 'Zod', note: 'валидация input/output на каждой границе' },
+        { name: 'BullMQ + Redis', note: 'отложенные задачи, cron, retries' },
+      ],
+    },
+    {
+      label: 'Payments',
+      items: [
+        { name: 'Stripe Checkout + Subscriptions', note: 'международные карты + рекуррентные платежи' },
+        { name: 'PayBox API', note: 'локальные СНГ-платежи (KGS, KZT, RUB)' },
+        { name: 'HMAC webhooks', note: 'идемпотентность + защита от подделки' },
+        { name: 'Audit log', note: 'все денежные транзакции журналируются' },
+      ],
+    },
+    {
+      label: 'Data & Storage',
+      items: [
+        { name: 'PostgreSQL 16', note: 'Neon / Supabase, point-in-time recovery' },
+        { name: 'Prisma ORM', note: 'миграции + type-safe queries' },
+        { name: 'Redis 7', note: 'кеш, сессии, очереди' },
+        { name: 'Cloudflare R2', note: 'медиафайлы курсов, S3-совместимое API' },
+      ],
+    },
+    {
+      label: 'Admin & Analytics',
+      items: [
+        { name: 'Retool', note: 'админка для контента и пользователей' },
+        { name: 'Metabase', note: 'SQL-аналитика и кастомные дашборды' },
+        { name: 'PostHog', note: 'event tracking, retention, funnels' },
+      ],
+    },
+    {
+      label: 'Infrastructure',
+      items: [
+        { name: 'Vercel', note: 'API endpoints + edge functions' },
+        { name: 'Railway / Fly.io', note: 'long-running bot worker' },
+        { name: 'GitHub Actions', note: 'CI/CD + preview environments' },
+        { name: 'Encrypted env vars', note: 'Vercel + KMS, никаких секретов в коде' },
+      ],
+    },
+    {
+      label: 'Reliability & Security',
+      items: [
+        { name: 'Sentry', note: 'error tracking + performance' },
+        { name: 'Structured logs (pino)', note: 'JSON-логи → Logtail / Datadog' },
+        { name: 'Rate limiting', note: 'rate-limiter-flexible, защита от abuse' },
+        { name: 'Uptime monitoring', note: 'BetterStack / UptimeRobot' },
+      ],
+    },
+  ],
+  techPrinciples: [
+    'End-to-end типизация: TypeScript strict + Zod-схемы на границах API и БД',
+    'Идемпотентные webhooks: повторная доставка от Stripe/PayBox не дублирует операции',
+    'Transactional outbox: гарантированная доставка событий между сервисами',
+    'Atomic deployments: zero-downtime + instant rollback на любой предыдущий релиз',
+    'Migrations через Prisma: ни одного ручного UPDATE в production',
+    'Tests: Vitest (unit + integration) + Playwright (E2E критичных флоу)',
   ],
 };
 
@@ -215,13 +289,90 @@ const SAAS: KPTemplate = {
     { step: 'Финал', desc: 'Деплой и сдача', sub: 'передаём доступы, документация, поддержка' },
   ],
   techStack: [
-    'Next.js 15 + React 19',
-    'TypeScript + PostgreSQL + Prisma',
-    'Stripe Subscriptions API',
-    'NextAuth.js (Email + OAuth)',
-    'Mixpanel / Amplitude',
-    'Retool (админка)',
-    'Vercel + Supabase',
+    {
+      label: 'Frontend',
+      items: [
+        { name: 'Next.js 15 (App Router)', note: 'React Server Components + Streaming SSR' },
+        { name: 'React 19', note: 'Suspense, transitions, Server Actions' },
+        { name: 'TypeScript 5.6 (strict)', note: 'no any, end-to-end типы' },
+        { name: 'Tailwind CSS v4', note: 'design tokens, no CSS-in-JS' },
+        { name: 'shadcn/ui + Radix', note: 'accessible primitives (WCAG AA)' },
+      ],
+    },
+    {
+      label: 'Auth & Identity',
+      items: [
+        { name: 'NextAuth.js v5 (Auth.js)', note: 'Email + Google + GitHub OAuth' },
+        { name: 'JWT + refresh tokens', note: 'rotating tokens, secure cookies' },
+        { name: 'Argon2id', note: 'password hashing (memory-hard)' },
+        { name: 'WebAuthn / Passkeys', note: 'опц. — passwordless login' },
+      ],
+    },
+    {
+      label: 'Backend & API',
+      items: [
+        { name: 'tRPC v11', note: 'end-to-end типизация без OpenAPI' },
+        { name: 'Server Actions', note: 'безопасные мутации, no exposed endpoints' },
+        { name: 'Zod', note: 'валидация input/output' },
+        { name: 'Inngest / BullMQ', note: 'background jobs, retries, scheduling' },
+      ],
+    },
+    {
+      label: 'Billing',
+      items: [
+        { name: 'Stripe Subscriptions', note: 'metered + per-seat billing' },
+        { name: 'Stripe Customer Portal', note: 'self-service для клиентов' },
+        { name: 'Idempotent webhooks', note: 'HMAC verification + дедупликация' },
+        { name: 'Proration & dunning', note: 'автообработка downgrades / failed cards' },
+      ],
+    },
+    {
+      label: 'Data & Storage',
+      items: [
+        { name: 'PostgreSQL 16', note: 'Supabase / Neon, point-in-time recovery' },
+        { name: 'Prisma ORM', note: 'миграции + type-safe queries' },
+        { name: 'Row Level Security (RLS)', note: 'multi-tenant изоляция на уровне БД' },
+        { name: 'Redis 7', note: 'кеш, сессии, rate limits' },
+        { name: 'Cloudflare R2 / S3', note: 'user uploads + CDN' },
+      ],
+    },
+    {
+      label: 'Analytics & Product',
+      items: [
+        { name: 'PostHog', note: 'product analytics, feature flags, A/B' },
+        { name: 'Sentry', note: 'error tracking + Replay + RUM' },
+        { name: 'Vercel Analytics', note: 'Core Web Vitals' },
+        { name: 'Retool', note: 'internal tools для саппорта' },
+      ],
+    },
+    {
+      label: 'Infrastructure & DevOps',
+      items: [
+        { name: 'Vercel', note: 'frontend + API на edge' },
+        { name: 'GitHub Actions', note: 'CI/CD + branch deployments' },
+        { name: 'Preview environments', note: 'на каждый PR, с изолированной БД' },
+        { name: 'Atomic deployments', note: 'instant rollback одним кликом' },
+      ],
+    },
+    {
+      label: 'Reliability & Security',
+      items: [
+        { name: 'OpenTelemetry traces', note: 'распределённая трассировка' },
+        { name: 'Structured logs (pino)', note: 'JSON → Logtail / Datadog' },
+        { name: 'Rate limiting (Redis)', note: 'sliding window per user/IP' },
+        { name: 'CSP / Helmet', note: 'security headers' },
+        { name: 'Secret rotation', note: 'регулярный ротейт API-ключей' },
+      ],
+    },
+  ],
+  techPrinciples: [
+    'End-to-end типизация: TypeScript strict + tRPC + Zod — никакого any',
+    'Multi-tenant safe by default: Row Level Security в Postgres на каждой таблице',
+    'Идемпотентные webhooks: Stripe events дедуплицируются по event ID',
+    'Audit log: каждое изменение критичных данных записывается с user_id + diff',
+    'SOC2-ready: encryption at rest, access logs, retention policy с первого дня',
+    'Tests: Vitest + Playwright + Stripe webhook signature tests + chaos tests',
+    'Observability с первого дня: traces, structured logs, alerts на ключевые SLO',
   ],
 };
 
@@ -297,13 +448,64 @@ const MVP: KPTemplate = {
     { step: 'Финал', desc: 'Тестирование и сдача', sub: 'фиксим баги, передаём проект' },
   ],
   techStack: [
-    'Next.js + React + TypeScript',
-    'PostgreSQL + Prisma',
-    'API Routes (REST / tRPC)',
-    'Cloudinary (медиа)',
-    'Retool (админка)',
-    'Vercel + Supabase',
-    'Sentry (мониторинг)',
+    {
+      label: 'Frontend',
+      items: [
+        { name: 'Next.js 15 (App Router)', note: 'RSC + Streaming SSR' },
+        { name: 'React 19 + TypeScript 5.6', note: 'strict mode, no any' },
+        { name: 'Tailwind CSS v4', note: 'design tokens' },
+        { name: 'Framer Motion', note: 'анимации и переходы' },
+      ],
+    },
+    {
+      label: 'Backend & API',
+      items: [
+        { name: 'Node.js 22 LTS', note: '' },
+        { name: 'API Routes / tRPC', note: 'выбор по требованиям проекта' },
+        { name: 'Zod', note: 'валидация на границах' },
+        { name: 'Server Actions', note: 'безопасные мутации' },
+      ],
+    },
+    {
+      label: 'Auth',
+      items: [
+        { name: 'NextAuth.js v5', note: 'Email + OAuth (Google/GitHub)' },
+        { name: 'JWT sessions', note: 'secure HTTP-only cookies' },
+        { name: 'Argon2id', note: 'password hashing' },
+      ],
+    },
+    {
+      label: 'Data & Storage',
+      items: [
+        { name: 'PostgreSQL 16', note: 'Supabase / Neon' },
+        { name: 'Prisma ORM', note: 'миграции + типы' },
+        { name: 'Cloudinary / R2', note: 'медиа CDN' },
+      ],
+    },
+    {
+      label: 'Admin & Ops',
+      items: [
+        { name: 'Retool', note: 'админ-панель' },
+        { name: 'Sentry', note: 'error tracking + performance' },
+        { name: 'PostHog', note: 'product analytics' },
+      ],
+    },
+    {
+      label: 'Infrastructure',
+      items: [
+        { name: 'Vercel', note: 'frontend + API на edge' },
+        { name: 'GitHub Actions', note: 'CI/CD + preview deploys' },
+        { name: 'Preview environments', note: 'на каждый PR' },
+      ],
+    },
+  ],
+  techPrinciples: [
+    'TypeScript strict end-to-end — никакого any',
+    'Migrations через Prisma — атомарные деплои',
+    'Структурированные логи + Sentry с первого дня',
+    'Tests: Vitest (unit + integration) минимум',
+    'Preview environments на каждый PR с изолированной БД',
+    'Atomic deployments + instant rollback',
   ],
 };
 

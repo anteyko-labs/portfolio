@@ -557,7 +557,72 @@
   color: #888;
 }
 
-/* ── Tech stack chips ── */
+/* ── Tech stack ── */
+.techIntro {
+  font-size: 13px;
+  color: #666;
+  line-height: 1.6;
+  margin: 0 0 1.25rem;
+  max-width: 600px;
+}
+
+.techGroups {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem 2rem;
+}
+
+@media (max-width: 760px) {
+  .techGroups {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+.techCategory {
+  break-inside: avoid;
+}
+
+.techCategoryLabel {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #2563eb;
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #ebebe6;
+}
+
+.techCategoryItems {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.techItem {
+  font-size: 12px;
+  line-height: 1.5;
+  color: #555;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.techItemName {
+  font-weight: 600;
+  color: #111;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 12px;
+}
+
+.techItemNote {
+  color: #888;
+  font-size: 12px;
+}
+
+/* keep old class as alias for tech chips that may still reference it */
 .techGrid {
   display: flex;
   flex-wrap: wrap;
@@ -572,6 +637,29 @@
   border-radius: 999px;
   border: 1px solid #ebebe6;
   font-family: 'JetBrains Mono', ui-monospace, monospace;
+}
+
+.principlesList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.principlesList li {
+  position: relative;
+  padding: 5px 0 5px 22px;
+  font-size: 13px;
+  color: #444;
+  line-height: 1.5;
+}
+
+.principlesList li::before {
+  content: "→";
+  position: absolute;
+  left: 0;
+  top: 5px;
+  color: #2563eb;
+  font-weight: 700;
 }
 
 /* ── Details (что входит / не входит) ── */
