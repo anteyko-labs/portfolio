@@ -1,3 +1,10 @@
 {
-  "_README": "Маппинг token → данные КП. Token — длинная случайная строка в URL (/kp/<token>). Поля: client (имя), currency (som|usd), template (courses|saas|mvp), validUntil (ISO дата, опц.), intro (персональное вступление, опц., до 500 символов), note (заметка для тебя, опц.). Создавай через: npm run kp:new -- --client \"Имя\" --intro \"Текст...\" --template courses --currency som"
+  "_README": "Маппинг token → данные КП. Token — длинная случайная строка в URL (/kp/<token>). Поля: client (имя), currency (som|usd), template (courses|saas|mvp), validUntil (ISO дата, опц.), intro (персональное вступление, опц., до 500 символов), note (заметка для тебя, опц.). Создавай через: npm run kp:new -- --client \"Имя\" --intro \"Текст...\" --template courses --currency som",
+  "YG7cUuFU03iF": {
+    "client": "Екатерина",
+    "currency": "som",
+    "template": "courses",
+    "validUntil": "2026-06-02",
+    "intro": "Екатерина, привет. Подготовили предложение для запуска вашего онлайн-курса в Telegram. Внутри — три варианта пакета с фиксированной ценой и сроком. На любом включён первый месяц поддержки и передача всех доступов. Готовы стартовать на этой неделе — за 30 минут разберём детали и подтвердим выбор пакета."
+  }
 }
