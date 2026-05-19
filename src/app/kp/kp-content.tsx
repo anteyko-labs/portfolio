@@ -20,7 +20,7 @@ import {
   GUARANTEE_TEXT,
 } from '@/lib/kp-data';
 
-const TELEGRAM_LINK = 'https://t.me/anteyko';
+const TELEGRAM_LINK = 'https://t.me/Anteyko_labs';
 
 export type KPContentProps = {
   client: string;
