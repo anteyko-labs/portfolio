@@ -1,0 +1,341 @@
+/* Invoice / Счёт на оплату — clean print-friendly layout */
+
+.page {
+  min-height: 100vh;
+  background: #f4f4f0;
+  padding: 2rem 1rem;
+  font-family: 'Inter', system-ui, sans-serif;
+  color: #111;
+}
+
+.toolbar {
+  max-width: 800px;
+  margin: 0 auto 1rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.printBtn {
+  background: #111;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: transform 0.15s;
+}
+
+.printBtn:hover {
+  transform: translateY(-1px);
+}
+
+.sheet {
+  max-width: 800px;
+  margin: 0 auto;
+  background: #fff;
+  border: 1px solid #e8e8e4;
+  border-radius: 12px;
+  padding: 3rem 3.5rem;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+@media (max-width: 640px) {
+  .sheet {
+    padding: 2rem 1.5rem;
+  }
+}
+
+.headerRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2rem;
+  padding-bottom: 1.5rem;
+  margin-bottom: 1.75rem;
+  border-bottom: 2px solid #111;
+}
+
+.brand {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.subtle {
+  color: #888;
+  font-size: 11px;
+}
+
+.docMeta {
+  text-align: right;
+}
+
+.label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #999;
+  margin-bottom: 4px;
+}
+
+.invoiceId {
+  font-size: 16px;
+  font-weight: 700;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  letter-spacing: -0.01em;
+}
+
+.date {
+  font-size: 12px;
+  color: #666;
+  margin-top: 2px;
+}
+
+.parties {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+@media (max-width: 640px) {
+  .parties {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+}
+
+.party {}
+
+.partyLabel {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #bbb;
+  margin-bottom: 8px;
+}
+
+.partyName {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111;
+  margin-bottom: 4px;
+}
+
+.line {
+  font-size: 12px;
+  color: #555;
+  padding: 1px 0;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 2rem;
+}
+
+.table th {
+  text-align: left;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #888;
+  padding: 10px 12px;
+  border-bottom: 1px solid #e8e8e4;
+  background: #f8f8f6;
+}
+
+.thNum {
+  width: 36px;
+  text-align: center !important;
+}
+
+.thQty {
+  width: 70px;
+  text-align: center !important;
+}
+
+.thAmount {
+  width: 160px;
+  text-align: right !important;
+}
+
+.table td {
+  padding: 14px 12px;
+  border-bottom: 1px solid #f0f0ec;
+  vertical-align: top;
+}
+
+.tdNum {
+  text-align: center;
+  color: #888;
+}
+
+.tdQty {
+  text-align: center;
+}
+
+.tdAmount {
+  text-align: right;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.serviceTitle {
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.serviceMeta {
+  font-size: 12px;
+  color: #888;
+}
+
+.totalLabel {
+  text-align: right;
+  font-size: 13px;
+  font-weight: 600;
+  color: #111;
+  padding: 14px 12px !important;
+}
+
+.totalAmount {
+  text-align: right;
+  font-size: 17px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: #111;
+  padding: 14px 12px !important;
+}
+
+.payment {
+  background: #f8f8f6;
+  border-radius: 10px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.paymentLabel {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #bbb;
+  margin-bottom: 12px;
+}
+
+.paymentGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px 20px;
+}
+
+@media (max-width: 640px) {
+  .paymentGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.paymentCell {}
+
+.cellLabel {
+  font-size: 11px;
+  color: #888;
+  margin-bottom: 2px;
+}
+
+.cellValue {
+  font-size: 13px;
+  font-weight: 500;
+  color: #111;
+  font-variant-numeric: tabular-nums;
+}
+
+.note {
+  margin-bottom: 2rem;
+  font-size: 12px;
+  color: #555;
+  line-height: 1.6;
+}
+
+.note p {
+  margin: 0 0 8px;
+}
+
+.signature {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  margin-top: 3rem;
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 640px) {
+  .signature {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}
+
+.signLeft,
+.signRight {}
+
+.signLabel {
+  font-size: 11px;
+  color: #888;
+  margin-bottom: 36px;
+}
+
+.signLine {
+  border-bottom: 1px solid #111;
+  margin-bottom: 6px;
+}
+
+.signName {
+  font-size: 11px;
+  color: #666;
+}
+
+.footer {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid #f0f0ec;
+  font-size: 10px;
+  color: #aaa;
+  text-align: center;
+}
+
+/* ── Print ── */
+@media print {
+  .page {
+    background: #fff;
+    padding: 0;
+  }
+  .noPrint {
+    display: none !important;
+  }
+  .sheet {
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    max-width: 100%;
+  }
+  :global(.noise-overlay) {
+    display: none !important;
+  }
+}
+
+@page {
+  size: A4;
+  margin: 1.5cm 1.2cm;
+}

@@ -34,6 +34,10 @@ import {
 
 const TELEGRAM_LINK = 'https://t.me/Anteyko_labs';
 
+function tgLink(message: string): string {
+  return `${TELEGRAM_LINK}?text=${encodeURIComponent(message)}`;
+}
+
 export type KPContentProps = {
   client: string;
   currency: Currency;
@@ -88,6 +92,7 @@ export default function KPContent({
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
+        event: 'open',
         slug: slug ?? null,
         client,
         documentId,
@@ -100,6 +105,31 @@ export default function KPContent({
       // silent — tracking failure shouldn't bother the client
     });
   }, [client, currency, documentId, slug, template.id]);
+
+  const trackClick = (
+    target: 'plan' | 'footer' | 'sticky',
+    planId?: string,
+    planName?: string
+  ) => {
+    fetch('/api/kp/track', {
+      method: 'POST',
+      keepalive: true,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        event: 'click',
+        target,
+        planId: planId ?? null,
+        planName: planName ?? null,
+        slug: slug ?? null,
+        client,
+        documentId,
+        template: template.id,
+        currency,
+      }),
+    }).catch(() => {
+      // silent
+    });
+  };
 
   const handlePrint = () => {
     if (typeof window === 'undefined') return;
@@ -225,15 +255,28 @@ export default function KPContent({
                 ))}
               </ul>
               <a
-                href={TELEGRAM_LINK}
+                href={tgLink(
+                  `Здравствуйте! Заинтересовал пакет «${plan.name}» (${formatPrice(plan.priceSom, currency)}, ${plan.time}) по предложению ${documentId}${client ? ` для ${client}` : ''}. Готов обсудить детали.`
+                )}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => trackClick('plan', plan.id, plan.name)}
                 className={`${styles.planBtn} ${
                   plan.featured ? styles.planBtnPrimary : styles.planBtnSecondary
                 }`}
               >
                 Выбрать →
               </a>
+              {slug && (
+                <a
+                  href={`/kp/${slug}/invoice/${plan.id}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.planInvoiceLink}
+                >
+                  <DownloadIcon size={12} /> Скачать счёт PDF
+                </a>
+              )}
             </div>
           ))}
         </div>
@@ -385,9 +428,12 @@ export default function KPContent({
             </div>
           </div>
           <a
-            href={TELEGRAM_LINK}
+            href={tgLink(
+              `Здравствуйте! Хочу обсудить предложение ${documentId}${client ? ` для ${client}` : ''}. У меня есть вопросы по пакетам.`
+            )}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() => trackClick('footer')}
             className={styles.footerBtn}
           >
             Обсудить проект →
@@ -449,9 +495,12 @@ export default function KPContent({
       </div>
 
       <a
-        href={TELEGRAM_LINK}
+        href={tgLink(
+          `Здравствуйте! Хочу обсудить предложение ${documentId}${client ? ` для ${client}` : ''}.`
+        )}
         target="_blank"
         rel="noopener noreferrer"
+        onClick={() => trackClick('sticky')}
         className={`${styles.stickyCta} ${styles.noPrint}`}
         aria-label="Обсудить проект в Telegram"
       >
