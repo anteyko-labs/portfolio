@@ -15,6 +15,7 @@ import Image from "next/image";
 import type { FlagshipCase } from "@/lib/cases-data";
 import { flagshipCases } from "@/lib/cases-data";
 import NextLink from "next/link";
+import { CaseBottomCTA } from "@/components/case-bottom-cta";
 
 // Sticky Summary Rail component
 function CaseSummaryRail({ caseItem, language, t }: { caseItem: FlagshipCase; language: "en" | "ru"; t: (key: string) => string }) {
@@ -810,6 +811,9 @@ export function CaseDetailContent({ caseItem }: { caseItem: FlagshipCase }) {
           )}
         </div>
       </Section>
+
+      {/* Universal bottom CTA */}
+      <CaseBottomCTA />
 
       {/* Fullscreen lightbox for screenshots */}
       {hasScreenshots && (

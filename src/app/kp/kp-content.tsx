@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import styles from './kp.module.css';
 import {
   WHY_ITEMS,
@@ -71,15 +71,16 @@ export default function KPContent({
   const showcaseCase = SHOWCASE_CASES[template.id];
   const documentId = useMemo(() => docId(client), [client]);
 
-  const today = useMemo(
-    () =>
+  const [today, setToday] = useState<string | null>(null);
+  useEffect(() => {
+    setToday(
       new Date().toLocaleDateString('ru-RU', {
         day: 'numeric',
         month: 'long',
         year: 'numeric',
-      }),
-    []
-  );
+      })
+    );
+  }, []);
 
   const validUntilFormatted = useMemo(() => formatDate(validUntil), [validUntil]);
 
@@ -158,7 +159,7 @@ export default function KPContent({
           <div className={styles.headerAccent} />
           <div className={styles.logoRow}>
             <div className={styles.logo}>ANTEYKO · DEVELOPMENT STUDIO</div>
-            <div className={styles.docMeta}>{documentId} · {today}</div>
+            <div className={styles.docMeta}>{documentId}{today ? ` · ${today}` : ''}</div>
           </div>
           {client && (
             <div className={styles.clientLine}>Подготовлено для: {client}</div>
@@ -256,7 +257,7 @@ export default function KPContent({
               </ul>
               <a
                 href={tgLink(
-                  `Здравствуйте! Заинтересовал пакет «${plan.name}» (${formatPrice(plan.priceSom, currency)}, ${plan.time}) по предложению ${documentId}${client ? ` для ${client}` : ''}. Готов обсудить детали.`
+                  `Здравствуйте! Заинтересовал пакет «${plan.name}» (${formatPrice(plan.priceSom, currency)}, ${plan.time}) по предложению ${documentId}${client ? ` (клиент: ${client})` : ''}. Готов обсудить детали.`
                 )}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -457,7 +458,7 @@ export default function KPContent({
           </div>
           <a
             href={tgLink(
-              `Здравствуйте! Хочу обсудить предложение ${documentId}${client ? ` для ${client}` : ''}. У меня есть вопросы по пакетам.`
+              `Здравствуйте! Хочу обсудить предложение ${documentId}${client ? ` (клиент: ${client})` : ''}. У меня есть вопросы по пакетам.`
             )}
             target="_blank"
             rel="noopener noreferrer"
@@ -524,7 +525,7 @@ export default function KPContent({
 
       <a
         href={tgLink(
-          `Здравствуйте! Хочу обсудить предложение ${documentId}${client ? ` для ${client}` : ''}.`
+          `Здравствуйте! Хочу обсудить предложение ${documentId}${client ? ` (клиент: ${client})` : ''}.`
         )}
         target="_blank"
         rel="noopener noreferrer"

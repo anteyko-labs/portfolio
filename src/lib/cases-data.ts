@@ -527,7 +527,7 @@ const _flagshipCases: FlagshipCase[] = [
     id: "case-10",
     slug: "multi-location-restaurant-management",
     category: "product",
-    year: 2026,
+    year: 2024,
     title: {
       en: "Restaurant Order & Inventory Management System (end\u2011to\u2011end)",
       ru: "Система учёта заказов и ингредиентов для ресторана (end\u2011to\u2011end)",
@@ -1037,6 +1037,7 @@ const _flagshipCases: FlagshipCase[] = [
         "Information architecture validated via mind map before any visual design",
         "Usability testing with real users before frontend handoff",
         "Mobile-first responsive approach for all 6 modules",
+        "Enterprise client anonymized under NDA — internal product naming and exact financial data remain confidential",
       ],
       ru: [
         "ACID\u2011совместимый транзакционный леджер — каждая финансовая операция должна быть атомарной и проверяемой",
@@ -1048,6 +1049,7 @@ const _flagshipCases: FlagshipCase[] = [
         "Информационная архитектура валидирована через mind map до начала визуального дизайна",
         "Юзабилити\u2011тестирование с реальными пользователями перед передачей фронтенда",
         "Mobile\u2011first отзывчивый подход для всех 6 модулей",
+        "Enterprise\u2011клиент анонимизирован по NDA \u2014 внутреннее наименование продукта и точные финансовые данные конфиденциальны",
       ],
     },
     solution: {
@@ -1151,7 +1153,7 @@ const _flagshipCases: FlagshipCase[] = [
     id: "case-7",
     slug: "local-food-delivery-platform",
     category: "product",
-    year: 2021,
+    year: 2024,
     title: {
       en: "LocalFood: Peer\u2011to\u2011Peer Home\u2011Cooked Food Delivery Platform (iOS + Backend)",
       ru: "LocalFood: P2P\u2011платформа доставки домашней еды от соседей (iOS + бэкенд)",
@@ -1887,12 +1889,14 @@ const _flagshipCases: FlagshipCase[] = [
         "15+ document types (invoices, receipts, contracts)",
         "Multi-currency and multi-language support",
         "SOX compliance requirements",
+        "Client anonymized under NDA — exact business metrics, subsidiary names, and partner identity remain confidential",
       ],
       ru: [
         "23 дочерние компании с разными планами счетов",
         "15+ типов документов (счета, чеки, контракты)",
         "Мультивалютность и мультиязычность",
         "Требования SOX compliance",
+        "Клиент анонимизирован по NDA — точные бизнес‑метрики, названия дочерних компаний и данные партнёра конфиденциальны",
       ],
     },
     solution: {
@@ -1962,7 +1966,7 @@ const _flagshipCases: FlagshipCase[] = [
     id: "case-12",
     slug: "analytics-pro-enterprise-bi",
     category: "product",
-    year: 2021,
+    year: 2024,
     title: {
       en: "AnalyticsPro Enterprise: BI Platform with Predictive Modeling",
       ru: "AnalyticsPro Enterprise: BI-платформа с предиктивным моделированием",
@@ -1990,12 +1994,14 @@ const _flagshipCases: FlagshipCase[] = [
         "Sub-3-second report generation",
         "Role-based access for 500+ users",
         "On-premise and cloud deployment options",
+        "Enterprise clients anonymized under NDA — exact client names and proprietary data models remain confidential",
       ],
       ru: [
         "45+ разных типов источников данных",
         "Генерация отчётов менее 3 секунд",
         "Ролевой доступ для 500+ пользователей",
         "Варианты развёртывания on-premise и cloud",
+        "Enterprise-клиенты анонимизированы по NDA — точные названия клиентов и проприетарные модели данных конфиденциальны",
       ],
     },
     solution: {

@@ -17,6 +17,7 @@ import {
   getRelatedFlagshipCases,
   microCases,
 } from "@/lib/cases-data";
+import { CaseBottomCTA } from "@/components/case-bottom-cta";
 
 interface MicroCaseDetailContentProps {
   caseItem: MicroCase;
@@ -289,6 +290,9 @@ export function MicroCaseDetailContent({ caseItem }: MicroCaseDetailContentProps
           </ButtonLink>
         </div>
       </Section>
+
+      {/* Universal bottom CTA */}
+      <CaseBottomCTA />
     </>
   );
 }

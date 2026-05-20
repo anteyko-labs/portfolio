@@ -6,7 +6,7 @@ import { ButtonLink } from "@/components/ui/link";
 import { MagneticButton } from "@/components/ui/magnetic-button";
 
 export function FinalCTASection() {
-  const { t, language } = useLanguage();
+  const { language } = useLanguage();
 
   return (
     <Section background="gradient" padding="xl" className="relative final-cta-section overflow-hidden">
@@ -44,17 +44,23 @@ export function FinalCTASection() {
         <div className="max-w-xl lg:max-w-2xl lg:text-left">
           <AnimatedItem>
             <h2 className="text-heading-xl sm:text-display-sm md:text-display-md font-display text-text-primary leading-tight">
-              {t("cta.finalLine1")}
+              {language === "en"
+                ? "Not sure if we're a fit?"
+                : "Не уверены, что мы подходим?"}
               <br />
-              <span className="text-text-secondary font-normal">{t("cta.finalLine2")}</span>
+              <span className="text-text-secondary font-normal">
+                {language === "en"
+                  ? "Let's find out in one call."
+                  : "Давайте проверим за один звонок."}
+              </span>
             </h2>
           </AnimatedItem>
 
           <AnimatedItem delay={0.1}>
             <p className="mt-6 text-body-lg text-text-secondary">
               {language === "en"
-                ? "Tell us about your project. We'll review it and get back with an estimate within 24 hours."
-                : "Расскажите о вашем проекте. Мы рассмотрим его и вернёмся с оценкой в течение 24 часов."}
+                ? "20 minutes — we'll discuss your task and give an honest assessment. No strings attached."
+                : "20 минут — обсудим вашу задачу, дадим честную оценку. Без обязательств."}
             </p>
           </AnimatedItem>
 
@@ -83,12 +89,16 @@ export function FinalCTASection() {
                   }
                   iconPosition="right"
                 >
-                  {t("cta.finalAction")}
+                  {language === "en"
+                    ? "Book a 20-min call"
+                    : "Записаться на 20-мин звонок"}
                 </ButtonLink>
               </MagneticButton>
               <MagneticButton className="inline-flex">
-                <ButtonLink href="/cases" buttonVariant="secondary" size="lg">
-                  {language === "en" ? "View our work" : "Смотреть кейсы"}
+                <ButtonLink href="/process" buttonVariant="secondary" size="lg">
+                  {language === "en"
+                    ? "See how we work"
+                    : "Как мы работаем"}
                 </ButtonLink>
               </MagneticButton>
             </div>
@@ -108,7 +118,9 @@ export function FinalCTASection() {
                   clipRule="evenodd"
                 />
               </svg>
-              {t("hero.trustLine")}
+              {language === "en"
+                ? "No commitments. No upsell. Just an honest 20-minute chat."
+                : "Без обязательств. Без навязывания. Просто честный 20-минутный разговор."}
             </p>
           </AnimatedItem>
         </div>

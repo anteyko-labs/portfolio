@@ -11,7 +11,11 @@ export interface ContactSubmission {
   name: string;
   email: string;
   message: string;
+  utm?: Record<string, string>;
+  referer?: string;
 }
+
+const HOT_LEAD_BUDGETS = new Set(["medium", "large", "enterprise", "custom"]);
 
 // Human-readable labels for form values
 const PROJECT_TYPES: Record<string, string> = {
@@ -49,12 +53,20 @@ function label(map: Record<string, string>, key: string): string {
 }
 
 function formatTelegramMessage(s: ContactSubmission): string {
-  const lines = [
-    `🔔 Новая заявка с anteyko.com`,
-    ``,
-    `👤 Имя: ${s.name}`,
-    `📧 Email: ${s.email}`,
-  ];
+  const isHotLead = s.budget && HOT_LEAD_BUDGETS.has(s.budget);
+
+  const lines: string[] = [];
+
+  if (isHotLead) {
+    lines.push(`🔥 ГОРЯЧИЙ ЛИД`);
+    lines.push(`🔥 Горячая заявка с anteyko.com`);
+  } else {
+    lines.push(`🔔 Новая заявка с anteyko.com`);
+  }
+
+  lines.push(``);
+  lines.push(`👤 Имя: ${s.name}`);
+  lines.push(`📧 Email: ${s.email}`);
 
   if (s.projectType) lines.push(`📦 Тип проекта: ${label(PROJECT_TYPES, s.projectType)}`);
   if (s.stage) lines.push(`🚀 Стадия: ${label(STAGES, s.stage)}`);
@@ -65,6 +77,28 @@ function formatTelegramMessage(s: ContactSubmission): string {
     lines.push(``);
     lines.push(`💬 Сообщение:`);
     lines.push(s.message);
+  }
+
+  if (s.utm && Object.keys(s.utm).length > 0) {
+    const source = s.utm.utm_source || "—";
+    const medium = s.utm.utm_medium || "—";
+    const campaign = s.utm.utm_campaign || "—";
+    lines.push(``);
+    lines.push(`📡 UTM: ${source} / ${medium} / ${campaign}`);
+
+    const extras: string[] = [];
+    if (s.utm.utm_content) extras.push(`content=${s.utm.utm_content}`);
+    if (s.utm.utm_term) extras.push(`term=${s.utm.utm_term}`);
+    if (s.utm.gclid) extras.push(`gclid=${s.utm.gclid}`);
+    if (s.utm.fbclid) extras.push(`fbclid=${s.utm.fbclid}`);
+    if (extras.length > 0) {
+      lines.push(`   ${extras.join(" · ")}`);
+    }
+  }
+
+  if (s.referer) {
+    lines.push(``);
+    lines.push(`↩️ С: ${s.referer}`);
   }
 
   lines.push(``);
@@ -115,7 +149,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: true }, { status: 200 });
     }
 
-    const { projectType, stage, timeline, budget, name, email, message } = body;
+    const { projectType, stage, timeline, budget, name, email, message, utm } = body;
 
     if (!name || !email) {
       return NextResponse.json(
@@ -123,6 +157,32 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
+
+    // Parse UTM from payload (sanitize: only string values, known keys)
+    const allowedUtmKeys = new Set([
+      "utm_source",
+      "utm_medium",
+      "utm_campaign",
+      "utm_content",
+      "utm_term",
+      "gclid",
+      "fbclid",
+    ]);
+    let sanitizedUtm: Record<string, string> | undefined;
+    if (utm && typeof utm === "object" && !Array.isArray(utm)) {
+      const entries: [string, string][] = [];
+      for (const [key, value] of Object.entries(utm as Record<string, unknown>)) {
+        if (allowedUtmKeys.has(key) && typeof value === "string" && value.trim() !== "") {
+          entries.push([key, value.slice(0, 200)]);
+        }
+      }
+      if (entries.length > 0) {
+        sanitizedUtm = Object.fromEntries(entries);
+      }
+    }
+
+    // Capture referer from headers
+    const refererHeader = request.headers.get("referer") || undefined;
 
     const submission: ContactSubmission = {
       projectType: String(projectType || ""),
@@ -132,6 +192,8 @@ export async function POST(request: NextRequest) {
       name: String(name).trim(),
       email: String(email).trim(),
       message: String(message || "").trim(),
+      utm: sanitizedUtm,
+      referer: refererHeader,
     };
 
     // Log to Vercel Function Logs as backup

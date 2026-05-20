@@ -7,30 +7,8 @@ import { useLanguage } from "@/lib/language-context";
 import { useReducedMotion } from "@/lib/hooks";
 import { Button } from "@/components/ui/button";
 import { MagneticButton } from "@/components/ui/magnetic-button";
-import { useState, useEffect } from "react";
+import { Fragment } from "react";
 import { fadeInUp, staggerContainer } from "@/lib/motion";
-
-function HeroCounter({ value, suffix }: { value: string; suffix: string }) {
-  const [display, setDisplay] = useState(0);
-  useEffect(() => {
-    const target = parseInt(value);
-    const duration = 1200;
-    const start = performance.now();
-    const tick = (now: number) => {
-      const progress = Math.min((now - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 4);
-      setDisplay(Math.round(target * eased));
-      if (progress < 1) requestAnimationFrame(tick);
-    };
-    const timer = setTimeout(() => requestAnimationFrame(tick), 800);
-    return () => clearTimeout(timer);
-  }, [value]);
-  return (
-    <span className="text-3xl sm:text-4xl font-display font-bold text-text-primary tabular-nums">
-      {display}{suffix}
-    </span>
-  );
-}
 
 // Dynamic import for 3D scene with SSR disabled
 const HeroScene = dynamic(
@@ -108,9 +86,10 @@ export function HeroSection() {
           >
             <p className="text-body-sm sm:text-body-md text-accent-primary/70 tracking-[0.15em] uppercase font-medium">
               {taglineParts.map((part, i) => (
-                <span key={i} className="inline-block mr-3 last:mr-0">
-                  {part}
-                </span>
+                <Fragment key={i}>
+                  <span className="inline-block">{part}</span>
+                  {i < taglineParts.length - 1 ? " · " : ""}
+                </Fragment>
               ))}
             </p>
           </motion.div>
@@ -120,44 +99,46 @@ export function HeroSection() {
             className="text-[1.75rem] sm:text-[2.25rem] md:text-display-lg lg:text-display-xl font-display font-bold leading-[1.1] tracking-tight text-balance"
             variants={prefersReducedMotion ? {} : fadeInUp}
           >
-            {t("hero.titleAccent").split(" ").map((word, i) => (
-              <motion.span
-                key={`accent-${i}`}
-                className="text-accent-primary inline-block mr-[0.3em]"
-                initial={prefersReducedMotion ? {} : { opacity: 0, y: 20, filter: "blur(8px)" }}
-                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                transition={{ delay: 0.3 + i * 0.08, duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
-              >
-                {word}
-              </motion.span>
-            ))}
-            <br className="hidden sm:block" />{" "}
-            {t("hero.titleRest").split(" ").map((word, i) => (
-              <motion.span
-                key={`rest-${i}`}
-                className="text-text-primary inline-block mr-[0.3em]"
-                initial={prefersReducedMotion ? {} : { opacity: 0, y: 20, filter: "blur(8px)" }}
-                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                transition={{ delay: 0.5 + i * 0.06, duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
-              >
-                {word}
-              </motion.span>
-            ))}
+            {(() => {
+              const accentWords = t("hero.titleAccent").split(" ");
+              const restWords = t("hero.titleRest").split(" ");
+              return (
+                <>
+                  {accentWords.map((word, i) => (
+                    <Fragment key={`accent-${i}`}>
+                      <motion.span
+                        className="text-accent-primary inline-block"
+                        initial={prefersReducedMotion ? {} : { opacity: 0, y: 20, filter: "blur(8px)" }}
+                        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                        transition={{ delay: 0.3 + i * 0.08, duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+                      >
+                        {word}
+                      </motion.span>
+                      {i < accentWords.length - 1 ? " " : ""}
+                    </Fragment>
+                  ))}
+                  <br className="hidden sm:block" />{" "}
+                  {restWords.map((word, i) => (
+                    <Fragment key={`rest-${i}`}>
+                      <motion.span
+                        className="text-text-primary inline-block"
+                        initial={prefersReducedMotion ? {} : { opacity: 0, y: 20, filter: "blur(8px)" }}
+                        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                        transition={{ delay: 0.5 + i * 0.06, duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+                      >
+                        {word}
+                      </motion.span>
+                      {i < restWords.length - 1 ? " " : ""}
+                    </Fragment>
+                  ))}
+                </>
+              );
+            })()}
           </motion.h1>
-
-          {/* Metric — glass card with counter */}
-          <motion.div
-            className="mt-8 inline-flex items-center gap-3 bg-bg-elevated/50 backdrop-blur-sm border border-border/60 rounded-xl px-5 py-3"
-            variants={prefersReducedMotion ? {} : fadeInUp}
-          >
-            <HeroCounter value="24" suffix={language === "en" ? "h" : "\u00A0\u0447"} />
-            <span className="w-px h-6 bg-border/60" />
-            <span className="text-body-sm text-text-tertiary">{t("hero.heroMetricLabel")}</span>
-          </motion.div>
 
           {/* Subtitle — larger, balanced */}
           <motion.p
-            className="mt-5 text-body-lg md:text-[1.2rem] text-text-secondary max-w-xl leading-relaxed text-balance"
+            className="mt-8 text-body-lg md:text-[1.2rem] text-text-secondary max-w-xl leading-relaxed text-balance"
             variants={prefersReducedMotion ? {} : fadeInUp}
           >
             {t("hero.subtitle")}

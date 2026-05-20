@@ -57,15 +57,39 @@ export default async function KPSlugPage({
   const currency: Currency = entry.currency === 'usd' ? 'usd' : 'som';
   const template = getTemplate(entry.template);
 
+  // JSON-LD payload is built from static template/entry data (no user input),
+  // and JSON.stringify safely escapes all string values, so this dangerouslySetInnerHTML
+  // call cannot introduce XSS. </script> sequences are not possible in our content.
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Offer',
+    name: template.title,
+    description: template.subtitle,
+    provider: {
+      '@type': 'Organization',
+      name: 'Anteyko Labs',
+      url: 'https://anteyko.com',
+    },
+    priceCurrency: currency === 'usd' ? 'USD' : 'KGS',
+    ...(entry.validUntil ? { validThrough: entry.validUntil } : {}),
+  };
+
   return (
-    <KPContent
-      client={entry.client}
-      currency={currency}
-      template={template}
-      validUntil={entry.validUntil}
-      slug={slug}
-      intro={entry.intro}
-      brief={entry.brief}
-    />
+    <>
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger -- static data, see note above
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <KPContent
+        client={entry.client}
+        currency={currency}
+        template={template}
+        validUntil={entry.validUntil}
+        slug={slug}
+        intro={entry.intro}
+        brief={entry.brief}
+      />
+    </>
   );
 }
