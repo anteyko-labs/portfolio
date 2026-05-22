@@ -13,10 +13,10 @@ interface CardProps extends Omit<HTMLAttributes<HTMLDivElement>, "onAnimationSta
 }
 
 const variants = {
-  default: "bg-bg-secondary",
-  elevated: "bg-bg-elevated shadow-card",
+  default: "bg-bg-secondary border border-border",
+  elevated: "bg-bg-elevated border border-border shadow-glow-sm",
   bordered: "bg-bg-secondary border border-border",
-  gradient: "bg-gradient-to-br from-bg-secondary via-bg-tertiary to-bg-secondary border border-border/50",
+  gradient: "bg-gradient-to-br from-bg-secondary to-bg-tertiary border border-border",
 };
 
 const paddings = {

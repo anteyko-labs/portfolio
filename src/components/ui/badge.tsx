@@ -13,10 +13,10 @@ interface BadgeProps {
 
 const variants = {
   default: "bg-bg-tertiary text-text-secondary border-border",
-  primary: "bg-accent-glow text-accent-primary border-accent-primary/30",
-  success: "bg-success/10 text-success border-success/30",
-  warning: "bg-warning/10 text-warning border-warning/30",
-  info: "bg-accent-secondary/10 text-accent-secondary border-accent-secondary/30",
+  primary: "bg-accent-primary/10 text-accent-primary border-accent-primary/20",
+  success: "bg-success/10 text-success border-success/20",
+  warning: "bg-warning/10 text-warning border-warning/20",
+  info: "bg-accent-secondary/10 text-accent-secondary border-accent-secondary/20",
 };
 
 const sizes = {
@@ -51,10 +51,10 @@ interface CategoryBadgeProps {
 }
 
 const categoryColors = {
-  web: "bg-blue-500/10 text-blue-400 border-blue-500/30",
-  product: "bg-green-500/10 text-green-400 border-green-500/30",
-  web3: "bg-purple-500/10 text-purple-400 border-purple-500/30",
-  infrastructure: "bg-orange-500/10 text-orange-400 border-orange-500/30",
+  web: "bg-blue-500/10 text-blue-700 border-blue-500/20",
+  product: "bg-green-500/10 text-green-700 border-green-500/20",
+  web3: "bg-purple-500/10 text-purple-700 border-purple-500/20",
+  infrastructure: "bg-orange-500/10 text-orange-700 border-orange-500/20",
 };
 
 const categoryLabels = {

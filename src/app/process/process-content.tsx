@@ -27,9 +27,9 @@ export function ProcessContent() {
   };
 
   const stepCardClass = (index: number) => {
-    const base = "bg-bg-tertiary border border-border";
+    const base = "bg-bg-secondary border border-border";
     if (index === 0) return `${base} pl-5 md:pl-10 border-l-4 border-l-accent-primary`;
-    if (index === 1) return `${base} ring-1 ring-accent-primary/20`;
+    if (index === 1) return base;
     if (index === 2) return `${base} pt-8 border-t-4 border-t-accent-primary md:pt-10`;
     return `${base} pl-5 md:pl-10 border-l-4 border-l-success/50`;
   };
@@ -85,25 +85,19 @@ export function ProcessContent() {
             {steps.map((step, index) => (
               <motion.div key={step.number} variants={stepVariants(index)} id={`process-step-${step.number}`}>
                 <div className={`relative flex flex-col md:flex-row gap-6 md:gap-12 rounded-2xl p-5 md:p-10 ${stepCardClass(index)}`}>
-                  {/* Decorative per-step */}
-                  {index === 0 && <div className="absolute top-0 left-0 w-32 h-1 bg-gradient-to-r from-accent-primary to-transparent rounded-r-full" aria-hidden />}
-                  {index === 1 && <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-accent-primary/15 to-transparent rounded-bl-2xl" aria-hidden />}
-                  {index === 2 && <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-accent-primary to-transparent rounded-b-full" aria-hidden />}
-                  {index === 3 && <div className="absolute bottom-0 right-0 w-28 h-28 bg-success/10 rounded-tl-2xl" aria-hidden />}
+                  {/* Decorative per-step — flat accents, no glow/gradient */}
+                  {index === 0 && <div className="absolute top-0 left-0 w-32 h-1 bg-accent-primary/60 rounded-r-full" aria-hidden />}
+                  {index === 2 && <div className="absolute top-0 left-0 right-0 h-px bg-border" aria-hidden />}
 
                   <div className={`relative shrink-0 ${index % 2 === 1 ? "md:w-64" : "md:w-72"}`}>
-                    {index === 1 ? (
-                      <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-accent-primary/30 to-accent-secondary/20 border border-accent-primary/30 flex items-center justify-center mb-4 shadow-sm">
-                        <span className="text-heading-lg font-display font-bold text-accent-primary">{step.number}</span>
-                      </div>
-                    ) : index === 3 ? (
-                      <div className="w-14 h-14 rounded-2xl bg-success/15 border border-success/40 flex items-center justify-center mb-4">
+                    {index === 3 ? (
+                      <div className="w-14 h-14 rounded-2xl bg-success/10 border border-success/30 flex items-center justify-center mb-4">
                         <svg className="w-7 h-7 text-success" fill="currentColor" viewBox="0 0 20 20">
                           <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                         </svg>
                       </div>
                     ) : (
-                      <div className="w-14 h-14 rounded-2xl bg-accent-glow border border-accent-primary/30 flex items-center justify-center mb-4">
+                      <div className="w-14 h-14 rounded-2xl bg-accent-primary/10 border border-accent-primary/20 flex items-center justify-center mb-4">
                         <span className="text-heading-lg font-display font-bold text-accent-primary">{step.number}</span>
                       </div>
                     )}

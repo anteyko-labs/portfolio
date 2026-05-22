@@ -9,37 +9,12 @@ export function FinalCTASection() {
   const { language } = useLanguage();
 
   return (
-    <Section background="gradient" padding="xl" className="relative final-cta-section overflow-hidden">
-      {/* Background: grid + blobs + noise */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none final-cta-bg-grid" aria-hidden />
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] sm:w-[600px] sm:h-[600px] rounded-full bg-accent-primary/10 blur-2xl sm:blur-3xl animate-float-blob" />
-        <div className="blob blob-accent w-[400px] h-[400px] absolute -top-20 left-1/4 opacity-40 animate-float-blob" style={{ animationDelay: "-3s" }} />
-        <div className="blob blob-accent-sub w-[300px] h-[300px] absolute bottom-0 right-1/4 opacity-30 animate-float-blob" style={{ animationDelay: "-7s" }} />
-        {/* Large blob right side (desktop) for asymmetry */}
-        <div className="hidden lg:block absolute top-1/2 -translate-y-1/2 right-0 w-[500px] h-[500px] rounded-full bg-accent-primary/15 blur-3xl translate-x-1/4 animate-float-blob" style={{ animationDelay: "-5s" }} />
-        <div className="hidden lg:block absolute bottom-0 left-0 w-[280px] h-[280px] rounded-full bg-accent-secondary/20 blur-2xl -translate-x-1/4 animate-float-blob" style={{ animationDelay: "-2s" }} />
-      </div>
-      <div className="absolute inset-0 pointer-events-none final-cta-noise" aria-hidden />
-      {/* Floating particles */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden>
-        {Array.from({ length: 30 }).map((_, i) => (
-          <div
-            key={i}
-            className="particle hidden sm:block"
-            style={{
-              "--left": `${5 + (i * 37) % 90}%`,
-              "--delay": `${(i * 0.7) % 12}s`,
-              "--duration": `${8 + (i % 6) * 2}s`,
-              "--size": `${2 + (i % 3)}px`,
-              "--drift": `${-30 + (i % 7) * 10}px`,
-              "--opacity": `${0.2 + (i % 4) * 0.1}`,
-            } as React.CSSProperties}
-          />
-        ))}
-      </div>
+    <Section background="secondary" padding="xl" className="relative final-cta-section">
+      <div className="relative overflow-hidden rounded-3xl border border-border bg-bg-tertiary px-6 py-12 sm:px-12 sm:py-16 lg:px-16 lg:py-20">
+        {/* Background: subtle dot grid (dark dots on light) */}
+        <div className="absolute inset-0 pointer-events-none final-cta-bg-grid opacity-70" aria-hidden />
 
-      <div className="relative flex flex-col lg:flex-row lg:items-center lg:justify-between lg:gap-16">
+        <div className="relative flex flex-col lg:flex-row lg:items-center lg:justify-between lg:gap-16">
         {/* Left: content (asymmetric on desktop) */}
         <div className="max-w-xl lg:max-w-2xl lg:text-left">
           <AnimatedItem>
@@ -125,8 +100,9 @@ export function FinalCTASection() {
           </AnimatedItem>
         </div>
 
-        {/* Right: visual weight (empty on mobile, blob area on desktop) */}
-        <div className="hidden lg:block flex-1 max-w-md min-h-[320px]" aria-hidden />
+        {/* Right: visual balance (empty on mobile, spacer on desktop) */}
+        <div className="hidden lg:block flex-1 max-w-md min-h-[240px]" aria-hidden />
+        </div>
       </div>
     </Section>
   );

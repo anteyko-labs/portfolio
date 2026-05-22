@@ -36,9 +36,9 @@ const config: Config = {
         error: "#EF4444",
       },
       fontFamily: {
-        sans: ["var(--font-inter)", "system-ui", "sans-serif"],
-        display: ["var(--font-cabinet)", "var(--font-inter)", "system-ui", "sans-serif"],
-        mono: ["var(--font-jetbrains)", "monospace"],
+        sans: ["var(--font-manrope)", "system-ui", "sans-serif"],
+        display: ["var(--font-manrope)", "system-ui", "sans-serif"],
+        mono: ["var(--font-geist-mono)", "ui-monospace", "monospace"],
       },
       fontSize: {
         "display-xl": ["5rem", { lineHeight: "1.05", letterSpacing: "-0.03em" }],
@@ -71,11 +71,11 @@ const config: Config = {
         "noise": "url('/noise.svg')",
       },
       boxShadow: {
-        "glow-sm": "0 0 20px -5px rgba(99, 102, 241, 0.3)",
-        "glow-md": "0 0 40px -10px rgba(99, 102, 241, 0.4)",
-        "glow-lg": "0 0 60px -15px rgba(99, 102, 241, 0.5)",
-        "card": "0 4px 24px -4px rgba(0, 0, 0, 0.5)",
-        "card-hover": "0 8px 40px -8px rgba(0, 0, 0, 0.6)",
+        "glow-sm": "0 1px 2px rgba(10, 10, 10, 0.04), 0 4px 12px -4px rgba(10, 10, 10, 0.08)",
+        "glow-md": "0 2px 4px rgba(10, 10, 10, 0.04), 0 12px 32px -8px rgba(10, 10, 10, 0.1)",
+        "glow-lg": "0 4px 8px rgba(10, 10, 10, 0.05), 0 20px 48px -12px rgba(10, 10, 10, 0.14)",
+        "card": "0 1px 2px rgba(10, 10, 10, 0.04), 0 8px 24px -8px rgba(10, 10, 10, 0.1)",
+        "card-hover": "0 8px 32px -8px rgba(10, 10, 10, 0.12), 0 0 0 1px rgba(234, 234, 234, 1)",
       },
       animation: {
         "fade-in": "fadeIn 0.5s ease-out",

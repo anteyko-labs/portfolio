@@ -31,7 +31,7 @@ export function Footer() {
                   alt="Anteyko"
                   width={100}
                   height={24}
-                  className="h-5 w-auto brightness-90 hover:brightness-100 transition-all"
+                  className="h-5 w-auto invert opacity-90 hover:opacity-100 transition-opacity"
                 />
               </NextLink>
               <p className="mt-4 text-body-md text-text-secondary max-w-sm">

@@ -104,8 +104,8 @@ export function MicroCaseDetailContent({ caseItem }: MicroCaseDetailContentProps
                   {caseItem.outcome[language]}
                 </p>
               </div>
-              {/* Decorative gradient */}
-              <div className="absolute -top-20 -right-20 w-40 h-40 bg-accent-primary/10 rounded-full blur-3xl" />
+              {/* Decorative wash — neutral, subtle */}
+              <div className="absolute -top-20 -right-20 w-40 h-40 bg-text-primary/[0.03] rounded-full blur-3xl" />
             </Card>
           </motion.div>
 
@@ -169,26 +169,26 @@ export function MicroCaseDetailContent({ caseItem }: MicroCaseDetailContentProps
                     noiseHoverOpacity={0.03}
                     className="h-full"
                   >
-                    <div className="relative h-40 bg-gradient-to-br from-bg-tertiary via-bg-elevated to-bg-secondary overflow-hidden rounded-t-2xl">
+                    <div className="relative h-40 bg-bg-tertiary overflow-hidden rounded-t-2xl">
                       <div className="absolute top-4 left-4 z-10">
                         <CategoryBadge category={flagship.category} />
                       </div>
                       {flagship.artifactHint && (
-                        <div className="absolute top-4 right-4 z-10 px-3 py-1 rounded-lg border border-accent-primary/30 bg-bg-primary/80 backdrop-blur-sm text-caption font-mono text-accent-primary">
+                        <div className="absolute top-4 right-4 z-10 px-3 py-1 rounded-lg border border-border bg-bg-primary/90 backdrop-blur-sm text-caption font-mono text-accent-primary">
                           {flagship.artifactHint[language]}
                         </div>
                       )}
                       <div
-                        className="absolute inset-0 opacity-15"
+                        className="absolute inset-0 opacity-60"
                         style={{
                           backgroundImage: `
-                            linear-gradient(to right, rgba(99,102,241,0.2) 1px, transparent 1px),
-                            linear-gradient(to bottom, rgba(99,102,241,0.2) 1px, transparent 1px)
+                            linear-gradient(to right, rgba(10,10,10,0.05) 1px, transparent 1px),
+                            linear-gradient(to bottom, rgba(10,10,10,0.05) 1px, transparent 1px)
                           `,
                           backgroundSize: "24px 24px",
                         }}
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-bg-secondary/80 to-transparent" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-bg-secondary/60 to-transparent" />
                     </div>
                     <div className="p-6">
                       <h3 className="text-heading-md font-medium text-text-primary mb-2 group-hover:text-accent-primary transition-colors">

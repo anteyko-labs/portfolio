@@ -21,7 +21,7 @@ export function PrincipleCard({
   return (
     <div
       className={clsx(
-        "rounded-2xl border border-border bg-bg-tertiary/60 p-6",
+        "rounded-2xl border border-border bg-bg-secondary p-6",
         "transition-colors hover:border-border-hover",
         className
       )}

@@ -115,9 +115,6 @@ export function WhyUsSection() {
 
   return (
     <Section background="primary" padding="xl" className="relative">
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="blob blob-accent w-[320px] h-[320px] absolute top-1/4 -right-20 opacity-30 animate-float-blob" />
-      </div>
       <SectionHeader
         title={t("whyUs.title")}
         eyebrow={language === "en" ? "Advantages" : "Преимущества"}
@@ -149,11 +146,11 @@ export function WhyUsSection() {
             transition={{ duration: 0.5, delay: index * 0.08, ease: [0.25, 0.46, 0.45, 0.94] }}
           >
             <div className="flex gap-4 group">
-              <div className="shrink-0 w-12 h-12 rounded-xl bg-bg-secondary border border-border flex items-center justify-center text-accent-primary transition-all duration-300 group-hover:border-accent-primary/50 group-hover:bg-accent-glow">
+              <div className="shrink-0 w-12 h-12 rounded-xl bg-bg-secondary border border-border flex items-center justify-center text-accent-primary transition-all duration-300 group-hover:border-border-hover group-hover:bg-bg-tertiary group-hover:shadow-glow-sm">
                 {icons[index]}
               </div>
               <div>
-                <h3 className="text-heading-sm font-medium text-text-primary mb-1">
+                <h3 className="text-heading-sm font-semibold text-text-primary mb-1">
                   {item.title[language]}
                 </h3>
                 <p className="text-body-md text-text-secondary">

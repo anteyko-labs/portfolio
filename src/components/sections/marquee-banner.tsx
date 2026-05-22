@@ -20,18 +20,18 @@ export function MarqueeBanner() {
 
   return (
     <section
-      className="relative py-4 overflow-hidden border-y border-border/50 bg-bg-secondary/80"
+      className="relative py-5 overflow-hidden border-y border-border bg-bg-secondary"
       aria-hidden="true"
     >
       <div
         className={prefersReducedMotion ? "flex justify-center" : "marquee-track flex whitespace-nowrap"}
         style={prefersReducedMotion ? {} : { willChange: "transform" }}
       >
-        <span className="marquee-content inline-block text-body-md font-medium text-text-secondary tracking-wider px-4">
+        <span className="marquee-content inline-block font-mono text-caption uppercase text-text-tertiary tracking-[0.2em] px-4">
           {content}
         </span>
         {!prefersReducedMotion && (
-          <span className="marquee-content inline-block text-body-md font-medium text-text-secondary tracking-wider px-4" aria-hidden>
+          <span className="marquee-content inline-block font-mono text-caption uppercase text-text-tertiary tracking-[0.2em] px-4" aria-hidden>
             {content}
           </span>
         )}

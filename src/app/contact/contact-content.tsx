@@ -266,7 +266,7 @@ export function ContactContent() {
                   aria-valuenow={completion}
                   aria-valuemin={0}
                   aria-valuemax={100}
-                  className="h-full bg-gradient-to-r from-accent-primary to-accent-secondary transition-all duration-300 ease-out progress-shimmer"
+                  className="h-full bg-accent-primary transition-all duration-300 ease-out progress-shimmer"
                   style={{ width: `${completion}%` }}
                 />
               </div>

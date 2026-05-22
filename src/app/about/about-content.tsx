@@ -99,11 +99,11 @@ export function AboutContent() {
         subtitle={about.subtitle[language]}
         eyebrow={language === "en" ? "About" : "О нас"}
         rightSlot={
-          <div className="rounded-2xl border border-border bg-bg-secondary/80 p-6 relative overflow-hidden">
-            <div className="absolute inset-0 opacity-10" style={{
+          <div className="rounded-2xl border border-border bg-bg-secondary p-6 relative overflow-hidden shadow-glow-sm">
+            <div className="absolute inset-0 opacity-[0.6]" style={{
               backgroundImage: `
-                linear-gradient(to right, rgba(99,102,241,0.3) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(99,102,241,0.3) 1px, transparent 1px)
+                linear-gradient(to right, rgba(10,10,10,0.04) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(10,10,10,0.04) 1px, transparent 1px)
               `,
               backgroundSize: '20px 20px',
             }} />
@@ -122,7 +122,6 @@ export function AboutContent() {
                 </div>
               ))}
             </div>
-            <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-bl from-accent-primary/20 to-transparent" />
           </div>
         }
       />
@@ -137,7 +136,7 @@ export function AboutContent() {
               { label: language === "en" ? "Who we work with" : "С кем мы работаем", text: story.who[language] },
             ].map((block, i) => (
               <AnimatedItem key={block.label} delay={i * 0.08}>
-                <div className="rounded-xl border border-border/60 bg-bg-primary/40 p-6">
+                <div className="rounded-2xl border border-border bg-bg-primary p-6 transition-colors hover:border-border-hover">
                   <p className="text-caption uppercase tracking-wider text-accent-primary mb-3 font-medium">
                     {block.label}
                   </p>
@@ -178,7 +177,7 @@ export function AboutContent() {
               {industries.items.map((ind) => (
                 <div
                   key={ind.icon}
-                  className="rounded-xl border border-border bg-bg-tertiary/60 p-5 text-center hover:border-accent-primary/30 hover:-translate-y-1 hover:shadow-lg hover:shadow-accent-primary/5 transition-all duration-300"
+                  className="rounded-2xl border border-border bg-bg-secondary p-5 text-center hover:border-border-hover hover:-translate-y-1 hover:shadow-glow-sm transition-all duration-300"
                 >
                   <div className="w-10 h-10 rounded-lg bg-accent-primary/10 border border-accent-primary/20 flex items-center justify-center mx-auto mb-3 text-accent-primary">
                     {industryIcons[ind.icon]}
@@ -196,14 +195,14 @@ export function AboutContent() {
 
           {/* Toolchain */}
           <AnimatedItem delay={0.2}>
-            <div className="p-5 sm:p-8 bg-bg-tertiary rounded-2xl border border-border relative overflow-hidden">
-              <div className="absolute inset-0 opacity-5" style={{
-                backgroundImage: `radial-gradient(circle at 1px 1px, rgba(255,255,255,0.15) 1px, transparent 0)`,
+            <div className="p-5 sm:p-8 bg-bg-secondary rounded-2xl border border-border relative overflow-hidden">
+              <div className="absolute inset-0 opacity-[0.5]" style={{
+                backgroundImage: `radial-gradient(circle at 1px 1px, rgba(10,10,10,0.05) 1px, transparent 0)`,
                 backgroundSize: '24px 24px',
               }} />
               <div className="relative">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 rounded-lg bg-accent-primary/10 border border-accent-primary/30 flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-lg bg-accent-primary/10 border border-accent-primary/20 flex items-center justify-center">
                     <svg className="w-5 h-5 text-accent-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                     </svg>
@@ -214,7 +213,7 @@ export function AboutContent() {
                 </div>
                 <div className="grid sm:grid-cols-2 gap-3">
                   {about.toolchain.items.map((item) => (
-                    <div key={`tool-${item.title.en.toLowerCase().replace(/\s+/g, '-')}`} className="group rounded-xl border border-border bg-bg-secondary/60 p-4 hover:border-accent-primary/30 transition-colors">
+                    <div key={`tool-${item.title.en.toLowerCase().replace(/\s+/g, '-')}`} className="group rounded-xl border border-border bg-bg-primary p-4 hover:border-border-hover transition-colors">
                       <div className="flex items-start gap-3">
                         <div className="w-2 h-2 rounded-full bg-success mt-2 shrink-0" />
                         <div className="min-w-0">
@@ -235,8 +234,8 @@ export function AboutContent() {
 
           {/* Geography */}
           <AnimatedItem delay={0.3}>
-            <div className="p-5 sm:p-8 bg-bg-tertiary rounded-2xl border border-border relative overflow-hidden">
-              <div className="absolute top-4 right-4 w-24 h-24 opacity-10">
+            <div className="p-5 sm:p-8 bg-bg-secondary rounded-2xl border border-border relative overflow-hidden">
+              <div className="absolute top-4 right-4 w-24 h-24 opacity-[0.08]">
                 <svg className="w-full h-full text-accent-primary" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
                 </svg>
@@ -255,7 +254,7 @@ export function AboutContent() {
                     { city: language === "en" ? "Moscow" : "Москва", role: language === "en" ? "Clients" : "Клиенты", tz: "GMT+3" },
                     { city: language === "en" ? "Remote" : "Удалённо", role: language === "en" ? "Worldwide" : "По миру", tz: "Async" },
                   ].map((loc) => (
-                    <div key={loc.city} className="rounded-lg border border-border/60 bg-bg-secondary/50 p-3 text-center">
+                    <div key={loc.city} className="rounded-xl border border-border bg-bg-primary p-3 text-center">
                       <p className="text-body-sm font-medium text-text-primary">{loc.city}</p>
                       <p className="text-caption text-text-tertiary">{loc.role}</p>
                       <p className="text-caption text-accent-primary font-mono mt-1">{loc.tz}</p>
@@ -268,10 +267,10 @@ export function AboutContent() {
 
           {/* Team */}
           <AnimatedItem delay={0.35}>
-            <div className="rounded-xl border border-border bg-bg-secondary/60 p-6 flex items-center gap-5">
+            <div className="rounded-2xl border border-border bg-bg-secondary p-6 flex items-center gap-5">
               <div className="flex -space-x-3 shrink-0">
                 {[0, 1, 2, 3, 4].map((i) => (
-                  <div key={i} className="w-10 h-10 rounded-full bg-bg-tertiary border-2 border-bg-secondary flex items-center justify-center">
+                  <div key={i} className="w-10 h-10 rounded-full bg-bg-tertiary border-2 border-bg-primary flex items-center justify-center">
                     <svg className="w-4 h-4 text-text-tertiary" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                       <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
                     </svg>

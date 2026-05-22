@@ -52,18 +52,19 @@ export function WhatWeBuildSection() {
           >
             <NextLink href="/services" className="block h-full">
               <TiltCard
-                variant="gradient"
+                variant="bordered"
                 padding="lg"
-                hoverGradientBorder
-                noiseHover
-                className="h-full group"
+                hoverGradientBorder={false}
+                noiseHover={false}
+                tiltAmount={4}
+                className="h-full group !bg-bg-primary !border-border transition-transform duration-300 hover:-translate-y-1"
               >
                 <div
                   className="text-accent-primary mb-6"
                 >
                   {icons[index]}
                 </div>
-                <h3 className="text-heading-lg font-medium text-text-primary mb-3 group-hover:text-accent-primary transition-colors">
+                <h3 className="text-heading-lg font-semibold text-text-primary mb-3 group-hover:text-accent-primary transition-colors">
                   {item.title[language]}
                 </h3>
                 <p className="text-body-md text-text-secondary pb-6">

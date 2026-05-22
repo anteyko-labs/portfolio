@@ -46,7 +46,7 @@ export function TiltCard({
 
   const cardFaceClasses =
     variant === "gradient"
-      ? "bg-gradient-to-br from-bg-secondary via-bg-tertiary to-bg-secondary border border-border/50"
+      ? "bg-gradient-to-br from-bg-secondary to-bg-tertiary border border-border"
       : "bg-bg-secondary border border-border";
 
   return (
@@ -55,8 +55,6 @@ export function TiltCard({
       className={clsx(
         "group rounded-2xl transition-shadow duration-300 cursor-pointer",
         "hover:shadow-card-hover hover:border-border-hover",
-        hoverGradientBorder &&
-          "hover:shadow-[0_0_0_1px_rgba(99,102,241,0.25),0_0_24px_-4px_rgba(99,102,241,0.2),0_8px_40px_-8px_rgba(0,0,0,0.6)]",
         className
       )}
       style={{ perspective: 1000 }}
@@ -75,14 +73,16 @@ export function TiltCard({
         }}
         transition={{ type: "spring", stiffness: 300, damping: 25 }}
       >
-        {/* Cursor-following glow */}
-        <div
-          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10 rounded-2xl"
-          style={{
-            background: `radial-gradient(circle at ${(mouse.x + 1) * 50}% ${(mouse.y + 1) * 50}%, rgba(99,102,241,0.12) 0%, transparent 60%)`,
-          }}
-          aria-hidden
-        />
+        {/* Cursor-following highlight — subtle neutral sheen */}
+        {hoverGradientBorder && (
+          <div
+            className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10 rounded-2xl"
+            style={{
+              background: `radial-gradient(circle at ${(mouse.x + 1) * 50}% ${(mouse.y + 1) * 50}%, rgba(10,10,10,0.04) 0%, transparent 60%)`,
+            }}
+            aria-hidden
+          />
+        )}
         {noiseHover && (
           <div
             className="absolute inset-0 opacity-0 group-hover:opacity-[var(--noise-opacity)] transition-opacity duration-300 pointer-events-none rounded-2xl z-20"

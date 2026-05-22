@@ -50,16 +50,16 @@ export function FeaturedCasesSection() {
               return (
                 <>
                   <div
-                    className="absolute inset-0 opacity-20"
+                    className="absolute inset-0 opacity-[0.6]"
                     style={{
                       backgroundImage: `
-                        linear-gradient(to right, rgba(255,255,255,0.08) 1px, transparent 1px),
-                        linear-gradient(to bottom, rgba(255,255,255,0.08) 1px, transparent 1px)
+                        linear-gradient(to right, rgba(10,10,10,0.04) 1px, transparent 1px),
+                        linear-gradient(to bottom, rgba(10,10,10,0.04) 1px, transparent 1px)
                       `,
                       backgroundSize: "28px 28px",
                     }}
                   />
-                  <div className="absolute top-6 right-6 w-24 h-24 opacity-40">
+                  <div className="absolute top-6 right-6 w-24 h-24 opacity-50">
                     <svg viewBox="0 0 100 100" className="w-full h-full text-accent-primary">
                       <circle cx="20" cy="20" r="4" fill="currentColor" />
                       <circle cx="50" cy="35" r="4" fill="currentColor" />
@@ -70,7 +70,7 @@ export function FeaturedCasesSection() {
                       <path d="M50 35 L30 60 L70 70" stroke="currentColor" strokeWidth="1" fill="none" opacity="0.6" />
                     </svg>
                   </div>
-                  <div className="absolute bottom-4 right-4 px-2.5 py-1 rounded-md bg-bg-elevated/80 border border-border text-caption font-mono text-accent-primary">
+                  <div className="absolute bottom-4 right-4 px-2.5 py-1 rounded-md bg-bg-primary/90 border border-border text-caption font-mono text-accent-primary">
                     {t("cases.scenariosCount")}
                   </div>
                 </>
@@ -79,9 +79,9 @@ export function FeaturedCasesSection() {
             if (index === 1) {
               return (
                 <div
-                  className="absolute inset-0 opacity-[0.07]"
+                  className="absolute inset-0 opacity-[0.5]"
                   style={{
-                    backgroundImage: "repeating-linear-gradient(-45deg, transparent, transparent 8px, rgba(255,255,255,0.15) 8px, rgba(255,255,255,0.15) 10px)",
+                    backgroundImage: "repeating-linear-gradient(-45deg, transparent, transparent 8px, rgba(10,10,10,0.04) 8px, rgba(10,10,10,0.04) 10px)",
                   }}
                 />
               );
@@ -89,9 +89,9 @@ export function FeaturedCasesSection() {
             if (index === 2) {
               return (
                 <div
-                  className="absolute inset-0 opacity-30"
+                  className="absolute inset-0 opacity-[0.7]"
                   style={{
-                    backgroundImage: "radial-gradient(circle at 20% 80%, rgba(99,102,241,0.25) 0%, transparent 50%)",
+                    backgroundImage: "radial-gradient(circle at 20% 80%, rgba(79,70,229,0.06) 0%, transparent 55%)",
                   }}
                 />
               );
@@ -99,18 +99,18 @@ export function FeaturedCasesSection() {
             if (index === 3) {
               return (
                 <div
-                  className="absolute inset-0 opacity-20"
+                  className="absolute inset-0 opacity-[0.6]"
                   style={{
-                    backgroundImage: "radial-gradient(circle 1px at 1px 1px, rgba(255,255,255,0.4), transparent 0)",
+                    backgroundImage: "radial-gradient(circle 1px at 1px 1px, rgba(10,10,10,0.08), transparent 0)",
                     backgroundSize: "16px 16px",
                   }}
                 />
               );
             }
             return (
-              <div className="absolute inset-0 opacity-25">
-                <div className="absolute top-4 right-4 w-28 h-28 rounded-full bg-accent-primary/20 blur-2xl" />
-                <div className="absolute bottom-4 left-4 w-20 h-20 rounded-full bg-accent-secondary/15 blur-xl" />
+              <div className="absolute inset-0">
+                <div className="absolute top-4 right-4 w-28 h-28 rounded-full bg-accent-primary/[0.06] blur-2xl" />
+                <div className="absolute bottom-4 left-4 w-20 h-20 rounded-full bg-accent-secondary/[0.05] blur-xl" />
               </div>
             );
           };
@@ -129,20 +129,19 @@ export function FeaturedCasesSection() {
                 <TiltCard
                   padding="none"
                   variant="bordered"
-                  hoverGradientBorder
-                  noiseHover
-                  tiltAmount={12}
-                  noiseHoverOpacity={0.05}
-                  className="h-full overflow-hidden"
+                  hoverGradientBorder={false}
+                  noiseHover={false}
+                  tiltAmount={8}
+                  className="h-full overflow-hidden shadow-glow-sm"
                 >
-                  <div className={`relative ${cardHeights} bg-gradient-to-br from-bg-tertiary via-bg-elevated to-bg-secondary overflow-hidden`}>
+                  <div className={`relative ${cardHeights} bg-bg-tertiary overflow-hidden`}>
                     {caseItem.imageUrl ? (
                       caseItem.screenshotLayout === "mobile" ? (
                         <>
                           <div className="absolute inset-0 flex items-center justify-center">
-                            <div className="absolute inset-0 bg-gradient-to-br from-bg-tertiary via-bg-elevated to-bg-primary" />
-                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 rounded-full bg-accent-primary/10 blur-3xl" />
-                            <div className={`relative ${isFeatured ? "w-[130px]" : "w-[100px]"} h-[85%] rounded-2xl overflow-hidden border-2 border-white/10 shadow-2xl shadow-black/40 transition-transform duration-700 group-hover:scale-105`}>
+                            <div className="absolute inset-0 bg-gradient-to-br from-bg-tertiary via-bg-secondary to-bg-primary" />
+                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 rounded-full bg-accent-primary/[0.06] blur-3xl" />
+                            <div className={`relative ${isFeatured ? "w-[130px]" : "w-[100px]"} h-[85%] rounded-2xl overflow-hidden border border-border shadow-[0_8px_24px_-8px_rgba(10,10,10,0.18)] transition-transform duration-700 group-hover:scale-105`}>
                               <Image
                                 src={caseItem.imageUrl}
                                 alt={caseItem.title[language]}
@@ -153,7 +152,7 @@ export function FeaturedCasesSection() {
                               />
                             </div>
                           </div>
-                          <div className="absolute inset-0 bg-gradient-to-t from-bg-secondary/80 via-transparent to-transparent" />
+                          <div className="absolute inset-0 bg-gradient-to-t from-bg-secondary/70 via-transparent to-transparent" />
                         </>
                       ) : (
                         <>
@@ -165,15 +164,15 @@ export function FeaturedCasesSection() {
                             className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
                             sizes={isFeatured ? "(max-width: 768px) 100vw, 66vw" : "(max-width: 768px) 100vw, 33vw"}
                           />
-                          <div className="absolute inset-0 bg-gradient-to-t from-bg-secondary/80 via-transparent to-transparent" />
+                          <div className="absolute inset-0 bg-gradient-to-t from-bg-secondary/70 via-transparent to-transparent" />
                         </>
                       )
                     ) : (
                       <>
                         {!isFeatured && (
-                          <div className="absolute inset-0 opacity-30">
-                            <div className="absolute top-4 right-4 w-32 h-32 rounded-full bg-accent-primary/20 blur-3xl" />
-                            <div className="absolute bottom-4 left-4 w-24 h-24 rounded-full bg-accent-secondary/20 blur-2xl" />
+                          <div className="absolute inset-0">
+                            <div className="absolute top-4 right-4 w-32 h-32 rounded-full bg-accent-primary/[0.06] blur-3xl" />
+                            <div className="absolute bottom-4 left-4 w-24 h-24 rounded-full bg-accent-secondary/[0.05] blur-2xl" />
                           </div>
                         )}
                         {backgroundByIndex()}
@@ -181,14 +180,14 @@ export function FeaturedCasesSection() {
                     )}
                     <div className="absolute top-4 left-4 z-10 flex items-center gap-2">
                       <CategoryBadge category={caseItem.category} />
-                      <span className="px-2 py-0.5 rounded-md bg-bg-primary/70 backdrop-blur-sm border border-border/40 text-caption font-mono text-text-tertiary">
+                      <span className="px-2 py-0.5 rounded-md bg-bg-primary/80 backdrop-blur-sm border border-border text-caption font-mono text-text-tertiary">
                         {caseItem.year}
                       </span>
                     </div>
                   </div>
 
                   <div className={`p-6 pb-10 md:pb-12 ${isFeatured ? "md:p-8 md:pb-14" : ""}`}>
-                    <h3 className={`font-medium text-text-primary mb-2 group-hover:text-accent-primary transition-colors duration-300 ${isFeatured ? "text-heading-lg md:text-heading-xl" : "text-heading-md"}`}>
+                    <h3 className={`font-display font-semibold text-text-primary mb-2 group-hover:text-accent-primary transition-colors duration-300 ${isFeatured ? "text-heading-lg md:text-heading-xl" : "text-heading-md"}`}>
                       {caseItem.title[language]}
                     </h3>
                     <p className={`text-text-secondary line-clamp-2 ${isFeatured ? "text-body-md" : "text-body-sm"}`}>

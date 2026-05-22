@@ -94,10 +94,10 @@ export function ServicesContent() {
           {packages.map((pkg, index) => (
             <AnimatedItem key={pkg.id} delay={index * 0.08} className="h-full">
               <Card
-                variant="gradient"
+                variant="bordered"
                 padding="lg"
                 className={clsx(
-                  "h-full flex flex-col",
+                  "h-full flex flex-col bg-bg-primary",
                   pkg.id === "web3-addon" ? "border-accent-primary/30" : ""
                 )}
               >
@@ -179,7 +179,7 @@ export function ServicesContent() {
                 </div>
 
                 {/* CTA Button - always at bottom */}
-                <div className="pt-6 mt-6 border-t border-border/30">
+                <div className="pt-6 mt-6 border-t border-border">
                   <ButtonLink 
                     href={`/contact?package=${pkg.id}`}
                     buttonVariant={pkg.id === "web3-addon" ? "primary" : "secondary"} 

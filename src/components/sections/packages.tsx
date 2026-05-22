@@ -18,9 +18,6 @@ export function PackagesSection() {
 
   return (
     <Section background="primary" padding="lg" className="relative">
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="blob blob-accent-sub w-[350px] h-[350px] absolute bottom-0 right-0 opacity-25 animate-float-blob" style={{ animationDelay: "-4s" }} />
-      </div>
       <SectionHeader
         title={t("packages.title")}
         subtitle={t("packages.subtitle")}
@@ -28,17 +25,22 @@ export function PackagesSection() {
       />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 relative items-stretch">
-        {packages.map((pkg, index) => (
+        {packages.map((pkg, index) => {
+          const isRecommended = pkg.id === "mvp-sprint";
+          return (
           <AnimatedItem key={pkg.id} delay={index * 0.1} className="h-full">
             <motion.div
               className="h-full"
-              whileHover={prefersReducedMotion ? {} : { y: -2, transition: { duration: 0.2 } }}
+              whileHover={prefersReducedMotion ? {} : { y: -3, transition: { duration: 0.2 } }}
             >
               <Card
-                variant="gradient"
+                variant="default"
                 padding="none"
                 className={clsx(
-                  "h-full flex flex-col transition-all duration-300 card-gradient-border",
+                  "h-full flex flex-col border transition-all duration-300 bg-bg-primary",
+                  isRecommended
+                    ? "border-accent-primary ring-1 ring-accent-primary/20 shadow-glow-md hover:shadow-card-hover"
+                    : "border-border shadow-glow-sm hover:shadow-glow-md hover:border-border-hover",
                   pkg.id === "web3-addon" && "lg:col-span-2"
                 )}
               >
@@ -48,13 +50,18 @@ export function PackagesSection() {
                     {/* Header */}
                     <div className="flex items-start justify-between gap-4 mb-4">
                       <div>
-                        <h3 className="text-heading-lg font-medium text-text-primary">
+                        <h3 className="text-heading-lg font-display font-bold text-text-primary">
                           {pkg.title[language]}
                         </h3>
                         <p className="text-body-sm text-text-secondary mt-1">
                           {pkg.timeline[language]}
                         </p>
                       </div>
+                      {isRecommended && (
+                        <Badge variant="primary">
+                          {language === "en" ? "Popular" : "Популярный"}
+                        </Badge>
+                      )}
                       {pkg.id === "web3-addon" && (
                         <Badge variant="primary">Add-on</Badge>
                       )}
@@ -67,7 +74,7 @@ export function PackagesSection() {
 
                     {/* For whom */}
                     <div className="mb-6">
-                      <p className="text-caption text-text-secondary uppercase tracking-wider mb-2">
+                      <p className="text-caption font-mono text-text-tertiary uppercase tracking-wide mb-2">
                         {language === "en" ? "Best for" : "Подходит для"}
                       </p>
                       <p className="text-body-sm text-text-secondary">
@@ -77,7 +84,7 @@ export function PackagesSection() {
 
                     {/* Deliverables */}
                     <div className="mb-6">
-                      <p className="text-caption text-text-secondary uppercase tracking-wider mb-3">
+                      <p className="text-caption font-mono text-text-tertiary uppercase tracking-wide mb-3">
                         {language === "en" ? "What you get" : "Что получите"}
                       </p>
                       <ul className="space-y-2">
@@ -104,8 +111,13 @@ export function PackagesSection() {
                     </div>
 
                     {/* Result */}
-                    <div className="p-4 bg-bg-tertiary rounded-xl">
-                      <p className="text-caption text-text-secondary uppercase tracking-wider mb-1">
+                    <div className={clsx(
+                      "p-4 rounded-xl border",
+                      isRecommended
+                        ? "bg-accent-glow border-accent-primary/20"
+                        : "bg-bg-secondary border-border"
+                    )}>
+                      <p className="text-caption font-mono text-text-tertiary uppercase tracking-wide mb-1">
                         {language === "en" ? "End result" : "Итоговый результат"}
                       </p>
                       <p className="text-body-sm text-text-primary">
@@ -115,10 +127,10 @@ export function PackagesSection() {
                   </div>
 
                   {/* CTA - always at bottom */}
-                  <div className="pt-6 mt-6 border-t border-border/30">
+                  <div className="pt-6 mt-6 border-t border-border">
                     <ButtonLink
                       href="/contact"
-                      buttonVariant="outline"
+                      buttonVariant={isRecommended ? "primary" : "outline"}
                       size="sm"
                       className="w-full justify-center"
                     >
@@ -129,7 +141,8 @@ export function PackagesSection() {
               </Card>
             </motion.div>
           </AnimatedItem>
-        ))}
+          );
+        })}
       </div>
     </Section>
   );

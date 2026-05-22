@@ -82,7 +82,7 @@ export function ScrollSpyRail({ items, className, mode = "sticky", position = "r
                     className={clsx(
                       "shrink-0 rounded-full transition-all duration-200",
                       isActive
-                        ? "w-1.5 h-1.5 bg-accent-primary shadow-[0_0_6px_rgba(99,102,241,0.4)]"
+                        ? "w-1.5 h-1.5 bg-accent-primary"
                         : "w-1 h-1 bg-text-tertiary/40"
                     )}
                   />
@@ -123,7 +123,7 @@ export function ScrollSpyRail({ items, className, mode = "sticky", position = "r
                       className={clsx(
                         "block rounded-full transition-all duration-200",
                         isActive
-                          ? "w-2.5 h-2.5 bg-accent-primary shadow-[0_0_8px_rgba(99,102,241,0.5)]"
+                          ? "w-2.5 h-2.5 bg-accent-primary"
                           : i <= activeIndex
                             ? "w-1.5 h-1.5 bg-accent-primary/40"
                             : "w-1.5 h-1.5 bg-text-tertiary/30"

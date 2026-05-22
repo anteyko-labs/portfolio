@@ -46,8 +46,8 @@ export function AccordionItem({
         className={clsx(
           "rounded-xl border transition-all duration-200",
           isOpen
-            ? "border-accent-primary/30 bg-bg-secondary shadow-lg shadow-accent-primary/5"
-            : "border-border/60 bg-bg-secondary/50 hover:border-border hover:bg-bg-secondary/80"
+            ? "border-accent-primary/30 bg-bg-elevated shadow-glow-sm"
+            : "border-border bg-bg-secondary hover:border-border-hover hover:bg-bg-elevated"
         )}
       >
         <button

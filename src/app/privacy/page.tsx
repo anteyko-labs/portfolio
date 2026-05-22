@@ -19,7 +19,7 @@ export default function PrivacyPage() {
             animate={false}
           />
 
-          <div className="prose prose-invert prose-zinc max-w-none mt-12 text-body-md text-text-secondary">
+          <div className="max-w-none mt-12 text-body-md text-text-secondary leading-relaxed [&_p]:mb-4 [&_ul]:mb-4 [&_h2]:mt-12 [&_h2]:mb-4">
             <p className="text-text-tertiary text-body-sm">
               Последнее обновление: 20 мая 2026
             </p>

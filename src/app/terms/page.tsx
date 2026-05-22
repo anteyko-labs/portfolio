@@ -17,7 +17,7 @@ export default function TermsPage() {
             align="center"
             animate={false}
           />
-          <div className="prose prose-invert prose-zinc max-w-none mt-12 space-y-6 text-body-md text-text-secondary">
+          <div className="max-w-none mt-12 space-y-6 text-body-md text-text-secondary leading-relaxed">
             <p>
               By using this website and submitting inquiries, you agree to receive a response from Anteyko.
               Estimates and proposals are non-binding until a separate agreement is signed.

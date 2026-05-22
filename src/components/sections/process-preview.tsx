@@ -29,7 +29,7 @@ export function ProcessPreviewSection() {
   };
 
   const stepBg = (index: number) => {
-    return "bg-bg-tertiary";
+    return "bg-bg-primary shadow-glow-sm";
   };
 
   return (
@@ -81,40 +81,36 @@ export function ProcessPreviewSection() {
                 transition={{ duration: 0.45, delay: index * 0.08, ease: [0.25, 0.46, 0.45, 0.94] }}
                 /* No hover lift — these cards are not interactive */
               >
-                <div className={`relative h-full rounded-2xl p-6 border border-border transition-all duration-300 overflow-hidden flex flex-col ${stepAccent(index)} ${stepBg(index)}`}>
+                <div className={`relative h-full rounded-2xl p-6 border border-border transition-all duration-300 overflow-hidden flex flex-col hover:shadow-glow-md hover:border-border-hover ${stepAccent(index)} ${stepBg(index)}`}>
                   {/* Per-step decorative elements */}
                   {index === 0 && (
-                    <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-accent-primary/15 to-transparent rounded-bl-3xl pointer-events-none" aria-hidden />
+                    <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-accent-primary/[0.06] to-transparent rounded-bl-3xl pointer-events-none" aria-hidden />
                   )}
                   {index === 2 && (
-                    <div className="absolute bottom-0 right-0 w-20 h-20 bg-gradient-to-tl from-accent-primary/12 to-transparent pointer-events-none" aria-hidden />
+                    <div className="absolute bottom-0 right-0 w-20 h-20 bg-gradient-to-tl from-accent-primary/[0.05] to-transparent pointer-events-none" aria-hidden />
                   )}
                   {index === 3 && (
-                    <div className="absolute inset-0 bg-success/5 pointer-events-none" aria-hidden />
+                    <div className="absolute inset-0 bg-success/[0.04] pointer-events-none" aria-hidden />
                   )}
 
                   {/* Content wrapper - grows to fill space */}
                   <div className="flex-1 relative">
                     {/* Step number / icon area - different per step */}
                     <div className="flex items-center gap-3 mb-4">
-                      {index === 1 ? (
-                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-accent-primary/30 to-accent-secondary/20 border border-accent-primary/30 flex items-center justify-center shadow-sm">
-                          <span className="text-heading-md font-display font-bold text-accent-primary">{step.number}</span>
-                        </div>
-                      ) : index === 3 ? (
-                        <div className="w-12 h-12 rounded-xl bg-success/15 border border-success/40 flex items-center justify-center">
+                      {index === 3 ? (
+                        <div className="w-12 h-12 rounded-xl bg-success/10 border border-success/30 flex items-center justify-center">
                           <svg className="w-6 h-6 text-success" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
                             <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                           </svg>
                         </div>
                       ) : (
-                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${isFirst ? "bg-accent-glow border-2 border-accent-primary/40" : "bg-accent-glow border border-accent-primary/30"}`}>
+                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center bg-accent-glow ${isFirst ? "border-2 border-accent-primary/40" : "border border-accent-primary/25"}`}>
                           <span className="text-heading-md font-display font-bold text-accent-primary">{step.number}</span>
                         </div>
                       )}
                     </div>
 
-                    <h3 className="text-heading-sm font-medium text-text-primary mb-2">
+                    <h3 className="text-heading-sm font-display font-bold text-text-primary mb-2">
                       {step.title[language]}
                     </h3>
                     <p className="text-body-sm text-text-secondary mb-3">

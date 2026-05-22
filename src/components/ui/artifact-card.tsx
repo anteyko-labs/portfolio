@@ -31,7 +31,7 @@ export function ArtifactCard({
   return (
     <article
       className={clsx(
-        "flex items-start gap-3 p-4 rounded-xl border bg-bg-tertiary/60",
+        "flex items-start gap-3 p-4 rounded-xl border border-border bg-bg-secondary",
         "transition-colors hover:border-border-hover",
         className
       )}

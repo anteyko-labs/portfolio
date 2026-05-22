@@ -231,8 +231,8 @@ export function CaseDetailContent({ caseItem }: { caseItem: FlagshipCase }) {
               {/* Mobile: horizontal compact metrics */}
               <div className="flex flex-wrap gap-3 lg:hidden">
                 {caseItem.metrics.slice(0, 4).map((metric) => (
-                  <div key={`hero-mobile-${metric.value}`} className="bg-bg-secondary/40 backdrop-blur-sm px-3 py-2 rounded-lg border border-white/5 flex items-baseline gap-2">
-                    <span className="text-heading-sm text-accent-primary font-bold">{metric.value}</span>
+                  <div key={`hero-mobile-${metric.value}`} className="bg-bg-secondary/80 backdrop-blur-sm px-3 py-2 rounded-lg border border-border flex items-baseline gap-2">
+                    <span className="text-heading-sm text-accent-primary font-bold tabular-nums">{metric.value}</span>
                     <span className="text-caption text-text-secondary">{metric.label[language]}</span>
                   </div>
                 ))}
@@ -240,8 +240,8 @@ export function CaseDetailContent({ caseItem }: { caseItem: FlagshipCase }) {
               {/* Desktop: vertical stacked metrics */}
               <div className="hidden lg:block space-y-4">
                 {caseItem.metrics.slice(0, 3).map((metric) => (
-                  <div key={`hero-right-${metric.value}`} className="bg-bg-secondary/40 backdrop-blur-sm p-4 rounded-xl border border-white/5">
-                    <p className="text-display-xs text-accent-primary font-bold">{metric.value}</p>
+                  <div key={`hero-right-${metric.value}`} className="bg-bg-secondary/80 backdrop-blur-sm p-4 rounded-xl border border-border shadow-glow-sm">
+                    <p className="text-display-xs text-accent-primary font-bold tabular-nums">{metric.value}</p>
                     <p className="text-body-sm text-text-secondary">{metric.label[language]}</p>
                   </div>
                 ))}
@@ -586,10 +586,10 @@ export function CaseDetailContent({ caseItem }: { caseItem: FlagshipCase }) {
             subtitle={language === "en" ? `${qualityGates.length}-phase checklist before release` : `${qualityGates.length}-фазный чеклист перед релизом`}
             animate={false}
           />
-          <div className="rounded-2xl border border-border bg-bg-secondary/60 p-6 relative overflow-hidden">
-            {/* Background grid */}
-            <div className="absolute inset-0 opacity-5" style={{
-              backgroundImage: `radial-gradient(circle at 1px 1px, rgba(255,255,255,0.2) 1px, transparent 0)`,
+          <div className="rounded-2xl border border-border bg-bg-secondary p-6 relative overflow-hidden">
+            {/* Background dot grid */}
+            <div className="absolute inset-0" style={{
+              backgroundImage: `radial-gradient(circle at 1px 1px, rgba(10,10,10,0.05) 1px, transparent 0)`,
               backgroundSize: '20px 20px',
             }} />
             <div className="relative space-y-3">
@@ -665,7 +665,7 @@ export function CaseDetailContent({ caseItem }: { caseItem: FlagshipCase }) {
               {caseItem.techStack.map((tech) => (
                 <span
                   key={tech}
-                  className="px-3 py-1.5 rounded-lg bg-bg-tertiary border border-border text-body-sm text-text-secondary"
+                  className="px-3 py-1.5 rounded-full bg-bg-tertiary border border-border text-body-sm text-text-secondary"
                 >
                   {tech}
                 </span>

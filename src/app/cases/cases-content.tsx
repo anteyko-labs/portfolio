@@ -101,11 +101,10 @@ export function CasesContent() {
                     )}
                     {caseItem.imageUrl ? (
                       caseItem.screenshotLayout === "mobile" ? (
-                        /* Mobile screenshot: phone mockup centered on gradient bg */
+                        /* Mobile screenshot: phone mockup centered on light bg */
                         <div className="absolute inset-0 flex items-center justify-center">
-                          <div className="absolute inset-0 bg-gradient-to-br from-bg-tertiary via-bg-elevated to-bg-primary" />
-                          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 rounded-full bg-accent-primary/10 blur-3xl" />
-                          <div className="relative w-[100px] md:w-[120px] h-[90%] rounded-2xl overflow-hidden border-2 border-white/10 shadow-2xl shadow-black/40 transition-transform duration-700 group-hover:scale-105">
+                          <div className="absolute inset-0 bg-bg-tertiary" />
+                          <div className="relative w-[100px] md:w-[120px] h-[90%] rounded-2xl overflow-hidden border border-border shadow-glow-md transition-transform duration-700 group-hover:scale-105">
                             <Image
                               src={caseItem.imageUrl}
                               alt={caseItem.title[language]}
@@ -128,18 +127,18 @@ export function CasesContent() {
                       )
                     ) : (
                       <div
-                        className="absolute inset-0 opacity-15"
+                        className="absolute inset-0 opacity-60"
                         style={{
                           backgroundImage: `
-                            linear-gradient(to right, rgba(99,102,241,0.2) 1px, transparent 1px),
-                            linear-gradient(to bottom, rgba(99,102,241,0.2) 1px, transparent 1px)
+                            linear-gradient(to right, rgba(10,10,10,0.05) 1px, transparent 1px),
+                            linear-gradient(to bottom, rgba(10,10,10,0.05) 1px, transparent 1px)
                           `,
                           backgroundSize: "24px 24px",
                         }}
                       />
                     )}
-                    {/* Gradient overlay for depth */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-bg-secondary/80 via-transparent to-transparent" />
+                    {/* Subtle bottom fade for depth */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-bg-secondary/60 via-transparent to-transparent" />
                   </div>
                   <div className="p-6 pb-8 md:p-8 md:pb-10">
                     <h2 className="text-heading-lg font-medium text-text-primary mb-2 group-hover:text-accent-primary transition-colors">
