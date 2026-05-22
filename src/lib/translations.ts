@@ -136,6 +136,13 @@ export const translations = {
           ru: "Чёткие границы поставки, не бесконечные спринты. Быстро и качественно.",
         },
       },
+      {
+        title: { en: "Support after launch", ru: "Поддержка после запуска" },
+        description: {
+          en: "First month of support is included. We don't disappear after deploy.",
+          ru: "Первый месяц поддержки включён. Не бросаем после деплоя.",
+        },
+      },
     ],
   },
 

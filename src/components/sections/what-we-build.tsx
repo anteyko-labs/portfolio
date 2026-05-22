@@ -59,17 +59,21 @@ export function WhatWeBuildSection() {
                 tiltAmount={4}
                 className="h-full group !bg-bg-primary !border-border transition-transform duration-300 hover:-translate-y-1"
               >
-                <div
-                  className="text-accent-primary mb-6"
-                >
+                <div className="w-14 h-14 rounded-2xl bg-bg-secondary border border-border flex items-center justify-center text-accent-primary mb-6 transition-colors duration-300 group-hover:bg-accent-primary/[0.07] group-hover:border-accent-primary/30">
                   {icons[index]}
                 </div>
                 <h3 className="text-heading-lg font-semibold text-text-primary mb-3 group-hover:text-accent-primary transition-colors">
                   {item.title[language]}
                 </h3>
-                <p className="text-body-md text-text-secondary pb-6">
+                <p className="text-body-md text-text-secondary">
                   {item.description[language]}
                 </p>
+                <span className="mt-5 inline-flex items-center gap-1.5 text-body-sm font-medium text-accent-primary">
+                  {language === "en" ? "Learn more" : "Подробнее"}
+                  <svg className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  </svg>
+                </span>
               </TiltCard>
             </NextLink>
           </motion.div>

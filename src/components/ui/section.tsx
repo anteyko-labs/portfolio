@@ -23,12 +23,12 @@ const backgrounds = {
 
 const paddings: Record<NonNullable<SectionProps["padding"]>, string> = {
   none: "",
-  sm: "py-12 md:py-16",
-  md: "py-16 md:py-24",
-  lg: "py-16 sm:py-24 md:py-32",
-  xl: "py-20 sm:py-32 md:py-40",
-  "xl-top": "pt-20 sm:pt-32 md:pt-40 pb-16 sm:pb-24 md:pb-32",
-  compact: "py-16 md:py-20",
+  sm: "py-10 md:py-14",
+  md: "py-14 md:py-20",
+  lg: "py-14 sm:py-20 md:py-24",
+  xl: "py-16 sm:py-24 md:py-28",
+  "xl-top": "pt-16 sm:pt-24 md:pt-28 pb-14 sm:pb-20 md:pb-24",
+  compact: "py-12 md:py-16",
 };
 
 export const Section = forwardRef<HTMLElement, SectionProps>(

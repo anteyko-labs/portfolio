@@ -100,6 +100,23 @@ const icons = [
       d="M13 10V3L4 14h7v7l9-11h-7z"
     />
   </svg>,
+  // Support after launch (lifebuoy)
+  <svg
+    key="support"
+    className="w-6 h-6"
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+  >
+    <circle cx="12" cy="12" r="9" strokeWidth={1.5} />
+    <circle cx="12" cy="12" r="3.5" strokeWidth={1.5} />
+    <path
+      strokeLinecap="round"
+      strokeWidth={1.5}
+      d="M5.6 5.6l3.3 3.3m6.2 6.2l3.3 3.3m0-13.1l-3.3 3.3M8.9 15.1l-3.3 3.3"
+    />
+  </svg>,
 ];
 
 export function WhyUsSection() {

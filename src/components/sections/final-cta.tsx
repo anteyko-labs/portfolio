@@ -23,7 +23,7 @@ export function FinalCTASection() {
                 ? "Not sure if we're a fit?"
                 : "Не уверены, что мы подходим?"}
               <br />
-              <span className="text-text-secondary font-normal">
+              <span className="text-accent-primary font-display">
                 {language === "en"
                   ? "Let's find out in one call."
                   : "Давайте проверим за один звонок."}

@@ -42,7 +42,7 @@ export function FAQPreviewSection() {
         </ButtonLink>
       </div>
 
-      <div className="max-w-3xl">
+      <div className="max-w-3xl mx-auto">
         <AnimatedItem>
           <div className="bg-bg-secondary rounded-2xl border border-border p-6 md:p-8">
             {faqItems.map((item) => (
