@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono, Syne } from "next/font/google";
+import { Manrope } from "next/font/google";
+import { GeistMono } from "geist/font/mono";
 import Script from "next/script";
 import "./globals.css";
 import { LanguageProvider } from "@/lib/language-context";
@@ -8,22 +9,12 @@ import { CustomCursor } from "@/components/effects/custom-cursor";
 import { CookieConsent } from "@/components/cookie-consent";
 import { AnalyticsBootstrap } from "@/components/analytics-bootstrap";
 
-const inter = Inter({
-  variable: "--font-inter",
+// Refined-light type system: Manrope (geometric grotesque, RU+EN, premium)
+// for both UI and display weights; Geist Mono for technical labels.
+const manrope = Manrope({
+  variable: "--font-manrope",
   subsets: ["latin", "cyrillic"],
-  display: "swap",
-});
-
-const syne = Syne({
-  variable: "--font-cabinet",
-  subsets: ["latin", "latin-ext"],
-  display: "swap",
-  fallback: ["Inter", "system-ui", "sans-serif"],
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  variable: "--font-jetbrains",
-  subsets: ["latin", "cyrillic"],
+  weight: ["400", "500", "600", "700", "800"],
   display: "swap",
 });
 
@@ -130,7 +121,7 @@ export default function RootLayout({
   const YM_ID = safeYmId();
 
   return (
-    <html lang="en" className="dark" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="icon" href="/icon.svg" type="image/svg+xml" />
@@ -196,7 +187,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${inter.variable} ${syne.variable} ${jetbrainsMono.variable} font-sans antialiased`}
+        className={`${manrope.variable} ${GeistMono.variable} font-sans antialiased`}
       >
         {/* GTM noscript fallback */}
         {GTM_ID ? (

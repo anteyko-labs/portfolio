@@ -76,7 +76,7 @@ export function Header() {
         className={clsx(
           "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
           isScrolled
-            ? "bg-bg-primary/80 backdrop-blur-xl border-b border-border/50 shadow-lg shadow-black/20"
+            ? "bg-bg-primary/80 backdrop-blur-xl border-b border-border shadow-sm shadow-black/5"
             : "bg-transparent"
         )}
       >
@@ -98,7 +98,7 @@ export function Header() {
                 alt="Anteyko"
                 width={100}
                 height={24}
-                className="h-5 w-auto brightness-90 hover:brightness-100 transition-all"
+                className="h-5 w-auto invert opacity-90 hover:opacity-100 transition-opacity"
                 priority
               />
             </NextLink>
