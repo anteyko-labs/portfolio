@@ -8,17 +8,20 @@ import { localeAlternates } from "@/i18n/metadata";
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   return {
-  title: "FAQ",
+  title: locale === "ru" ? "Частые вопросы" : "FAQ",
   description:
-    "Frequently asked questions about pricing, timelines, ownership, NDA, support, Web3, and how we work. Anteyko — Kyrgyzstan & Dubai.",
+    locale === "ru"
+      ? "Частые вопросы о ценах, сроках, правах собственности, NDA, поддержке, Web3 и о том, как мы работаем. Anteyko — Кыргызстан и Дубай."
+      : "Frequently asked questions about pricing, timelines, ownership, NDA, support, Web3, and how we work. Anteyko — Kyrgyzstan & Dubai.",
     alternates: localeAlternates(locale, "/faq"),
   };
 }
 
-export default function FAQPage() {
+export default async function FAQPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
   return (
     <PageWrapper>
-      <FAQSchema />
+      <FAQSchema locale={locale} />
       <JsonLd data={homeBreadcrumb("FAQ", "/faq")} />
       <FAQContent />
     </PageWrapper>

@@ -10,6 +10,8 @@ export const translations = {
     faq: { en: "FAQ", ru: "FAQ" },
     about: { en: "About", ru: "О нас" },
     contact: { en: "Contact", ru: "Контакты" },
+    pricing: { en: "Pricing", ru: "Цены" },
+    blog: { en: "Blog", ru: "Блог" },
   },
 
   // CTAs

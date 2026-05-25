@@ -7,9 +7,11 @@ import { ServicesContent } from "./services-content";
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   return {
-  title: "Services",
+  title: locale === "ru" ? "Услуги" : "Services",
   description:
-    "Launch Site, MVP Sprint, Startup Under Key, Web3 Add-on. Clear scope, fixed timeline, predictable outcomes. Based in Kyrgyzstan & Dubai.",
+    locale === "ru"
+      ? "Launch Site, MVP Sprint, Startup Under Key, Web3 Add-on. Понятный объём, фиксированные сроки, предсказуемый результат. Базируемся в Кыргызстане и Дубае."
+      : "Launch Site, MVP Sprint, Startup Under Key, Web3 Add-on. Clear scope, fixed timeline, predictable outcomes. Based in Kyrgyzstan & Dubai.",
     alternates: localeAlternates(locale, "/services"),
   };
 }

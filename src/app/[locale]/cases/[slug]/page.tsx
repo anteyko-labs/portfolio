@@ -37,17 +37,22 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props) {
   const { locale, slug } = await params;
 
+  const isRu = locale === "ru";
+
   // Try flagship first
   const flagshipCase = getFlagshipCaseBySlug(slug);
   if (flagshipCase) {
-    const description = clampDescription(flagshipCase.summary.en);
+    const title = isRu ? flagshipCase.title.ru : flagshipCase.title.en;
+    const description = clampDescription(
+      isRu ? flagshipCase.summary.ru : flagshipCase.summary.en
+    );
     return {
-      title: flagshipCase.title.en,
+      title,
       description,
       alternates: localeAlternates(locale, `/cases/${slug}`),
       openGraph: {
         type: "article",
-        title: flagshipCase.title.en,
+        title,
         description,
         url: `${SITE}/cases/${slug}`,
       },
@@ -57,14 +62,17 @@ export async function generateMetadata({ params }: Props) {
   // Try micro case
   const microCase = getMicroCaseById(slug);
   if (microCase) {
-    const description = clampDescription(microCase.what.en);
+    const title = isRu ? microCase.title.ru : microCase.title.en;
+    const description = clampDescription(
+      isRu ? microCase.what.ru : microCase.what.en
+    );
     return {
-      title: microCase.title.en,
+      title,
       description,
       alternates: localeAlternates(locale, `/cases/${slug}`),
       openGraph: {
         type: "article",
-        title: microCase.title.en,
+        title,
         description,
         url: `${SITE}/cases/${slug}`,
       },

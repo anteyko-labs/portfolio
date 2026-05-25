@@ -7,9 +7,11 @@ import { AboutContent } from "./about-content";
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   return {
-  title: "About",
+  title: locale === "ru" ? "О студии" : "About",
   description:
-    "CTO-grade engineering meets product delivery. Based in Bishkek, Kyrgyzstan. Active in Dubai, UAE. Serving clients globally.",
+    locale === "ru"
+      ? "Инженерия уровня CTO в сочетании с продуктовой поставкой. Базируемся в Бишкеке, Кыргызстан. Активны в Дубае, ОАЭ. Работаем с клиентами по всему миру."
+      : "CTO-grade engineering meets product delivery. Based in Bishkek, Kyrgyzstan. Active in Dubai, UAE. Serving clients globally.",
     alternates: localeAlternates(locale, "/about"),
   };
 }

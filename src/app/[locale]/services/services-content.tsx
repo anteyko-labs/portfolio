@@ -7,8 +7,9 @@ import { PageHero } from "@/components/sections/page-hero";
 import { Section, SectionHeader, AnimatedItem } from "@/components/ui/section";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ButtonLink } from "@/components/ui/link";
+import { ButtonLink, Link } from "@/components/ui/link";
 import { ComparisonAxis } from "@/components/ui/comparison-axis";
+import { PACKAGE_SLUGS } from "@/lib/service-slugs";
 
 type PackageId = "launch-site" | "mvp-sprint" | "startup-key" | "web3-addon";
 
@@ -179,15 +180,22 @@ export function ServicesContent() {
                 </div>
 
                 {/* CTA Button - always at bottom */}
-                <div className="pt-6 mt-6 border-t border-border">
-                  <ButtonLink 
+                <div className="pt-6 mt-6 border-t border-border space-y-3">
+                  <ButtonLink
                     href={`/contact?package=${pkg.id}`}
-                    buttonVariant={pkg.id === "web3-addon" ? "primary" : "secondary"} 
+                    buttonVariant={pkg.id === "web3-addon" ? "primary" : "secondary"}
                     size="md"
                     className="w-full justify-center"
                   >
                     {t("cta.finalAction")}
                   </ButtonLink>
+                  <Link
+                    href={`/services/${PACKAGE_SLUGS[pkg.id as keyof typeof PACKAGE_SLUGS]}`}
+                    variant="underline"
+                    className="block text-center text-body-sm no-underline hover:underline"
+                  >
+                    {language === "en" ? "Learn more" : "Подробнее"}
+                  </Link>
                 </div>
               </Card>
             </AnimatedItem>

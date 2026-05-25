@@ -7,9 +7,11 @@ import { ContactContent } from "./contact-content";
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   return {
-  title: "Contact",
+  title: locale === "ru" ? "Контакты" : "Contact",
   description:
-    "Get an estimate in 24 hours or book a 20-minute scoping call. Tell us about your project. Anteyko — Kyrgyzstan & Dubai.",
+    locale === "ru"
+      ? "Получите оценку за 24 часа или запишитесь на 20-минутный созвон. Расскажите нам о вашем проекте. Anteyko — Кыргызстан и Дубай."
+      : "Get an estimate in 24 hours or book a 20-minute scoping call. Tell us about your project. Anteyko — Kyrgyzstan & Dubai.",
     alternates: localeAlternates(locale, "/contact"),
   };
 }

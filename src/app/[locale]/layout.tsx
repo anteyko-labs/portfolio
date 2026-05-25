@@ -22,14 +22,31 @@ const manrope = Manrope({
   display: "swap",
 });
 
-export const metadata: Metadata = {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const isRu = locale === "ru";
+
+  const title = isRu
+    ? "Anteyko — студия полного цикла продуктовой разработки"
+    : "Anteyko — End-to-end Product Development Studio";
+  const description = isRu
+    ? "Дизайн, фронтенд, бэкенд, админ-панели, интеграции, инфраструктура и запуск. Web2 + Web3 — в одном цикле поставки. Базируемся в Кыргызстане и Дубае."
+    : "Design, frontend, backend, admin panels, integrations, infrastructure, and launch. Web2 + Web3 — in one delivery loop. Based in Kyrgyzstan & Dubai.";
+  const ogDescription = isRu
+    ? "Дизайн, фронтенд, бэкенд, админ-панели, интеграции, инфраструктура и запуск. Web2 + Web3 — в одном цикле поставки."
+    : "Design, frontend, backend, admin panels, integrations, infrastructure, and launch. Web2 + Web3 — in one delivery loop.";
+
+  return {
   metadataBase: new URL("https://www.anteyko.com"),
   title: {
-    default: "Anteyko — End-to-end Product Development Studio",
+    default: title,
     template: "%s | Anteyko",
   },
-  description:
-    "Design, frontend, backend, admin panels, integrations, infrastructure, and launch. Web2 + Web3 — in one delivery loop. Based in Kyrgyzstan & Dubai.",
+  description,
   keywords: [
     "web development",
     "MVP development",
@@ -62,13 +79,12 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: "website",
-    locale: "en_US",
-    alternateLocale: "ru_RU",
+    locale: isRu ? "ru_RU" : "en_US",
+    alternateLocale: isRu ? "en_US" : "ru_RU",
     url: "https://anteyko.com",
     siteName: "Anteyko",
-    title: "Anteyko — End-to-end Product Development Studio",
-    description:
-      "Design, frontend, backend, admin panels, integrations, infrastructure, and launch. Web2 + Web3 — in one delivery loop.",
+    title,
+    description: ogDescription,
     images: [
       {
         url: "https://www.anteyko.com/og-image.png",
@@ -81,9 +97,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Anteyko — End-to-end Product Development Studio",
-    description:
-      "Design, frontend, backend, admin panels, integrations, infrastructure, and launch. Web2 + Web3 — in one delivery loop.",
+    title,
+    description: ogDescription,
     images: ["https://www.anteyko.com/og-image.png"],
   },
   robots: {
@@ -98,7 +113,8 @@ export const metadata: Metadata = {
     },
   },
   // verification: { google: "..." } — add when using Search Console
-};
+  };
+}
 
 // Validate analytics IDs from env. Only allow alphanumeric and hyphen — these IDs
 // are set by the project owner via NEXT_PUBLIC_* env vars, but we still validate

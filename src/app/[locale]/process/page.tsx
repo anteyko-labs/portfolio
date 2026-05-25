@@ -7,9 +7,11 @@ import { ProcessContent } from "./process-content";
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   return {
-  title: "Process",
+  title: locale === "ru" ? "Процесс" : "Process",
   description:
-    "Discovery & Scope, Design & Architecture, Build & QA, Launch & Support. Four phases with clear deliverables. Based in Kyrgyzstan & Dubai.",
+    locale === "ru"
+      ? "Исследование и объём, дизайн и архитектура, разработка и QA, запуск и поддержка. Четыре фазы с понятными результатами. Базируемся в Кыргызстане и Дубае."
+      : "Discovery & Scope, Design & Architecture, Build & QA, Launch & Support. Four phases with clear deliverables. Based in Kyrgyzstan & Dubai.",
     alternates: localeAlternates(locale, "/process"),
   };
 }
