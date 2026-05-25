@@ -374,6 +374,14 @@ UTM нужно парсить в `/api/contact/route.ts` и добавлять �
 | P5 | Schema.org для кейсов (CreativeWork / Article) | 2 ч |
 | P6 | OG-images для каждого кейса (сейчас один общий) | 3 ч |
 
+> **✅ Stage 3 — DONE (2026-05-25, коммит `d5f6887`, проверено на проде www.anteyko.com).**
+> - **P1/P2 оказались устаревшими** после редизайна: Next 16 уже сплитит по роутам (top-чанк 101 КБ gzip, не 1.2 МБ), hero стал CSS-only (нет растрового LCP), шрифты через next/font (авто-preload). Реальной работы не было — кроме удаления **мёртвого three.js** (`hero-scene.tsx` не импортился; убраны three/@react-three/fiber/drei, −56 пакетов, ~42 МБ node_modules).
+> - **P3 done** — `next.config.ts` → `headers()`: `Timing-Allow-Origin: *` + security-набор (X-Content-Type-Options, Referrer-Policy, X-Frame-Options, Permissions-Policy, X-DNS-Prefetch-Control). CSP НЕ добавлял (сломал бы env-gated GTM/Yandex inline). Подтверждено curl'ом на проде.
+> - **P4 done** — описания кейсов обрезаны до ~155 симв. по границе слова + per-case canonical. Описания обычных страниц уже были в норме (105–137), не трогал.
+> - **P5 done** — JSON-LD `Article` + `BreadcrumbList` на каждом кейсе через `src/components/seo/json-ld.tsx`. Валидность JSON подтверждена на проде.
+> - **P6 done** — динамические OG на кейс через `next/og` (`cases/[slug]/opengraph-image.tsx`, светлая брендовая карточка 1200×630). Визуально проверены флагман + микро-кейс с прода. Фикс типа OG в layout (jpeg→png).
+> - **Остаётся в Stage 3 (не делалось, низкий приоритет):** P5-доп (Schema для главной), P6-доп (OG для не-кейс страниц), мета-нормализация уже не нужна.
+
 ### Stage 4 — analytics setup (после переписки Privacy Policy)
 
 #### Этап 4.1 — must-have для запуска
