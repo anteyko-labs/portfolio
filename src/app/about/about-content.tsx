@@ -296,7 +296,7 @@ export function AboutContent() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <ButtonLink href="/contact" buttonVariant="primary" size="lg">
-                  {language === "en" ? "Start a conversation" : "Начать разговор"}
+                  {language === "en" ? "Get an estimate in 24 hours" : "Получить оценку за 24 часа"}
                 </ButtonLink>
                 <ButtonLink href="/cases" buttonVariant="secondary" size="lg">
                   {language === "en" ? "See our work" : "Смотреть кейсы"}

@@ -15,7 +15,7 @@ export function CaseBottomCTA() {
             href="/contact"
             className="px-6 py-3 bg-accent-primary text-white rounded-lg font-medium hover:opacity-90 transition"
           >
-            Записаться на 20-мин звонок →
+            Получить оценку за 24 часа →
           </Link>
           <Link
             href="/cases"

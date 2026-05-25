@@ -25,8 +25,8 @@ export function FinalCTASection() {
               <br />
               <span className="text-accent-primary font-display">
                 {language === "en"
-                  ? "Let's find out in one call."
-                  : "Давайте проверим за один звонок."}
+                  ? "Let's find out — fast."
+                  : "Давайте выясним — быстро."}
               </span>
             </h2>
           </AnimatedItem>
@@ -65,8 +65,8 @@ export function FinalCTASection() {
                   iconPosition="right"
                 >
                   {language === "en"
-                    ? "Book a 20-min call"
-                    : "Записаться на 20-мин звонок"}
+                    ? "Get an estimate in 24 hours"
+                    : "Получить оценку за 24 часа"}
                 </ButtonLink>
               </MagneticButton>
               <MagneticButton className="inline-flex">
