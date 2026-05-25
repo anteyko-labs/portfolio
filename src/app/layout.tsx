@@ -71,7 +71,7 @@ export const metadata: Metadata = {
         width: 1024,
         height: 682,
         alt: "Anteyko — Product Development Studio",
-        type: "image/jpeg",
+        type: "image/png",
       },
     ],
   },
