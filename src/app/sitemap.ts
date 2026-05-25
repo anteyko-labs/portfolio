@@ -1,7 +1,7 @@
 import { MetadataRoute } from "next";
 import { flagshipCases } from "@/lib/cases-data";
 
-const BASE = "https://anteyko.com";
+const BASE = "https://www.anteyko.com";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticPages: MetadataRoute.Sitemap = [

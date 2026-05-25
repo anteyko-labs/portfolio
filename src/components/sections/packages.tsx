@@ -53,6 +53,9 @@ export function PackagesSection() {
                         <h3 className="text-heading-lg font-display font-bold text-text-primary">
                           {pkg.title[language]}
                         </h3>
+                        <p className="text-heading-sm font-display font-semibold text-accent-primary mt-1">
+                          {pkg.startingPrice[language]}
+                        </p>
                         <p className="text-body-sm text-text-secondary mt-1">
                           {pkg.timeline[language]}
                         </p>

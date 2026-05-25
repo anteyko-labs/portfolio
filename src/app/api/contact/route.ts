@@ -10,6 +10,7 @@ export interface ContactSubmission {
   budget: string;
   name: string;
   email: string;
+  phone?: string;
   message: string;
   utm?: Record<string, string>;
   referer?: string;
@@ -67,6 +68,7 @@ function formatTelegramMessage(s: ContactSubmission): string {
   lines.push(``);
   lines.push(`👤 Имя: ${s.name}`);
   lines.push(`📧 Email: ${s.email}`);
+  if (s.phone) lines.push(`📱 Телефон: ${s.phone}`);
 
   if (s.projectType) lines.push(`📦 Тип проекта: ${label(PROJECT_TYPES, s.projectType)}`);
   if (s.stage) lines.push(`🚀 Стадия: ${label(STAGES, s.stage)}`);
@@ -149,7 +151,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: true }, { status: 200 });
     }
 
-    const { projectType, stage, timeline, budget, name, email, message, utm } = body;
+    const { projectType, stage, timeline, budget, name, email, phone, message, utm } = body;
 
     if (!name || !email) {
       return NextResponse.json(
@@ -191,6 +193,7 @@ export async function POST(request: NextRequest) {
       budget: String(budget || ""),
       name: String(name).trim(),
       email: String(email).trim(),
+      phone: String(phone || "").trim(),
       message: String(message || "").trim(),
       utm: sanitizedUtm,
       referer: refererHeader,

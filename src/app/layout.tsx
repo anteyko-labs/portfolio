@@ -19,7 +19,7 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://anteyko.com"),
+  metadataBase: new URL("https://www.anteyko.com"),
   title: {
     default: "Anteyko — End-to-end Product Development Studio",
     template: "%s | Anteyko",
