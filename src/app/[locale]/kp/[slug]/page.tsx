@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import clients from '../../../../data/kp-clients.json';
+import clients from '../../../../../data/kp-clients.json';
 import KPContent from '../kp-content';
 import { getTemplate, type Currency } from '@/lib/kp-templates';
 

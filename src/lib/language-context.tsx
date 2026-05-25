@@ -1,7 +1,9 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from "react";
+import React, { createContext, useContext, useCallback, ReactNode } from "react";
+import { useLocale } from "next-intl";
 import { Language, translations, t as translate } from "./translations";
+import { usePathname, useRouter } from "@/i18n/navigation";
 
 interface LanguageContextType {
   language: Language;
@@ -12,67 +14,29 @@ interface LanguageContextType {
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
-const STORAGE_KEY = "anteyko-language";
-
+// The active locale now comes from the URL (next-intl), not localStorage — so the
+// server renders the correct language per /[locale] route and crawlers see it.
+// The public API (language / setLanguage / t / translations) is unchanged, so the
+// 20+ existing consumers keep working without edits.
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [language, setLanguageState] = useState<Language>("en");
-  const [mounted, setMounted] = useState(false);
+  const locale = useLocale() as Language;
+  const pathname = usePathname();
+  const router = useRouter();
 
-  useEffect(() => {
-    setMounted(true);
-    let lang: Language = "en";
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY) as Language | null;
-      if (stored && (stored === "en" || stored === "ru")) {
-        lang = stored;
-      } else {
-        const browserLang = navigator?.language?.toLowerCase() ?? "";
-        if (browserLang.startsWith("ru")) {
-          lang = "ru";
-        }
-      }
-    } catch {
-      // localStorage unavailable (Safari private, etc.)
-    }
-    setLanguageState(lang);
-    document.documentElement.lang = lang;
-  }, []);
-
-  const setLanguage = useCallback((lang: Language) => {
-    setLanguageState(lang);
-    try { localStorage.setItem(STORAGE_KEY, lang); } catch { /* quota / private browsing */ }
-    document.documentElement.lang = lang;
-  }, []);
-
-  const t = useCallback(
-    (key: string) => translate(key, language),
-    [language]
+  const setLanguage = useCallback(
+    (lang: Language) => {
+      // Switch locale while staying on the same path; next-intl applies the
+      // as-needed prefix (en stays unprefixed, ru is served under /ru).
+      router.replace(pathname, { locale: lang });
+    },
+    [pathname, router]
   );
 
-  // Prevent hydration mismatch
-  if (!mounted) {
-    return (
-      <LanguageContext.Provider
-        value={{
-          language: "en",
-          setLanguage: () => {},
-          t: (key: string) => translate(key, "en"),
-          translations,
-        }}
-      >
-        {children}
-      </LanguageContext.Provider>
-    );
-  }
+  const t = useCallback((key: string) => translate(key, locale), [locale]);
 
   return (
     <LanguageContext.Provider
-      value={{
-        language,
-        setLanguage,
-        t,
-        translations,
-      }}
+      value={{ language: locale, setLanguage, t, translations }}
     >
       {children}
     </LanguageContext.Provider>

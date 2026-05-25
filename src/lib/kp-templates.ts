@@ -1,4 +1,4 @@
-import type { IconId } from '@/app/kp/icons';
+import type { IconId } from '@/app/[locale]/kp/icons';
 
 export type Currency = 'som' | 'usd';
 export type TemplateId = 'courses' | 'saas' | 'mvp';

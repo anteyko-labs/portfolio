@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import createNextIntlPlugin from "next-intl/plugin";
 
 // Baseline security + RUM headers applied to every response.
 // CSP is intentionally omitted: the env-gated inline GTM / Yandex.Metrika
@@ -29,4 +30,6 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
+
+export default withNextIntl(nextConfig);

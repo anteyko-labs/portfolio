@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import clients from '../../../../../../data/kp-clients.json';
+import clients from '../../../../../../../data/kp-clients.json';
 import { getTemplate, formatPrice, docId, type Currency } from '@/lib/kp-templates';
 import { LEGAL_INFO, CONTACT_INFO } from '@/lib/kp-data';
 import styles from './invoice.module.css';

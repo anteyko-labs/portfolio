@@ -2,7 +2,11 @@ import type { Metadata } from "next";
 import { Manrope } from "next/font/google";
 import { GeistMono } from "geist/font/mono";
 import Script from "next/script";
-import "./globals.css";
+import { NextIntlClientProvider, hasLocale } from "next-intl";
+import { setRequestLocale } from "next-intl/server";
+import { notFound } from "next/navigation";
+import { routing } from "@/i18n/routing";
+import "../globals.css";
 import { LanguageProvider } from "@/lib/language-context";
 import { LogoFusionEffect } from "@/components/effects/logo-fusion";
 import { CustomCursor } from "@/components/effects/custom-cursor";
@@ -112,16 +116,29 @@ function safeYmId(): string | null {
   return id && YM_ID_PATTERN.test(id) ? id : null;
 }
 
-export default function RootLayout({
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
+
+export default async function LocaleLayout({
   children,
+  params,
 }: Readonly<{
   children: React.ReactNode;
+  params: Promise<{ locale: string }>;
 }>) {
+  const { locale } = await params;
+  if (!hasLocale(routing.locales, locale)) {
+    notFound();
+  }
+  // Enable static rendering for this locale.
+  setRequestLocale(locale);
+
   const GTM_ID = safeGtmId();
   const YM_ID = safeYmId();
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang={locale} suppressHydrationWarning>
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="icon" href="/icon.svg" type="image/svg+xml" />
@@ -201,7 +218,8 @@ export default function RootLayout({
           </noscript>
         ) : null}
 
-        <LanguageProvider>
+        <NextIntlClientProvider>
+          <LanguageProvider>
           {/* Skip to content — WCAG 2.4.1 + 2.5.5 (44x44 min touch target) */}
           <a
             href="#main-content"
@@ -218,7 +236,8 @@ export default function RootLayout({
           </main>
           <CookieConsent />
           <AnalyticsBootstrap />
-        </LanguageProvider>
+          </LanguageProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   );
