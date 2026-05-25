@@ -1,6 +1,7 @@
 import { PageWrapper } from "@/components/layout/page-wrapper";
 import { JsonLd } from "@/components/seo/json-ld";
 import { SITE_BASE } from "@/components/seo/breadcrumbs";
+import { localeAlternates } from "@/i18n/metadata";
 import { HeroSection } from "@/components/sections/hero";
 import { MarqueeBanner } from "@/components/sections/marquee-banner";
 import { WhatWeBuildSection } from "@/components/sections/what-we-build";
@@ -27,6 +28,11 @@ const websiteSchema = {
     url: SITE_BASE,
   },
 };
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  return { alternates: localeAlternates(locale, "/") };
+}
 
 export default function Home() {
   return (

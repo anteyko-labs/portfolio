@@ -14,7 +14,7 @@ import { Lightbox } from "@/components/ui/lightbox";
 import Image from "next/image";
 import type { FlagshipCase } from "@/lib/cases-data";
 import { flagshipCases } from "@/lib/cases-data";
-import NextLink from "next/link";
+import { Link as NextLink } from "@/i18n/navigation";
 import { CaseBottomCTA } from "@/components/case-bottom-cta";
 
 // Sticky Summary Rail component

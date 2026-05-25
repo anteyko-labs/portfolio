@@ -1,12 +1,13 @@
 "use client";
 
-import NextLink, { LinkProps as NextLinkProps } from "next/link";
+import { Link as NextLink } from "@/i18n/navigation";
+import type { LinkProps as NextLinkProps } from "next/link";
 import { forwardRef, AnchorHTMLAttributes, ReactNode } from "react";
 import { motion } from "framer-motion";
 import clsx from "clsx";
 import { useReducedMotion } from "@/lib/hooks";
 
-interface LinkProps extends NextLinkProps {
+interface LinkProps extends Omit<NextLinkProps, "locale"> {
   children: ReactNode;
   className?: string;
   external?: boolean;

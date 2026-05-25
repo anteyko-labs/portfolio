@@ -3,7 +3,7 @@
 import { ReactNode } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import NextLink from "next/link";
+import { Link as NextLink } from "@/i18n/navigation";
 import { useReducedMotion } from "@/lib/hooks";
 import { Section, AnimatedItem } from "@/components/ui/section";
 

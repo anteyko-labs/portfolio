@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { useLanguage } from "@/lib/language-context";
 import { useReducedMotion } from "@/lib/hooks";
-import NextLink from "next/link";
+import { Link as NextLink } from "@/i18n/navigation";
 import { Section, SectionHeader, AnimatedItem } from "@/components/ui/section";
 import { TiltCard } from "@/components/ui/tilt-card";
 import { slideInLeft, slideInRight, fadeInUp } from "@/lib/motion";

@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { PageWrapper } from "@/components/layout/page-wrapper";
 import { JsonLd } from "@/components/seo/json-ld";
+import { localeAlternates } from "@/i18n/metadata";
 import {
   getFlagshipCaseBySlug,
   getMicroCaseById,
@@ -12,7 +13,7 @@ import {
 import { CaseDetailContent } from "./case-detail-content";
 import { MicroCaseDetailContent } from "./micro-case-detail-content";
 
-type Props = { params: Promise<{ slug: string }> };
+type Props = { params: Promise<{ locale: string; slug: string }> };
 
 const SITE = "https://www.anteyko.com";
 
@@ -34,7 +35,7 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props) {
-  const { slug } = await params;
+  const { locale, slug } = await params;
 
   // Try flagship first
   const flagshipCase = getFlagshipCaseBySlug(slug);
@@ -43,7 +44,7 @@ export async function generateMetadata({ params }: Props) {
     return {
       title: flagshipCase.title.en,
       description,
-      alternates: { canonical: `/cases/${slug}` },
+      alternates: localeAlternates(locale, `/cases/${slug}`),
       openGraph: {
         type: "article",
         title: flagshipCase.title.en,
@@ -60,7 +61,7 @@ export async function generateMetadata({ params }: Props) {
     return {
       title: microCase.title.en,
       description,
-      alternates: { canonical: `/cases/${slug}` },
+      alternates: localeAlternates(locale, `/cases/${slug}`),
       openGraph: {
         type: "article",
         title: microCase.title.en,

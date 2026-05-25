@@ -1,14 +1,18 @@
 import { PageWrapper } from "@/components/layout/page-wrapper";
 import { JsonLd } from "@/components/seo/json-ld";
 import { homeBreadcrumb, SITE_BASE } from "@/components/seo/breadcrumbs";
+import { localeAlternates } from "@/i18n/metadata";
 import { ServicesContent } from "./services-content";
 
-export const metadata = {
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  return {
   title: "Services",
   description:
     "Launch Site, MVP Sprint, Startup Under Key, Web3 Add-on. Clear scope, fixed timeline, predictable outcomes. Based in Kyrgyzstan & Dubai.",
-  alternates: { canonical: "/services" },
-};
+    alternates: localeAlternates(locale, "/services"),
+  };
+}
 
 const PROVIDER = {
   "@type": "Organization",

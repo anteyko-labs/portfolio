@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import NextLink from "next/link";
+import { Link as NextLink } from "@/i18n/navigation";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
 import { motion, AnimatePresence, useScroll, useSpring } from "framer-motion";
 import clsx from "clsx";
 import { useLanguage } from "@/lib/language-context";

@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
-import NextLink from "next/link";
+import { Link as NextLink } from "@/i18n/navigation";
 import Image from "next/image";
 import { useLanguage } from "@/lib/language-context";
 import { useReducedMotion } from "@/lib/hooks";

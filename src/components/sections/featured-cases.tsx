@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import NextLink from "next/link";
+import { Link as NextLink } from "@/i18n/navigation";
 import Image from "next/image";
 import { useLanguage } from "@/lib/language-context";
 import { Section, SectionHeader, AnimatedItem } from "@/components/ui/section";
