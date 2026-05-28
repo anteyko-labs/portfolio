@@ -494,11 +494,46 @@ body {
 .hero-veil-dark {
   background: linear-gradient(
     180deg,
-    rgba(0, 0, 0, 0.55) 0%,
-    rgba(0, 0, 0, 0.25) 14%,
-    rgba(0, 0, 0, 0.10) 38%,
-    rgba(0, 0, 0, 0.10) 62%,
-    rgba(255, 255, 255, 0.50) 86%,
+    rgba(0, 0, 0, 0.45) 0%,
+    rgba(0, 0, 0, 0.18) 14%,
+    rgba(0, 0, 0, 0.05) 42%,
+    rgba(0, 0, 0, 0.05) 58%,
+    rgba(255, 255, 255, 0.45) 86%,
     var(--bg-primary, #ffffff) 100%
   );
+}
+
+/* Focused radial "stage" — softly darkens an elliptical pool under the text block.
+   The text reads on calm darkness while the video shimmers through the edges. */
+.hero-stage {
+  background: radial-gradient(
+    ellipse 60% 55% at 50% 48%,
+    rgba(0, 0, 0, 0.65) 0%,
+    rgba(0, 0, 0, 0.45) 35%,
+    rgba(0, 0, 0, 0.18) 65%,
+    rgba(0, 0, 0, 0) 90%
+  );
+}
+
+/* Two-layer text-shadow — invisible over dark, life-saving over bright video frames. */
+.hero-text-shadow {
+  text-shadow:
+    0 1px 1px rgba(0, 0, 0, 0.5),
+    0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+/* Fluid hero typography — calm desktop-to-mobile scale, no breakpoint snaps. */
+.hero-headline {
+  font-size: clamp(2.25rem, 1.5rem + 2.7vw, 3.75rem);
+  line-height: 1.06;
+  letter-spacing: -0.03em;
+}
+.hero-subtitle {
+  font-size: clamp(1rem, 0.85rem + 0.6vw, 1.125rem);
+  line-height: 1.55;
+  max-width: 36rem;
+}
+.hero-trust {
+  font-size: clamp(0.85rem, 0.78rem + 0.25vw, 0.95rem);
+  line-height: 1.55;
 }

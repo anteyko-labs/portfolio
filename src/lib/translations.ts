@@ -37,20 +37,20 @@ export const translations = {
   // Hero
   hero: {
     tagline: {
-      en: "Bishkek · Dubai · 5 years in production",
-      ru: "Бишкек · Дубай · 5 лет в продакшене",
+      en: "Build · Ship · Iterate",
+      ru: "Собираем · Запускаем · Улучшаем",
     },
     title: {
-      en: "We ship products.",
-      ru: "Доводим продукты до прода.",
+      en: "End-to-end development: websites, MVPs, and complex startup products.",
+      ru: "Разработка под ключ: сайты, MVP и сложные стартап-продукты.",
     },
     titleAccent: {
-      en: "We ship",
-      ru: "Доводим",
+      en: "End-to-end development:",
+      ru: "Разработка под ключ:",
     },
     titleRest: {
-      en: "products.",
-      ru: "продукты до прода.",
+      en: "websites, MVPs, and complex startup products.",
+      ru: "сайты, MVP и сложные стартап-продукты.",
     },
     heroMetric: {
       en: "24h",
@@ -61,12 +61,12 @@ export const translations = {
       ru: "ответ по оценке",
     },
     subtitle: {
-      en: "From the first line of code to public release — design, backend, infrastructure, launch. Web2 and Web3 under one team.",
-      ru: "От первой строки кода до публичного релиза — дизайн, бэкенд, инфраструктура, запуск. Web2 и Web3 в одной команде.",
+      en: "Design, frontend, backend, admin panels, integrations, infrastructure, and launch. Web2 + Web3 — in one delivery loop.",
+      ru: "Дизайн, фронтенд, backend, админ-панели, интеграции, инфраструктура и запуск. Web2 + Web3 — в одном цикле поставки.",
     },
     trustLine: {
-      en: "40+ shipped products. Milestone-based delivery. Repo access from day one.",
-      ru: "40+ продуктов в проде. Этапная оплата. Доступ к репозиторию с первого дня.",
+      en: "40+ projects delivered. Dubai & Kyrgyzstan. Milestone-based. NDA on request.",
+      ru: "40+ проектов. Дубай и Кыргызстан. Работаем по этапам. NDA по запросу.",
     },
   },
 

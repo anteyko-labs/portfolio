@@ -18,9 +18,11 @@ export function HeroSection() {
 
   return (
     <section className="relative min-h-[92dvh] flex items-center justify-center overflow-hidden bg-black pt-24 pb-16">
-      {/* Cinematic background video — muted, looped, with poster fallback for fast first paint */}
+      {/* Cinematic background video — slight downward shift so the figure anchors beneath the buttons,
+          not under the headline. Poster gives an instant first paint. */}
       <video
         className="hero-video absolute inset-0 w-full h-full object-cover"
+        style={{ objectPosition: "center 62%" }}
         autoPlay
         muted
         loop
@@ -32,17 +34,21 @@ export function HeroSection() {
         <source src="/videos/hero.mp4" type="video/mp4" />
       </video>
 
-      {/* Cinematic dark veil — slight top darkening so the header reads, transparent middle for the
-          video, and a soft fade-to-white at the bottom so the next light section meets us gracefully. */}
+      {/* Global veil: slight top darkening for header legibility, soft white fade at the bottom. */}
       <div className="hero-veil-dark absolute inset-0 pointer-events-none" aria-hidden="true" />
 
-      {/* Indigo halo behind the headline — a touch brighter on dark */}
+      {/* Focused radial stage — softly darkens an elliptical pool under the text block so the
+          subtitle and trust line stay readable even when the video plays bright frames behind them. */}
+      <div className="hero-stage absolute inset-0 pointer-events-none" aria-hidden="true" />
+
+      {/* Restrained indigo halo behind the headline. */}
       <div
-        className="absolute left-1/2 top-[30%] -translate-x-1/2 w-[60rem] max-w-[90vw] h-[24rem] pointer-events-none"
+        className="absolute left-1/2 top-[34%] -translate-x-1/2 w-[52rem] max-w-[88vw] h-[20rem] pointer-events-none"
         style={{
           background:
-            "radial-gradient(ellipse at center, rgba(99,102,241,0.22), transparent 65%)",
+            "radial-gradient(ellipse at center, rgba(99,102,241,0.18), transparent 65%)",
         }}
+        aria-hidden="true"
       />
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -62,26 +68,26 @@ export function HeroSection() {
             </span>
           </div>
 
-          {/* Headline — white on cinematic dark, with one indigo accent run */}
+          {/* Headline — fluid clamp, two-layer shadow for legibility on bright video frames */}
           <h1
-            className="hero-reveal mt-7 font-display font-extrabold leading-[1.06] tracking-[-0.03em] text-[2.25rem] sm:text-[3rem] lg:text-[3.75rem] text-white text-balance"
+            className="hero-reveal hero-headline hero-text-shadow mt-6 font-display font-extrabold text-white text-balance"
             style={delay(0.12)}
           >
             <span className="text-accent-primary">{t("hero.titleAccent")}</span>{" "}
             <span className="text-white">{t("hero.titleRest")}</span>
           </h1>
 
-          {/* Subtitle */}
+          {/* Subtitle — narrower, fluid, soft shadow */}
           <p
-            className="hero-reveal mt-6 text-body-lg md:text-[1.2rem] text-white/85 max-w-xl leading-relaxed text-balance"
+            className="hero-reveal hero-subtitle hero-text-shadow mt-5 text-white/90 text-balance"
             style={delay(0.2)}
           >
             {t("hero.subtitle")}
           </p>
 
-          {/* CTAs */}
+          {/* CTAs — pulled closer to the content above */}
           <div
-            className="hero-reveal mt-9 flex flex-col sm:flex-row items-center justify-center gap-4"
+            className="hero-reveal mt-7 flex flex-col sm:flex-row items-center justify-center gap-3.5"
             style={delay(0.28)}
           >
             <MagneticButton>
@@ -118,13 +124,14 @@ export function HeroSection() {
             </MagneticButton>
           </div>
 
-          {/* Trust line */}
-          <div className="hero-reveal mt-10" style={delay(0.36)}>
-            <p className="text-body-md text-white/75 flex items-center justify-center gap-2.5">
+          {/* Trust line — close to CTAs, fluid, light shadow */}
+          <div className="hero-reveal mt-6" style={delay(0.36)}>
+            <p className="hero-trust hero-text-shadow text-white/85 flex items-center justify-center gap-2.5">
               <svg
                 className="w-5 h-5 text-success shrink-0"
                 fill="currentColor"
                 viewBox="0 0 20 20"
+                aria-hidden="true"
               >
                 <path
                   fillRule="evenodd"
