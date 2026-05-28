@@ -18,11 +18,11 @@ export function HeroSection() {
 
   return (
     <section className="relative min-h-[92dvh] flex items-center justify-center overflow-hidden bg-black pt-24 pb-16">
-      {/* Cinematic background video — slight downward shift so the figure anchors beneath the buttons,
-          not under the headline. Poster gives an instant first paint. */}
+      {/* Cinematic background video — object-position is set in CSS so the figure anchors
+          below the text on mobile (center 62%) and slides to the right on desktop (78% 50%)
+          where it lives in the open right column of the split layout. */}
       <video
         className="hero-video absolute inset-0 w-full h-full object-cover"
-        style={{ objectPosition: "center 62%" }}
         autoPlay
         muted
         loop
@@ -41,9 +41,10 @@ export function HeroSection() {
           subtitle and trust line stay readable even when the video plays bright frames behind them. */}
       <div className="hero-stage absolute inset-0 pointer-events-none" aria-hidden="true" />
 
-      {/* Restrained indigo halo behind the headline. */}
+      {/* Restrained indigo halo behind the headline — centered on mobile, anchored under the
+          left text column on desktop where it backs the H1. */}
       <div
-        className="absolute left-1/2 top-[34%] -translate-x-1/2 w-[52rem] max-w-[88vw] h-[20rem] pointer-events-none"
+        className="absolute left-1/2 top-[34%] -translate-x-1/2 w-[52rem] max-w-[88vw] h-[20rem] pointer-events-none lg:left-[26%] lg:top-[40%] lg:w-[36rem]"
         style={{
           background:
             "radial-gradient(ellipse at center, rgba(99,102,241,0.18), transparent 65%)",
@@ -52,7 +53,7 @@ export function HeroSection() {
       />
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="mx-auto max-w-3xl flex flex-col items-center text-center">
+        <div className="mx-auto max-w-3xl flex flex-col items-center text-center lg:mx-0 lg:max-w-xl lg:items-start lg:text-left">
           {/* Eyebrow pill — dark glass */}
           <div className="hero-reveal" style={delay(0.04)}>
             <span className="liquid-glass-dark inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-caption font-mono uppercase tracking-[0.16em] text-white/85">

@@ -41,16 +41,16 @@ export const translations = {
       ru: "Собираем · Запускаем · Улучшаем",
     },
     title: {
-      en: "End-to-end development: websites, MVPs, and complex startup products.",
-      ru: "Разработка под ключ: сайты, MVP и сложные стартап-продукты.",
+      en: "Launch a product you're proud of.",
+      ru: "Запустим продукт, которым гордитесь.",
     },
     titleAccent: {
-      en: "End-to-end development:",
-      ru: "Разработка под ключ:",
+      en: "Launch",
+      ru: "Запустим",
     },
     titleRest: {
-      en: "websites, MVPs, and complex startup products.",
-      ru: "сайты, MVP и сложные стартап-продукты.",
+      en: "a product you're proud of.",
+      ru: "продукт, которым гордитесь.",
     },
     heroMetric: {
       en: "24h",
@@ -61,8 +61,8 @@ export const translations = {
       ru: "ответ по оценке",
     },
     subtitle: {
-      en: "Design, frontend, backend, admin panels, integrations, infrastructure, and launch. Web2 + Web3 — in one delivery loop.",
-      ru: "Дизайн, фронтенд, backend, админ-панели, интеграции, инфраструктура и запуск. Web2 + Web3 — в одном цикле поставки.",
+      en: "No missed deadlines. Pay per stage. Your code from day one.",
+      ru: "Без срывов сроков. Этапная оплата. Код ваш с первого дня.",
     },
     trustLine: {
       en: "40+ projects delivered. Dubai & Kyrgyzstan. Milestone-based. NDA on request.",

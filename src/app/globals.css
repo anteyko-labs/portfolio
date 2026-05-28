@@ -472,6 +472,12 @@ body {
 .hero-video {
   animation: hero-video-drift 22s ease-in-out infinite alternate;
   will-change: transform;
+  object-position: 50% 62%;
+}
+@media (min-width: 1024px) {
+  .hero-video {
+    object-position: 78% 50%;
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   .hero-video { animation: none; }
@@ -503,8 +509,9 @@ body {
   );
 }
 
-/* Focused radial "stage" — softly darkens an elliptical pool under the text block.
-   The text reads on calm darkness while the video shimmers through the edges. */
+/* Focused stage — mobile: radial pool under centered text. Desktop: split layout —
+   text lives in the left column on a calm dark wash, the right half is left clear so
+   the video figure breathes without overlap. */
 .hero-stage {
   background: radial-gradient(
     ellipse 60% 55% at 50% 48%,
@@ -513,6 +520,19 @@ body {
     rgba(0, 0, 0, 0.18) 65%,
     rgba(0, 0, 0, 0) 90%
   );
+}
+
+@media (min-width: 1024px) {
+  .hero-stage {
+    background: linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.80) 0%,
+      rgba(0, 0, 0, 0.62) 28%,
+      rgba(0, 0, 0, 0.30) 48%,
+      rgba(0, 0, 0, 0.08) 62%,
+      rgba(0, 0, 0, 0) 75%
+    );
+  }
 }
 
 /* Two-layer text-shadow — invisible over dark, life-saving over bright video frames. */
