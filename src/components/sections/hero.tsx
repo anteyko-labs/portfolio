@@ -19,7 +19,25 @@ export function HeroSection() {
 
   return (
     <section className="relative min-h-[92dvh] flex items-center justify-center overflow-hidden bg-bg-primary pt-24 pb-16">
-      {/* Subtle tech grid — radial fade toward center for an airy feel */}
+      {/* Cinematic background video — muted, looped, with poster fallback for fast first paint */}
+      <video
+        className="hero-video absolute inset-0 w-full h-full object-cover"
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="metadata"
+        poster="/videos/hero-poster.jpg"
+        aria-hidden="true"
+      >
+        <source src="/videos/hero.mp4" type="video/mp4" />
+      </video>
+
+      {/* Light-cinematic veil — a radial vignette that turns the dark video into a misty white centre
+          for the headline while letting the video shimmer through the edges. */}
+      <div className="hero-veil absolute inset-0 pointer-events-none" aria-hidden="true" />
+
+      {/* Subtle tech grid — radial fade toward centre for an airy feel */}
       <div
         className="absolute inset-0 page-hero-grid pointer-events-none"
         style={{
@@ -29,20 +47,21 @@ export function HeroSection() {
             "radial-gradient(ellipse 70% 60% at 50% 35%, black 0%, transparent 80%)",
         }}
       />
-      {/* Soft indigo halo behind the headline — restrained */}
+
+      {/* Soft indigo halo behind the headline — restrained brand accent */}
       <div
         className="absolute left-1/2 top-[28%] -translate-x-1/2 w-[60rem] max-w-[90vw] h-[24rem] pointer-events-none"
         style={{
           background:
-            "radial-gradient(ellipse at center, rgba(79,70,229,0.07), transparent 65%)",
+            "radial-gradient(ellipse at center, rgba(79,70,229,0.10), transparent 65%)",
         }}
       />
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="mx-auto max-w-3xl flex flex-col items-center text-center">
-          {/* Eyebrow pill */}
+          {/* Eyebrow pill — liquid glass over the cinematic veil */}
           <div className="hero-reveal" style={delay(0.04)}>
-            <span className="inline-flex items-center gap-2 rounded-full border border-border bg-bg-secondary px-3.5 py-1.5 text-caption font-mono uppercase tracking-[0.16em] text-text-secondary">
+            <span className="liquid-glass-light inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-caption font-mono uppercase tracking-[0.16em] text-text-secondary">
               <span className="w-1.5 h-1.5 rounded-full bg-accent-primary" />
               {taglineParts.map((part, i) => (
                 <Fragment key={i}>
@@ -108,6 +127,7 @@ export function HeroSection() {
                 variant="outline"
                 size="lg"
                 onClick={() => router.push("/cases")}
+                className="liquid-glass-light"
               >
                 {language === "en" ? "View our work" : "Смотреть кейсы"}
               </Button>

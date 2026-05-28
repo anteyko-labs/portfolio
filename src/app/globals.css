@@ -445,3 +445,34 @@ body {
     scroll-behavior: auto !important;
   }
 }
+
+/* Light liquid glass — pill / cards layered over the cinematic hero veil. */
+.liquid-glass-light {
+  background: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(12px) saturate(140%);
+  -webkit-backdrop-filter: blur(12px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow:
+    0 1px 1px rgba(0, 0, 0, 0.04),
+    0 4px 16px rgba(0, 0, 0, 0.05),
+    inset 0 1px 1px rgba(255, 255, 255, 0.9);
+}
+
+/* Hero cinematic veil — radial vignette over the bg video: a brighter misty centre for the headline, video showing through the edges. */
+.hero-veil {
+  background:
+    radial-gradient(ellipse 90% 80% at 50% 50%, rgba(255, 255, 255, 0.92) 0%, rgba(255, 255, 255, 0.75) 35%, rgba(255, 255, 255, 0.55) 100%);
+}
+
+/* Subtle slow Ken Burns on the hero video for a living, cinematic feel. */
+@keyframes hero-video-drift {
+  0%   { transform: scale(1.04) translate3d(0, 0, 0); }
+  100% { transform: scale(1.10) translate3d(0, -1.5%, 0); }
+}
+.hero-video {
+  animation: hero-video-drift 22s ease-in-out infinite alternate;
+  will-change: transform;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-video { animation: none; }
+}
