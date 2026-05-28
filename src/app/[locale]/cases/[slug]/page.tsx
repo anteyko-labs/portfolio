@@ -86,7 +86,7 @@ const ORG = {
   "@type": "Organization",
   name: "Anteyko",
   url: SITE,
-  logo: { "@type": "ImageObject", url: `${SITE}/icon.svg` },
+  logo: { "@type": "ImageObject", url: `${SITE}/icon-512.png` },
 };
 
 // Build Article + BreadcrumbList structured data for a case study.

@@ -156,9 +156,7 @@ export default async function LocaleLayout({
   return (
     <html lang={locale} suppressHydrationWarning>
       <head>
-        <link rel="icon" href="/favicon.ico" sizes="any" />
-        <link rel="icon" href="/icon.svg" type="image/svg+xml" />
-        <link rel="apple-touch-icon" href="/icon.svg" />
+        {/* favicon.ico / icon.png / apple-icon.png live in src/app/ and are wired by Next App Router. */}
         <link rel="manifest" href="/manifest.json" />
 
         {/* Google Tag Manager — only if validated NEXT_PUBLIC_GTM_ID is set */}

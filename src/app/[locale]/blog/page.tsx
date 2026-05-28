@@ -31,7 +31,7 @@ const ORG = {
   "@type": "Organization",
   name: "Anteyko",
   url: SITE,
-  logo: { "@type": "ImageObject", url: `${SITE}/icon.svg` },
+  logo: { "@type": "ImageObject", url: `${SITE}/icon-512.png` },
 };
 
 // Blog listing as a structured CollectionPage + ItemList so crawlers can read the

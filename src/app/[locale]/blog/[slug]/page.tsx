@@ -47,7 +47,7 @@ const ORG = {
   "@type": "Organization",
   name: "Anteyko",
   url: SITE,
-  logo: { "@type": "ImageObject", url: `${SITE}/icon.svg` },
+  logo: { "@type": "ImageObject", url: `${SITE}/icon-512.png` },
 };
 
 // Build Article + BreadcrumbList structured data for a blog post. Mirrors the
@@ -60,7 +60,7 @@ function articleJsonLd(slug: string, post: BlogPost) {
     "@type": "Article",
     headline: post.title.en,
     description: clampDescription(post.excerpt.en),
-    image: `${SITE}/icon.svg`,
+    image: `${SITE}/icon-512.png`,
     mainEntityOfPage: url,
     datePublished: post.date,
     author: ORG,
