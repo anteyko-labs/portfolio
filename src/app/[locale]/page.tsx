@@ -8,6 +8,7 @@ import { WhatWeBuildSection } from "@/components/sections/what-we-build";
 import { WhyUsSection } from "@/components/sections/why-us";
 import { TrustedBySection } from "@/components/sections/trusted-by";
 import { FeaturedCasesSection } from "@/components/sections/featured-cases";
+import { TestimonialsSection } from "@/components/sections/testimonials";
 import { PackagesSection } from "@/components/sections/packages";
 import { ProcessPreviewSection } from "@/components/sections/process-preview";
 import { FAQPreviewSection } from "@/components/sections/faq-preview";
@@ -44,6 +45,7 @@ export default function Home() {
       <WhyUsSection />
       <TrustedBySection />
       <FeaturedCasesSection />
+      <TestimonialsSection />
       <PackagesSection />
       <ProcessPreviewSection />
       <FAQPreviewSection />
