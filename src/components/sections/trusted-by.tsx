@@ -37,13 +37,13 @@ export function TrustedBySection() {
         <p className="text-center text-caption font-mono text-text-tertiary uppercase tracking-widest mb-10">
           {heading}
         </p>
-        <div className="flex flex-wrap justify-center items-center gap-x-10 gap-y-8 md:gap-x-14 mb-8 max-w-5xl mx-auto">
+        <div className="flex flex-wrap justify-center items-center gap-x-8 gap-y-8 md:gap-x-10 lg:gap-x-12 mb-8 max-w-6xl mx-auto">
           {LOGOS.map(({ name, src, h, dark }) => (
             <div
               key={name}
               className={
                 dark
-                  ? "rounded-xl bg-text-primary px-5 py-3 opacity-85 hover:opacity-100 transition-opacity duration-300 flex items-center"
+                  ? "rounded-xl bg-text-primary px-4 py-2.5 opacity-85 hover:opacity-100 transition-opacity duration-300 flex items-center"
                   : "opacity-70 hover:opacity-100 transition-opacity duration-300 flex items-center"
               }
               title={name}
