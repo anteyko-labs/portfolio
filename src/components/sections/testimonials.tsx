@@ -50,7 +50,7 @@ export function TestimonialsSection() {
               </blockquote>
               <figcaption className="flex items-center gap-3 pt-2 border-t border-border/50">
                 <div className="w-10 h-10 rounded-full bg-accent-primary/10 text-accent-primary flex items-center justify-center text-body-sm font-semibold shrink-0">
-                  {t.initials ?? t.author[lang].slice(0, 2).toUpperCase()}
+                  {t.initials?.[lang] ?? t.author[lang].slice(0, 2).toUpperCase()}
                 </div>
                 <div className="min-w-0">
                   <div className="text-body-sm font-semibold text-text-primary truncate">

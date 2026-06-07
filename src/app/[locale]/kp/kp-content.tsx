@@ -209,7 +209,7 @@ export default function KPContent({
                   <p className={styles.testimonialQuote}>“{t.quote.ru}”</p>
                   <div className={styles.testimonialAuthor}>
                     {t.initials && (
-                      <div className={styles.testimonialAvatar}>{t.initials}</div>
+                      <div className={styles.testimonialAvatar}>{t.initials.ru}</div>
                     )}
                     <div>
                       <div className={styles.testimonialName}>{t.author.ru}</div>

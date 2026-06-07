@@ -33,7 +33,9 @@ export type Testimonial = {
   quote: LocalizedString;
   author: LocalizedString;
   role: LocalizedString;
-  initials?: string;
+  // Initials follow the locale so the avatar shows АК in Russian and AK in
+  // English — keeps the typography native to the reader's alphabet.
+  initials?: LocalizedString;
 };
 
 // Реальные отзывы клиентов. Подтверждены клиентами в 2026.
@@ -46,7 +48,7 @@ export const TESTIMONIALS: Testimonial[] = [
     },
     author: { ru: 'Адина Какешова', en: 'Adina Kakeshova' },
     role: { ru: 'Основатель, TRM, Бишкек', en: 'Founder, TRM, Bishkek' },
-    initials: 'АК',
+    initials: { ru: 'АК', en: 'AK' },
   },
   {
     quote: {
@@ -58,7 +60,7 @@ export const TESTIMONIALS: Testimonial[] = [
       ru: 'CEO, KUT Energy Investments, Dubai',
       en: 'CEO, KUT Energy Investments, Dubai',
     },
-    initials: 'BZ',
+    initials: { ru: 'BZ', en: 'BZ' },
   },
   {
     quote: {
@@ -70,7 +72,7 @@ export const TESTIMONIALS: Testimonial[] = [
       ru: 'CEO, KUT Resources AG, Zurich',
       en: 'CEO, KUT Resources AG, Zurich',
     },
-    initials: 'AL',
+    initials: { ru: 'AL', en: 'AL' },
   },
   {
     quote: {
@@ -82,7 +84,7 @@ export const TESTIMONIALS: Testimonial[] = [
       ru: 'CTO, fintech (под NDA), Hong Kong',
       en: 'CTO, fintech (under NDA), Hong Kong',
     },
-    initials: 'AR',
+    initials: { ru: 'AR', en: 'AR' },
   },
   {
     quote: {
@@ -94,7 +96,7 @@ export const TESTIMONIALS: Testimonial[] = [
       ru: 'CFO, hospitality (под NDA), San Jose',
       en: 'CFO, hospitality (under NDA), San Jose',
     },
-    initials: 'MB',
+    initials: { ru: 'MB', en: 'MB' },
   },
 ];
 
