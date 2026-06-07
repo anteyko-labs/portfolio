@@ -24,49 +24,76 @@ export const SHOWCASE_CASES: Record<TemplateId, ShowcaseCase | null> = {
   mvp: TRM_CASE,
 };
 
+// Bilingual testimonials. `quote`, `author`, `role` carry both EN and RU so the
+// home section (locale from URL) and KP pages (RU-only for now) read from the
+// same source. `initials` are language-neutral.
+export type LocalizedString = { en: string; ru: string };
+
 export type Testimonial = {
-  quote: string;
-  author: string;
-  role: string;
+  quote: LocalizedString;
+  author: LocalizedString;
+  role: LocalizedString;
   initials?: string;
 };
 
 // Реальные отзывы клиентов. Подтверждены клиентами в 2026.
-// Восемь NDA: где клиент скрыт, идентифицируется через должность + индустрию + город.
+// NDA-клиенты идентифицируются через должность + индустрию + город (без имени компании).
 export const TESTIMONIALS: Testimonial[] = [
   {
-    quote:
-      'До Anteyko мы собирали согласия учеников на бумаге и переживали о юридической силе цифровых акцептов — большинство IT-подрядчиков предлагали внешние сервисы ЭП за сотни долларов в месяц. Anteyko сделали свою архитектуру акцепта с аудит-трейлом и PDF с печатью директора, которая полностью соответствует Гражданскому кодексу КР, — за 2 недели. Бумажный процесс закрыли полностью.',
-    author: 'Адина Какешова',
-    role: 'Основатель, TRM, Бишкек',
+    quote: {
+      ru: 'До Anteyko мы собирали согласия учеников на бумаге и переживали о юридической силе цифровых акцептов — большинство IT-подрядчиков предлагали внешние сервисы ЭП за сотни долларов в месяц. Anteyko сделали свою архитектуру акцепта с аудит-трейлом и PDF с печатью директора, которая полностью соответствует Гражданскому кодексу КР, — за 2 недели. Бумажный процесс закрыли полностью.',
+      en: 'Before Anteyko we collected student consents on paper and worried about the legal validity of digital acceptance — most IT contractors offered external e-signature services at hundreds of dollars per month. Anteyko built their own acceptance architecture with an audit trail and a PDF with the director\'s seal that fully complies with the Civil Code of the Kyrgyz Republic — in 2 weeks. The paper process is closed entirely.',
+    },
+    author: { ru: 'Адина Какешова', en: 'Adina Kakeshova' },
+    role: { ru: 'Основатель, TRM, Бишкек', en: 'Founder, TRM, Bishkek' },
     initials: 'АК',
   },
   {
-    quote:
-      'В 2023 Дубай только что закодифицировал VARA-регуляции, и нам нужно было запустить платформу токенизации до Q3 — с полным KYC/AML, ончейн-распределением токенов и аудит-трейлом. Большинство подрядчиков либо предлагали нерегулируемые DeFi-шаблоны из 2021 года, либо просили 6+ месяцев. Anteyko уложились в 12 недель, полностью соответствуя VARA. Private Sale стартовал в срок — без них этого не случилось бы.',
-    author: 'Bazan',
-    role: 'CEO, KUT Energy Investments, Dubai',
+    quote: {
+      ru: 'В 2023 Дубай только что закодифицировал VARA-регуляции, и нам нужно было запустить платформу токенизации до Q3 — с полным KYC/AML, ончейн-распределением токенов и аудит-трейлом. Большинство подрядчиков либо предлагали нерегулируемые DeFi-шаблоны из 2021 года, либо просили 6+ месяцев. Anteyko уложились в 12 недель, полностью соответствуя VARA. Private Sale стартовал в срок — без них этого не случилось бы.',
+      en: 'In 2023 Dubai had just codified VARA regulations, and we needed to launch a tokenization platform by Q3 — with full KYC/AML, on-chain token distribution, and an audit trail. Most contractors either offered unregulated DeFi templates from 2021 or asked for 6+ months. Anteyko delivered in 12 weeks, fully VARA-compliant. The Private Sale launched on schedule — without them, it wouldn\'t have happened.',
+    },
+    author: { ru: 'Bazan', en: 'Bazan' },
+    role: {
+      ru: 'CEO, KUT Energy Investments, Dubai',
+      en: 'CEO, KUT Energy Investments, Dubai',
+    },
     initials: 'BZ',
   },
   {
-    quote:
-      'Мы хотели кошелёк, который ощущается как банковское приложение — интуитивно как Revolut, но со встроенным трейдингом и аналитикой расходов. Trust Wallet и Coinbase Wallet слишком технические для нашей аудитории. Anteyko полностью спроектировали и реализовали 26+ экранов с UX уровня банковского приложения и спрятали под капотом non-custodial архитектуру с шифрованием. На App Store запустились без единого ревью-rejection.',
-    author: 'Alexander',
-    role: 'CEO, KUT Resources AG, Zurich',
+    quote: {
+      ru: 'Мы хотели кошелёк, который ощущается как банковское приложение — интуитивно как Revolut, но со встроенным трейдингом и аналитикой расходов. Trust Wallet и Coinbase Wallet слишком технические для нашей аудитории. Anteyko полностью спроектировали и реализовали 26+ экранов с UX уровня банковского приложения и спрятали под капотом non-custodial архитектуру с шифрованием. На App Store запустились без единого ревью-rejection.',
+      en: 'We wanted a wallet that feels like a banking app — intuitive like Revolut, but with built-in trading and spending analytics. Trust Wallet and Coinbase Wallet are too technical for our audience. Anteyko designed and built 26+ screens with banking-app-grade UX and hid a non-custodial architecture with encryption under the hood. We launched on the App Store without a single review rejection.',
+    },
+    author: { ru: 'Alexander', en: 'Alexander' },
+    role: {
+      ru: 'CEO, KUT Resources AG, Zurich',
+      en: 'CEO, KUT Resources AG, Zurich',
+    },
     initials: 'AL',
   },
   {
-    quote:
-      'Нам нужна была банковская платформа production-grade с нуля: транзакционный леджер с ACID-гарантиями, четыре платёжных провайдера за одним API, sub-200ms response time на агрегацию баланса. Команда Anteyko не просто написала код — они сделали инженерное решение архитектурного уровня: двойная запись, idempotency keys, JWT rotation, 87% покрытие тестами, всё вышло в продакшен без единого критического инцидента в первом квартале после запуска.',
-    author: 'Aron',
-    role: 'CTO, fintech (под NDA), Hong Kong',
+    quote: {
+      ru: 'Нам нужна была банковская платформа production-grade с нуля: транзакционный леджер с ACID-гарантиями, четыре платёжных провайдера за одним API, sub-200ms response time на агрегацию баланса. Команда Anteyko не просто написала код — они сделали инженерное решение архитектурного уровня: двойная запись, idempotency keys, JWT rotation, 87% покрытие тестами, всё вышло в продакшен без единого критического инцидента в первом квартале после запуска.',
+      en: 'We needed a production-grade banking platform from scratch: a transactional ledger with ACID guarantees, four payment providers behind one API, sub-200ms response time on balance aggregation. The Anteyko team didn\'t just write code — they delivered an engineering solution at the architecture level: double-entry, idempotency keys, JWT rotation, 87% test coverage. Everything shipped to production without a single critical incident in the first quarter after launch.',
+    },
+    author: { ru: 'Aron', en: 'Aron' },
+    role: {
+      ru: 'CTO, fintech (под NDA), Hong Kong',
+      en: 'CTO, fintech (under NDA), Hong Kong',
+    },
     initials: 'AR',
   },
   {
-    quote:
-      'Мы не знали точную себестоимость и маржу каждого ролла — цены на ингредиенты менялись, а считать руками в Excel было невозможно для меню из 50+ позиций. Anteyko построили систему где каждый рецепт автоматически пересчитывает себестоимость при изменении цены ингредиента, шеф видит свою часть, бухгалтер — свою, я как CFO — аналитику по всему. С первого месяца увидели где теряем маржу.',
-    author: 'Markel Bron',
-    role: 'CFO, hospitality (под NDA), San Jose',
+    quote: {
+      ru: 'Мы не знали точную себестоимость и маржу каждого ролла — цены на ингредиенты менялись, а считать руками в Excel было невозможно для меню из 50+ позиций. Anteyko построили систему где каждый рецепт автоматически пересчитывает себестоимость при изменении цены ингредиента, шеф видит свою часть, бухгалтер — свою, я как CFO — аналитику по всему. С первого месяца увидели где теряем маржу.',
+      en: 'We didn\'t know the exact cost and margin of each roll — ingredient prices changed, and recalculating by hand in Excel was impossible for a 50+ item menu. Anteyko built a system where each recipe automatically recalculates cost when an ingredient price changes — the chef sees their part, the accountant sees theirs, and as CFO I see the analytics across everything. From the first month we saw where we were losing margin.',
+    },
+    author: { ru: 'Markel Bron', en: 'Markel Bron' },
+    role: {
+      ru: 'CFO, hospitality (под NDA), San Jose',
+      en: 'CFO, hospitality (under NDA), San Jose',
+    },
     initials: 'MB',
   },
 ];

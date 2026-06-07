@@ -4,20 +4,20 @@ import { useLanguage } from "@/lib/language-context";
 import { TESTIMONIALS } from "@/lib/kp-data";
 
 // Reusing the verified TESTIMONIALS from kp-data.ts so the home page and KP
-// pages share a single source of truth — keeping testimonials consistent
-// across surfaces and avoiding drift between client confirmations and what
-// renders publicly.
+// pages share a single source of truth. quote/author/role are bilingual —
+// resolved here by the locale from useLanguage(), driven by the URL prefix.
 
 export function TestimonialsSection() {
   const { language } = useLanguage();
   if (TESTIMONIALS.length === 0) return null;
 
+  const lang: "en" | "ru" = language === "en" ? "en" : "ru";
   const heading =
-    language === "en"
+    lang === "en"
       ? "What founders say about working with us"
       : "Что говорят основатели о работе с нами";
   const eyebrow =
-    language === "en" ? "Verified clients" : "Подтверждённые клиенты";
+    lang === "en" ? "Verified clients" : "Подтверждённые клиенты";
 
   return (
     <section className="py-20 md:py-28 bg-bg-secondary">
@@ -46,18 +46,18 @@ export function TestimonialsSection() {
                 <path d="M9.5 6.5C6.5 6.5 4 9 4 12.5c0 3 2 5 4.5 5 1 0 1.5-.3 1.5-1 0-.5-.3-1-1-1.3-1.5-.6-2.3-1.5-2.3-3.2 0-2 1.5-3 3-3 .8 0 1.3-.4 1.3-1.2 0-.7-.5-1.3-1.5-1.3zm9 0c-3 0-5.5 2.5-5.5 6 0 3 2 5 4.5 5 1 0 1.5-.3 1.5-1 0-.5-.3-1-1-1.3-1.5-.6-2.3-1.5-2.3-3.2 0-2 1.5-3 3-3 .8 0 1.3-.4 1.3-1.2 0-.7-.5-1.3-1.5-1.3z" />
               </svg>
               <blockquote className="text-body-md text-text-secondary leading-relaxed flex-1">
-                {t.quote}
+                {t.quote[lang]}
               </blockquote>
               <figcaption className="flex items-center gap-3 pt-2 border-t border-border/50">
                 <div className="w-10 h-10 rounded-full bg-accent-primary/10 text-accent-primary flex items-center justify-center text-body-sm font-semibold shrink-0">
-                  {t.initials ?? t.author.slice(0, 2).toUpperCase()}
+                  {t.initials ?? t.author[lang].slice(0, 2).toUpperCase()}
                 </div>
                 <div className="min-w-0">
                   <div className="text-body-sm font-semibold text-text-primary truncate">
-                    {t.author}
+                    {t.author[lang]}
                   </div>
                   <div className="text-caption text-text-tertiary truncate">
-                    {t.role}
+                    {t.role[lang]}
                   </div>
                 </div>
               </figcaption>

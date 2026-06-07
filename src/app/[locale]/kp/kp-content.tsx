@@ -206,14 +206,14 @@ export default function KPContent({
             <div className={styles.testimonialsGrid}>
               {TESTIMONIALS.map((t, i) => (
                 <div key={i} className={styles.testimonial}>
-                  <p className={styles.testimonialQuote}>“{t.quote}”</p>
+                  <p className={styles.testimonialQuote}>“{t.quote.ru}”</p>
                   <div className={styles.testimonialAuthor}>
                     {t.initials && (
                       <div className={styles.testimonialAvatar}>{t.initials}</div>
                     )}
                     <div>
-                      <div className={styles.testimonialName}>{t.author}</div>
-                      <div className={styles.testimonialRole}>{t.role}</div>
+                      <div className={styles.testimonialName}>{t.author.ru}</div>
+                      <div className={styles.testimonialRole}>{t.role.ru}</div>
                     </div>
                   </div>
                 </div>
