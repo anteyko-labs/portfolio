@@ -586,8 +586,8 @@ export const translations = {
     geography: {
       title: { en: "Bishkek. Dubai. Your timezone.", ru: "Бишкек. Дубай. Ваш часовой пояс." },
       description: {
-        en: "Core team in Bishkek (GMT+6) and Dubai (GMT+4). Clients in Moscow, Bishkek, Dubai, and across 5+ countries. We operate async-first with daily standups adapted to your timezone \u2014 whether you\u2019re in New York or Singapore.",
-        ru: "Основная команда в Бишкеке (GMT+6) и Дубае (GMT+4). Клиенты в Москве, Бишкеке, Дубае и 5+ странах. Работаем async\u2011first с ежедневными стендапами, адаптированными под ваш часовой пояс \u2014 будь вы в Нью\u2011Йорке или Сингапуре.",
+        en: "Core team in Dubai (GMT+4) and Bishkek (GMT+6). Clients in Moscow, Bishkek, Dubai, and across 5+ countries. We operate async-first with daily standups adapted to your timezone \u2014 whether you\u2019re in New York or Singapore.",
+        ru: "Основная команда в Дубае (GMT+4) и Бишкеке (GMT+6). Клиенты в Москве, Бишкеке, Дубае и 5+ странах. Работаем async\u2011first с ежедневными стендапами, адаптированными под ваш часовой пояс \u2014 будь вы в Нью\u2011Йорке или Сингапуре.",
       },
     },
     closingCta: {
