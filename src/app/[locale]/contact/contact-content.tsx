@@ -9,23 +9,17 @@ import { Input, Textarea, Select, RadioGroup } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Stepper } from "@/components/ui/stepper";
 import { CalEmbed } from "@/components/ui/cal-embed";
+import { SegmentedControl } from "@/components/ui/segmented-control";
 
 // ── Instant-contact channels ──────────────────────────────────────────────
-// Single source of truth for the direct-contact buttons. When the founder
-// shares the real WhatsApp number and the Cal.com booking link, update them
-// here only — nothing else needs to change.
+// Single source of truth for the direct-contact buttons. The Cal.com booking
+// link lives in the CalEmbed component (src/components/ui/cal-embed.tsx).
 const CONTACT_EMAIL = "labs@anteyko.com";
 const TELEGRAM_URL = "https://t.me/Anteyko_labs";
 // WhatsApp number in wa.me/<digits> international format (no "+", no spaces).
 // While empty, the WhatsApp button is hidden so we never ship a dead/wrong link.
 const WHATSAPP_NUMBER: string = "996551180770";
 const WHATSAPP_URL: string = WHATSAPP_NUMBER ? `https://wa.me/${WHATSAPP_NUMBER}` : "";
-// Cal.com booking URL. While empty, the "Book a 45-min call" CTA falls back to a
-// mailto link so the button always works.
-const CALCOM_URL: string = "https://cal.com/anteyko-labs/45min";
-const BOOK_CALL_HREF =
-  CALCOM_URL || `mailto:${CONTACT_EMAIL}?subject=Scoping%20Call%20Request`;
-const BOOK_CALL_EXTERNAL = Boolean(CALCOM_URL);
 
 const projectTypeOptions = (t: (k: string) => string) => [
   { value: "website", label: t("contact.form.projectTypes.website") },
@@ -83,6 +77,9 @@ export function ContactContent() {
   const [formData, setFormData] = useState(initialFormState);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [step, setStep] = useState(1);
+  // Contact mode toggle: the async brief (primary funnel — feeds the 24h
+  // estimate + Telegram hot-lead pipeline) vs. booking a call right now.
+  const [contactMode, setContactMode] = useState<"form" | "call">("form");
 
   const requiredMessage = language === "en" ? "Required" : "Обязательное поле";
 
@@ -268,6 +265,20 @@ export function ContactContent() {
       <Section background="secondary" padding="lg">
         <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-10">
           <div>
+            {/* Mode toggle: async brief (default) vs. book a call now */}
+            <SegmentedControl
+              id="contact-mode"
+              className="mb-6"
+              value={contactMode}
+              onChange={(v) => setContactMode(v as "form" | "call")}
+              options={[
+                { value: "form", label: language === "en" ? "Send a brief" : "Оставить заявку" },
+                { value: "call", label: language === "en" ? "Book a call" : "Забронировать звонок" },
+              ]}
+            />
+
+            {contactMode === "form" ? (
+            <>
             {/* Progress bar */}
             <div className="mb-6">
               <div className="flex items-center justify-between text-caption text-text-tertiary mb-2">
@@ -469,37 +480,25 @@ export function ContactContent() {
                 )}
               </AnimatePresence>
             </form>
-
-            {/* Book a call — always visible */}
-            <div className="mt-8 p-4 rounded-xl bg-bg-tertiary/60 border border-border">
-              <p className="text-body-sm text-text-secondary text-center mb-3">
-                {language === "en"
-                  ? "Prefer a call? Book a 45-minute scoping call."
-                  : "Удобнее созвон? Забронируйте 45-минутный scoping call."}
-              </p>
-              <div className="flex justify-center">
-                <a
-                  href={BOOK_CALL_HREF}
-                  {...(BOOK_CALL_EXTERNAL ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-bg-secondary border border-border text-body-sm text-accent-primary font-medium hover:border-accent-primary/30 hover:text-accent-secondary transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary"
-                >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                  </svg>
-                  {t("cta.secondary")}
-                </a>
+            </>
+            ) : (
+              /* Book-a-call panel — the Cal.com inline embed */
+              <div className="rounded-2xl border border-border bg-bg-secondary/80 p-6">
+                <div className="pb-4">
+                  <h3 className="text-heading-md font-medium text-text-primary">
+                    {language === "en"
+                      ? "Book a 45-min scoping call"
+                      : "Забронируйте scoping-звонок на 45 мин"}
+                  </h3>
+                  <p className="text-body-sm text-text-tertiary mt-1">
+                    {language === "en"
+                      ? "Pick a slot that works for you — we’ll talk through your project and next steps."
+                      : "Выберите удобный слот — обсудим ваш проект и следующие шаги."}
+                  </p>
+                </div>
+                <CalEmbed />
               </div>
-            </div>
-
-            {/* Cal.com inline booking — full width under the form */}
-            <div className="mt-8 rounded-2xl border border-border bg-bg-secondary/80 p-6">
-              <p className="text-caption uppercase tracking-wider text-text-tertiary mb-4">
-                {language === "en"
-                  ? "Or book a slot right now"
-                  : "Или забронируйте слот прямо сейчас"}
-              </p>
-              <CalEmbed />
-            </div>
+            )}
           </div>
 
           {/* ── Sidebar ── */}
