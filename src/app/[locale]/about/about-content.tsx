@@ -281,7 +281,7 @@ export function AboutContent() {
                     alt={
                       language === "en"
                         ? "Bekjan Ergeshov, Founder & CEO of Anteyko Labs"
-                        : "Бекжан Ергешов, основатель и CEO Anteyko Labs"
+                        : "Бекжан Эргешов, основатель и CEO Anteyko Labs"
                     }
                     width={88}
                     height={88}
@@ -291,7 +291,7 @@ export function AboutContent() {
                 </div>
                 <div className="min-w-0 flex-1 text-center sm:text-left">
                   <p className="text-heading-sm font-medium text-text-primary">
-                    {language === "en" ? "Bekjan Ergeshov" : "Бекжан Ергешов"}
+                    {language === "en" ? "Bekjan Ergeshov" : "Бекжан Эргешов"}
                   </p>
                   <p className="text-caption uppercase tracking-wider text-accent-primary font-medium mt-0.5">
                     {language === "en" ? "Founder & CEO" : "Основатель и CEO"}
@@ -299,7 +299,7 @@ export function AboutContent() {
                   <p className="text-body-sm text-text-secondary leading-relaxed mt-3">
                     {language === "en"
                       ? "Helps founders turn an idea into a production-grade product — no blown deadlines, no rewrites from scratch, no surprises on the invoice. Five years building Anteyko: 40+ products shipped, from startup MVPs to enterprise platforms, across Bishkek and Dubai."
-                      : "Помогает founder'ам превращать идею в production-grade продукт — без срывов сроков, переписки с нуля и сюрпризов в счёте. Пять лет строит Anteyko: 40+ запущенных продуктов, от MVP стартапов до enterprise-платформ, в Бишкеке и Дубае."}
+                      : "Помогает founder'ам превращать идею в production-grade продукт — без срывов сроков, переписывания с нуля и сюрпризов в счёте. Пять лет строит Anteyko: 40+ запущенных продуктов, от MVP стартапов до enterprise-платформ, в Бишкеке и Дубае."}
                   </p>
                   <div className="mt-4 flex flex-wrap gap-2 justify-center sm:justify-start">
                     <a
@@ -365,7 +365,7 @@ export function AboutContent() {
               <figcaption className="mt-4 text-body-sm text-text-tertiary">
                 {language === "en"
                   ? "— Bekjan Ergeshov, Founder & CEO"
-                  : "— Бекжан Ергешов, основатель и CEO"}
+                  : "— Бекжан Эргешов, основатель и CEO"}
               </figcaption>
             </figure>
           </AnimatedItem>
