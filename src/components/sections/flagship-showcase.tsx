@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ButtonLink } from "@/components/ui/link";
 import { useLanguage } from "@/lib/language-context";
@@ -95,6 +95,11 @@ function MetricPill({ metric, inView }: { metric: Metric; inView: boolean }) {
 export function FlagshipShowcase() {
   const { language } = useLanguage();
   const prefersReducedMotion = useReducedMotion();
+  // useReducedMotion() is false during SSR/first paint, so an autoPlay <video>
+  // in the initial HTML would start playing for reduced-motion users before
+  // the post-mount state flip. Render the poster until motion is confirmed OK.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
   const [statsRef, statsInView] = useInViewOnce(0.4);
 
   // Scroll-driven parallax for the video figure. The figure drifts up slightly
@@ -244,7 +249,7 @@ export function FlagshipShowcase() {
 
               {/* Media: video when motion is allowed, poster otherwise. */}
               <div className="relative aspect-video bg-black">
-                {prefersReducedMotion ? (
+                {!mounted || prefersReducedMotion ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
                     src="/videos/armadex-poster.jpg"
