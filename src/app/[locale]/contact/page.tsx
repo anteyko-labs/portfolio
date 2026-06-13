@@ -10,8 +10,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   title: locale === "ru" ? "Контакты" : "Contact",
   description:
     locale === "ru"
-      ? "Получите оценку за 24 часа или запишитесь на 20-минутный созвон. Расскажите нам о вашем проекте. Anteyko — Кыргызстан и Дубай."
-      : "Get an estimate in 24 hours or book a 20-minute scoping call. Tell us about your project. Anteyko — Kyrgyzstan & Dubai.",
+      ? "Получите оценку за 24 часа или запишитесь на 45-минутный созвон. Расскажите нам о вашем проекте. Anteyko — Кыргызстан и Дубай."
+      : "Get an estimate in 24 hours or book a 45-minute scoping call. Tell us about your project. Anteyko — Kyrgyzstan & Dubai.",
     alternates: localeAlternates(locale, "/contact"),
   };
 }

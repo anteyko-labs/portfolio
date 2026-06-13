@@ -132,6 +132,13 @@ export function WhyUsSection() {
 
   return (
     <Section background="primary" padding="xl" className="relative">
+      {/* Subtle dot-grid texture — restrained tactile depth on the white surface,
+          faded toward the edges so it never hard-cuts. Decorative only. */}
+      <div
+        className="grid-dots grid-dots-fade absolute inset-0 -z-10 pointer-events-none"
+        aria-hidden="true"
+      />
+
       <SectionHeader
         title={t("whyUs.title")}
         eyebrow={language === "en" ? "Advantages" : "Преимущества"}

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useMemo, useRef } from "react";
 import { useCountUp, useInViewOnce } from "@/lib/animation-hooks";
 import { useLanguage } from "@/lib/language-context";
@@ -265,27 +266,108 @@ export function AboutContent() {
             </div>
           </AnimatedItem>
 
-          {/* Team */}
+          {/* Team — real founder + honest team representation */}
           <AnimatedItem delay={0.35}>
-            <div className="rounded-2xl border border-border bg-bg-secondary p-6 flex items-center gap-5">
-              <div className="flex -space-x-3 shrink-0">
-                {[0, 1, 2, 3, 4].map((i) => (
-                  <div key={i} className="w-10 h-10 rounded-full bg-bg-tertiary border-2 border-bg-primary flex items-center justify-center">
-                    <svg className="w-4 h-4 text-text-tertiary" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                      <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-                    </svg>
+            <SectionHeader
+              title={language === "en" ? "Who's behind Anteyko" : "Кто стоит за Anteyko"}
+              animate={false}
+            />
+            <div className="mt-6 space-y-4">
+              {/* Founder card */}
+              <div className="rounded-2xl border border-border bg-bg-primary p-6 flex flex-col sm:flex-row sm:items-start gap-5">
+                <div className="shrink-0 mx-auto sm:mx-0">
+                  <Image
+                    src="/images/team/bekzhan.jpg"
+                    alt={
+                      language === "en"
+                        ? "Bekjan Ergeshov, Founder & CEO of Anteyko Labs"
+                        : "Бекжан Эргешов, основатель и CEO Anteyko Labs"
+                    }
+                    width={88}
+                    height={88}
+                    className="rounded-2xl object-cover border border-border"
+                    style={{ width: "88px", height: "88px" }}
+                  />
+                </div>
+                <div className="min-w-0 flex-1 text-center sm:text-left">
+                  <p className="text-heading-sm font-medium text-text-primary">
+                    {language === "en" ? "Bekjan Ergeshov" : "Бекжан Эргешов"}
+                  </p>
+                  <p className="text-caption uppercase tracking-wider text-accent-primary font-medium mt-0.5">
+                    {language === "en" ? "Founder & CEO" : "Основатель и CEO"}
+                  </p>
+                  <p className="text-body-sm text-text-secondary leading-relaxed mt-3">
+                    {language === "en"
+                      ? "Helps founders turn an idea into a production-grade product — no blown deadlines, no rewrites from scratch, no surprises on the invoice. Five years building Anteyko: 40+ products shipped, from startup MVPs to enterprise platforms, across Bishkek and Dubai."
+                      : "Помогает founder'ам превращать идею в production-grade продукт — без срывов сроков, переписывания с нуля и сюрпризов в счёте. Пять лет строит Anteyko: 40+ запущенных продуктов, от MVP стартапов до enterprise-платформ, в Бишкеке и Дубае."}
+                  </p>
+                  <div className="mt-4 flex flex-wrap gap-2 justify-center sm:justify-start">
+                    <a
+                      href="https://github.com/anteyko-labs"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border bg-bg-secondary text-caption text-text-secondary hover:text-accent-primary hover:border-accent-primary/30 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary"
+                    >
+                      <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M12 .5C5.73.5.5 5.73.5 12.21c0 5.18 3.36 9.58 8.02 11.13.59.11.8-.26.8-.57v-2c-3.26.72-3.95-1.58-3.95-1.58-.53-1.37-1.3-1.73-1.3-1.73-1.07-.74.08-.73.08-.73 1.18.08 1.8 1.23 1.8 1.23 1.05 1.83 2.76 1.3 3.43.99.11-.78.41-1.3.75-1.6-2.6-.3-5.34-1.32-5.34-5.88 0-1.3.46-2.36 1.22-3.19-.12-.3-.53-1.51.12-3.15 0 0 1-.33 3.3 1.22a11.3 11.3 0 016 0c2.28-1.55 3.29-1.22 3.29-1.22.65 1.64.24 2.85.12 3.15.76.83 1.22 1.89 1.22 3.19 0 4.57-2.75 5.58-5.36 5.87.42.37.8 1.1.8 2.22v3.29c0 .31.21.69.81.57 4.65-1.56 8-5.95 8-11.13C23.5 5.73 18.27.5 12 .5z" />
+                      </svg>
+                      GitHub
+                    </a>
+                    <a
+                      href="https://www.linkedin.com/in/bekjan-ergeshov/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border bg-bg-secondary text-caption text-text-secondary hover:text-accent-primary hover:border-accent-primary/30 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary"
+                    >
+                      <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.07 2.07 0 110-4.14 2.07 2.07 0 010 4.14zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z" />
+                      </svg>
+                      LinkedIn
+                    </a>
                   </div>
-                ))}
+                </div>
               </div>
-              <div>
-                <p className="text-body-sm font-medium text-text-primary">
-                  {language === "en" ? "5+ engineers, designers, and product thinkers" : "5+ инженеров, дизайнеров и продуктовых мыслителей"}
-                </p>
-                <p className="text-caption text-text-tertiary mt-0.5">
-                  {language === "en" ? "Multi-discipline team. Full-stack by default." : "Мультидисциплинарная команда. Full-stack по умолчанию."}
-                </p>
+
+              {/* Honest team representation — no fake faces */}
+              <div className="rounded-2xl border border-border bg-bg-secondary p-6 flex items-center gap-4">
+                <div className="w-10 h-10 rounded-lg bg-accent-primary/10 border border-accent-primary/20 flex items-center justify-center shrink-0 text-accent-primary">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m6-1.13a4 4 0 10-4-4 4 4 0 004 4zm6 0a3 3 0 10-2.83-4M5 11a3 3 0 102.83-4" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="text-body-sm font-medium text-text-primary">
+                    {language === "en"
+                      ? "5+ engineers across Bishkek & Dubai"
+                      : "5+ инженеров в Бишкеке и Дубае"}
+                  </p>
+                  <p className="text-caption text-text-tertiary mt-0.5">
+                    {language === "en"
+                      ? "Multi-discipline team — design, frontend, backend, infrastructure. Full-stack by default."
+                      : "Мультидисциплинарная команда — дизайн, фронт, бэк, инфраструктура. Full-stack по умолчанию."}
+                  </p>
+                </div>
               </div>
             </div>
+          </AnimatedItem>
+
+          {/* Founder note — why we started Anteyko. */}
+          <AnimatedItem delay={0.38}>
+            <figure className="rounded-2xl border border-accent-primary/20 bg-accent-primary/5 p-7 md:p-8">
+              <p className="text-caption uppercase tracking-wider text-accent-primary font-medium mb-4">
+                {language === "en" ? "Why we started Anteyko" : "Почему мы основали Anteyko"}
+              </p>
+              <blockquote className="text-body-lg text-text-secondary leading-relaxed">
+                {language === "en"
+                  ? "“Five years ago I started Anteyko Labs as a full-cycle product studio. Too many founders I met had the same story: a contractor who blew the deadline, or code they were afraid to open. We built Anteyko to be the opposite of that — staged payments, code in your repo from day one, a demo every two weeks, and the keys handed over at the end. Production-grade products founders can actually be proud of.”"
+                  : "«Пять лет назад я основал Anteyko Labs — продуктовую студию полного цикла. У слишком многих founder'ов, которых я встречал, была одна и та же история: подрядчик, сорвавший сроки, или код, который страшно открыть. Мы построили Anteyko как противоположность этому — этапная оплата, код в твоём репо с первого дня, демо каждые две недели и передача ключей в конце. Production-grade продукты, которыми хочется гордиться.»"}
+              </blockquote>
+              <figcaption className="mt-4 text-body-sm text-text-tertiary">
+                {language === "en"
+                  ? "— Bekjan Ergeshov, Founder & CEO"
+                  : "— Бекжан Эргешов, основатель и CEO"}
+              </figcaption>
+            </figure>
           </AnimatedItem>
 
           {/* CTA */}

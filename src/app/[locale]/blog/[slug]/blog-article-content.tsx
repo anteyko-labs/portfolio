@@ -165,7 +165,7 @@ export function BlogArticleContent({ post }: { post: BlogPost }) {
             <p className="text-body-lg text-text-secondary mb-8">
               {language === "en"
                 ? "20 minutes — we'll discuss your task and give an honest estimate. No strings attached."
-                : "20 минут — обсудим вашу задачу и дадим честную оценку. Без обязательств."}
+                : "45 минут — обсудим вашу задачу и дадим честную оценку. Без обязательств."}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <ButtonLink href="/contact" buttonVariant="primary" size="lg">

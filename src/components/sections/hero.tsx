@@ -71,7 +71,7 @@ export function HeroSection() {
 
           {/* Headline — fluid clamp, two-layer shadow for legibility on bright video frames */}
           <h1
-            className="hero-reveal hero-headline hero-text-shadow mt-6 font-display font-extrabold text-white text-balance"
+            className="hero-reveal hero-headline heading-brand hero-text-shadow mt-6 font-bold text-white text-balance"
             style={delay(0.12)}
           >
             <span className="text-accent-primary">{t("hero.titleAccent")}</span>{" "}

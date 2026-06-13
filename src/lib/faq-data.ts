@@ -254,8 +254,8 @@ export const faqItems: FAQItem[] = [
       ru: "Как начать?",
     },
     answer: {
-      en: "Fill out the contact form or book a 20-minute scoping call. We'll discuss your project and provide an estimate within 24 hours.",
-      ru: "Заполните контактную форму или запишитесь на 20-минутный созвон. Обсудим ваш проект и предоставим оценку в течение 24\u00A0часов.",
+      en: "Fill out the contact form or book a 45-minute scoping call. We'll discuss your project and provide an estimate within 24 hours.",
+      ru: "Заполните контактную форму или запишитесь на 45-минутный созвон. Обсудим ваш проект и предоставим оценку в течение 24\u00A0часов.",
     },
   },
 ];

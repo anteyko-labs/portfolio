@@ -1,36 +1,56 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Anteyko Labs — Portfolio
 
-## Getting Started
+Marketing site and portfolio for Anteyko Labs ([www.anteyko.com](https://www.anteyko.com)).
+Bilingual (EN/RU), content-driven, with a custom commercial-proposal (`/kp`) system.
 
-First, run the development server:
+## Stack
+
+- **Next.js 16** (App Router) + **React 19**
+- **Tailwind CSS v4** (CSS-first config — see gotchas below)
+- **framer-motion 12** for scroll/interaction animation
+- **next-intl** for EN/RU routing and translations
+- **TypeScript** (strict)
+
+## Getting started
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev      # start the dev server at http://localhost:3000
+npm run build    # production build
+npm run start    # serve the production build
+npm run lint     # eslint
+npm run kp:new   # scaffold a new commercial proposal (/kp) — scripts/new-kp.mjs
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Gotchas for contributors (read before you edit)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Design tokens live in `src/app/globals.css`, inside the `@theme` block — NOT in `tailwind.config.ts`.**
+  Under Tailwind v4 the JS config is *not* auto-detected (there is no `@config` directive),
+  so `tailwind.config.ts` does not affect the build. Colors, the type scale (`text-display-*`,
+  `text-heading-*`, etc.), and fonts (`font-sans` / `font-display` / `font-mono` / `font-brand`)
+  are all generated from the `--color-*`, `--text-*`, and `--font-*` variables in `@theme`.
+  Add or change tokens there.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **The middleware file is `src/proxy.ts`** (Next.js 16 renamed `middleware.ts` → `proxy.ts`).
+  It powers next-intl locale routing. The i18n setup lives in `src/i18n/`.
 
-## Learn More
+- **Pushing to `main` auto-deploys to Vercel.** Treat `main` as production.
 
-To learn more about Next.js, take a look at the following resources:
+- **Design system is "Refined Light":** white background, near-black text (`#0A0A0A`),
+  indigo accent (`#4F46E5`) used sparingly, Manrope + Geist Mono, hairline borders,
+  `rounded-2xl`, restrained motion. Respect `prefers-reduced-motion` for every animation.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Project layout
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+src/
+  app/[locale]/   App Router pages (EN/RU)
+  app/globals.css Tailwind v4 @theme tokens + global styles
+  components/     UI and section components
+  i18n/           next-intl routing/config
+  lib/            hooks, language context, helpers
+  proxy.ts        Next 16 middleware (locale routing)
+scripts/
+  new-kp.mjs      backs `npm run kp:new`
+docs/             internal docs (audit-findings.md is the current source of truth)
+```
