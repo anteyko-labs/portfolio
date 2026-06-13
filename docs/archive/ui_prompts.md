@@ -1,3 +1,5 @@
+> ARCHIVED: this dark-glassmorphism AI-mockup plan (targeting a non-existent images/gallery/) was abandoned in favor of real screenshots. Kept for reference only.
+
 # UI Mockup Prompts for Portfolio Cases
 **Total: 56 prompts for 12 cases**
 

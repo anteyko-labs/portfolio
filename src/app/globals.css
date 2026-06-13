@@ -29,6 +29,9 @@
   --font-sans: var(--font-manrope);
   --font-display: var(--font-manrope);
   --font-mono: var(--font-geist-mono);
+  /* Brand display personality — Unbounded (wide). Emits the `font-brand`
+     utility; also consumed by the `.heading-brand` recipe below. */
+  --font-brand: var(--font-display-brand), system-ui, sans-serif;
 
   /* Typography scale — must live in @theme for Tailwind v4 to emit text-* utilities */
   --text-display-xl: 5rem;
@@ -230,6 +233,25 @@ body {
   overflow: hidden;
 }
 
+/* Brand display heading — Unbounded is a WIDE display face, so we run it at
+   weight 500/600 with tight tracking to keep it composed, not shouty.
+   Apply to the hero H1 and section H2s. Pair with the existing text-display-*
+   size utilities (e.g. `heading-brand text-display-lg`). The negative tracking
+   counteracts Unbounded's natural width; do not widen it. */
+.heading-brand {
+  /* Reference the next/font variable directly: --font-brand lives in
+     @theme inline, which does not emit CSS variables at runtime, so
+     var(--font-brand) would silently fail and fall back to Manrope. */
+  font-family: var(--font-display-brand), system-ui, sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.08;
+}
+.heading-brand-light {
+  font-weight: 500;
+  letter-spacing: -0.015em;
+}
+
 /* Gradient text — refined near-black → indigo, subtle */
 .gradient-text {
   background: linear-gradient(120deg, var(--color-text-primary) 30%, var(--color-accent-primary));
@@ -323,7 +345,7 @@ body {
 .blob {
   border-radius: 50%;
   filter: blur(80px);
-  opacity: 0.05;
+  opacity: 0.09;
   pointer-events: none;
 }
 .blob-accent {
@@ -548,6 +570,13 @@ body {
   line-height: 1.06;
   letter-spacing: -0.03em;
 }
+/* Unbounded runs ~25% wider than Manrope: when the brand face is on the
+   hero headline, step the fluid scale down so the RU line still breaks
+   into two lines, not four, inside the split-layout text column. */
+.hero-headline.heading-brand {
+  font-size: clamp(1.875rem, 1.2rem + 2.1vw, 3rem);
+  line-height: 1.14;
+}
 .hero-subtitle {
   font-size: clamp(1rem, 0.85rem + 0.6vw, 1.125rem);
   line-height: 1.55;
@@ -556,4 +585,135 @@ body {
 .hero-trust {
   font-size: clamp(0.85rem, 0.78rem + 0.25vw, 0.95rem);
   line-height: 1.55;
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   BRAND MOTIF SYSTEM — energy / connection language promoted from the
+   logo-fusion effect. Dark feature surfaces, indigo halo, dot-grid texture.
+   ════════════════════════════════════════════════════════════════════ */
+
+/* Subtle dot-grid texture for LIGHT sections — restrained, near-invisible,
+   adds tactile depth without the "purple gradient on white" cliché.
+   Usage: put on a section (or an absolutely-positioned aria-hidden layer).
+   Pair with a radial mask via `.grid-dots-fade` to avoid hard edges. */
+.grid-dots {
+  background-image:
+    radial-gradient(circle at 1px 1px, rgba(10, 10, 10, 0.05) 1px, transparent 0);
+  background-size: 24px 24px;
+}
+/* Optional: fade the dot grid out toward the edges so it never hard-cuts. */
+.grid-dots-fade {
+  -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, #000 40%, transparent 100%);
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, #000 40%, transparent 100%);
+}
+
+/* ── Dark feature surface ──────────────────────────────────────────────
+   Turns any section into a hero-consistent dark surface. It REMAPS the
+   --color-text-* and --color-border tokens within its own scope, so child
+   elements using text-text-primary / text-text-secondary / border-border
+   automatically invert to light-on-dark — no per-child overrides needed.
+   The accent stays the brand indigo (slightly brightened for dark contrast).
+   Position children with relative z-index; halo/veil layers sit behind. */
+.section-dark {
+  position: relative;
+  isolation: isolate;
+  background-color: #0A0A0B;
+
+  /* Scoped token overrides — children read these via the @theme color utils. */
+  --color-bg-primary: #0A0A0B;
+  --color-bg-secondary: #111113;
+  --color-bg-tertiary: #18181B;
+  --color-bg-elevated: #1F1F23;
+  --color-text-primary: #FAFAFA;
+  --color-text-secondary: #A1A1AA;
+  --color-text-tertiary: #71717A;
+  --color-text-muted: #52525B;
+  --color-border: rgba(255, 255, 255, 0.1);
+  --color-border-hover: rgba(255, 255, 255, 0.18);
+  --color-border-active: rgba(255, 255, 255, 0.28);
+  /* Brighter indigo reads better on near-black (matches logo-fusion accent). */
+  --color-accent-primary: #818CF8;
+  --color-accent-secondary: #6366F1;
+
+  color: var(--color-text-primary);
+}
+
+/* Indigo radial halo — extends the logo-fusion glow language into sections.
+   Drop as an absolutely-positioned aria-hidden child of `.section-dark`
+   (or any dark surface). Centered, soft, low-opacity. Override --halo-x /
+   --halo-y / --halo-size inline to reposition (e.g. behind a headline). */
+.section-halo {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  background: radial-gradient(
+    ellipse var(--halo-size, 60% 50%) at var(--halo-x, 50%) var(--halo-y, 38%),
+    rgba(99, 102, 241, 0.22) 0%,
+    rgba(99, 102, 241, 0.08) 45%,
+    transparent 75%
+  );
+}
+/* Stronger halo variant for hero-like feature moments. */
+.section-halo-strong {
+  background: radial-gradient(
+    ellipse var(--halo-size, 70% 60%) at var(--halo-x, 50%) var(--halo-y, 40%),
+    rgba(99, 102, 241, 0.35) 0%,
+    rgba(99, 102, 241, 0.12) 45%,
+    transparent 78%
+  );
+}
+
+/* Soft white fade at the top/bottom of a dark surface so it BLENDS into the
+   light neighbours instead of hard-cutting (mirrors `.hero-veil-dark`).
+   Drop as absolutely-positioned aria-hidden children, pinned to the edges.
+   `--blend-h` controls fade depth; defaults to a calm 96px. */
+.section-blend-top,
+.section-blend-bottom {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: var(--blend-h, 96px);
+  pointer-events: none;
+  z-index: 0;
+}
+.section-blend-top {
+  top: 0;
+  background: linear-gradient(
+    180deg,
+    var(--blend-color, #ffffff) 0%,
+    rgba(255, 255, 255, 0) 100%
+  );
+}
+.section-blend-bottom {
+  bottom: 0;
+  background: linear-gradient(
+    0deg,
+    var(--blend-color, #ffffff) 0%,
+    rgba(255, 255, 255, 0) 100%
+  );
+}
+
+/* ── Section connector beam — STATIC line ─────────────────────────────
+   The thin vertical gradient line drawn by <SectionBeam>. The traveling
+   pulse spark is rendered by framer-motion in the component; this class only
+   styles the always-visible track (so the line still shows under
+   prefers-reduced-motion, where the JS pulse is suppressed). */
+.section-beam-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(99, 102, 241, var(--beam-opacity, 0.18)) 18%,
+    rgba(99, 102, 241, var(--beam-opacity, 0.18)) 82%,
+    transparent 100%
+  );
+}
+/* On dark surfaces the beam can be more present. */
+.section-dark .section-beam-line {
+  --beam-opacity: 0.45;
+  width: 2px;
 }

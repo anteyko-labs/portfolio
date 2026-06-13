@@ -28,8 +28,8 @@ export function TrustedBySection() {
     language === "en" ? "Trusted by" : "Нам доверяют";
   const ndaLine =
     language === "en"
-      ? "and 40+ products in production across fintech, hospitality and banking — many under NDA."
-      : "и 40+ продуктов в проде в fintech, hospitality и банкинге — большая часть под NDA.";
+      ? "15 flagship case studies below — and 40+ products shipped to production, many under NDA."
+      : "15 флагманских кейсов ниже — и 40+ продуктов, выпущенных в прод, большинство под NDA.";
 
   return (
     <section className="py-14 md:py-20 border-y border-border/50 bg-bg-primary">

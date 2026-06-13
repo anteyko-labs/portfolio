@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Manrope } from "next/font/google";
+import { Manrope, Unbounded } from "next/font/google";
 import { GeistMono } from "geist/font/mono";
 import Script from "next/script";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
@@ -19,6 +19,17 @@ const manrope = Manrope({
   variable: "--font-manrope",
   subsets: ["latin", "cyrillic"],
   weight: ["400", "500", "600", "700", "800"],
+  display: "swap",
+});
+
+// Display/brand personality — Unbounded (wide geometric display, RU+EN).
+// Exposed as --font-display-brand; mapped to the `font-family-brand` token and
+// the `.heading-brand` utility in globals.css. Used pointwise on the hero H1
+// and section H2s by the integration agent.
+const unbounded = Unbounded({
+  variable: "--font-display-brand",
+  subsets: ["latin", "cyrillic"],
+  weight: ["500", "600", "700"],
   display: "swap",
 });
 
@@ -218,7 +229,7 @@ export default async function LocaleLayout({
         />
       </head>
       <body
-        className={`${manrope.variable} ${GeistMono.variable} font-sans antialiased`}
+        className={`${manrope.variable} ${unbounded.variable} ${GeistMono.variable} font-sans antialiased`}
       >
         {/* GTM noscript fallback */}
         {GTM_ID ? (

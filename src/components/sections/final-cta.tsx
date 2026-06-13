@@ -4,15 +4,45 @@ import { useLanguage } from "@/lib/language-context";
 import { Section, AnimatedItem } from "@/components/ui/section";
 import { ButtonLink } from "@/components/ui/link";
 import { MagneticButton } from "@/components/ui/magnetic-button";
+import { SectionBeam } from "@/components/effects/section-beam";
 
 export function FinalCTASection() {
   const { language } = useLanguage();
 
   return (
-    <Section background="secondary" padding="xl" className="relative final-cta-section">
-      <div className="relative overflow-hidden rounded-3xl border border-border bg-bg-tertiary px-6 py-12 sm:px-12 sm:py-16 lg:px-16 lg:py-20">
-        {/* Background: subtle dot grid (dark dots on light) */}
-        <div className="absolute inset-0 pointer-events-none final-cta-bg-grid opacity-70" aria-hidden />
+    // Dark bookend — echoes the hero so the page ends as it began. `.section-dark`
+    // remaps the color tokens within scope, so the child text/border/button
+    // utilities invert to light-on-dark with no per-child overrides. The beam
+    // motif sits here, just above the footer where logo-fusion fires, so the two
+    // read as one connected system.
+    <Section
+      padding="xl"
+      animate={false}
+      className="section-dark relative overflow-hidden final-cta-section"
+    >
+      {/* Soft white fade at the top so the dark surface blends down from the
+          light FAQ section above instead of hard-cutting. */}
+      <div className="section-blend-top" aria-hidden />
+
+      {/* Indigo halo — extends the logo-fusion glow language behind the card. */}
+      <div className="section-halo" style={{ ["--halo-y" as string]: "50%" }} aria-hidden />
+
+      {/* Section connector beam — energy threads down toward the footer. */}
+      <div className="absolute inset-x-0 top-0 h-40 pointer-events-none" aria-hidden>
+        <SectionBeam height="full" variant="dark" />
+      </div>
+
+      <div className="relative z-10 overflow-hidden rounded-3xl border border-border bg-bg-tertiary px-6 py-12 sm:px-12 sm:py-16 lg:px-16 lg:py-20">
+        {/* Faint dot grid (light dots on the dark card) for tactile depth. */}
+        <div
+          className="absolute inset-0 pointer-events-none opacity-60"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle 1px at 1px 1px, rgba(255,255,255,0.05), transparent 0)",
+            backgroundSize: "28px 28px",
+          }}
+          aria-hidden
+        />
 
         <div className="relative flex flex-col lg:flex-row lg:items-center lg:justify-between lg:gap-16">
         {/* Left: content (asymmetric on desktop) */}

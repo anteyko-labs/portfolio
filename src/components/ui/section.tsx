@@ -120,13 +120,16 @@ export function SectionHeader({
         </div>
       )}
 
-      {/* Title */}
+      {/* Title — brand display face (Unbounded). It runs WIDE, so the size
+          tokens are stepped down one notch vs. the old Manrope sizing to keep
+          the headings composed rather than overflowing. The `.heading-brand`
+          recipe carries the tight tracking/line-height. */}
       <h2
         className={clsx(
-          "font-display font-semibold tracking-tight text-text-primary",
+          "heading-brand text-text-primary",
           size === "lg"
-            ? "text-display-md md:text-display-lg"
-            : "text-display-sm md:text-display-md"
+            ? "text-display-sm md:text-display-md"
+            : "text-heading-xl md:text-display-sm"
         )}
       >
         {title}
