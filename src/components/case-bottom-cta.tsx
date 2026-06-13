@@ -15,7 +15,7 @@ export function CaseBottomCTA() {
         <p className="text-body-lg text-text-secondary mb-8">
           {language === "en"
             ? "20 minutes — we'll discuss your task and give an honest assessment. No strings attached."
-            : "20 минут — обсудим вашу задачу, дадим честную оценку. Без обязательств."}
+            : "45 минут — обсудим вашу задачу, дадим честную оценку. Без обязательств."}
         </p>
         <div className="flex gap-4 justify-center flex-wrap">
           <Link

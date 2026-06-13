@@ -280,7 +280,7 @@ export function AboutContent() {
                     src="/images/team/bekzhan.jpg"
                     alt={
                       language === "en"
-                        ? "Bekzhan Ergeshov, Founder & CEO of Anteyko Labs"
+                        ? "Bekjan Ergeshov, Founder & CEO of Anteyko Labs"
                         : "Бекжан Ергешов, основатель и CEO Anteyko Labs"
                     }
                     width={88}
@@ -291,7 +291,7 @@ export function AboutContent() {
                 </div>
                 <div className="min-w-0 flex-1 text-center sm:text-left">
                   <p className="text-heading-sm font-medium text-text-primary">
-                    {language === "en" ? "Bekzhan Ergeshov" : "Бекжан Ергешов"}
+                    {language === "en" ? "Bekjan Ergeshov" : "Бекжан Ергешов"}
                   </p>
                   <p className="text-caption uppercase tracking-wider text-accent-primary font-medium mt-0.5">
                     {language === "en" ? "Founder & CEO" : "Основатель и CEO"}
@@ -313,7 +313,17 @@ export function AboutContent() {
                       </svg>
                       GitHub
                     </a>
-                    {/* TODO: drop in the founder's LinkedIn profile URL here (see needs_user) */}
+                    <a
+                      href="https://www.linkedin.com/in/bekjan-ergeshov/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border bg-bg-secondary text-caption text-text-secondary hover:text-accent-primary hover:border-accent-primary/30 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary"
+                    >
+                      <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.07 2.07 0 110-4.14 2.07 2.07 0 010 4.14zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z" />
+                      </svg>
+                      LinkedIn
+                    </a>
                   </div>
                 </div>
               </div>
@@ -341,9 +351,7 @@ export function AboutContent() {
             </div>
           </AnimatedItem>
 
-          {/* Founder note — why we started Anteyko.
-             Adapted from the founder's own words (docs/linkedin-profile.md, "About").
-             Replace with a final founder-approved version when available (see needs_user). */}
+          {/* Founder note — why we started Anteyko. */}
           <AnimatedItem delay={0.38}>
             <figure className="rounded-2xl border border-accent-primary/20 bg-accent-primary/5 p-7 md:p-8">
               <p className="text-caption uppercase tracking-wider text-accent-primary font-medium mb-4">
@@ -356,7 +364,7 @@ export function AboutContent() {
               </blockquote>
               <figcaption className="mt-4 text-body-sm text-text-tertiary">
                 {language === "en"
-                  ? "— Bekzhan Ergeshov, Founder & CEO"
+                  ? "— Bekjan Ergeshov, Founder & CEO"
                   : "— Бекжан Ергешов, основатель и CEO"}
               </figcaption>
             </figure>

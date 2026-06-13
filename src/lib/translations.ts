@@ -21,8 +21,8 @@ export const translations = {
       ru: "Получить оценку за 24\u00A0часа",
     },
     secondary: {
-      en: "Book a 20-min scoping call",
-      ru: "Звонок на 20\u00A0минут",
+      en: "Book a 45-min scoping call",
+      ru: "Звонок на 45\u00A0минут",
     },
     viewCase: { en: "View case", ru: "Смотреть кейс" },
     viewAll: { en: "View all", ru: "Смотреть все" },

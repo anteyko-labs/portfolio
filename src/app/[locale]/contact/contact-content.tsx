@@ -8,6 +8,7 @@ import { Section } from "@/components/ui/section";
 import { Input, Textarea, Select, RadioGroup } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Stepper } from "@/components/ui/stepper";
+import { CalEmbed } from "@/components/ui/cal-embed";
 
 // ── Instant-contact channels ──────────────────────────────────────────────
 // Single source of truth for the direct-contact buttons. When the founder
@@ -15,15 +16,13 @@ import { Stepper } from "@/components/ui/stepper";
 // here only — nothing else needs to change.
 const CONTACT_EMAIL = "labs@anteyko.com";
 const TELEGRAM_URL = "https://t.me/Anteyko_labs";
-// TODO(needs_user): replace with the real WhatsApp number in wa.me/<digits>
-// international format (no "+", no spaces). Until then the WhatsApp button is
-// hidden so we never ship a dead/wrong link.
-const WHATSAPP_NUMBER: string = "";
+// WhatsApp number in wa.me/<digits> international format (no "+", no spaces).
+// While empty, the WhatsApp button is hidden so we never ship a dead/wrong link.
+const WHATSAPP_NUMBER: string = "996551180770";
 const WHATSAPP_URL: string = WHATSAPP_NUMBER ? `https://wa.me/${WHATSAPP_NUMBER}` : "";
-// TODO(needs_user): drop the Cal.com booking URL here (e.g.
-// "https://cal.com/anteyko/20min"). While empty, the "Book a 20-min call"
-// CTA falls back to a mailto link so the button always works.
-const CALCOM_URL: string = "";
+// Cal.com booking URL. While empty, the "Book a 45-min call" CTA falls back to a
+// mailto link so the button always works.
+const CALCOM_URL: string = "https://cal.com/anteyko-labs/45min";
 const BOOK_CALL_HREF =
   CALCOM_URL || `mailto:${CONTACT_EMAIL}?subject=Scoping%20Call%20Request`;
 const BOOK_CALL_EXTERNAL = Boolean(CALCOM_URL);
@@ -475,8 +474,8 @@ export function ContactContent() {
             <div className="mt-8 p-4 rounded-xl bg-bg-tertiary/60 border border-border">
               <p className="text-body-sm text-text-secondary text-center mb-3">
                 {language === "en"
-                  ? "Prefer a call? Book a 20-minute scoping call."
-                  : "Удобнее созвон? Забронируйте 20-минутный scoping call."}
+                  ? "Prefer a call? Book a 45-minute scoping call."
+                  : "Удобнее созвон? Забронируйте 45-минутный scoping call."}
               </p>
               <div className="flex justify-center">
                 <a
@@ -490,6 +489,16 @@ export function ContactContent() {
                   {t("cta.secondary")}
                 </a>
               </div>
+            </div>
+
+            {/* Cal.com inline booking — full width under the form */}
+            <div className="mt-8 rounded-2xl border border-border bg-bg-secondary/80 p-6">
+              <p className="text-caption uppercase tracking-wider text-text-tertiary mb-4">
+                {language === "en"
+                  ? "Or book a slot right now"
+                  : "Или забронируйте слот прямо сейчас"}
+              </p>
+              <CalEmbed />
             </div>
           </div>
 

@@ -65,7 +65,7 @@ export function FinalCTASection() {
             <p className="mt-6 text-body-lg text-text-secondary">
               {language === "en"
                 ? "20 minutes — we'll discuss your task and give an honest assessment. No strings attached."
-                : "20 минут — обсудим вашу задачу, дадим честную оценку. Без обязательств."}
+                : "45 минут — обсудим вашу задачу, дадим честную оценку. Без обязательств."}
             </p>
           </AnimatedItem>
 
@@ -124,8 +124,8 @@ export function FinalCTASection() {
                 />
               </svg>
               {language === "en"
-                ? "No commitments. No upsell. Just an honest 20-minute chat."
-                : "Без обязательств. Без навязывания. Просто честный 20-минутный разговор."}
+                ? "No commitments. No upsell. Just an honest 45-minute chat."
+                : "Без обязательств. Без навязывания. Просто честный 45-минутный разговор."}
             </p>
           </AnimatedItem>
         </div>
