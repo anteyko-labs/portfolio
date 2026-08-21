@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { submitLeadToCrm } from "@/lib/crm";
 
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || "";
 const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID || "";
@@ -109,6 +110,35 @@ function formatTelegramMessage(s: ContactSubmission): string {
   return lines.join("\n");
 }
 
+/**
+ * Текст заявки для CRM. Отличается от телеграмного намеренно: это сообщение
+ * приходит в CRM как входящее ОТ КЛИЕНТА, его читает менеджер и по нему
+ * Custom::LeadScorer считает AI-балл. Поэтому здесь нет эмодзи-шапки «новая
+ * заявка» и есть все поля брифа: бюджет, сроки и тип проекта — ровно те
+ * признаки, по которым идёт скоринг.
+ */
+function formatCrmMessage(s: ContactSubmission): string {
+  const lines: string[] = ["Заявка с сайта anteyko.com", ""];
+
+  if (s.projectType) lines.push(`Тип проекта: ${label(PROJECT_TYPES, s.projectType)}`);
+  if (s.stage) lines.push(`Стадия: ${label(STAGES, s.stage)}`);
+  if (s.timeline) lines.push(`Сроки: ${label(TIMELINES, s.timeline)}`);
+  if (s.budget) lines.push(`Бюджет: ${label(BUDGETS, s.budget)}`);
+
+  if (s.message) {
+    lines.push("", "Сообщение клиента:", s.message);
+  }
+
+  if (s.utm && Object.keys(s.utm).length > 0) {
+    const parts = Object.entries(s.utm).map(([k, v]) => `${k}=${v}`);
+    lines.push("", `UTM: ${parts.join(" · ")}`);
+  }
+
+  if (s.referer) lines.push(`Страница: ${s.referer}`);
+
+  return lines.join("\n");
+}
+
 async function sendTelegram(text: string): Promise<boolean> {
   if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
     console.error("❌ Telegram credentials missing. BOT_TOKEN:", !!TELEGRAM_BOT_TOKEN, "CHAT_ID:", !!TELEGRAM_CHAT_ID);
@@ -202,11 +232,34 @@ export async function POST(request: NextRequest) {
     // Log to Vercel Function Logs as backup
     console.log("📩 New lead:", JSON.stringify(submission));
 
-    // Send to Telegram
-    const sent = await sendTelegram(formatTelegramMessage(submission));
+    // CRM — основной адресат: там заявка получает AI-балл, ответственного,
+    // место в воронке и SLA-таймер. Telegram оставлен намеренно как страховка
+    // на время перехода: пока путь в CRM не проверен на живых заявках, снимать
+    // работающий канал доставки нельзя. Убрать вторым шагом.
+    //
+    // allSettled, а не await по очереди: отказ одного адресата не должен
+    // лишать заявку второго. Ни один из них не влияет на ответ посетителю —
+    // заявка уже написана человеком, и наш даунтайм не его проблема. Именно
+    // поэтому оба результата только логируются.
+    const [crm, telegram] = await Promise.allSettled([
+      submitLeadToCrm({
+        name: submission.name,
+        email: submission.email,
+        phone: submission.phone,
+        message: formatCrmMessage(submission),
+      }),
+      sendTelegram(formatTelegramMessage(submission)),
+    ]);
 
-    if (!sent) {
-      console.warn("⚠️ Telegram delivery failed — lead logged above");
+    if (crm.status === "fulfilled" && crm.value) {
+      console.log("✅ CRM: беседа", crm.value.conversationId);
+    } else {
+      const reason = crm.status === "rejected" ? crm.reason : "не настроено";
+      console.error("❌ CRM: заявка не доехала —", reason, "| лид залогирован выше");
+    }
+
+    if (telegram.status !== "fulfilled" || !telegram.value) {
+      console.warn("⚠️ Telegram: не доставлено — лид залогирован выше");
     }
 
     return NextResponse.json({ success: true }, { status: 200 });
