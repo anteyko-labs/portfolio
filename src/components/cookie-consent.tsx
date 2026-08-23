@@ -2,7 +2,14 @@
 
 import { useEffect, useState } from "react";
 
-const CONSENT_KEY = "anteyko_cookie_consent";
+export const CONSENT_KEY = "anteyko_cookie_consent";
+
+/**
+ * Событие, которым баннер сообщает остальной странице, что посетитель ответил.
+ * Нужно тому, что обязано дождаться ответа, но не должно опрашивать
+ * localStorage в цикле, — например чату поддержки (`CrmWidget`).
+ */
+export const CONSENT_EVENT = "anteyko:consent";
 
 export function CookieConsent() {
   const [shown, setShown] = useState(false);
@@ -25,6 +32,7 @@ export function CookieConsent() {
         ad_personalization: mode === "all" ? "granted" : "denied",
       });
     }
+    window.dispatchEvent(new Event(CONSENT_EVENT));
     setShown(false);
   };
 
