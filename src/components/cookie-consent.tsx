@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Link } from "@/i18n/navigation";
+import { useLanguage } from "@/lib/language-context";
 
 export const CONSENT_KEY = "anteyko_cookie_consent";
 
@@ -11,8 +13,30 @@ export const CONSENT_KEY = "anteyko_cookie_consent";
  */
 export const CONSENT_EVENT = "anteyko:consent";
 
+// Consent is the one dialog every visitor sees before anything else, so it is
+// also the one place where a hardcoded language is most visible. The link goes
+// through the locale-aware Link: a Russian visitor must land on /ru/privacy.
+const COPY = {
+  en: {
+    title: "Cookies and analytics",
+    body: "We use cookies for analytics and to improve the experience. You can accept all or only the necessary ones. Details are in our ",
+    policy: "privacy policy",
+    all: "Accept all",
+    necessary: "Necessary only",
+  },
+  ru: {
+    title: "Cookies и аналитика",
+    body: "Используем cookies для аналитики и улучшения UX. Можете принять все или только необходимые. Подробнее — в ",
+    policy: "политике конфиденциальности",
+    all: "Принять все",
+    necessary: "Только необходимые",
+  },
+} as const;
+
 export function CookieConsent() {
   const [shown, setShown] = useState(false);
+  const { language } = useLanguage();
+  const copy = COPY[language] ?? COPY.en;
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -48,14 +72,13 @@ export function CookieConsent() {
         id="cookie-consent-title"
         className="text-sm font-semibold mb-2 text-text-primary"
       >
-        Cookies и аналитика
+        {copy.title}
       </h2>
       <p className="text-xs text-text-secondary mb-4 leading-relaxed">
-        Используем cookies для аналитики и улучшения UX. Можете принять все или
-        только необходимые. Подробнее — в{" "}
-        <a href="/privacy" className="underline">
-          политике конфиденциальности
-        </a>
+        {copy.body}
+        <Link href="/privacy" className="underline">
+          {copy.policy}
+        </Link>
         .
       </p>
       <div className="flex gap-2 flex-wrap">
@@ -64,14 +87,14 @@ export function CookieConsent() {
           onClick={() => accept("all")}
           className="flex-1 min-w-[120px] px-3 py-2 bg-accent-primary text-white text-xs font-medium rounded-lg hover:opacity-90 transition"
         >
-          Принять все
+          {copy.all}
         </button>
         <button
           type="button"
           onClick={() => accept("necessary")}
           className="flex-1 min-w-[120px] px-3 py-2 border border-border text-text-primary text-xs font-medium rounded-lg hover:bg-bg-tertiary transition"
         >
-          Только необходимые
+          {copy.necessary}
         </button>
       </div>
     </div>
