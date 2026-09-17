@@ -21,6 +21,18 @@ export interface CrmLead {
   message: string;
 }
 
+/**
+ * Метка источника на беседе. В API-инбокс «Сайт и скраперы» попадает всё, у
+ * чего нет своего канала: эта форма, выхлоп скраперов и лиды с телефона. CRM
+ * отвечает автоматически ТОЛЬКО на то, что помечено этой меткой, — человеку,
+ * который сам нам написал. Скрапер такую метку не ставит и автоответа не
+ * получит, что и требуется: ему мы не писали и писать первыми не будем.
+ *
+ * Значение читает Custom::AutoReplyPolicy на стороне CRM; менять его в одном
+ * месте нельзя.
+ */
+export const WEBSITE_FORM_SOURCE = "website_form";
+
 async function post(path: string, body: unknown): Promise<Record<string, unknown>> {
   const res = await fetch(`${CRM_BASE}${path}`, {
     method: "POST",
@@ -77,7 +89,10 @@ export async function submitLeadToCrm(lead: CrmLead): Promise<{ conversationId: 
   const sid = String(contact.source_id ?? sourceId);
   const conversation = await post(
     `/public/api/v1/inboxes/${CRM_IDENT}/contacts/${sid}/conversations`,
-    {},
+    // Публичный API беседы принимает только custom_attributes (см.
+    // Public::Api::V1::Inboxes::ConversationsController#conversation_params),
+    // поэтому метка едет здесь, а не в additional_attributes.
+    { custom_attributes: { anteyko_source: WEBSITE_FORM_SOURCE } },
   );
 
   /**
