@@ -65,8 +65,8 @@ export const translations = {
       ru: "Без срывов сроков. Этапная оплата. Код ваш с первого дня.",
     },
     trustLine: {
-      en: "40+ projects delivered. Dubai & Kyrgyzstan. Milestone-based. NDA on request.",
-      ru: "40+ проектов. Дубай и Кыргызстан. Работаем по этапам. NDA по запросу.",
+      en: "40+ projects delivered. Bishkek · Dubai · Istanbul · Chicago · Shenzhen. Milestone-based. NDA on request.",
+      ru: "40+ проектов. Бишкек · Дубай · Стамбул · Чикаго · Шэньчжэнь. Работаем по этапам. NDA по запросу.",
     },
   },
 
@@ -481,8 +481,8 @@ export const translations = {
   about: {
     title: { en: "We build products that work after launch", ru: "Мы строим продукты, которые работают после запуска" },
     subtitle: {
-      en: "Engineering studio from Bishkek and Dubai. 40+ products. From MVP to L1 blockchain.",
-      ru: "Инженерная студия из Бишкека и Дубая. 40+ продуктов. От MVP до L1 блокчейна.",
+      en: "Engineering studio with offices in Bishkek, Dubai, Istanbul, Chicago and Shenzhen. 40+ products. From MVP to L1 blockchain.",
+      ru: "Инженерная студия с офисами в Бишкеке, Дубае, Стамбуле, Чикаго и Шэньчжэне. 40+ продуктов. От MVP до L1 блокчейна.",
     },
     story: {
       why: {
@@ -584,10 +584,10 @@ export const translations = {
       ],
     },
     geography: {
-      title: { en: "Bishkek. Dubai. Your timezone.", ru: "Бишкек. Дубай. Ваш часовой пояс." },
+      title: { en: "Bishkek. Dubai. Istanbul. Chicago. Shenzhen.", ru: "Бишкек. Дубай. Стамбул. Чикаго. Шэньчжэнь." },
       description: {
-        en: "Core team in Dubai (GMT+4) and Bishkek (GMT+6). Clients in Moscow, Bishkek, Dubai, and across 5+ countries. We operate async-first with daily standups adapted to your timezone \u2014 whether you\u2019re in New York or Singapore.",
-        ru: "Основная команда в Дубае (GMT+4) и Бишкеке (GMT+6). Клиенты в Москве, Бишкеке, Дубае и 5+ странах. Работаем async\u2011first с ежедневными стендапами, адаптированными под ваш часовой пояс \u2014 будь вы в Нью\u2011Йорке или Сингапуре.",
+        en: "Offices in Bishkek (GMT+6), Dubai (GMT+4), Istanbul (GMT+3), Chicago (GMT\u22126) and Shenzhen (GMT+8) \u2014 someone on the team is awake almost around the clock. We operate async-first with daily standups adapted to your timezone \u2014 whether you\u2019re in New York or Singapore.",
+        ru: "Офисы в Бишкеке (GMT+6), Дубае (GMT+4), Стамбуле (GMT+3), Чикаго (GMT\u22126) и Шэньчжэне (GMT+8) \u2014 кто\u2011то из команды на связи почти круглые сутки. Работаем async\u2011first с ежедневными стендапами, адаптированными под ваш часовой пояс \u2014 будь вы в Нью\u2011Йорке или Сингапуре.",
       },
     },
     closingCta: {

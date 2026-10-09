@@ -13,6 +13,7 @@ import { CookieConsent } from "@/components/cookie-consent";
 import { AnalyticsBootstrap } from "@/components/analytics-bootstrap";
 import { CrmWidget } from "@/components/crm-widget";
 import { WhatsAppButton } from "@/components/whatsapp-button";
+import { OFFICES } from "@/lib/locations";
 
 // Refined-light type system: Manrope (geometric grotesque, RU+EN, premium)
 // for both UI and display weights; Geist Mono for technical labels.
@@ -46,8 +47,8 @@ export async function generateMetadata({
     ? "Anteyko — студия полного цикла продуктовой разработки"
     : "Anteyko — End-to-end Product Development Studio";
   const description = isRu
-    ? "Дизайн, фронтенд, бэкенд, админ-панели, интеграции, инфраструктура и запуск. Web2 + Web3 — в одном цикле поставки. Базируемся в Кыргызстане и Дубае."
-    : "Design, frontend, backend, admin panels, integrations, infrastructure, and launch. Web2 + Web3 — in one delivery loop. Based in Kyrgyzstan & Dubai.";
+    ? "Дизайн, фронтенд, бэкенд, админ-панели, интеграции, инфраструктура и запуск. Web2 + Web3 — в одном цикле поставки. Офисы в Бишкеке, Дубае, Стамбуле, Чикаго и Шэньчжэне."
+    : "Design, frontend, backend, admin panels, integrations, infrastructure, and launch. Web2 + Web3 — in one delivery loop. Offices in Bishkek, Dubai, Istanbul, Chicago and Shenzhen.";
   const ogDescription = isRu
     ? "Дизайн, фронтенд, бэкенд, админ-панели, интеграции, инфраструктура и запуск. Web2 + Web3 — в одном цикле поставки."
     : "Design, frontend, backend, admin panels, integrations, infrastructure, and launch. Web2 + Web3 — in one delivery loop.";
@@ -219,12 +220,9 @@ export default async function LocaleLayout({
               name: "Anteyko",
               url: "https://anteyko.com",
               description:
-                "End-to-end product development studio. Design, frontend, backend, admin panels, integrations, infrastructure. Web2 + Web3. Based in Kyrgyzstan & Dubai.",
+                "End-to-end product development studio. Design, frontend, backend, admin panels, integrations, infrastructure. Web2 + Web3. Offices in Bishkek, Dubai, Istanbul, Chicago and Shenzhen.",
               email: "labs@anteyko.com",
-              address: [
-                { "@type": "PostalAddress", addressLocality: "Bishkek", addressCountry: "KG" },
-                { "@type": "PostalAddress", addressLocality: "Dubai", addressCountry: "AE" },
-              ],
+              address: OFFICES.map((o) => ({ "@type": "PostalAddress", addressLocality: o.city.en, addressCountry: o.countryCode })),
             }),
           }}
         />

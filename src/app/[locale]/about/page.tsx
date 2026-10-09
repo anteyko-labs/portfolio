@@ -10,8 +10,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   title: locale === "ru" ? "О студии" : "About",
   description:
     locale === "ru"
-      ? "Инженерия уровня CTO в сочетании с продуктовой поставкой. Базируемся в Бишкеке, Кыргызстан. Активны в Дубае, ОАЭ. Работаем с клиентами по всему миру."
-      : "CTO-grade engineering meets product delivery. Based in Bishkek, Kyrgyzstan. Active in Dubai, UAE. Serving clients globally.",
+      ? "Инженерия уровня CTO в сочетании с продуктовой поставкой. Офисы в Бишкеке, Дубае, Стамбуле, Чикаго и Шэньчжэне. Работаем с клиентами по всему миру."
+      : "CTO-grade engineering meets product delivery. Offices in Bishkek, Dubai, Istanbul, Chicago and Shenzhen. Serving clients globally.",
     alternates: localeAlternates(locale, "/about"),
   };
 }
