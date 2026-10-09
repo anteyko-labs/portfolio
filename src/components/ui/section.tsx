@@ -126,7 +126,7 @@ export function SectionHeader({
           recipe carries the tight tracking/line-height. */}
       <h2
         className={clsx(
-          "heading-brand text-text-primary",
+          "heading-brand [overflow-wrap:break-word] [hyphens:auto] text-text-primary",
           size === "lg"
             ? "text-display-sm md:text-display-md"
             : "text-heading-xl md:text-display-sm"

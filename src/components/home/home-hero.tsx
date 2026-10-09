@@ -231,8 +231,8 @@ export function HomeHero() {
         style={{ backgroundImage: "linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)", backgroundSize: "64px 64px" }}
       />
 
-      <div className="container mx-auto grid items-center gap-14 px-4 sm:px-6 lg:grid-cols-12 lg:gap-8 lg:px-8">
-        <div className="lg:col-span-6">
+      <div className="container mx-auto grid items-center gap-14 px-4 sm:px-6 lg:grid-cols-[1fr_1.15fr] lg:gap-6 lg:px-8">
+        <div>
           <motion.p
             initial={reduced ? false : { opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -332,19 +332,19 @@ export function HomeHero() {
         </div>
 
         {/* Device stage */}
-        <div className="relative lg:col-span-6">
+        <div className="relative">
           <motion.div
             initial={reduced ? false : { opacity: 0, y: 60, scale: 0.94 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 1.2, delay: 0.25, ease: EASE }}
-            className="relative mx-auto aspect-[5/4] w-full max-w-[640px] [perspective:1600px]"
+            className="relative mx-auto aspect-[5/4] w-full max-w-[720px] [perspective:1600px] lg:max-w-none lg:w-[104%] 2xl:w-[116%]"
           >
             <motion.div
               style={reduced ? undefined : { rotateY: rotY, rotateX: rotX }}
               className="absolute inset-0 [transform-style:preserve-3d]"
             >
               {/* browser with a live concept site */}
-              <div className="absolute left-[4%] top-[8%] w-[88%] overflow-hidden rounded-2xl border border-white/15 bg-[#111118] shadow-[0_50px_100px_-30px_rgba(79,70,229,0.55)]">
+              <div className="absolute left-[2%] top-[6%] w-[92%] overflow-hidden rounded-2xl border border-white/15 bg-[#111118] shadow-[0_50px_100px_-30px_rgba(79,70,229,0.55)]">
                 <div className="flex h-8 items-center gap-1.5 border-b border-white/10 bg-white/[0.04] px-3">
                   <i className="h-2.5 w-2.5 rounded-full bg-[#FF5F57]" />
                   <i className="h-2.5 w-2.5 rounded-full bg-[#FEBC2E]" />
@@ -357,7 +357,7 @@ export function HomeHero() {
               </div>
 
               {/* phone */}
-              <motion.div style={reduced ? undefined : layerPhone} className="absolute -bottom-[2%] left-[-2%] w-[26%] min-w-[110px]">
+              <motion.div style={reduced ? undefined : layerPhone} className="absolute -bottom-[4%] left-[-4%] w-[31%] min-w-[130px]">
                 <div className="overflow-hidden rounded-[22px] border-[5px] border-[#0A0A0A] bg-[#0A0A0A] shadow-[0_40px_70px_-20px_rgba(0,0,0,0.8)]">
                   <div className="relative aspect-[390/844] bg-[#0A0A0A]">
                     <PhoneScreens />
@@ -366,12 +366,12 @@ export function HomeHero() {
               </motion.div>
 
               {/* L1 card */}
-              <motion.div style={reduced ? undefined : layerTicker} className="absolute -right-[3%] top-[-4%] hidden sm:block">
+              <motion.div style={reduced ? undefined : layerTicker} className="absolute right-0 top-[-4%] hidden sm:block 2xl:-right-[3%]">
                 <L1Card en={en} />
               </motion.div>
 
               {/* result chips */}
-              <motion.div style={reduced ? undefined : layerChips} className="absolute bottom-[6%] right-[0%] flex flex-col items-end gap-2">
+              <motion.div style={reduced ? undefined : layerChips} className="absolute bottom-[6%] right-[4%] flex flex-col items-end gap-2 2xl:right-0">
                 <span className="home-float inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/90 px-4 py-2 text-sm font-semibold text-[#0A0A0F] shadow-xl">
                   <span className="text-emerald-600">▲</span> {en ? "mobile conversion +23%" : "мобильная конверсия +23%"}
                 </span>

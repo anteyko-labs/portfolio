@@ -127,10 +127,10 @@ export function CaseDetailContent({ caseItem }: { caseItem: FlagshipCase }) {
     // Case-specific artifacts
     const caseArtifacts: Record<string, { title: string; subtitle: string; tone?: "primary" | "success" | "warning" }[]> = {
       "web3-l1-dex": [
-        { title: language === "en" ? "L1 Rust Node" : "L1 нода на Rust", subtitle: language === "en" ? "15+ core modules" : "15+ модулей ядра", tone: "primary" },
-        { title: language === "en" ? "DEX Engine" : "DEX\u2011движок", subtitle: language === "en" ? "Orderbook + Bulletproofs" : "Ордербук + Bulletproofs", tone: "success" },
-        { title: language === "en" ? "4 Frontend Apps" : "4 фронтенда", subtitle: "DEX UI, Explorer, Operator, Faucet", tone: "warning" },
-        { title: "TypeScript SDK", subtitle: language === "en" ? "HTTP API + DEX integration" : "HTTP API + DEX\u2011интеграция", tone: "primary" },
+        { title: language === "en" ? "The blockchain" : "Сам блокчейн", subtitle: language === "en" ? "Trades final in ~0.2 s" : "Сделки окончательны за ~0,2 с", tone: "primary" },
+        { title: language === "en" ? "Built-in exchange" : "Встроенная биржа", subtitle: language === "en" ? "Fair order, no cutting in line" : "Честный порядок, без «влезания»", tone: "success" },
+        { title: language === "en" ? "4 apps" : "4 приложения", subtitle: language === "en" ? "Trading, explorer, control panel, faucet" : "Торговля, обозреватель, панель, кран", tone: "warning" },
+        { title: language === "en" ? "Developer kits" : "Наборы для разработчиков", subtitle: "TypeScript · Python · Rust", tone: "primary" },
       ],
       "utility-token-uae": [
         { title: language === "en" ? "Security Audit Report" : "Отчёт security\u2011аудита", subtitle: "SECURITY_AUDIT_REPORT", tone: "success" },

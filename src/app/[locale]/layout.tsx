@@ -12,6 +12,7 @@ import { CustomCursor } from "@/components/effects/custom-cursor";
 import { CookieConsent } from "@/components/cookie-consent";
 import { AnalyticsBootstrap } from "@/components/analytics-bootstrap";
 import { CrmWidget } from "@/components/crm-widget";
+import { WhatsAppButton } from "@/components/whatsapp-button";
 
 // Refined-light type system: Manrope (geometric grotesque, RU+EN, premium)
 // for both UI and display weights; Geist Mono for technical labels.
@@ -260,6 +261,7 @@ export default async function LocaleLayout({
           </main>
           <CookieConsent />
           <AnalyticsBootstrap />
+          <WhatsAppButton />
           <CrmWidget />
           </LanguageProvider>
         </NextIntlClientProvider>

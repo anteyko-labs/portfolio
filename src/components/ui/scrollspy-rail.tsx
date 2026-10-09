@@ -103,10 +103,10 @@ export function ScrollSpyRail({ items, className, mode = "sticky", position = "r
             />
           </div>
 
-          {/* Floating pill showing current section */}
-          <div className="flex justify-center pointer-events-none">
+          {/* Floating pill showing current section — pinned to the bottom so it never covers the text */}
+          <div className="fixed bottom-5 left-0 right-0 flex justify-center pointer-events-none">
             <nav
-              className="pointer-events-auto mt-2 inline-flex items-center gap-1 px-2 py-1 rounded-full bg-bg-secondary/90 backdrop-blur-md border border-border/60 shadow-md"
+              className="pointer-events-auto inline-flex items-center gap-1 px-2 py-1 rounded-full bg-bg-secondary/90 backdrop-blur-md border border-border/60 shadow-md"
               aria-label="Section navigation"
             >
               {items.map((item, i) => {

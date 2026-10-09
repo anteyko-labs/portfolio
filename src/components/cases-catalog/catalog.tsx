@@ -17,7 +17,7 @@ import { CatalogCard, type CardSize } from "./catalog-card";
 import { CatalogList } from "./catalog-list";
 import { FILTER_LABEL, SORT_LABEL, plural } from "./labels";
 
-const FILTERS: CatalogFilter[] = ["all", "motion", "web", "product", "web3", "infrastructure"];
+const FILTERS: CatalogFilter[] = ["all", "motion", "web", "mobile", "product", "web3", "infrastructure"];
 const SORTS: CatalogSort[] = ["featured", "newest", "oldest", "az"];
 type View = "grid" | "list";
 
@@ -121,7 +121,7 @@ export function Catalog() {
   return (
     <section id="catalog" className="relative scroll-mt-16 bg-bg-primary pb-20 md:pb-28" aria-labelledby="catalog-title">
       {/* Toolbar — sticks under the header */}
-      <div className="sticky top-14 z-30 border-b border-border bg-bg-primary/85 backdrop-blur-xl md:top-16">
+      <div className="sticky top-14 z-30 border-b border-border bg-bg-primary/95 md:top-16">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col gap-3 py-3 lg:flex-row lg:items-center lg:gap-6">
             <h2 id="catalog-title" className="sr-only">
@@ -260,7 +260,7 @@ export function Catalog() {
                     <motion.div
                       key={entry.slug}
                       layout={!reduced}
-                      className={s.span}
+                      className={`${s.span} [content-visibility:auto] [contain-intrinsic-size:auto_640px]`}
                       initial={reduced ? false : { opacity: 0, y: 40, scale: 0.97 }}
                       whileInView={reduced ? undefined : { opacity: 1, y: 0, scale: 1 }}
                       animate={reduced ? { opacity: 1 } : undefined}
