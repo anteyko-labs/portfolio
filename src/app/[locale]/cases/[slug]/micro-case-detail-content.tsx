@@ -4,20 +4,19 @@ import { Link as NextLink } from "@/i18n/navigation";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/lib/language-context";
 import { useReducedMotion } from "@/lib/hooks";
-import { PageHero } from "@/components/sections/page-hero";
 import { Section, AnimatedItem } from "@/components/ui/section";
 import { Card } from "@/components/ui/card";
 import { TiltCard } from "@/components/ui/tilt-card";
 import { CategoryBadge } from "@/components/ui/badge";
 import { MetricPill } from "@/components/ui/metric-pill";
 import { ButtonLink } from "@/components/ui/link";
-import { fadeInUp, staggerContainer } from "@/lib/motion";
 import {
   type MicroCase,
   getRelatedFlagshipCases,
   microCases,
 } from "@/lib/cases-data";
 import { CaseBottomCTA } from "@/components/case-bottom-cta";
+import { MicroVisual } from "@/components/cases-catalog/micro-visuals";
 
 interface MicroCaseDetailContentProps {
   caseItem: MicroCase;
@@ -55,96 +54,90 @@ export function MicroCaseDetailContent({ caseItem }: MicroCaseDetailContentProps
     },
   };
 
+  const index = microCases.findIndex((c) => c.id === caseItem.id);
+  const next = microCases[(index + 1) % microCases.length];
+  const en = language === "en";
+  const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
+
   return (
     <>
-      <PageHero
-        title={caseItem.title[language]}
-        subtitle={caseItem.what[language]}
-        eyebrow={language === "en" ? "Micro Case" : "Микро-кейс"}
-        backLink={{ href: "/cases", label: language === "en" ? "All Cases" : "Все кейсы" }}
-        rightSlot={
-          <div className="rounded-2xl border border-border bg-bg-secondary/80 backdrop-blur-sm p-6">
-            <div className="flex items-center gap-3 mb-4">
-              <CategoryBadge category={caseItem.category} />
-              <span className="text-caption text-text-tertiary uppercase tracking-wider">
-                {language === "en" ? "Category" : "Категория"}
-              </span>
-            </div>
-            <p className="text-body-sm text-text-secondary">
-              {categoryDescriptions[caseItem.category][language]}
-            </p>
+      <section className="relative overflow-hidden bg-bg-primary pb-10 pt-10 md:pb-14 md:pt-14">
+        <div className="pointer-events-none absolute -right-40 -top-40 h-[480px] w-[480px] rounded-full bg-accent-primary/10 blur-3xl" aria-hidden="true" />
+        <div className="container relative mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-wrap items-center justify-between gap-3 font-mono text-caption uppercase tracking-[0.16em] text-text-tertiary">
+            <NextLink href="/cases" className="inline-flex items-center gap-2 transition-colors hover:text-accent-primary">
+              <span aria-hidden="true">←</span> {en ? "All work" : "Все работы"}
+            </NextLink>
+            <span>
+              {String(index + 1).padStart(2, "0")} / {String(microCases.length).padStart(2, "0")}
+            </span>
           </div>
-        }
-      />
-
-      {/* Main content */}
-      <Section background="secondary" padding="lg">
-        <motion.div
-          className="max-w-3xl mx-auto"
-          variants={prefersReducedMotion ? {} : staggerContainer}
-          initial="hidden"
-          animate="visible"
-        >
-          {/* Outcome highlight */}
-          <motion.div 
-            variants={prefersReducedMotion ? {} : fadeInUp}
-            className="mb-12"
+          <div className="mt-8">
+            <CategoryBadge category={caseItem.category} />
+          </div>
+          <h1 className="mt-5 max-w-4xl overflow-hidden pb-[0.06em] font-brand text-4xl font-semibold leading-[1.02] tracking-[-0.03em] text-text-primary sm:text-6xl">
+            <motion.span
+              className="block"
+              initial={prefersReducedMotion ? false : { y: "105%" }}
+              animate={{ y: 0 }}
+              transition={{ duration: 0.9, ease: EASE }}
+            >
+              {caseItem.title[language]}
+            </motion.span>
+          </h1>
+          <motion.p
+            className="mt-4 max-w-2xl text-heading-md text-text-secondary"
+            initial={prefersReducedMotion ? false : { opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2, ease: EASE }}
           >
-            <Card variant="gradient" padding="lg" className="relative overflow-hidden">
-              <div className="relative z-10">
-                <div className="flex items-center gap-2 mb-4">
-                  <svg className="w-5 h-5 text-accent-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  <span className="text-caption uppercase tracking-wider text-text-tertiary">
-                    {language === "en" ? "Outcome" : "Результат"}
-                  </span>
-                </div>
-                <p className="text-heading-md text-text-primary font-medium">
-                  {caseItem.outcome[language]}
-                </p>
+            {caseItem.what[language]}
+          </motion.p>
+        </div>
+      </section>
+
+      <section className="bg-bg-primary pb-14 md:pb-20">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={prefersReducedMotion ? false : { opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.25, ease: EASE }}
+          >
+            <MicroVisual id={caseItem.id} category={caseItem.category} />
+          </motion.div>
+
+          <div className="mt-8 grid gap-4 md:grid-cols-2">
+            <AnimatedItem>
+              <div className="h-full rounded-2xl border border-border bg-bg-secondary p-6 md:p-8">
+                <p className="font-mono text-caption uppercase tracking-[0.16em] text-text-tertiary">{en ? "What we did" : "Что сделали"}</p>
+                <p className="mt-3 text-heading-md text-text-primary">{caseItem.what[language]}</p>
+                <p className="mt-3 text-body-md text-text-secondary">{categoryDescriptions[caseItem.category][language]}</p>
               </div>
-              {/* Decorative wash — neutral, subtle */}
-              <div className="absolute -top-20 -right-20 w-40 h-40 bg-text-primary/[0.03] rounded-full blur-3xl" />
-            </Card>
-          </motion.div>
+            </AnimatedItem>
+            <AnimatedItem delay={0.08}>
+              <div className="relative h-full overflow-hidden rounded-2xl bg-text-primary p-6 text-white md:p-8">
+                <div className="pointer-events-none absolute -bottom-16 -right-16 h-48 w-48 rounded-full bg-accent-primary/40 blur-3xl" aria-hidden="true" />
+                <p className="relative font-mono text-caption uppercase tracking-[0.16em] text-white/50">{en ? "Outcome" : "Результат"}</p>
+                <p className="relative mt-3 font-brand text-2xl font-semibold leading-snug tracking-tight md:text-3xl">{caseItem.outcome[language]}</p>
+              </div>
+            </AnimatedItem>
+          </div>
 
-          {/* What we did */}
-          <motion.div 
-            variants={prefersReducedMotion ? {} : fadeInUp}
-            className="mb-12"
-          >
-            <h2 className="text-heading-lg font-medium text-text-primary mb-4">
-              {language === "en" ? "What we delivered" : "Что мы сделали"}
-            </h2>
-            <Card variant="bordered" padding="md">
-              <p className="text-body-md text-text-secondary leading-relaxed">
-                {caseItem.what[language]}
-              </p>
-            </Card>
-          </motion.div>
-
-          {/* CTA section */}
-          <motion.div 
-            variants={prefersReducedMotion ? {} : fadeInUp}
-            className="p-6 rounded-2xl border border-border bg-bg-tertiary/50 text-center"
-          >
-            <p className="text-body-md text-text-secondary mb-4">
-              {language === "en" 
-                ? "Want to see how we can apply similar solutions to your project?" 
-                : "Хотите узнать, как мы можем применить похожие решения для вашего проекта?"}
+          <div className="mt-8 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-border p-5 md:p-6">
+            <p className="text-body-md text-text-secondary">
+              {en ? "Want something similar in your product?" : "Хотите такое же в вашем продукте?"}
             </p>
-            <div className="flex flex-wrap justify-center gap-3">
+            <div className="flex flex-wrap gap-3">
               <ButtonLink href="/contact" buttonVariant="primary">
-                {language === "en" ? "Get in touch" : "Связаться"}
+                {en ? "Discuss the project" : "Обсудить проект"}
               </ButtonLink>
-              <ButtonLink href="/process" buttonVariant="secondary">
-                {language === "en" ? "Our process" : "Наш процесс"}
+              <ButtonLink href={`/cases/${next.id}`} buttonVariant="secondary">
+                {en ? "Next work →" : "Следующая работа →"}
               </ButtonLink>
             </div>
-          </motion.div>
-        </motion.div>
-      </Section>
+          </div>
+        </div>
+      </section>
 
       {/* Related Flagship Cases */}
       {relatedFlagship.length > 0 && (
