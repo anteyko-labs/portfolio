@@ -7,6 +7,7 @@ import { useReducedMotion } from "@/lib/hooks";
 import { AnimatedItem, Section } from "@/components/ui/section";
 import { CaseBottomCTA } from "@/components/case-bottom-cta";
 import { ShowcaseViewer } from "@/components/cases-catalog/showcase-viewer";
+import { AdminShowcase } from "@/components/cases-catalog/admin-showcase";
 import { CATEGORY_LABEL, pad } from "@/components/cases-catalog/labels";
 import { catalogEntries, sortEntries } from "@/lib/catalog";
 import type { ShowcaseItem } from "@/lib/showcase-data";
@@ -113,6 +114,8 @@ export function ShowcaseDetailContent({ item }: { item: ShowcaseItem }) {
           </motion.div>
         </div>
       </section>
+
+      {item.admin?.length ? <AdminShowcase item={item} /> : null}
 
       <Section background="secondary" padding="lg" className="border-t border-border">
         <div className="grid gap-10 lg:grid-cols-[14rem_1fr]">

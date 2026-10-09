@@ -97,10 +97,6 @@ export function CatalogHero() {
         >
           <span className="h-px w-8 bg-text-muted" />
           {language === "en" ? "Cases · catalog" : "Кейсы · каталог"}
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-bg-primary/70 px-2.5 py-0.5 normal-case tracking-normal text-text-secondary backdrop-blur">
-            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-success motion-reduce:animate-none" />
-            {language === "en" ? "live previews" : "живые превью"}
-          </span>
         </motion.p>
 
         <h1 className="mt-6 max-w-5xl font-brand text-[2.6rem] font-semibold leading-[0.98] tracking-[-0.035em] text-text-primary sm:text-6xl md:text-7xl lg:text-[5.5rem]">

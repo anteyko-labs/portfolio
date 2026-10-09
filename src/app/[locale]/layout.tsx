@@ -8,7 +8,6 @@ import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import "../globals.css";
 import { LanguageProvider } from "@/lib/language-context";
-import { LogoFusionEffect } from "@/components/effects/logo-fusion";
 import { CustomCursor } from "@/components/effects/custom-cursor";
 import { CookieConsent } from "@/components/cookie-consent";
 import { AnalyticsBootstrap } from "@/components/analytics-bootstrap";
@@ -255,7 +254,6 @@ export default async function LocaleLayout({
           </a>
           {/* Noise overlay for texture */}
           <div className="noise-overlay" aria-hidden="true" />
-          <LogoFusionEffect />
           <CustomCursor />
           <main id="main-content">
             {children}

@@ -95,12 +95,6 @@ export function CatalogCard({
               <span className="truncate">{entry.signature[language]}</span>
             </span>
           )}
-          {entry.demo && (
-            <span className="pointer-events-none absolute bottom-3 left-3 z-10 inline-flex items-center gap-2 rounded-full bg-black/70 px-3 py-1 font-mono text-[11px] text-white backdrop-blur transition-opacity duration-300 group-hover:opacity-0">
-              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[#28C840] motion-reduce:animate-none" />
-              {language === "en" ? "Live preview" : "Живое превью"}
-            </span>
-          )}
         </div>
       </NextLink>
 
