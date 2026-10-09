@@ -966,3 +966,12 @@ body {
   100% { scale: 1 0.04; }
 }
 .gcover .geo-pin { animation: gc-float 3s ease-in-out infinite; }
+
+/* Admin showcase on case pages */
+.admin-sheen {
+  background: linear-gradient(115deg, transparent 35%, rgba(255, 255, 255, 0.08) 48%, transparent 60%);
+  background-size: 260% 100%;
+  animation: gm-sheen 6s ease-in-out infinite;
+}
+@keyframes admin-progress { from { width: 0%; } to { width: 100%; } }
+@media (prefers-reduced-motion: reduce) { .admin-sheen { animation: none; } }

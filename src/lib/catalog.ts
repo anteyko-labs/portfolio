@@ -101,7 +101,7 @@ const fromShowcase: CatalogEntry[] = visibleShowcaseItems.map((s) => ({
   demo: s.demo,
   cover: s.cover,
   fullPage: s.fullPage,
-  frames: [s.cover, ...(s.gallery ?? []).map((g) => g.src)].filter(Boolean) as string[],
+  frames: [s.cover, ...(s.gallery ?? []).map((g) => g.src), ...(s.admin ?? []).map((a) => a.src)].filter(Boolean) as string[],
   phones: s.phones,
   stage: s.stage,
   decor: s.decor,

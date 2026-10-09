@@ -42,6 +42,8 @@ export interface ShowcaseItem {
   gallery?: { src: string; alt: L }[];
   /** Phone screenshot, 390×844 */
   mobile?: string;
+  /** Back-office screens, shown in their own section on the case page */
+  admin?: { src: string; title: L }[];
   /** Mobile-first products: 2–3 phone screens shown as a fanned stack on the card */
   phones?: string[];
   /** CSS background of the phone stage (decor only — the project's palette stays as is) */
@@ -538,10 +540,12 @@ export const showcaseItems: ShowcaseItem[] = [
     domain: "blik",
     cover: "/images/showcase/detailing-booking/cover.jpg",
     gallery: [
-      { src: "/images/showcase/detailing-booking/screen-2.jpg", alt: { en: "BLIK — screen 2", ru: "BLIK — экран 2" } },
       { src: "/images/showcase/detailing-booking/screen-3.jpg", alt: { en: "BLIK — screen 3", ru: "BLIK — экран 3" } },
     ],
     mobile: "/images/showcase/detailing-booking/mobile.jpg",
+    admin: [
+      { src: "/images/showcase/detailing-booking/screen-2.jpg", title: { en: "Studio dashboard: today's bookings, no-shows, revenue", ru: "Дашборд студии: записи на сегодня, неявки, выручка" } },
+    ],
     summary: { en: "BLIK is a white-label platform that gives a detailing studio its own online booking page, an admin panel and a client base. One deployment serves many studios, each with its own branding, services, staff and feature set.", ru: "BLIK — white-label платформа, которая даёт студии детейлинга собственную страницу онлайн-записи, админку и базу клиентов. Одна установка обслуживает много студий, у каждой свои бренд, услуги, мастера и набор функций." },
     review: {
       en: [
@@ -577,11 +581,11 @@ export const showcaseItems: ShowcaseItem[] = [
     year: 2026,
     domain: "go market",
     cover: "/images/showcase/go-market/cover.jpg",
-    gallery: [
-      { src: "/images/showcase/go-market/screen-2.jpg", alt: { en: "Go Market — screen 2", ru: "Go Market — экран 2" } },
-      { src: "/images/showcase/go-market/screen-3.jpg", alt: { en: "Go Market — screen 3", ru: "Go Market — экран 3" } },
-    ],
     phones: ["/images/showcase/go-market/phone-1.jpg","/images/showcase/go-market/phone-2.jpg"],
+    admin: [
+      { src: "/images/showcase/go-market/screen-2.jpg", title: { en: "Orders: live queue for the shift", ru: "Заказы: живая очередь смены" } },
+      { src: "/images/showcase/go-market/screen-3.jpg", title: { en: "Catalog with stock and prices", ru: "Каталог с остатками и ценами" } },
+    ],
     summary: { en: "A bilingual (Russian/Kyrgyz) grocery delivery PWA where customers pay through Cash2U instalments, built for low-cost Android phones and unstable mobile internet. A staff cabinet covers the whole order cycle from picking and amount confirmation to courier routes and payments.", ru: "Двуязычная (русский/кыргызский) PWA доставки продуктов с оплатой в рассрочку через Cash2U, рассчитанная на недорогие Android-смартфоны и нестабильный мобильный интернет. Рабочий кабинет закрывает весь цикл заказа — от сборки и подтверждения суммы до маршрута курьера и платежей." },
     review: {
       en: [
@@ -649,11 +653,11 @@ export const showcaseItems: ShowcaseItem[] = [
     year: 2026,
     domain: "erp marking",
     cover: "/images/showcase/erp-garment/cover.jpg",
-    gallery: [
-      { src: "/images/showcase/erp-garment/screen-2.jpg", alt: { en: "ERP Marking — screen 2", ru: "ERP Маркировка — экран 2" } },
-      { src: "/images/showcase/erp-garment/screen-3.jpg", alt: { en: "ERP Marking — screen 3", ru: "ERP Маркировка — экран 3" } },
-    ],
     mobile: "/images/showcase/erp-garment/mobile.jpg",
+    admin: [
+      { src: "/images/showcase/erp-garment/screen-2.jpg", title: { en: "Product catalog and marking codes", ru: "Справочник изделий и коды маркировки" } },
+      { src: "/images/showcase/erp-garment/screen-3.jpg", title: { en: "Label editor: DataMatrix + Wildberries", ru: "Редактор этикеток: DataMatrix + Wildberries" } },
+    ],
     summary: { en: "A marking and shipping system for a garment factory. It handles Chestny Znak DataMatrix codes and Wildberries barcodes, prints labels on the shop floor and tracks every item from its box to the pallet and the marketplace shipment.", ru: "Система маркировки и отгрузки для швейного цеха. Работает с кодами DataMatrix «Честного знака» и штрихкодами Wildberries, печатает этикетки прямо в цеху и отслеживает каждое изделие по цепочке «короб → паллета → поставка на маркетплейс»." },
     review: {
       en: [
@@ -687,11 +691,11 @@ export const showcaseItems: ShowcaseItem[] = [
     year: 2026,
     domain: "djal",
     cover: "/images/showcase/djal/cover.jpg",
-    gallery: [
-      { src: "/images/showcase/djal/screen-2.jpg", alt: { en: "Djal — screen 2", ru: "Джал — экран 2" } },
-      { src: "/images/showcase/djal/screen-3.jpg", alt: { en: "Djal — screen 3", ru: "Джал — экран 3" } },
-    ],
     phones: ["/images/showcase/djal/phone-1.jpg","/images/showcase/djal/phone-2.jpg"],
+    admin: [
+      { src: "/images/showcase/djal/screen-2.jpg", title: { en: "Survey dishes per branch", ru: "Блюда опроса по филиалам" } },
+      { src: "/images/showcase/djal/screen-3.jpg", title: { en: "Guest responses and ratings", ru: "Ответы и оценки гостей" } },
+    ],
     summary: { en: "A guest-facing web app for a cafe chain: guests reach it through the guest Wi-Fi captive portal or a QR code on the table, see the branch's promotions and leave a dish-by-dish quality review. Managers read the responses and run promotions, survey dishes and printable table QR cards from an admin panel.", ru: "Гостевое веб-приложение для сети кафе: гость попадает в него через captive-портал гостевого Wi-Fi или по QR-коду на столе, видит акции филиала и оставляет поблюдный отзыв о качестве. Управляющие читают ответы и ведут акции, список блюд опроса и печатные таблички с QR в панели управления." },
     review: {
       en: [
@@ -725,11 +729,11 @@ export const showcaseItems: ShowcaseItem[] = [
     year: 2026,
     domain: "anteyko business pwa",
     cover: "/images/showcase/anteyko-pwa/cover.jpg",
-    gallery: [
-      { src: "/images/showcase/anteyko-pwa/screen-2.jpg", alt: { en: "Anteyko Business PWA — screen 2", ru: "Anteyko PWA для бизнеса — экран 2" } },
-      { src: "/images/showcase/anteyko-pwa/screen-3.jpg", alt: { en: "Anteyko Business PWA — screen 3", ru: "Anteyko PWA для бизнеса — экран 3" } },
-    ],
     phones: ["/images/showcase/anteyko-pwa/phone-1.jpg","/images/showcase/anteyko-pwa/phone-2.jpg"],
+    admin: [
+      { src: "/images/showcase/anteyko-pwa/screen-3.jpg", title: { en: "Owner dashboard and incoming orders", ru: "Сводка владельца и входящие заказы" } },
+      { src: "/images/showcase/anteyko-pwa/screen-2.jpg", title: { en: "Menu editor", ru: "Редактор меню" } },
+    ],
     summary: { en: "A branded order and booking PWA delivered as a separate instance for each client, with its own brand, domain and database, and no aggregator commission or subscription. It is the product behind the studio's “Start” and “Turnkey” offers.", ru: "Брендированная PWA для заказов и записи, которая ставится каждому клиенту отдельным инстансом — со своим брендом, доменом и базой, без комиссии агрегатора и подписки. Это продукт, на котором построены предложения студии «Старт» и «Под ключ»." },
     review: {
       en: [
@@ -761,9 +765,9 @@ export const showcaseItems: ShowcaseItem[] = [
     year: 2026,
     domain: "jocash tender",
     cover: "/images/showcase/jocash-tender/cover.jpg",
-    gallery: [
-      { src: "/images/showcase/jocash-tender/screen-2.jpg", alt: { en: "JoCash Tender — screen 2", ru: "JoCash Tender — экран 2" } },
-      { src: "/images/showcase/jocash-tender/screen-3.jpg", alt: { en: "JoCash Tender — screen 3", ru: "JoCash Tender — экран 3" } },
+    admin: [
+      { src: "/images/showcase/jocash-tender/screen-2.jpg", title: { en: "Tender card: status, assignee, comments", ru: "Карточка тендера: статус, ответственный, комментарии" } },
+      { src: "/images/showcase/jocash-tender/screen-3.jpg", title: { en: "Scraper runs across procurement portals", ru: "Запуски сборщиков по порталам закупок" } },
     ],
     summary: { en: "An internal platform that collects new tenders from Kyrgyz procurement portals into one list and lets the team take each tender from discovery to a submitted bid. Tenders get statuses, owners, tags, comments and attached cost estimates, and the list exports to Excel or CSV.", ru: "Внутренняя платформа, которая собирает новые тендеры с киргизских порталов закупок в один список и позволяет команде вести каждый тендер от обнаружения до поданной заявки. У тендеров есть статусы, ответственные, теги, комментарии и прикреплённые сметы, а список выгружается в Excel или CSV." },
     review: {
