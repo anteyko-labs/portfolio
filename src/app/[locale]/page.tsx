@@ -12,10 +12,6 @@ import { TrustedBySection } from "@/components/sections/trusted-by";
 import { TestimonialsSection } from "@/components/sections/testimonials";
 import { PackagesSection } from "@/components/sections/packages";
 import { FAQPreviewSection } from "@/components/sections/faq-preview";
-import { getL1Snapshot } from "@/lib/l1-stats";
-
-// Re-read the L1 height every 10 minutes; the client extrapolates in between.
-export const revalidate = 600;
 
 // WebSite entity for the home page. No SearchAction is included because the site
 // exposes no on-site search endpoint. publisher points at the Organization that
@@ -38,16 +34,15 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   return { alternates: localeAlternates(locale, "/") };
 }
 
-export default async function Home() {
-  const l1 = await getL1Snapshot();
+export default function Home() {
   return (
     <PageWrapper>
       <JsonLd data={websiteSchema} />
-      <HomeHero l1={l1} />
+      <HomeHero />
       <TrustedBySection />
       <HomeServices />
       <HomeWork />
-      <HomeL1 snapshot={l1} />
+      <HomeL1 />
       <HomeProcess />
       <TestimonialsSection />
       <PackagesSection />

@@ -7,7 +7,6 @@ import { Link as NextLink } from "@/i18n/navigation";
 import { useLanguage } from "@/lib/language-context";
 import { useReducedMotion } from "@/lib/hooks";
 import { MagneticButton } from "@/components/ui/magnetic-button";
-import { estimateHeight, type L1Snapshot } from "@/lib/l1-stats";
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
@@ -82,41 +81,86 @@ function LiveSite({ src, title, width = 1440, height = 900, poster }: { src: str
   );
 }
 
-function L1Ticker({ snapshot, en }: { snapshot: L1Snapshot; en: boolean }) {
-  const [h, setH] = useState(snapshot.height);
+const SCREENS = [
+  "/images/showcase/asaki-sushi/phone-1.jpg",
+  "/images/showcase/go-market/phone-1.jpg",
+  "/images/showcase/djal/phone-1.jpg",
+  "/images/showcase/anteyko-pwa/phone-1.jpg",
+  "/images/showcase/asaki-sushi/phone-2.jpg",
+];
+
+/** Real app screens swiping like stories, each slowly panning while shown */
+function PhoneScreens() {
+  const reduced = useReducedMotion();
+  const [i, setI] = useState(0);
   useEffect(() => {
-    const tick = () => setH(estimateHeight(snapshot));
-    const first = window.setTimeout(tick, 0);
-    const id = window.setInterval(tick, 1000);
-    return () => {
-      window.clearTimeout(first);
-      window.clearInterval(id);
-    };
-  }, [snapshot]);
+    if (reduced) return;
+    const id = window.setInterval(() => setI((n) => (n + 1) % SCREENS.length), 2600);
+    return () => window.clearInterval(id);
+  }, [reduced]);
+  return (
+    <div className="absolute inset-0 overflow-hidden">
+      {SCREENS.map((src, k) => (
+        <div
+          key={src}
+          className="absolute inset-0 transition-[transform,opacity] duration-700 ease-[cubic-bezier(.22,1,.36,1)]"
+          style={{ transform: `translateX(${(k - i) * 100}%) scale(${k === i ? 1 : 0.92})`, opacity: Math.abs(k - i) > 1 ? 0 : 1 }}
+        >
+          <Image src={src} alt="" fill sizes="170px" className={k === i ? "phone-pan object-cover object-top" : "object-cover object-top"} />
+        </div>
+      ))}
+      <div className="absolute inset-x-0 bottom-2 flex justify-center gap-1">
+        {SCREENS.map((src, k) => (
+          <span key={src} className={`h-1 rounded-full transition-all duration-500 ${k === i ? "w-4 bg-white" : "w-1 bg-white/50"}`} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/** Rotating ring of text around an arrow — a quiet "scroll" cue */
+function RingBadge({ en }: { en: boolean }) {
+  const text = en ? "ANTEYKO · PRODUCT STUDIO · SINCE 2021 · " : "ANTEYKO · СТУДИЯ ПРОДУКТОВ · С 2021 · ";
+  return (
+    <a href="#home-services" aria-label={en ? "Scroll to services" : "К услугам"} className="group relative grid h-28 w-28 place-items-center">
+      <svg viewBox="0 0 100 100" className="home-ring absolute inset-0 h-full w-full" aria-hidden="true">
+        <defs>
+          <path id="ring-path" d="M50 50 m-38 0 a38 38 0 1 1 76 0 a38 38 0 1 1 -76 0" />
+        </defs>
+        <text fill="rgba(255,255,255,0.7)" fontSize="8.4" letterSpacing="2.2" fontFamily="ui-monospace, monospace">
+          <textPath href="#ring-path">{text}</textPath>
+        </text>
+      </svg>
+      <span className="grid h-11 w-11 place-items-center rounded-full bg-white text-[#0A0A0F] transition-transform duration-500 group-hover:rotate-90" aria-hidden="true">↓</span>
+    </a>
+  );
+}
+
+/** Decorative card for the L1 work: modules lighting up in turn (no live data) */
+function L1Card({ en }: { en: boolean }) {
+  const mods = ["Consensus", "EVM", "DEX", "Privacy", "Governance", "SDK"];
   return (
     <div className="w-[220px] rounded-2xl border border-white/10 bg-[#0E0E18]/90 p-4 shadow-2xl backdrop-blur-xl">
       <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-wider text-white/50">
-        <span className="relative flex h-2 w-2">
-          <span className="absolute inset-0 animate-ping rounded-full bg-emerald-400/70 motion-reduce:animate-none" />
-          <span className="relative h-2 w-2 rounded-full bg-emerald-400" />
-        </span>
-        {en ? "Our L1 · finalized" : "Наш L1 · финализирован"}
+        <span className="h-2 w-2 rounded-full bg-fuchsia-400" />
+        {en ? "L1 blockchain" : "L1-блокчейн"}
       </div>
-      <AnimatePresence mode="popLayout" initial={false}>
-        <motion.p
-          key={h}
-          initial={{ y: 14, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          exit={{ y: -14, opacity: 0 }}
-          transition={{ duration: 0.35 }}
-          className="mt-2 font-mono text-xl font-semibold tabular-nums text-white"
-        >
-          #{h.toLocaleString("ru-RU")}
-        </motion.p>
-      </AnimatePresence>
-      <div className="mt-3 flex gap-1">
-        {Array.from({ length: 12 }, (_, i) => (
-          <span key={i} className="h-5 flex-1 rounded-sm bg-gradient-to-t from-indigo-500/40 to-fuchsia-400/80" style={{ opacity: 0.35 + ((h + i) % 5) * 0.15 }} />
+      <p className="mt-2 font-brand text-lg font-semibold text-white">Rust · EVM · DEX</p>
+      <svg viewBox="0 0 120 30" className="mt-2 h-8 w-full" aria-hidden="true">
+        <defs>
+          <linearGradient id="l1-spark" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0%" stopColor="#E879F9" stopOpacity="0.5" />
+            <stop offset="100%" stopColor="#E879F9" stopOpacity="0" />
+          </linearGradient>
+        </defs>
+        <path d="M0 24 L10 20 L20 22 L30 15 L40 17 L50 10 L60 13 L70 8 L80 11 L90 5 L100 9 L110 4 L120 6 L120 30 L0 30 Z" fill="url(#l1-spark)" />
+        <path className="l1-spark" d="M0 24 L10 20 L20 22 L30 15 L40 17 L50 10 L60 13 L70 8 L80 11 L90 5 L100 9 L110 4 L120 6" fill="none" stroke="#F0ABFC" strokeWidth="1.6" pathLength={1} />
+      </svg>
+      <div className="mt-3 grid grid-cols-3 gap-1">
+        {mods.map((m, i) => (
+          <span key={m} className="home-module rounded-md border border-white/10 px-1.5 py-1 text-center font-mono text-[9px] text-white/70" style={{ animationDelay: `${i * 0.4}s` }}>
+            {m}
+          </span>
         ))}
       </div>
     </div>
@@ -135,7 +179,7 @@ function Counter({ to, suffix = "", delay = 0 }: { to: number; suffix?: string; 
   return <span ref={ref} className="tabular-nums">{`${to}${suffix}`}</span>;
 }
 
-export function HomeHero({ l1 }: { l1: L1Snapshot }) {
+export function HomeHero() {
   const { t, language } = useLanguage();
   const en = language === "en";
   const reduced = useReducedMotion();
@@ -162,6 +206,8 @@ export function HomeHero({ l1 }: { l1: L1Snapshot }) {
   const onMove = (e: React.PointerEvent) => {
     if (reduced) return;
     const r = (e.currentTarget as HTMLElement).getBoundingClientRect();
+    (e.currentTarget as HTMLElement).style.setProperty("--sx", `${e.clientX - r.left}px`);
+    (e.currentTarget as HTMLElement).style.setProperty("--sy", `${e.clientY - r.top}px`);
     mx.set(((e.clientX - r.left) / r.width) * 2 - 1);
     my.set(((e.clientY - r.top) / r.height) * 2 - 1);
   };
@@ -175,6 +221,8 @@ export function HomeHero({ l1 }: { l1: L1Snapshot }) {
 
   return (
     <section onPointerMove={onMove} className="relative isolate overflow-hidden bg-[#06060B] pb-16 pt-28 text-white md:pb-24 md:pt-32 lg:min-h-[100svh]">
+      {/* Soft light that follows the pointer */}
+      <div aria-hidden="true" className="home-spotlight pointer-events-none absolute inset-0 -z-10" />
       {/* Aurora + grid */}
       <div aria-hidden="true" className="home-aurora pointer-events-none absolute inset-0 -z-10" />
       <div
@@ -311,15 +359,15 @@ export function HomeHero({ l1 }: { l1: L1Snapshot }) {
               {/* phone */}
               <motion.div style={reduced ? undefined : layerPhone} className="absolute -bottom-[2%] left-[-2%] w-[26%] min-w-[110px]">
                 <div className="overflow-hidden rounded-[22px] border-[5px] border-[#0A0A0A] bg-[#0A0A0A] shadow-[0_40px_70px_-20px_rgba(0,0,0,0.8)]">
-                  <div className="relative aspect-[390/844] bg-[#FAFAF7]">
-                    <LiveSite src="/demos/lumo/index.html" width={390} height={844} title={en ? "Live mobile site" : "Живой мобильный сайт"} />
+                  <div className="relative aspect-[390/844] bg-[#0A0A0A]">
+                    <PhoneScreens />
                   </div>
                 </div>
               </motion.div>
 
-              {/* L1 ticker */}
+              {/* L1 card */}
               <motion.div style={reduced ? undefined : layerTicker} className="absolute -right-[3%] top-[-4%] hidden sm:block">
-                <L1Ticker snapshot={l1} en={en} />
+                <L1Card en={en} />
               </motion.div>
 
               {/* result chips */}
@@ -336,10 +384,9 @@ export function HomeHero({ l1 }: { l1: L1Snapshot }) {
         </div>
       </div>
 
-      <a href="#home-services" className="absolute bottom-6 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 font-mono text-[10px] uppercase tracking-[0.3em] text-white/40 lg:flex">
-        {en ? "scroll" : "листайте"}
-        <span className="home-scroll-cue h-10 w-px bg-gradient-to-b from-white/60 to-transparent" />
-      </a>
+      <div className="absolute bottom-8 right-8 hidden lg:block xl:right-14">
+        <RingBadge en={en} />
+      </div>
     </section>
   );
 }

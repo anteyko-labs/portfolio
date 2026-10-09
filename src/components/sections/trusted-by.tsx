@@ -6,7 +6,7 @@ import { useLanguage } from "@/lib/language-context";
 import { useReducedMotion } from "@/lib/hooks";
 
 // Clients whose names we show publicly. Logos come from the projects themselves
-// (Asaki's brand kit, Paddock's site, TRM's file); ShoeStreet and Avtodom use a
+// (Asaki's brand kit, Djal's logo file, TRM's file); ShoeStreet and Avtodom use a
 // text wordmark in their own UI, so they are set in type the same way.
 // Each tile lifts and glows in the brand colour on hover, with a one-line caption.
 type Client = {
@@ -35,10 +35,10 @@ const CLIENTS: Client[] = [
     logo: <Image src="/logos/trm.png" alt="TRM" width={160} height={80} className="h-12 w-auto object-contain" />,
   },
   {
-    name: "Paddock Rent a Car",
-    what: { en: "Car rental, Dubai", ru: "Прокат авто, Дубай" },
-    color: "#E4252A",
-    logo: <Image src="/logos/paddock.png" alt="Paddock Rent a Car" width={443} height={33} className="h-6 w-auto" />,
+    name: "Djal",
+    what: { en: "Guest survey & promos", ru: "Опрос гостей и акции" },
+    color: "#EA580C",
+    logo: <Image src="/logos/djal.png" alt="Шашлычная Джал" width={704} height={240} className="h-12 w-auto" />,
   },
   {
     name: "ShoeStreet",
@@ -91,7 +91,7 @@ export function TrustedBySection() {
               className={i === CLIENTS.length - 1 ? "col-span-2 sm:col-span-1" : undefined}
             >
               <div
-                className="logo-tile group relative flex h-32 flex-col items-center justify-center overflow-hidden rounded-2xl border border-border bg-bg-secondary px-4 text-text-primary transition-[border-color,box-shadow,transform,color] duration-500 hover:-translate-y-1 motion-reduce:hover:translate-y-0"
+                className="logo-tile group relative flex h-32 flex-col items-center justify-center overflow-hidden rounded-2xl border border-border bg-bg-secondary px-4 text-text-primary transition-[border-color,box-shadow,color] duration-500"
                 style={{ ["--brand" as string]: c.color }}
                 title={c.name}
               >

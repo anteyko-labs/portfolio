@@ -1,4 +1,5 @@
 import { GoMarketScene } from "./go-market-scene";
+import { L1Terminal } from "./l1-terminal";
 
 // Illustrated covers for case studies that have no screenshots (NDA work).
 // Each is an SVG scene on a 1600×1000 canvas, scaled like `object-fit: cover`.
@@ -60,6 +61,20 @@ function WalletRpc({ active }: CoverProps) {
       <circle cx="800" cy="520" r="96" fill="url(#wr-core)" />
       <text x="800" y="512" textAnchor="middle" fill="#fff" fontSize="34" fontWeight="700" fontFamily={MONO}>RPC</text>
       <text x="800" y="550" textAnchor="middle" fill="#E0E7FF" fontSize="20" fontFamily={MONO}>eth_chainId</text>
+      {/* sparks around the node */}
+      {Array.from({ length: 14 }, (_, i) => {
+        const a = (i / 14) * Math.PI * 2;
+        return <circle key={i} className="gc-spark" cx={Math.round(800 + Math.cos(a) * 190)} cy={Math.round(520 + Math.sin(a) * 190)} r="5" fill={i % 2 ? "#22D3EE" : "#C4B5FD"} style={{ animationDelay: `${i * -0.25}s` }} />;
+      })}
+      {/* signature request */}
+      <g className="gc-float" transform="translate(1110 420)" style={{ animationDelay: "-2s" }}>
+        <rect width="380" height="200" rx="24" fill="#151528" stroke="#8B5CF6" strokeOpacity="0.5" />
+        <text x="28" y="50" fill="#C4B5FD" fontSize="22" fontFamily={MONO}>eth_signTypedData_v4</text>
+        <text x="28" y="96" fill="#fff" fontSize="30" fontWeight="700" fontFamily={SANS}>Sign request</text>
+        <rect x="28" y="124" width="324" height="14" rx="7" fill="#ffffff" fillOpacity="0.08" />
+        <rect className="gc-progress" x="28" y="124" width="324" height="14" rx="7" fill="#8B5CF6" />
+        <text x="28" y="176" fill="#34D399" fontSize="22" fontFamily={MONO}>✓ signature valid</text>
+      </g>
       <g transform="translate(560 800)">
         <rect width="480" height="150" rx="18" fill="#0F0F1F" stroke="#ffffff" strokeOpacity="0.12" />
         <text x="28" y="50" fill="#22D3EE" fontSize="22" fontFamily={MONO}>{"{ \"jsonrpc\": \"2.0\","}</text>
@@ -328,4 +343,5 @@ export const GENERATIVE_COVERS: Record<string, (p: CoverProps) => React.ReactEle
   "analytics-pro-enterprise-bi": AnalyticsBi,
   "geo-heatmap-backend": GeoHeatmap,
   "go-market": GoMarketScene,
+  "web3-l1-dex": ({ active }) => <L1Terminal active={active} />,
 };
