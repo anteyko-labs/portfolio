@@ -1021,3 +1021,7 @@ body {
   .home-aurora, .home-gradient-text, .home-cta-glow, .home-float, .home-scroll-cue,
   .home-chain, .home-spin-slow, .home-blink, .home-marquee { animation: none; }
 }
+
+/* Trusted-by tiles: lift and glow in the brand colour on hover */
+.logo-tile:hover { border-color: color-mix(in srgb, var(--brand) 45%, transparent); box-shadow: 0 24px 50px -28px var(--brand); color: var(--brand); }
+.logo-tile__glow { background: radial-gradient(120% 90% at 50% 120%, color-mix(in srgb, var(--brand) 22%, transparent), transparent 70%); }

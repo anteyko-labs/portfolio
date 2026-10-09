@@ -17,7 +17,7 @@ const WORDS = {
 };
 
 /** A real page in a scaled iframe that scrolls itself in a loop */
-function LiveSite({ src, title }: { src: string; title: string }) {
+function LiveSite({ src, title, width = 1440, height = 900, poster }: { src: string; title: string; width?: number; height?: number; poster?: string }) {
   const wrap = useRef<HTMLDivElement>(null);
   const frame = useRef<HTMLIFrameElement>(null);
   const [scale, setScale] = useState(0.4);
@@ -27,10 +27,10 @@ function LiveSite({ src, title }: { src: string; title: string }) {
   useEffect(() => {
     const el = wrap.current;
     if (!el) return;
-    const ro = new ResizeObserver(() => setScale(el.clientWidth / 1440));
+    const ro = new ResizeObserver(() => setScale(el.clientWidth / width));
     ro.observe(el);
     return () => ro.disconnect();
-  }, []);
+  }, [width]);
 
   useEffect(() => {
     if (!loaded || reduced) return;
@@ -66,7 +66,7 @@ function LiveSite({ src, title }: { src: string; title: string }) {
 
   return (
     <div ref={wrap} className="absolute inset-0 overflow-hidden">
-      <Image src="/images/showcase/gran/cover.jpg" alt="" fill sizes="600px" priority className="object-cover object-top" />
+      {poster && <Image src={poster} alt="" fill sizes="600px" priority className="object-cover object-top" />}
       <iframe
         ref={frame}
         src={src}
@@ -76,7 +76,7 @@ function LiveSite({ src, title }: { src: string; title: string }) {
         scrolling="no"
         onLoad={() => window.setTimeout(() => setLoaded(true), 400)}
         className="pointer-events-none absolute left-0 top-0 origin-top-left border-0 transition-opacity duration-700"
-        style={{ width: 1440, height: 900, transform: `scale(${scale})`, opacity: loaded ? 1 : 0 }}
+        style={{ width, height, transform: `scale(${scale})`, opacity: loaded ? 1 : 0 }}
       />
     </div>
   );
@@ -304,15 +304,15 @@ export function HomeHero({ l1 }: { l1: L1Snapshot }) {
                   <span className="mx-auto rounded-md bg-white/5 px-3 py-0.5 font-mono text-[10px] text-white/50">gran</span>
                 </div>
                 <div className="relative aspect-[16/10]">
-                  <LiveSite src="/demos/gran/index.html" title={en ? "Live concept site" : "Живой концепт-сайт"} />
+                  <LiveSite src="/demos/gran/index.html" poster="/images/showcase/gran/cover.jpg" title={en ? "Live concept site" : "Живой концепт-сайт"} />
                 </div>
               </div>
 
               {/* phone */}
               <motion.div style={reduced ? undefined : layerPhone} className="absolute -bottom-[2%] left-[-2%] w-[26%] min-w-[110px]">
                 <div className="overflow-hidden rounded-[22px] border-[5px] border-[#0A0A0A] bg-[#0A0A0A] shadow-[0_40px_70px_-20px_rgba(0,0,0,0.8)]">
-                  <div className="relative aspect-[390/844]">
-                    <Image src="/images/showcase/go-market/phone-1.jpg" alt="" fill sizes="170px" className="object-cover object-top" />
+                  <div className="relative aspect-[390/844] bg-[#FAFAF7]">
+                    <LiveSite src="/demos/lumo/index.html" width={390} height={844} title={en ? "Live mobile site" : "Живой мобильный сайт"} />
                   </div>
                 </div>
               </motion.div>
