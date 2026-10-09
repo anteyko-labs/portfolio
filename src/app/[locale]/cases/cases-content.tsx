@@ -3,18 +3,15 @@
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { Link as NextLink } from "@/i18n/navigation";
-import Image from "next/image";
 import { useLanguage } from "@/lib/language-context";
 import { useReducedMotion } from "@/lib/hooks";
-import { PageHero } from "@/components/sections/page-hero";
-import { Section, SectionHeader, AnimatedItem } from "@/components/ui/section";
+import { Section, AnimatedItem } from "@/components/ui/section";
 import { Card } from "@/components/ui/card";
-import { TiltCard } from "@/components/ui/tilt-card";
 import { CategoryBadge } from "@/components/ui/badge";
-import { MetricPill } from "@/components/ui/metric-pill";
 import { SegmentedControl } from "@/components/ui/segmented-control";
+import { CatalogHero } from "@/components/cases-catalog/catalog-hero";
+import { Catalog } from "@/components/cases-catalog/catalog";
 import {
-  flagshipCases,
   microCases,
   getCasesByCategory,
   type CaseCategory,
@@ -28,182 +25,22 @@ const FILTERS: { value: CaseCategory | "all"; key: string }[] = [
   { value: "infrastructure", key: "filterInfra" },
 ];
 
-const INITIAL_FLAGSHIP_COUNT = 4;
-
 export function CasesContent() {
   const { t, language } = useLanguage();
   const prefersReducedMotion = useReducedMotion();
   const [filter, setFilter] = useState<CaseCategory | "all">("all");
-  const [showAllFlagship, setShowAllFlagship] = useState(false);
   const filteredMicro = useMemo(
     () => getCasesByCategory(filter, microCases),
     [filter]
   );
 
-  const visibleFlagshipCases = showAllFlagship
-    ? flagshipCases
-    : flagshipCases.slice(0, INITIAL_FLAGSHIP_COUNT);
-
   return (
     <>
-      <PageHero
-        title={t("cases.keyCases")}
-        subtitle={t("cases.subtitle")}
-        eyebrow={language === "en" ? "Cases" : "Кейсы"}
-        metric={{
-          value: String(flagshipCases.length),
-          label: language === "en" ? "flagship cases" : "ключевых кейсов",
-        }}
-        rightSlot={
-          <div className="rounded-2xl border border-border bg-bg-secondary/80 p-6">
-            <p className="text-caption uppercase tracking-wider text-text-tertiary mb-4">
-              {language === "en" ? "Proof stack" : "Слой доказательств"}
-            </p>
-            <ul className="space-y-3 text-body-sm text-text-secondary">
-              <li className="flex items-start gap-2">
-                <span className="text-accent-primary">•</span>
-                {language === "en" ? "Metrics on every case" : "Метрики на каждом кейсе"}
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-accent-primary">•</span>
-                {language === "en" ? "Artifacts and verification" : "Артефакты и верификация"}
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-accent-primary">•</span>
-                {language === "en" ? "Engineering-grade delivery" : "Поставка уровня engineering"}
-              </li>
-            </ul>
-          </div>
-        }
-      />
-
-      {/* Flagship cases - big cards with TiltCard */}
-      <Section background="secondary" padding="lg">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
-          {visibleFlagshipCases.map((caseItem, index) => (
-            <AnimatedItem key={caseItem.id} delay={index * 0.06}>
-              <NextLink href={`/cases/${caseItem.slug}`} className="block h-full group">
-                <TiltCard
-                  variant="bordered"
-                  padding="none"
-                  tiltAmount={10}
-                  noiseHoverOpacity={0.04}
-                  className="h-full"
-                >
-                  <div className="relative h-48 md:h-56 bg-gradient-to-br from-bg-tertiary via-bg-elevated to-bg-secondary overflow-hidden rounded-t-2xl">
-                    <div className="absolute top-4 left-4 z-10">
-                      <CategoryBadge category={caseItem.category} />
-                    </div>
-                    {caseItem.artifactHint && (
-                      <div className="absolute top-4 right-4 z-10 px-3 py-1 rounded-lg border border-accent-primary/30 bg-bg-primary/80 backdrop-blur-sm text-caption font-mono text-accent-primary">
-                        {caseItem.artifactHint[language]}
-                      </div>
-                    )}
-                    {caseItem.imageUrl ? (
-                      caseItem.screenshotLayout === "mobile" ? (
-                        /* Mobile screenshot: phone mockup centered on light bg */
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <div className="absolute inset-0 bg-bg-tertiary" />
-                          <div className="relative w-[100px] md:w-[120px] h-[90%] rounded-2xl overflow-hidden border border-border shadow-glow-md transition-transform duration-700 group-hover:scale-105">
-                            <Image
-                              src={caseItem.imageUrl}
-                              alt={caseItem.title[language]}
-                              width={390}
-                              height={844}
-                              sizes="120px"
-                              className="w-full h-full object-cover object-top"
-                            />
-                          </div>
-                        </div>
-                      ) : (
-                        <Image
-                          src={caseItem.imageUrl}
-                          alt={caseItem.title[language]}
-                          width={800}
-                          height={450}
-                          sizes="(max-width: 768px) 100vw, 50vw"
-                          className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                        />
-                      )
-                    ) : (
-                      <div
-                        className="absolute inset-0 opacity-60"
-                        style={{
-                          backgroundImage: `
-                            linear-gradient(to right, rgba(10,10,10,0.05) 1px, transparent 1px),
-                            linear-gradient(to bottom, rgba(10,10,10,0.05) 1px, transparent 1px)
-                          `,
-                          backgroundSize: "24px 24px",
-                        }}
-                      />
-                    )}
-                    {/* Subtle bottom fade for depth */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-bg-secondary/60 via-transparent to-transparent" />
-                  </div>
-                  <div className="p-6 pb-8 md:p-8 md:pb-10">
-                    <h2 className="text-heading-lg font-medium text-text-primary mb-2 group-hover:text-accent-primary transition-colors">
-                      {caseItem.title[language]}
-                    </h2>
-                    <p className="text-body-md text-text-secondary line-clamp-2">
-                      {caseItem.summary[language]}
-                    </p>
-                    {caseItem.metrics && caseItem.metrics.length > 0 && (
-                      <div className="mt-4 flex flex-wrap gap-2">
-                        {caseItem.metrics.slice(0, 3).map((metric) => (
-                          <MetricPill
-                            key={`${caseItem.id}-metric-${metric.value}`}
-                            label={metric.label[language]}
-                            value={metric.value}
-                            tone="primary"
-                          />
-                        ))}
-                      </div>
-                    )}
-                    <span className="mt-6 inline-flex items-center text-body-sm text-accent-primary font-medium group-hover:gap-2 transition-all">
-                      {t("cta.viewCase")}
-                      <svg
-                        className="w-4 h-4 ml-1 transition-transform group-hover:translate-x-1"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                        aria-hidden="true"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M14 5l7 7m0 0l-7 7m7-7H3"
-                        />
-                      </svg>
-                    </span>
-                  </div>
-                </TiltCard>
-              </NextLink>
-            </AnimatedItem>
-          ))}
-        </div>
-
-        {/* Load more button */}
-        {!showAllFlagship && flagshipCases.length > INITIAL_FLAGSHIP_COUNT && (
-          <div className="mt-8 text-center" aria-live="polite">
-            <button
-              type="button"
-              onClick={() => setShowAllFlagship(true)}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-border bg-bg-tertiary/60 text-body-md text-text-secondary font-medium hover:text-text-primary hover:border-border-hover transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary rounded-xl"
-            >
-              {language === "en"
-                ? `Show ${flagshipCases.length - INITIAL_FLAGSHIP_COUNT} more cases`
-                : `Показать ещё ${flagshipCases.length - INITIAL_FLAGSHIP_COUNT} кейсов`}
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
-          </div>
-        )}
-      </Section>
+      <CatalogHero />
+      <Catalog />
 
       {/* Micro showcase */}
-      <Section background="primary" padding="lg">
+      <Section background="secondary" padding="lg" className="border-t border-border">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
           <h2 className="text-display-sm font-display text-text-primary">
             {t("cases.micro")}

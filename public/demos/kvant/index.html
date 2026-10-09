@@ -1,0 +1,1183 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>КВАНТ·ЛАБ — фотонные чипы, сенсоры и контрактное производство пластин</title>
+<meta name="description" content="КВАНТ·ЛАБ — исследовательский и производственный центр микроэлектроники: фотонные интегральные схемы, МЭМС-сенсоры и контрактное производство на пластинах 200 мм. От GDSII до годных кристаллов за 9 недель.">
+<meta name="theme-color" content="#07080B">
+<script>document.documentElement.className='js'</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Onest:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#07080B;--bg2:#0B0D12;--bg3:#10131A;
+  --ink:#E9EEF3;--mute:#8D97A6;--dim:#5A6472;
+  --line:rgba(150,180,210,.14);--line2:rgba(150,180,210,.26);
+  --cy:#3DF2E0;--vi:#8B5CFF;--vi2:#B39BFF;
+  --paper:#E8EDF0;
+  --pad:clamp(16px,4vw,64px);
+  --sans:"Onest","Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+  --ease:cubic-bezier(.2,.7,.2,1);
+  --hh:68px;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-padding-top:80px}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+h1,h2,h3,p,ul,ol,dl,dd,figure{margin:0;padding:0}
+ul,ol{list-style:none}
+a{color:inherit;text-decoration:none}
+button,input,textarea{font:inherit;color:inherit}
+svg{display:block}
+:focus-visible{outline:2px solid var(--cy);outline-offset:3px;border-radius:2px}
+::selection{background:var(--cy);color:#04110F}
+.mono{font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;font-weight:500}
+.skip{position:absolute;left:-999px;top:8px;z-index:200;background:var(--cy);color:#04110F;padding:10px 14px}
+.skip:focus{left:8px}
+
+/* ambient layers */
+.bp{position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px),linear-gradient(rgba(150,180,210,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(150,180,210,.05) 1px,transparent 1px);
+  background-size:96px 96px,96px 96px,24px 24px,24px 24px;opacity:.5;
+  -webkit-mask-image:radial-gradient(120% 90% at 50% 40%,#000 20%,transparent 85%);mask-image:radial-gradient(120% 90% at 50% 40%,#000 20%,transparent 85%)}
+.grain{position:fixed;inset:0;z-index:90;pointer-events:none;opacity:.07;mix-blend-mode:overlay;width:100%;height:100%}
+main,footer{position:relative;z-index:1}
+
+/* header */
+.hd{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--hh);display:flex;align-items:center;justify-content:space-between;padding:0 var(--pad);transition:background .4s,border-color .4s,backdrop-filter .4s;border-bottom:1px solid transparent}
+.hd.sc{background:rgba(7,8,11,.9);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-bottom-color:var(--line)}
+.logo{display:flex;align-items:center;gap:12px;font-weight:600;letter-spacing:.14em;font-size:15px;white-space:nowrap}
+.logo svg{width:26px;height:26px;flex:none}
+.logo b{color:var(--cy);font-weight:600}
+.nav{display:flex;gap:clamp(16px,2.2vw,36px)}
+.nav a{position:relative;color:var(--mute);padding:8px 0;transition:color .3s}
+.nav a::after{content:"";position:absolute;left:0;right:0;bottom:2px;height:1px;background:var(--cy);transform:scaleX(0);transform-origin:right;transition:transform .45s var(--ease)}
+.nav a:hover,.nav a:focus-visible{color:var(--ink)}
+.nav a:hover::after,.nav a:focus-visible::after{transform:scaleX(1);transform-origin:left}
+.hd-r{display:flex;align-items:center;gap:14px}
+.btn{--bc:var(--line2);position:relative;display:inline-flex;align-items:center;gap:12px;height:48px;padding:0 22px;border:1px solid var(--bc);background:transparent;cursor:pointer;overflow:hidden;white-space:nowrap;font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;font-weight:500;transition:color .45s var(--ease),border-color .45s;isolation:isolate}
+.btn::before{content:"";position:absolute;inset:0;background:var(--cy);transform:translateY(101%);transition:transform .5s var(--ease);z-index:-1}
+.btn:hover,.btn:focus-visible{color:#04110F;border-color:var(--cy)}
+.btn:hover::before,.btn:focus-visible::before{transform:none}
+.btn i{width:14px;height:1px;background:currentColor;position:relative;transition:width .4s var(--ease)}
+.btn i::after{content:"";position:absolute;right:0;top:-3px;width:7px;height:7px;border-top:1px solid currentColor;border-right:1px solid currentColor;transform:rotate(45deg)}
+.btn:hover i{width:22px}
+.btn.pri{background:var(--cy);color:#04110F;border-color:var(--cy)}
+.btn.pri::before{background:var(--ink)}
+.btn.sm{height:40px;padding:0 16px}
+.burger{display:none;width:44px;height:44px;border:1px solid var(--line2);background:transparent;cursor:pointer;position:relative}
+.burger span{position:absolute;left:12px;right:12px;height:1px;background:var(--ink);transition:transform .4s var(--ease),top .4s var(--ease)}
+.burger span:nth-child(1){top:17px}.burger span:nth-child(2){top:25px}
+.hd.open .burger span:nth-child(1){top:21px;transform:rotate(45deg)}
+.hd.open .burger span:nth-child(2){top:21px;transform:rotate(-45deg)}
+.mm{position:fixed;inset:0;z-index:99;background:rgba(7,8,11,.97);padding:calc(var(--hh) + 28px) var(--pad) 28px;display:flex;flex-direction:column;justify-content:space-between;clip-path:inset(0 0 100% 0);visibility:hidden;transition:clip-path .6s var(--ease),visibility 0s .6s}
+.mm.open{clip-path:inset(0);visibility:visible;transition:clip-path .6s var(--ease)}
+.mm ol{counter-reset:m}
+.mm li{border-bottom:1px solid var(--line)}
+.mm li a{display:flex;align-items:baseline;gap:16px;padding:15px 0;font-size:30px;font-weight:500;letter-spacing:-.02em}
+.mm li a::before{counter-increment:m;content:"0" counter(m);font-family:var(--mono);font-size:11px;color:var(--cy);letter-spacing:.08em}
+.mm .mono{color:var(--mute);line-height:2}
+
+/* hero */
+.hero{position:relative;height:340vh}
+.hero-st{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;background:radial-gradient(60% 50% at 68% 46%,rgba(61,242,224,.06),transparent 70%)}
+#wafer{position:absolute;inset:0;width:100%;height:100%}
+#die{position:absolute;left:0;top:0;opacity:0;transform-origin:50% 50%;pointer-events:none}
+.scrim{position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(7,8,11,.92) 0%,rgba(7,8,11,.62) 34%,transparent 60%),linear-gradient(0deg,rgba(7,8,11,.85) 0%,transparent 34%)}
+.sweep{position:absolute;left:0;right:0;top:0;height:28vh;pointer-events:none;background:linear-gradient(180deg,transparent,rgba(61,242,224,.025) 60%,rgba(61,242,224,.11) 100%);border-bottom:1px solid rgba(61,242,224,.3);animation:sweep 7.5s linear infinite;mix-blend-mode:screen}
+@keyframes sweep{0%{transform:translateY(-30vh)}100%{transform:translateY(100vh)}}
+.hud{position:absolute;color:var(--mute)}
+.hud-cam{left:var(--pad);top:calc(var(--hh) + 26px);line-height:1.9}
+.hud-cam b{color:var(--ink);font-weight:500}
+.hud-cam .dot{display:inline-block;width:6px;height:6px;background:var(--cy);margin-right:8px;animation:blink 1.6s steps(2) infinite}
+@keyframes blink{50%{opacity:.2}}
+.hud-fx{right:calc(var(--pad) + 44px);top:calc(var(--hh) + 26px);display:grid;gap:18px;text-align:right}
+.hud-fx::before{content:"";position:absolute;inset:-40px -60px -50px -90px;background:radial-gradient(closest-side,rgba(7,8,11,.82),rgba(7,8,11,.5) 60%,transparent);z-index:-1;pointer-events:none}
+.hud-fx dt{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
+.hud-fx dd{font-family:var(--mono);font-size:clamp(20px,2vw,30px);color:var(--ink);font-weight:400;letter-spacing:-.02em;line-height:1.15;white-space:nowrap}
+.hud-fx dd small{font-size:.5em;color:var(--cy);letter-spacing:.06em;margin-left:6px}
+.ruler{position:absolute;right:var(--pad);top:calc(var(--hh) + 30px);bottom:40px;width:22px;pointer-events:none;
+  background:repeating-linear-gradient(180deg,var(--line2) 0 1px,transparent 1px 10px);-webkit-mask-image:linear-gradient(90deg,transparent 60%,#000 60%);mask-image:linear-gradient(90deg,transparent 60%,#000 60%)}
+.ruler-m{position:absolute;right:var(--pad);top:calc(var(--hh) + 30px);bottom:40px;width:22px;pointer-events:none}
+.ruler-m i{position:absolute;right:0;top:0;width:22px;height:1px;background:var(--cy);box-shadow:0 0 12px var(--cy);transform:translateY(calc(var(--p,0) * (100vh - var(--hh) - 70px)))}
+.hero-tx{position:absolute;left:var(--pad);bottom:clamp(28px,7vh,72px);right:var(--pad);max-width:920px}
+.eyb{color:var(--cy);display:flex;align-items:center;gap:12px;margin-bottom:22px;min-height:1.6em}
+.eyb::before{content:"";width:28px;height:1px;background:var(--cy)}
+.h1{font-size:clamp(35px,6.1vw,100px);line-height:.98;letter-spacing:-.04em;font-weight:500}
+.h1 span{display:block;white-space:nowrap;min-height:.98em}
+.h1 span+span{color:transparent;background:linear-gradient(90deg,var(--cy),var(--vi2) 90%);-webkit-background-clip:text;background-clip:text}
+.subs{display:grid;margin-top:26px;max-width:520px}
+.subs p{grid-area:1/1;color:#B4BDCA;opacity:0;transition:opacity .5s;font-size:clamp(15px,1.15vw,18px)}
+.subs p.on{opacity:1}
+.hero-cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+.scale{position:absolute;right:calc(var(--pad) + 44px);bottom:clamp(28px,7vh,72px);text-align:right;color:var(--mute)}
+.scale u{display:block;width:120px;height:7px;border:1px solid var(--ink);border-top:0;margin:0 0 8px auto}
+.scale b{color:var(--ink);font-weight:500}
+.scale em{display:block;font-style:normal;margin-top:16px;color:var(--dim)}
+.scale em::after{content:"";display:inline-block;width:1px;height:18px;background:var(--cy);margin-left:10px;vertical-align:middle;animation:hint 1.8s var(--ease) infinite;transform-origin:top}
+@keyframes hint{0%{transform:scaleY(0)}60%{transform:scaleY(1)}100%{transform:scaleY(1);opacity:0}}
+/* die svg */
+#die .t{fill:none;stroke-width:1.25;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1}
+#die .fr{stroke:rgba(190,215,235,.7)}#die .fr2{stroke:rgba(150,180,210,.3)}
+#die .op{stroke:var(--cy)}#die .el{stroke:var(--vi)}#die .pd{stroke:#fff}
+#die .pads rect{fill:rgba(139,92,255,.16);stroke:rgba(179,155,255,.75);stroke-width:1}
+#die text{font-family:var(--mono);font-size:7px;fill:#9AA6B6;letter-spacing:.06em}
+#die .an text{fill:#fff;font-size:6.5px}
+#die .an path{stroke:#fff;stroke-width:.7;fill:none}
+#die .flow{fill:none;stroke:#fff;stroke-width:2.4;stroke-linecap:round;stroke-dasharray:.05 .95;animation:flow 2.6s linear infinite;filter:drop-shadow(0 0 3px var(--cy))}
+@keyframes flow{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+
+/* sections common */
+.sec{position:relative;padding:clamp(88px,13vw,190px) var(--pad)}
+.tag{display:flex;align-items:center;gap:14px;color:var(--mute);margin-bottom:clamp(28px,4vw,56px)}
+.tag b{color:var(--cy);font-weight:500}
+.tag::after{content:"";flex:1;height:1px;background:var(--line)}
+.tag span:last-child{order:3;color:var(--dim)}
+.h2{font-size:clamp(32px,5.2vw,82px);line-height:1.02;letter-spacing:-.035em;font-weight:500;max-width:16ch}
+.h2 em{font-style:normal;color:var(--cy)}
+.lead{color:#B4BDCA;max-width:46ch;font-size:clamp(16px,1.2vw,19px)}
+
+/* reveal */
+.js .rv{opacity:0;transform:translateY(28px);transition:opacity .9s var(--ease) var(--d,0s),transform .9s var(--ease) var(--d,0s)}
+.js .rv.in{opacity:1;transform:none}
+.js .wipe{clip-path:inset(0 100% 0 0);transition:clip-path 1.1s cubic-bezier(.7,0,.2,1) var(--d,0s)}
+.js .wipe.in{clip-path:inset(0 0 0 0)}
+.sw .w{display:inline-block;overflow:hidden;vertical-align:top;padding:.12em 0 .14em;margin:-.12em 0 -.14em}
+.sw .w>i{display:inline-block;font-style:normal}
+.js .sw .w>i{transform:translateY(112%);transition:transform .95s var(--ease);transition-delay:calc(var(--i) * 45ms)}
+.js .sw.in .w>i{transform:none}
+.js .draw *{stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 1.6s var(--ease) .15s}
+.js .in .draw *,.js .draw.in *{stroke-dashoffset:0}
+
+/* about */
+.about{padding-top:clamp(100px,14vw,220px);padding-bottom:clamp(72px,9vw,130px)}
+.st{font-size:clamp(25px,3.7vw,60px);line-height:1.14;letter-spacing:-.03em;font-weight:400;max-width:24ch;max-width:min(1280px,100%)}
+.js .st .sx{color:rgba(233,238,243,.2);transition:color .5s}
+.js .st .sx.on{color:var(--ink)}
+.js .st .sx.hl.on{color:var(--cy)}
+.nums{display:grid;grid-template-columns:repeat(4,1fr);margin-top:clamp(56px,8vw,120px);border-top:1px solid var(--line2)}
+.num{padding:26px 24px 8px 0;border-right:1px solid var(--line);position:relative}
+.num:last-child{border-right:0}
+.num+.num{padding-left:24px}
+.num::before{content:"";position:absolute;left:0;top:-1px;width:36px;height:1px;background:var(--cy)}
+.num+.num::before{left:24px}
+.num strong{display:block;font-size:clamp(40px,5.4vw,88px);font-weight:400;letter-spacing:-.05em;line-height:1;white-space:nowrap}
+.num strong small{font-family:var(--mono);font-size:max(11px,.2em);letter-spacing:.04em;color:var(--cy);margin-left:8px;vertical-align:.9em}
+.num p{color:var(--mute);margin-top:14px;font-size:15px;max-width:22ch}
+.mq{overflow:hidden;border-block:1px solid var(--line);padding:22px 0;margin-top:clamp(72px,10vw,150px);margin-inline:calc(var(--pad) * -1)}
+.mq div{display:flex;width:max-content;animation:mq 46s linear infinite}
+.mq span{font-family:var(--mono);font-size:clamp(15px,1.5vw,22px);letter-spacing:.06em;text-transform:uppercase;color:var(--mute);white-space:nowrap;padding-right:56px}
+.mq span b{color:var(--cy);font-weight:400;margin-right:56px}
+@keyframes mq{to{transform:translateX(-50%)}}
+
+/* capabilities */
+.cap-top{display:grid;grid-template-columns:1.2fr 1fr;gap:40px;align-items:end;margin-bottom:clamp(40px,6vw,88px)}
+.caps{border-top:1px solid var(--line2)}
+.cap{--mx:50%;position:relative;display:grid;grid-template-columns:90px minmax(0,1.1fr) minmax(0,1.2fr) 150px;gap:28px;align-items:start;padding:34px 0;border-bottom:1px solid var(--line);overflow:hidden}
+.cap::before{content:"";position:absolute;inset:0;background:radial-gradient(420px 180px at var(--mx) 50%,rgba(61,242,224,.09),transparent 70%);opacity:0;transition:opacity .5s}
+.cap::after{content:"";position:absolute;left:0;bottom:-1px;height:1px;width:100%;background:var(--cy);transform:scaleX(0);transform-origin:left;transition:transform .8s var(--ease)}
+.cap:hover::before{opacity:1}.cap:hover::after{transform:scaleX(1)}
+.cap>*{position:relative}
+.cap .n{color:var(--cy);padding-top:10px}
+.cap h3{font-size:clamp(23px,2.5vw,38px);font-weight:500;letter-spacing:-.03em;line-height:1.08;transition:transform .6s var(--ease)}
+.cap:hover h3{transform:translateX(10px)}
+.cap p{color:#AEB8C5;font-size:16px}
+.cap ul{display:flex;flex-wrap:wrap;gap:6px;margin-top:16px}
+.cap li{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--mute);border:1px solid var(--line2);padding:4px 8px}
+.cap svg{width:100%;max-width:150px;height:auto;justify-self:end;fill:none;stroke:var(--mute);stroke-width:1;transition:stroke .5s}
+.cap svg .a{stroke:var(--cy)}.cap svg .b{stroke:var(--vi2)}
+.cap:hover svg{stroke:var(--ink)}
+
+/* process */
+.proc{position:relative}
+.proc-st{padding:clamp(88px,11vw,150px) 0 0}
+.proc-hd{padding:0 var(--pad)}
+.proc-row{display:grid;grid-template-columns:1.25fr 1fr;gap:40px;align-items:end}
+.proc .h2{max-width:none}
+.rail{position:relative;height:1px;background:var(--line2);margin:clamp(30px,4vh,48px) 0 0}
+.rail i{position:absolute;inset:0;background:var(--cy);transform-origin:left;transform:scaleX(var(--pp,0));box-shadow:0 0 14px rgba(61,242,224,.7)}
+.rail ol{position:absolute;inset:0;display:flex;justify-content:space-between}
+.rail li{width:1px;height:9px;background:var(--line2);margin-top:-4px}
+.track{display:flex;gap:20px;padding:clamp(22px,3.5vh,40px) var(--pad) 0;will-change:transform}
+.step{flex:none;width:clamp(330px,30vw,450px);border:1px solid var(--line);background:linear-gradient(180deg,rgba(16,19,26,.9),rgba(11,13,18,.7));padding:20px 22px 26px;position:relative;transition:border-color .5s,background .5s}
+.step::before,.step::after{content:"";position:absolute;width:9px;height:9px;border:1px solid var(--cy);opacity:0;transition:opacity .5s}
+.step::before{left:-1px;top:-1px;border-right:0;border-bottom:0}.step::after{right:-1px;bottom:-1px;border-left:0;border-top:0}
+.step.act,.step:hover{border-color:var(--line2)}
+.step.act::before,.step.act::after,.step:hover::before,.step:hover::after{opacity:1}
+.step-h{display:flex;justify-content:space-between;gap:12px;color:var(--mute)}
+.step-h b{color:var(--cy);font-weight:500}
+.sch{width:100%;height:clamp(150px,27vh,270px);margin:14px 0 18px;background:rgba(7,8,11,.7);border:1px solid var(--line)}
+.sch text{font-family:var(--mono);font-size:8.5px;fill:#8D97A6;letter-spacing:.04em}
+.sch .sb{fill:#151A24;stroke:rgba(150,180,210,.3)}
+.sch .fm{fill:rgba(61,242,224,.2);stroke:rgba(61,242,224,.6)}
+.sch .rs{fill:rgba(139,92,255,.3);stroke:rgba(179,155,255,.7)}
+.sch .mk{fill:#C9D3DE}
+.sch .ln{stroke:rgba(150,180,210,.4);fill:none}
+.sch .ray{stroke:var(--vi2);stroke-width:1.2;stroke-dasharray:5 7;animation:ray 1s linear infinite}
+@keyframes ray{to{stroke-dashoffset:-12}}
+.sch .ex{fill:var(--cy);animation:expose 5s ease-in-out infinite}
+@keyframes expose{0%,8%{opacity:0}55%,88%{opacity:.85}100%{opacity:0}}
+.sch .ion{fill:var(--vi2);animation:fall 1.5s linear infinite}
+@keyframes fall{0%{transform:translateY(0);opacity:0}15%{opacity:1}100%{transform:translateY(var(--dy,84px));opacity:1}}
+.sch .tr{fill:#090B10;transform-box:fill-box;transform-origin:center top;animation:trench 5s ease-in-out infinite}
+@keyframes trench{0%,6%{transform:scaleY(0)}70%,90%{transform:scaleY(1)}100%{transform:scaleY(0)}}
+.sch .dp{fill:rgba(139,92,255,.5);stroke:var(--vi2);transform-box:fill-box;transform-origin:center top;animation:dope 5s ease-in-out infinite}
+@keyframes dope{0%,5%{transform:scaleY(.05);opacity:0}70%,90%{transform:scaleY(1);opacity:1}100%{transform:scaleY(.05);opacity:0}}
+.sch .mt{fill:none;stroke:#D7DFE8;stroke-linejoin:round;stroke-linecap:butt;animation:grow 5s ease-in-out infinite}
+@keyframes grow{0%,6%{stroke-width:0}72%,90%{stroke-width:9}100%{stroke-width:0}}
+.sch .probe{animation:probe 6s var(--ease) infinite}
+@keyframes probe{0%{transform:translate(50px,112px)}5%,11%{transform:translate(50px,130px)}16%{transform:translate(50px,112px)}20%{transform:translate(90px,112px)}25%,31%{transform:translate(90px,130px)}36%{transform:translate(90px,112px)}40%{transform:translate(130px,112px)}45%,51%{transform:translate(130px,130px)}56%{transform:translate(130px,112px)}60%{transform:translate(170px,112px)}65%,71%{transform:translate(170px,130px)}76%{transform:translate(170px,112px)}80%{transform:translate(210px,112px)}85%,91%{transform:translate(210px,130px)}96%{transform:translate(210px,112px)}100%{transform:translate(50px,112px)}}
+.sch .ok{fill:var(--cy);animation:ok 6s linear infinite}
+@keyframes ok{0%,7%{fill-opacity:.12}9%,92%{fill-opacity:1}100%{fill-opacity:.12}}
+.sch .wv{fill:none;stroke:var(--cy);stroke-dasharray:6 4;animation:ray 1s linear infinite reverse}
+.step h3{font-size:clamp(24px,2.1vw,32px);font-weight:500;letter-spacing:-.03em;line-height:1.1}
+.step p{color:#AEB8C5;font-size:15.5px;margin-top:10px}
+.step.end{display:flex;flex-direction:column;justify-content:space-between;border-style:dashed;background:none;width:clamp(260px,22vw,340px)}
+.step.end h3{font-size:clamp(22px,1.8vw,28px)}
+@media (min-width:1000px) and (min-height:700px){
+  .js .proc-st{position:sticky;top:0;height:100vh;overflow:hidden;display:flex;flex-direction:column;padding-top:calc(var(--hh) + clamp(20px,4vh,48px))}
+  .js .proc .tag{margin-bottom:clamp(16px,2.5vh,36px)}
+  .js .proc .h2{font-size:clamp(34px,4.2vw,68px)}
+}
+.spec{padding:clamp(64px,8vw,120px) var(--pad) clamp(88px,12vw,170px);display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,2fr);gap:40px}
+.spec h3{font-size:clamp(24px,2.4vw,36px);font-weight:500;letter-spacing:-.03em;line-height:1.1}
+.spec .side p{color:var(--mute);margin-top:16px;font-size:15px;max-width:30ch}
+table{width:100%;border-collapse:collapse}
+caption{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+th,td{text-align:left;padding:17px 16px;border-bottom:1px solid var(--line);vertical-align:top;font-weight:400}
+thead th{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);border-bottom-color:var(--line2);padding-top:0}
+tbody th{color:var(--mute);width:34%;font-size:15.5px}
+tbody td:nth-child(2){font-family:var(--mono);font-size:15px;color:var(--ink);white-space:nowrap}
+tbody td:last-child{color:var(--mute);font-size:15px}
+tbody tr{position:relative;transition:background .35s}
+tbody tr th{position:relative;transition:color .35s,padding .45s var(--ease)}
+tbody tr th::before{content:"";position:absolute;left:0;top:-1px;bottom:-1px;width:2px;background:var(--cy);transform:scaleY(0);transition:transform .45s var(--ease)}
+tbody tr:hover{background:rgba(61,242,224,.055)}
+tbody tr:hover th{color:var(--ink);padding-left:26px}
+tbody tr:hover th::before{transform:scaleY(1)}
+tbody tr:hover td:nth-child(2){color:var(--cy)}
+
+/* products */
+.prod-top{display:flex;justify-content:space-between;align-items:end;gap:40px;margin-bottom:clamp(40px,6vw,80px);flex-wrap:wrap}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;perspective:1400px}
+.card{--rx:0deg;--ry:0deg;--mx:50%;--my:30%;position:relative;border:1px solid var(--line);background:linear-gradient(180deg,var(--bg3),var(--bg2));padding:20px 20px 24px;display:flex;flex-direction:column;transform:rotateX(var(--rx)) rotateY(var(--ry));transition:transform .5s var(--ease),border-color .4s;transform-style:preserve-3d}
+.card::before{content:"";position:absolute;inset:0;background:radial-gradient(300px 260px at var(--mx) var(--my),rgba(139,92,255,.2),transparent 70%);opacity:0;transition:opacity .5s;pointer-events:none}
+.card:hover{border-color:rgba(139,92,255,.6)}.card:hover::before{opacity:1}
+.card>*{position:relative}
+.card .top{display:flex;justify-content:space-between;color:var(--mute)}
+.card .top b{color:var(--vi2);font-weight:500}
+.pk{width:100%;height:auto;margin:10px 0 6px;fill:none;stroke:#A9B4C2;stroke-width:1.1;stroke-linejoin:round;stroke-linecap:round;transition:transform .7s var(--ease)}
+.card:hover .pk{transform:translateY(-6px) scale(1.04)}
+.pk .a{stroke:var(--cy)}.pk .b{stroke:var(--vi2)}.pk .f{fill:rgba(61,242,224,.12)}
+.pk text{font-family:var(--mono);font-size:8px;fill:#8D97A6;stroke:none;letter-spacing:.08em}
+.card h3{font-size:clamp(25px,2.2vw,34px);font-weight:500;letter-spacing:-.03em;line-height:1.05}
+.card .ds{color:#AEB8C5;font-size:15px;margin-top:8px;min-height:3.1em}
+.card dl{margin-top:18px;border-top:1px solid var(--line)}
+.card dl div{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+.card dt{color:var(--mute)}.card dd{font-family:var(--mono);font-size:12.5px;text-align:right;white-space:nowrap}
+.card .more{margin-top:20px;display:inline-flex;align-items:center;gap:10px;color:var(--cy);align-self:flex-start}
+.card .more::after{content:"";width:18px;height:1px;background:currentColor;transition:width .4s var(--ease)}
+.card .more:hover::after,.card .more:focus-visible::after{width:36px}
+
+/* quality (light) */
+.qual{position:relative;padding:0}
+.q-panel{--qi:0vw;--qr:0px;background:var(--paper);color:#0B0D12;clip-path:inset(0 var(--qi) 0 var(--qi) round var(--qr));padding:clamp(88px,12vw,180px) var(--pad);position:relative;
+  background-image:linear-gradient(rgba(7,8,11,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(7,8,11,.06) 1px,transparent 1px);background-size:96px 96px}
+.q-panel .tag{color:#4A5361}.q-panel .tag b{color:#5B2EE0}.q-panel .tag::after{background:rgba(7,8,11,.18)}.q-panel .tag span:last-child{color:#5F6875}
+.q-panel .h2 em{color:#5B2EE0}
+.q-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:clamp(32px,6vw,110px);align-items:start}
+.q-panel .lead{color:#333B47;margin-top:28px}
+.q-nums{display:grid;grid-template-columns:repeat(3,1fr);margin-top:clamp(40px,5vw,72px);border-top:1px solid rgba(7,8,11,.3)}
+.q-nums div{padding:20px 16px 22px 0;border-bottom:1px solid rgba(7,8,11,.14)}
+.q-nums strong{display:block;font-size:clamp(30px,3.4vw,54px);font-weight:400;letter-spacing:-.045em;line-height:1;white-space:nowrap}
+.q-nums strong small{font-family:var(--mono);font-size:max(11px,.26em);letter-spacing:.02em;color:#5B2EE0;margin-left:5px;vertical-align:.7em}
+.q-nums p{font-size:14px;color:#4A5361;margin-top:10px;max-width:20ch}
+.map{position:relative;border:1px solid rgba(7,8,11,.22);padding:18px;background:rgba(255,255,255,.45)}
+.map svg{width:100%;height:auto}
+.map .g{fill:rgba(11,13,18,.16)}.map .x{fill:#6B3BFF}
+.js .map rect{opacity:0;transition:opacity .5s}
+.js .map.in rect{opacity:1}
+.map-h,.map-f{display:flex;justify-content:space-between;gap:12px;color:#4A5361;flex-wrap:wrap}
+.map-h{margin-bottom:10px}.map-f{margin-top:12px}
+.map-f i{display:inline-block;width:9px;height:9px;margin-right:7px;background:rgba(11,13,18,.2)}
+.map-f i.x{background:#6B3BFF}
+.map-scan{position:absolute;left:18px;right:18px;top:0;height:1px;background:#5B2EE0;box-shadow:0 0 14px #6B3BFF;animation:mscan 5s ease-in-out infinite alternate;opacity:.7}
+@keyframes mscan{from{transform:translateY(50px)}to{transform:translateY(min(72vw,460px))}}
+
+/* contact */
+.cta{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(32px,6vw,110px);align-items:start}
+.cta .h2{max-width:13ch}
+.cta .lead{margin-top:28px}
+.how{margin-top:44px;border-top:1px solid var(--line2);counter-reset:h}
+.how li{display:grid;grid-template-columns:54px 1fr;padding:17px 0;border-bottom:1px solid var(--line);color:#C3CBD6;font-size:16px}
+.how li::before{counter-increment:h;content:"0" counter(h);font-family:var(--mono);font-size:11.5px;color:var(--cy);padding-top:4px}
+.dir{display:flex;flex-wrap:wrap;gap:12px 40px;margin-top:34px}
+.dir a{font-size:clamp(19px,1.7vw,25px);letter-spacing:-.02em;background:linear-gradient(var(--cy),var(--cy)) 0 100%/0 1px no-repeat;transition:background-size .5s var(--ease);padding-bottom:3px}
+.dir a:hover,.dir a:focus-visible{background-size:100% 1px}
+.dir small{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);margin-bottom:4px}
+.term{border:1px solid var(--line2);background:rgba(9,11,15,.92);font-family:var(--mono);font-size:14px;box-shadow:0 40px 120px -40px rgba(61,242,224,.25),0 0 0 1px rgba(0,0,0,.4)}
+.term-b{display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid var(--line);color:var(--mute);font-size:11.5px;letter-spacing:.06em}
+.term-b i{width:9px;height:9px;border:1px solid var(--line2);border-radius:50%}
+.term-b i:first-child{background:var(--cy);border-color:var(--cy)}
+.term-b span{margin-left:auto}
+.term-in{padding:20px 20px 24px}
+.term .cm{color:var(--dim);margin-bottom:14px;font-size:12.5px;line-height:1.6}
+.fl{display:grid;grid-template-columns:128px 1fr;align-items:center;border-bottom:1px dashed var(--line2);min-height:50px;transition:border-color .3s}
+.fl:focus-within{border-bottom-color:var(--cy);border-bottom-style:solid}
+.fl label,.fl legend{color:var(--cy);white-space:nowrap;padding:0;float:left}
+.fl label::before,.fl .lg::before{content:"› ";color:var(--vi2)}
+.fl input,.fl textarea{width:100%;background:transparent;border:0;outline:0;padding:14px 0;caret-color:var(--cy);font-size:14px;resize:none}
+.fl input::placeholder,.fl textarea::placeholder{color:var(--dim)}
+fieldset.fl{border:0;border-bottom:1px dashed var(--line2);margin:0;padding:0;min-width:0}
+.chips{display:flex;flex-wrap:wrap;gap:6px;padding:10px 0}
+.chips label{color:var(--mute);border:1px solid var(--line2);padding:6px 10px;font-size:12px;cursor:pointer;transition:all .3s;float:none}
+.chips label::before{content:none}
+.chips input{position:absolute;opacity:0;width:1px;height:1px}
+.chips input:checked+label{background:var(--cy);color:#04110F;border-color:var(--cy)}
+.chips input:focus-visible+label{outline:2px solid var(--cy);outline-offset:2px}
+.chips label:hover{color:var(--ink);border-color:var(--ink)}
+.term .btn{margin-top:22px;width:100%;justify-content:space-between}
+.term .err{color:#FF8FA3;font-size:12.5px;margin-top:12px;min-height:1.4em}
+.term .log{display:none;line-height:2}
+.term.done form{display:none}.term.done .log{display:block}
+.log p{opacity:0;transform:translateY(6px);transition:opacity .4s,transform .4s}
+.log p.on{opacity:1;transform:none}
+.log b{color:var(--cy);font-weight:500}.log em{color:var(--vi2);font-style:normal}
+.caret{display:inline-block;width:8px;height:15px;background:var(--cy);vertical-align:-2px;animation:blink 1s steps(2) infinite}
+
+/* footer */
+.ft{padding:clamp(56px,7vw,100px) var(--pad) 28px;border-top:1px solid var(--line);overflow:hidden}
+.ft-g{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:32px}
+.ft h4{margin:0 0 16px;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);font-weight:500}
+.ft li{margin-bottom:8px}
+.ft li a,.ft p a{color:#C3CBD6;background:linear-gradient(var(--cy),var(--cy)) 0 100%/0 1px no-repeat;transition:background-size .45s var(--ease),color .3s}
+.ft li a:hover,.ft p a:hover,.ft li a:focus-visible{background-size:100% 1px;color:var(--ink)}
+.ft .abt{color:var(--mute);max-width:34ch;font-size:15px;margin-top:18px}
+.wm{font-size:clamp(50px,15.6vw,310px);font-weight:600;letter-spacing:-.045em;line-height:.9;white-space:nowrap;margin:clamp(48px,7vw,96px) 0 26px -.04em;color:transparent;-webkit-text-stroke:1px rgba(150,180,210,.5);background:linear-gradient(100deg,transparent 40%,rgba(61,242,224,.9) 50%,transparent 60%) 120% 0/250% 100% no-repeat;-webkit-background-clip:text;background-clip:text;animation:wm 7s linear infinite}
+@keyframes wm{to{background-position:-60% 0}}
+.ft-b{display:flex;justify-content:space-between;gap:12px 32px;flex-wrap:wrap;color:var(--mute);border-top:1px solid var(--line);padding-top:20px;font-size:13.5px}
+.ft-b a{color:var(--ink);border-bottom:1px solid var(--cy)}
+
+/* responsive */
+@media (max-width:1180px){
+  .cards{grid-template-columns:repeat(2,1fr)}
+  .cap{grid-template-columns:60px minmax(0,1fr) minmax(0,1.2fr)}.cap svg{display:none}
+}
+@media (max-width:999px),(max-height:699px){
+  .proc-row{grid-template-columns:1fr;gap:20px}
+  .rail{display:none}
+  .track{flex-direction:column;gap:14px;padding-top:36px}
+  .step,.step.end{width:auto}
+  .sch{height:auto;aspect-ratio:320/200}
+  .step.end{gap:24px}
+}
+@media (max-width:900px){
+  body{font-size:16px}
+  .nav,.hd-r .btn{display:none}.burger{display:block}
+  .hero{height:300vh}
+  .hud-cam,.ruler,.ruler-m,.scale em{display:none}
+  .hud-fx{left:var(--pad);right:var(--pad);top:calc(var(--hh) + 10px);grid-template-columns:repeat(3,1fr);gap:10px;text-align:left}
+  .hud-fx div{border-top:1px solid var(--line2);padding-top:8px}
+  .hud-fx dt{font-size:9px;letter-spacing:.06em}
+  .hud-fx dd{font-size:17px;margin-top:2px}
+  .scrim{background:linear-gradient(0deg,rgba(7,8,11,.96) 0%,rgba(7,8,11,.86) 36%,transparent 58%),linear-gradient(180deg,rgba(7,8,11,.9) 0%,rgba(7,8,11,.7) 14%,transparent 24%)}
+  .hud-fx::before{content:none}
+  .hero-tx{bottom:22px}
+  .eyb{margin-bottom:14px}
+  .subs{margin-top:16px}.hero-cta{margin-top:20px}
+  .hero-cta .btn{flex:1 1 auto;justify-content:space-between;padding:0 16px}
+  .scale{right:var(--pad);bottom:auto;top:calc(var(--hh) + 84px)}
+  .scale u{width:80px}
+  .nums{grid-template-columns:repeat(2,1fr)}
+  .num{padding:22px 12px 22px 0;border-bottom:1px solid var(--line)}
+  .num:nth-child(2n){border-right:0;padding-left:16px}.num:nth-child(2n+1){padding-left:0}
+  .num:nth-child(2n)::before{left:16px}.num:nth-child(2n+1)::before{left:0}
+  .cap-top,.q-grid,.cta,.spec{grid-template-columns:1fr}
+  .cap{grid-template-columns:1fr;gap:12px;padding:26px 0}.cap .n{padding:0}
+  table,tbody,tr,th,td{display:block;width:auto}
+  thead{display:none}
+  tbody tr{padding:14px 0;border-bottom:1px solid var(--line)}
+  tbody th,tbody td{border:0;padding:2px 0;width:auto}
+  tbody td:nth-child(2){white-space:normal;font-size:16px;margin:2px 0}
+  tbody tr:hover th{padding-left:14px}
+  .ft-g{grid-template-columns:1fr 1fr}.ft-g>div:first-child{grid-column:1/-1}
+  .fl{grid-template-columns:1fr;padding-top:10px}.fl input,.fl textarea{padding:6px 0 12px}
+  .term-in{padding:16px}
+}
+@media (max-width:620px){
+  .cards{grid-template-columns:1fr}
+  .q-nums{grid-template-columns:repeat(2,1fr)}
+  .card .ds{min-height:0}
+  .h1{font-size:clamp(33px,9.6vw,60px)}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .js .rv,.js .wipe,.js .sw .w>i{opacity:1;transform:none;clip-path:none}
+  .js .draw *{stroke-dashoffset:0}
+  .js .map rect{opacity:1}
+  .js .st .sx{color:var(--ink)}
+  .sweep{display:none}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#center">К содержанию</a>
+<div class="bp" aria-hidden="true"></div>
+<svg class="grain" aria-hidden="true"><filter id="gr"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .9 0"/></filter><rect width="100%" height="100%" filter="url(#gr)"/></svg>
+
+<header class="hd" id="hd">
+  <a class="logo" href="#top" aria-label="КВАНТ·ЛАБ — в начало">
+    <svg viewBox="0 0 26 26" fill="none" stroke="currentColor" aria-hidden="true"><rect x="5.5" y="5.5" width="15" height="15"/><path d="M9 2v3.5M13 2v3.5M17 2v3.5M9 20.5V24M13 20.5V24M17 20.5V24M2 9h3.5M2 13h3.5M2 17h3.5M20.5 9H24M20.5 13H24M20.5 17H24"/><circle cx="13" cy="13" r="3" stroke="#3DF2E0"/></svg>
+    <span>КВАНТ<b>·</b>ЛАБ</span>
+  </a>
+  <nav class="nav mono" aria-label="Основная навигация">
+    <a href="#center">Центр</a><a href="#capabilities">Возможности</a><a href="#process">Техпроцесс</a><a href="#products">Продукция</a><a href="#quality">Качество</a>
+  </nav>
+  <div class="hd-r">
+    <a class="btn sm mag" href="#contact">Запросить запуск<i></i></a>
+    <button class="burger" id="burger" aria-label="Меню" aria-expanded="false" aria-controls="mm"><span></span><span></span></button>
+  </div>
+</header>
+<div class="mm" id="mm" aria-hidden="true">
+  <ol>
+    <li><a href="#center">Центр</a></li><li><a href="#capabilities">Возможности</a></li><li><a href="#process">Техпроцесс</a></li><li><a href="#products">Продукция</a></li><li><a href="#quality">Качество</a></li><li><a href="#contact">Контракт</a></li>
+  </ol>
+  <p class="mono">0709&nbsp;927&nbsp;895<br>hello@kvant.example</p>
+</div>
+
+<main id="top">
+<!-- HERO -->
+<section class="hero" id="hero" aria-label="КВАНТ·ЛАБ: от пластины до топологии">
+  <div class="hero-st">
+    <canvas id="wafer" aria-hidden="true"></canvas>
+    <svg id="die" viewBox="0 0 600 600" aria-hidden="true"></svg>
+    <div class="scrim"></div>
+    <div class="sweep" aria-hidden="true"></div>
+
+    <div class="hud hud-cam mono" aria-hidden="true">
+      <div><span class="dot"></span>Объект&nbsp; <b id="hObj">пластина Si · Ø&nbsp;200&nbsp;мм</b></div>
+      <div>X&nbsp;<b id="hX">+000,00</b> &nbsp;Y&nbsp;<b id="hY">+000,00</b>&nbsp;мм</div>
+      <div>Увеличение&nbsp; <b id="hZ">×1,0</b></div>
+    </div>
+    <dl class="hud hud-fx">
+      <div><dt>Шаг пикселя</dt><dd><span id="fNm">182&nbsp;800</span><small>нм</small></dd></div>
+      <div><dt>Пластин в&nbsp;месяц</dt><dd><span id="fW">1&nbsp;200</span><small>шт</small></dd></div>
+      <div><dt>Выход годных</dt><dd><span id="fY">97,4</span><small>%</small></dd></div>
+    </dl>
+    <div class="ruler" aria-hidden="true"></div><div class="ruler-m" id="rulerM" aria-hidden="true"><i></i></div>
+
+    <div class="hero-tx">
+      <div class="eyb mono" id="eyb">01 — Пластина · Ø&nbsp;200&nbsp;мм</div>
+      <h1 class="h1" aria-label="Чипы, которые считают светом"><span id="hl1" aria-hidden="true">Чипы, которые</span><span id="hl2" aria-hidden="true">считают светом</span></h1>
+      <div class="subs" id="subs">
+        <p class="on">КВАНТ·ЛАБ проектирует и&nbsp;выпускает фотонные интегральные схемы и&nbsp;МЭМС-сенсоры на&nbsp;собственной линии 200&nbsp;мм. Берём контрактные заказы&nbsp;— от&nbsp;одной инженерной пластины.</p>
+        <p>Каждый кристалл 6,25&nbsp;×&nbsp;6,25&nbsp;мм несёт четыре оптических канала: модуляторы, кольцевые фильтры и&nbsp;германиевые фотодиоды на&nbsp;одной подложке.</p>
+        <p>Свет идёт по&nbsp;кремниевому волноводу сечением 450&nbsp;×&nbsp;220&nbsp;нм. Шероховатость стенки&nbsp;— меньше 2&nbsp;нм, потери&nbsp;— до&nbsp;1,8&nbsp;дБ/см.</p>
+      </div>
+      <div class="hero-cta">
+        <a class="btn pri mag" href="#contact">Обсудить запуск<i></i></a>
+        <a class="btn mag" href="#process">Техпроцесс<i></i></a>
+      </div>
+    </div>
+    <div class="hud scale mono" aria-hidden="true"><u></u><b id="hS">21,9&nbsp;мм</b><em>Листайте — камера приближается</em></div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="sec about" id="center">
+  <div class="tag mono rv"><b>[ 02 ]</b><span>Центр</span><span>R&amp;D + FAB</span></div>
+  <p class="st" id="st">КВАНТ·ЛАБ&nbsp;— исследовательский и&nbsp;производственный центр микроэлектроники. Мы проектируем <span class="hl">фотонные интегральные схемы</span> и&nbsp;<span class="hl">МЭМС-сенсоры</span>, выпускаем их на&nbsp;собственной линии 200&nbsp;мм и&nbsp;открываем эту линию заказчикам: от&nbsp;одной инженерной пластины до&nbsp;серии в&nbsp;тысячи.</p>
+  <div class="nums">
+    <div class="num rv"><strong><span data-to="1200">1&nbsp;200</span></strong><p>пластин 200&nbsp;мм проходит линию каждый месяц</p></div>
+    <div class="num rv" style="--d:.08s"><strong><span data-to="90">90</span><small>нм</small></strong><p>минимальный размер элемента на&nbsp;DUV-литографии</p></div>
+    <div class="num rv" style="--d:.16s"><strong><span data-to="9">9</span><small>недель</small></strong><p>от&nbsp;файла GDSII до&nbsp;измеренных годных кристаллов</p></div>
+    <div class="num rv" style="--d:.24s"><strong><span data-to="2400">2&nbsp;400</span><small>м²</small></strong><p>чистых помещений классов ISO&nbsp;5 и&nbsp;ISO&nbsp;6</p></div>
+  </div>
+  <div class="mq" aria-hidden="true"><div>
+    <span><b>+</b>SOI 220 нм<b></b><b>+</b>SiN 400 нм<b></b><b>+</b>МЭМС на объёмном кремнии<b></b><b>+</b>Ge-фотодиоды<b></b><b>+</b>TiN-нагреватели<b></b><b>+</b>MPW-запуски каждый квартал<b></b><b>+</b>PDK 120+ элементов</span>
+    <span><b>+</b>SOI 220 нм<b></b><b>+</b>SiN 400 нм<b></b><b>+</b>МЭМС на объёмном кремнии<b></b><b>+</b>Ge-фотодиоды<b></b><b>+</b>TiN-нагреватели<b></b><b>+</b>MPW-запуски каждый квартал<b></b><b>+</b>PDK 120+ элементов</span>
+  </div></div>
+</section>
+
+<!-- CAPABILITIES -->
+<section class="sec" id="capabilities" style="padding-top:0">
+  <div class="tag mono rv"><b>[ 03 ]</b><span>Возможности</span><span>04 направления</span></div>
+  <div class="cap-top">
+    <h2 class="h2 sw">Полный цикл под одной крышей</h2>
+    <p class="lead rv">Разработчик топологии сидит в&nbsp;сорока метрах от&nbsp;литографа. Поэтому итерация «изменили&nbsp;— изготовили&nbsp;— измерили» занимает у&nbsp;нас недели, а&nbsp;не&nbsp;кварталы.</p>
+  </div>
+  <div class="caps">
+    <article class="cap rv">
+      <div class="n mono">01</div>
+      <h3>Проектирование схем и&nbsp;сенсоров</h3>
+      <div><p>Берём задачу на&nbsp;уровне ТЗ и&nbsp;доводим до&nbsp;GDSII: моделирование, топология, проверка правил. Собственный PDK на&nbsp;120+ элементов с&nbsp;измеренными, а&nbsp;не&nbsp;расчётными моделями.</p><ul><li>FDTD / EME</li><li>DRC · LVS</li><li>PDK 4.2</li></ul></div>
+      <svg viewBox="0 0 150 90" aria-hidden="true"><path d="M5 45h30c12 0 12-18 24-18h32c12 0 12 18 24 18h30M35 45c12 0 12 18 24 18h32c12 0 12-18 24-18" class="a"/><rect x="62" y="20" width="26" height="14" class="b"/><path d="M5 80h140M5 77v6M145 77v6"/></svg>
+    </article>
+    <article class="cap rv">
+      <div class="n mono">02</div>
+      <h3>Контрактное производство пластин</h3>
+      <div><p>Три технологические платформы на&nbsp;пластинах 200&nbsp;мм. Раз в&nbsp;квартал&nbsp;— MPW-запуск, где площадь делят несколько заказчиков; выделенные партии&nbsp;— от&nbsp;25&nbsp;пластин.</p><ul><li>SOI 220</li><li>SiN 400</li><li>МЭМС</li><li>MPW</li></ul></div>
+      <svg viewBox="0 0 150 90" aria-hidden="true"><ellipse cx="75" cy="45" rx="62" ry="34"/><path d="M30 28h90M20 39h110M18 50h114M28 61h94M52 14v62M75 11v68M98 14v62" opacity=".5"/><rect x="75" y="39" width="23" height="11" class="a"/></svg>
+    </article>
+    <article class="cap rv">
+      <div class="n mono">03</div>
+      <h3>Корпусирование и&nbsp;оптическая стыковка</h3>
+      <div><p>Разварка, flip-chip, герметизация. Активная юстировка и&nbsp;приклейка волокна с&nbsp;потерями меньше 1,5&nbsp;дБ на&nbsp;торец&nbsp;— серийно, а&nbsp;не&nbsp;на&nbsp;лабораторном столе.</p><ul><li>Flip-chip</li><li>Волоконные сборки</li><li>Butterfly · LGA · TO</li></ul></div>
+      <svg viewBox="0 0 150 90" aria-hidden="true"><rect x="40" y="26" width="62" height="40"/><path d="M48 26V12M58 26V12M68 26V12M78 26V12M88 26V12M48 66v14M58 66v14M68 66v14M78 66v14M88 66v14"/><path d="M102 46h14c16 0 12 24 30 24" class="a"/><rect x="55" y="38" width="22" height="16" class="b"/></svg>
+    </article>
+    <article class="cap rv">
+      <div class="n mono">04</div>
+      <h3>Измерения и&nbsp;испытания</h3>
+      <div><p>Оптический и&nbsp;электрический зонд на&nbsp;уровне пластины, спектральные измерения, термоциклы от&nbsp;−60 до&nbsp;+125&nbsp;°C, вибрация и&nbsp;удар. Протокол&nbsp;— к&nbsp;каждой партии.</p><ul><li>100&nbsp;% кристаллов</li><li>38 параметров</li><li>−60…+125&nbsp;°C</li></ul></div>
+      <svg viewBox="0 0 150 90" aria-hidden="true"><path d="M5 70h140M5 10v60"/><path d="M8 60c14 0 16-4 26-4s10-40 18-40 8 46 18 46 8-30 16-30 8 24 18 24 12-6 38-6" class="a"/><path d="M52 10v60M88 10v60" stroke-dasharray="2 3" class="b"/></svg>
+    </article>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="proc" id="process" aria-labelledby="procT">
+  <div class="proc-st" id="procSt">
+    <div class="proc-hd">
+      <div class="tag mono rv"><b>[ 04 ]</b><span>Техпроцесс</span><span>Маршрут KL-SOI-220</span></div>
+      <div class="proc-row">
+        <h2 class="h2 sw" id="procT">Пять операций&nbsp;— <em>один маршрут</em></h2>
+        <p class="lead rv">Пластина проходит этот цикл до&nbsp;двадцати раз, слой за&nbsp;слоем. Каждую операцию мы ведём со&nbsp;статистическим контролем: отклонение видно раньше, чем оно станет браком.</p>
+      </div>
+      <div class="rail" aria-hidden="true"><i></i><ol><li></li><li></li><li></li><li></li><li></li><li></li></ol></div>
+    </div>
+    <ol class="track" id="track">
+      <li class="step">
+        <div class="step-h mono"><b>01 / 05</b><span>CD 90 нм · ±12 нм</span></div>
+        <svg class="sch" viewBox="0 0 320 200" role="img" aria-label="Схема: ультрафиолет проходит через окна фотошаблона и засвечивает резист">
+          <text x="20" y="22">DUV 193 нм</text><path class="ln" d="M20 30H240"/>
+          <g class="ray"><path d="M58 30V118M68 30V118M78 30V118M124 30V118M134 30V118M144 30V118M190 30V118M200 30V118M210 30V118"/></g>
+          <g class="mk"><rect x="20" y="56" width="30" height="7"/><rect x="86" y="56" width="30" height="7"/><rect x="152" y="56" width="30" height="7"/><rect x="218" y="56" width="22" height="7"/></g>
+          <rect class="rs" x="20" y="118" width="220" height="14"/>
+          <g class="ex"><rect x="50" y="118" width="36" height="14"/><rect x="116" y="118" width="36" height="14"/><rect x="182" y="118" width="36" height="14"/></g>
+          <rect class="fm" x="20" y="132" width="220" height="10"/><rect class="sb" x="20" y="142" width="220" height="38"/>
+          <text x="250" y="63">шаблон</text><text x="250" y="128">резист</text><text x="250" y="140">Si 220 нм</text><text x="250" y="165">SiO₂</text>
+        </svg>
+        <h3>Литография</h3>
+        <p>Сканер переносит рисунок с&nbsp;фотошаблона на&nbsp;резист. Совмещение слоёв держим в&nbsp;пределах ±12&nbsp;нм по&nbsp;всей пластине.</p>
+      </li>
+      <li class="step">
+        <div class="step-h mono"><b>02 / 05</b><span>ICP-RIE · стенка 89°</span></div>
+        <svg class="sch" viewBox="0 0 320 200" role="img" aria-label="Схема: ионы плазмы вытравливают канавки в окнах резиста">
+          <defs><linearGradient id="pl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8B5CFF" stop-opacity=".45"/><stop offset="1" stop-color="#8B5CFF" stop-opacity="0"/></linearGradient></defs>
+          <rect x="20" y="14" width="220" height="40" fill="url(#pl)"/><text x="250" y="30">плазма</text>
+          <rect class="fm" x="20" y="118" width="220" height="22"/>
+          <g class="tr"><rect x="50" y="118" width="36" height="22"/><rect x="116" y="118" width="36" height="22"/><rect x="182" y="118" width="36" height="22"/></g>
+          <g class="rs"><rect x="20" y="106" width="30" height="12"/><rect x="86" y="106" width="30" height="12"/><rect x="152" y="106" width="30" height="12"/><rect x="218" y="106" width="22" height="12"/></g>
+          <rect class="sb" x="20" y="140" width="220" height="40"/>
+          <g style="--dy:92px"><circle class="ion" cx="60" cy="34" r="1.8"/><circle class="ion" cx="76" cy="34" r="1.8" style="animation-delay:-.5s"/><circle class="ion" cx="126" cy="34" r="1.8" style="animation-delay:-.9s"/><circle class="ion" cx="142" cy="34" r="1.8" style="animation-delay:-.2s"/><circle class="ion" cx="192" cy="34" r="1.8" style="animation-delay:-1.2s"/><circle class="ion" cx="208" cy="34" r="1.8" style="animation-delay:-.7s"/></g>
+          <text x="250" y="115">резист</text><text x="250" y="132">Si 220 нм</text><text x="250" y="163">SiO₂</text>
+        </svg>
+        <h3>Травление</h3>
+        <p>Плазма формирует волноводы с&nbsp;почти вертикальной стенкой. Шероховатость меньше 2&nbsp;нм&nbsp;— отсюда низкие оптические потери.</p>
+      </li>
+      <li class="step">
+        <div class="step-h mono"><b>03 / 05</b><span>B⁺, P⁺ · 10–120 кэВ</span></div>
+        <svg class="sch" viewBox="0 0 320 200" role="img" aria-label="Схема: ионный пучок внедряет примесь в кремний через окно в маске">
+          <path class="ln" d="M20 28H240"/><text x="250" y="31">ионы B⁺</text>
+          <g class="ray"><path d="M100 28V112M115 28V112M130 28V112M145 28V112M160 28V112"/></g>
+          <rect class="sb" x="20" y="112" width="220" height="68"/>
+          <path class="dp" d="M90 112H170V132Q170 152 130 152Q90 152 90 132Z"/>
+          <g class="rs"><rect x="20" y="100" width="70" height="12"/><rect x="170" y="100" width="70" height="12"/></g>
+          <g style="--dy:100px"><circle class="ion" cx="108" cy="30" r="1.8"/><circle class="ion" cx="122" cy="30" r="1.8" style="animation-delay:-.6s"/><circle class="ion" cx="138" cy="30" r="1.8" style="animation-delay:-1.1s"/><circle class="ion" cx="152" cy="30" r="1.8" style="animation-delay:-.3s"/></g>
+          <text x="250" y="109">маска</text><text x="250" y="134">p-область</text><text x="250" y="170">Si</text>
+        </svg>
+        <h3>Легирование</h3>
+        <p>Ионная имплантация создаёт p-n-переходы модуляторов и&nbsp;контакты фотодиодов. Шесть уровней дозы в&nbsp;одном маршруте.</p>
+      </li>
+      <li class="step">
+        <div class="step-h mono"><b>04 / 05</b><span>Al/Cu ×2 · TiN</span></div>
+        <svg class="sch" viewBox="0 0 320 200" role="img" aria-label="Схема: металл осаждается на рельеф диэлектрика и заполняет контактные окна">
+          <path class="fm" d="M20 132H70V152H100V132H160V152H190V132H240V160H20Z"/>
+          <path class="mt" d="M20 128H66V148H104V128H156V148H194V128H240"/>
+          <rect class="sb" x="20" y="160" width="220" height="20"/>
+          <g style="--dy:86px"><circle class="ion" cx="40" cy="30" r="1.8" style="fill:#D7DFE8"/><circle class="ion" cx="85" cy="30" r="1.8" style="fill:#D7DFE8;animation-delay:-.4s"/><circle class="ion" cx="130" cy="30" r="1.8" style="fill:#D7DFE8;animation-delay:-1s"/><circle class="ion" cx="175" cy="30" r="1.8" style="fill:#D7DFE8;animation-delay:-.7s"/><circle class="ion" cx="220" cy="30" r="1.8" style="fill:#D7DFE8;animation-delay:-.15s"/></g>
+          <path class="ln" d="M20 22H240" stroke-dasharray="2 4"/><text x="250" y="25">мишень</text>
+          <text x="250" y="128">Al/Cu</text><text x="250" y="148">SiO₂</text><text x="250" y="174">Si</text>
+        </svg>
+        <h3>Металлизация</h3>
+        <p>Два уровня алюминий-медной разводки и&nbsp;нагреватели из&nbsp;нитрида титана. После каждого слоя&nbsp;— планаризация.</p>
+      </li>
+      <li class="step">
+        <div class="step-h mono"><b>05 / 05</b><span>100&nbsp;% · 38 параметров</span></div>
+        <svg class="sch" viewBox="0 0 320 200" role="img" aria-label="Схема: зонд по очереди касается контактных площадок, кристаллы получают отметку годности">
+          <g><rect class="ok" x="43" y="26" width="14" height="14"/><rect class="ok" x="83" y="26" width="14" height="14" style="animation-delay:1.2s"/><rect class="ok" x="123" y="26" width="14" height="14" style="animation-delay:2.4s"/><rect class="ok" x="163" y="26" width="14" height="14" style="animation-delay:3.6s"/><rect class="ok" x="203" y="26" width="14" height="14" style="animation-delay:4.8s"/></g>
+          <text x="250" y="36">годен</text>
+          <g class="probe"><path d="M0 0L-4 -40H4Z" fill="#D7DFE8"/><rect x="-12" y="-52" width="24" height="12" fill="none" stroke="#D7DFE8"/></g>
+          <g fill="#3DF2E0"><rect x="40" y="131" width="20" height="5"/><rect x="80" y="131" width="20" height="5"/><rect x="120" y="131" width="20" height="5"/><rect x="160" y="131" width="20" height="5"/><rect x="200" y="131" width="20" height="5"/></g>
+          <rect class="fm" x="20" y="136" width="220" height="12"/><rect class="sb" x="20" y="148" width="220" height="32"/>
+          <path class="wv" d="M250 92h8l4-14 6 26 5-20 4 8h22"/><text x="250" y="116">S21, дБ</text>
+          <text x="250" y="142">площадки</text><text x="250" y="168">пластина</text>
+        </svg>
+        <h3>Контроль</h3>
+        <p>Каждый кристалл проходит оптический и&nbsp;электрический зонд. В&nbsp;карту годности попадает всё: от&nbsp;потерь до&nbsp;тёмного тока.</p>
+      </li>
+      <li class="step end">
+        <div class="step-h mono"><b>Далее</b><span>→</span></div>
+        <div><h3>Резка, корпус, испытания, отгрузка</h3><p>Или пластины целиком&nbsp;— если корпусируете сами.</p></div>
+        <a class="btn" href="#contact">Заказать пластины<i></i></a>
+      </li>
+    </ol>
+  </div>
+</section>
+<section class="spec" aria-labelledby="specT">
+  <div class="side">
+    <div class="tag mono rv" style="margin-bottom:24px"><b>[ 04.1 ]</b><span>Паспорт линии</span></div>
+    <h3 id="specT" class="rv">Что линия гарантирует на&nbsp;бумаге</h3>
+    <p class="rv">Значения из&nbsp;действующей спецификации. Полный документ и&nbsp;PDK передаём после подписания NDA.</p>
+  </div>
+  <table class="rv">
+    <caption>Основные параметры производственной линии КВАНТ·ЛАБ</caption>
+    <thead><tr><th scope="col">Параметр</th><th scope="col">Значение</th><th scope="col">Примечание</th></tr></thead>
+    <tbody>
+      <tr><th scope="row">Диаметр пластин</th><td>200&nbsp;мм</td><td>150&nbsp;мм&nbsp;— по&nbsp;согласованию</td></tr>
+      <tr><th scope="row">Минимальный размер элемента</th><td>90&nbsp;нм</td><td>DUV 193&nbsp;нм, сухая литография</td></tr>
+      <tr><th scope="row">Точность совмещения слоёв</th><td>±&nbsp;12&nbsp;нм</td><td>3σ по&nbsp;пластине</td></tr>
+      <tr><th scope="row">Потери в&nbsp;волноводе, SOI</th><td>&lt;&nbsp;1,8&nbsp;дБ/см</td><td>полосковый 450&nbsp;×&nbsp;220&nbsp;нм, 1&nbsp;550&nbsp;нм</td></tr>
+      <tr><th scope="row">Потери в&nbsp;волноводе, SiN</th><td>&lt;&nbsp;0,2&nbsp;дБ/см</td><td>LPCVD, толщина 400&nbsp;нм</td></tr>
+      <tr><th scope="row">Полоса Ge-фотодиода</th><td>&gt;&nbsp;35&nbsp;ГГц</td><td>чувствительность 0,9&nbsp;А/Вт</td></tr>
+      <tr><th scope="row">Металлизация</th><td>2&nbsp;×&nbsp;Al/Cu + TiN</td><td>нагреватели, контактные площадки</td></tr>
+      <tr><th scope="row">Цикл MPW-запуска</th><td>9&nbsp;недель</td><td>включая зондовый контроль</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- PRODUCTS -->
+<section class="sec" id="products" style="padding-top:0">
+  <div class="tag mono rv"><b>[ 05 ]</b><span>Продукция</span><span>04 семейства</span></div>
+  <div class="prod-top">
+    <h2 class="h2 sw">Серийные изделия на&nbsp;своих кристаллах</h2>
+    <p class="lead rv">То, что мы обещаем контрактным заказчикам, сначала проверяем на&nbsp;собственных продуктах. Четыре семейства выпускаются серийно и&nbsp;есть на&nbsp;складе.</p>
+  </div>
+  <div class="cards">
+    <article class="card rv tilt">
+      <div class="top mono"><b>KL·FM</b><span>Butterfly-14</span></div>
+      <svg class="pk draw" viewBox="0 0 300 190" aria-hidden="true">
+        <rect x="80" y="55" width="120" height="80" rx="3"/><rect x="90" y="65" width="100" height="60" rx="2"/><rect x="62" y="84" width="18" height="22"/><circle cx="71" cy="95" r="4"/>
+        <path d="M95 55V28M110 55V28M125 55V28M140 55V28M155 55V28M170 55V28M185 55V28M95 135v27M110 135v27M125 135v27M140 135v27M155 135v27M170 135v27M185 135v27"/>
+        <rect x="200" y="87" width="26" height="16"/><path d="M226 90l24 3v4l-24 3"/>
+        <path class="a" d="M250 95c28 0 20 50 50 56"/><rect class="b" x="112" y="82" width="34" height="26"/><path class="a" d="M146 95h44"/>
+        <text x="96" y="120">KL·FM425</text>
+      </svg>
+      <h3>ФОТОН-М</h3>
+      <p class="ds">Фотонные чипы и&nbsp;модули для оптических трансиверов</p>
+      <dl><div><dt>Скорость</dt><dd>4&nbsp;×&nbsp;25&nbsp;Гбит/с</dd></div><div><dt>Длина волны</dt><dd>1&nbsp;310&nbsp;нм</dd></div><div><dt>Потери стыковки</dt><dd>&lt;&nbsp;1,5&nbsp;дБ</dd></div></dl>
+      <a class="more mono" href="#contact">Спецификация</a>
+    </article>
+    <article class="card rv tilt" style="--d:.08s">
+      <div class="top mono"><b>KL·IN</b><span>LGA-24</span></div>
+      <svg class="pk draw" viewBox="0 0 300 190" aria-hidden="true">
+        <defs><clipPath id="cw"><circle cx="150" cy="95" r="33"/></clipPath></defs>
+        <rect x="95" y="40" width="110" height="110" rx="4"/><circle cx="108" cy="53" r="3" class="a"/>
+        <path d="M108 36v4M124 36v4M140 36v4M156 36v4M172 36v4M188 36v4M108 150v4M124 150v4M140 150v4M156 150v4M172 150v4M188 150v4M91 56h4M91 72h4M91 88h4M91 104h4M91 120h4M91 136h4M205 56h4M205 72h4M205 88h4M205 104h4M205 120h4M205 136h4"/>
+        <circle cx="150" cy="95" r="33" class="b"/>
+        <g clip-path="url(#cw)" class="a"><path d="M112 76h76M112 114h76M120 76v30M132 76v30M144 76v30M156 76v30M168 76v30M180 76v30"/><path d="M126 114V84M138 114V84M150 114V84M162 114V84M174 114V84" class="b"/></g>
+        <text x="216" y="146">IN·6X</text>
+      </svg>
+      <h3>ИНЕРТ-6</h3>
+      <p class="ds">Шестиосевые инерциальные МЭМС-модули</p>
+      <dl><div><dt>Диапазон</dt><dd>±16&nbsp;g · ±2&nbsp;000&nbsp;°/с</dd></div><div><dt>Шум</dt><dd>60&nbsp;мкg/√Гц</dd></div><div><dt>Температура</dt><dd>−60…+125&nbsp;°C</dd></div></dl>
+      <a class="more mono" href="#contact">Спецификация</a>
+    </article>
+    <article class="card rv tilt" style="--d:.16s">
+      <div class="top mono"><b>KL·BR</b><span>TO-8</span></div>
+      <svg class="pk draw" viewBox="0 0 300 190" aria-hidden="true">
+        <rect x="95" y="112" width="110" height="8" rx="2"/><path d="M108 112V58q0-8 8-8h68q8 0 8 8v54"/><rect x="140" y="28" width="20" height="22"/><ellipse cx="150" cy="28" rx="10" ry="3" class="a"/>
+        <path d="M120 120v52M140 120v52M160 120v52M180 120v52"/><path d="M118 70h64M118 82h64" opacity=".5"/>
+        <path class="b" d="M150 4v16M146 15l4 5 4-5M132 8v10M168 8v10"/><path class="a" d="M124 100h52"/>
+        <text x="214" y="108">BR·02</text>
+      </svg>
+      <h3>БАРО-2</h3>
+      <p class="ds">Датчики абсолютного давления для промышленных сред</p>
+      <dl><div><dt>Диапазон</dt><dd>0,3–11&nbsp;бар</dd></div><div><dt>Погрешность</dt><dd>±0,05&nbsp;% ВПИ</dd></div><div><dt>Стабильность</dt><dd>0,02&nbsp;% в&nbsp;год</dd></div></dl>
+      <a class="more mono" href="#contact">Спецификация</a>
+    </article>
+    <article class="card rv tilt" style="--d:.24s">
+      <div class="top mono"><b>KL·SP</b><span>Керамика 8&nbsp;×&nbsp;8</span></div>
+      <svg class="pk draw" viewBox="0 0 300 190" aria-hidden="true">
+        <rect x="88" y="34" width="124" height="122" rx="2"/><path d="M88 52h-5v10h5M88 76h-5v10h5M88 100h-5v10h5M88 124h-5v10h5M212 52h5v10h-5M212 76h5v10h-5M212 100h5v10h-5M212 124h5v10h-5"/>
+        <rect x="110" y="56" width="80" height="78" rx="8" class="a"/>
+        <rect x="122" y="68" width="24" height="24" class="b"/><rect x="154" y="68" width="24" height="24" class="b"/><rect x="122" y="98" width="24" height="24" class="b"/><rect x="154" y="98" width="24" height="24" class="b"/>
+        <path class="a" d="M128 86l12-12M160 86l12-12M128 116l12-12M160 116l12-12"/>
+        <path class="b" d="M236 12l-30 30M252 24l-34 34M206 34v8h8"/>
+        <text x="96" y="170">SP·4C</text>
+      </svg>
+      <h3>СПЕКТР-4</h3>
+      <p class="ds">Инфракрасные сенсоры для газового анализа</p>
+      <dl><div><dt>Каналы</dt><dd>4 · 3–5&nbsp;мкм</dd></div><div><dt>Газы</dt><dd>CO₂ · CH₄ · CO</dd></div><div><dt>Потребление</dt><dd>12&nbsp;мВт</dd></div></dl>
+      <a class="more mono" href="#contact">Спецификация</a>
+    </article>
+  </div>
+</section>
+
+<!-- QUALITY -->
+<section class="qual" id="quality" aria-labelledby="qT">
+  <div class="q-panel" id="qPanel">
+    <div class="tag mono rv"><b>[ 06 ]</b><span>Чистая комната и&nbsp;качество</span><span>ISO 14644-1</span></div>
+    <div class="q-grid">
+      <div>
+        <h2 class="h2 sw" id="qT">Здесь пыль считают <em>поштучно</em></h2>
+        <p class="lead rv">Одна частица размером полмикрона перекрывает волновод целиком. Поэтому воздух в&nbsp;зоне литографии меняется шестьсот раз в&nbsp;час, а&nbsp;датчики пишут температуру и&nbsp;влажность каждую секунду.</p>
+        <div class="q-nums">
+          <div class="rv"><strong>ISO&nbsp;<span data-to="5">5</span></strong><p>класс чистоты в&nbsp;зоне литографии</p></div>
+          <div class="rv" style="--d:.06s"><strong><span data-to="3520">3&nbsp;520</span><small>шт/м³</small></strong><p>предел частиц ≥&nbsp;0,5&nbsp;мкм; факт&nbsp;— втрое ниже</p></div>
+          <div class="rv" style="--d:.12s"><strong><span data-to="22" data-dec="1">22,0</span><small>±0,1&nbsp;°C</small></strong><p>температура, круглый год</p></div>
+          <div class="rv" style="--d:.18s"><strong><span data-to="45">45</span><small>±1&nbsp;%</small></strong><p>относительная влажность</p></div>
+          <div class="rv" style="--d:.24s"><strong><span data-to="600">600</span><small>крат/ч</small></strong><p>воздухообмен через HEPA/ULPA</p></div>
+          <div class="rv" style="--d:.3s"><strong><span data-to="100">100</span><small>%</small></strong><p>кристаллов проходят зондовый контроль</p></div>
+        </div>
+      </div>
+      <figure class="map rv" id="map">
+        <div class="map-h mono"><span>Карта годности</span><span>Партия KL-2291 · пл.&nbsp;07</span></div>
+        <div class="map-scan" aria-hidden="true"></div>
+        <svg id="mapSvg" viewBox="0 0 420 420" role="img" aria-label="Карта годности пластины: подавляющее большинство кристаллов годные, брак сосредоточен у края"></svg>
+        <figcaption class="map-f mono"><span><i></i>Годен · <span id="mapG">—</span></span><span><i class="x"></i>Брак · <span id="mapB">—</span></span><span>Выход <span id="mapY">97,4</span>&nbsp;%</span></figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="sec" id="contact">
+  <div class="tag mono rv"><b>[ 07 ]</b><span>Контрактное производство</span><span>Ближайший MPW&nbsp;— через 6&nbsp;недель</span></div>
+  <div class="cta">
+    <div>
+      <h2 class="h2 sw">Запустите свой кристалл на&nbsp;нашей линии</h2>
+      <p class="lead rv">Пришлите ТЗ, эскиз или готовую топологию. Технолог посмотрит её сам и&nbsp;ответит по&nbsp;существу: что реализуемо, на&nbsp;какой платформе и&nbsp;к&nbsp;какому сроку.</p>
+      <ol class="how">
+        <li class="rv">Заявка и&nbsp;NDA&nbsp;— в&nbsp;течение одного рабочего дня</li>
+        <li class="rv" style="--d:.06s">Передаём PDK и&nbsp;правила проектирования</li>
+        <li class="rv" style="--d:.12s">Проверяем топологию и&nbsp;бронируем место в&nbsp;запуске</li>
+        <li class="rv" style="--d:.18s">Через 9&nbsp;недель&nbsp;— кристаллы и&nbsp;протокол измерений</li>
+      </ol>
+      <div class="dir rv">
+        <div><small>Телефон</small><a href="tel:+996709927895">0709&nbsp;927&nbsp;895</a></div>
+        <div><small>Почта</small><a href="#contact">hello@kvant.example</a></div>
+      </div>
+    </div>
+    <div class="term rv" id="term">
+      <div class="term-b"><i></i><i></i><i></i><span>kvant@mpw:~ — заявка на&nbsp;запуск</span></div>
+      <div class="term-in">
+        <form id="form" novalidate>
+          <p class="cm"># Заполните поля и&nbsp;нажмите Enter.<br># Отвечает инженер, а&nbsp;не&nbsp;отдел продаж.</p>
+          <div class="fl"><label for="fN">имя</label><input id="fN" name="name" autocomplete="name" placeholder="как к вам обращаться" required></div>
+          <div class="fl"><label for="fC">компания</label><input id="fC" name="org" autocomplete="organization" placeholder="организация или лаборатория"></div>
+          <div class="fl"><label for="fE">почта</label><input id="fE" name="email" type="email" autocomplete="email" placeholder="name@company.example" required></div>
+          <fieldset class="fl"><legend class="lg">платформа</legend>
+            <div class="chips"><input type="radio" name="pf" id="p1" value="SOI 220" checked><label for="p1">SOI 220</label><input type="radio" name="pf" id="p2" value="SiN 400"><label for="p2">SiN 400</label><input type="radio" name="pf" id="p3" value="МЭМС"><label for="p3">МЭМС</label><input type="radio" name="pf" id="p4" value="не знаю"><label for="p4">Не знаю</label></div>
+          </fieldset>
+          <fieldset class="fl"><legend class="lg">объём</legend>
+            <div class="chips"><input type="radio" name="vol" id="v1" value="MPW" checked><label for="v1">MPW-блок</label><input type="radio" name="vol" id="v2" value="25"><label for="v2">25 пластин</label><input type="radio" name="vol" id="v3" value="серия"><label for="v3">Серия</label></div>
+          </fieldset>
+          <div class="fl"><label for="fM">задача</label><textarea id="fM" name="msg" rows="2" placeholder="в двух словах: что должно делать изделие"></textarea></div>
+          <p class="err" id="err" role="alert" aria-live="polite"></p>
+          <button class="btn pri" type="submit">Отправить заявку<i></i></button>
+        </form>
+        <div class="log" id="log" role="status" aria-live="polite">
+          <p>$ submit --run mpw</p>
+          <p>› проверка полей… <b>ok</b></p>
+          <p>› платформа: <em id="lgP">SOI 220</em> · объём: <em id="lgV">MPW</em></p>
+          <p>› заявка <b id="lgId">KL-0000</b> принята</p>
+          <p>› технолог ответит в&nbsp;течение одного рабочего дня</p>
+          <p>$ <span class="caret"></span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="ft">
+  <div class="ft-g">
+    <div>
+      <a class="logo" href="#top"><svg viewBox="0 0 26 26" fill="none" stroke="currentColor" aria-hidden="true"><rect x="5.5" y="5.5" width="15" height="15"/><path d="M9 2v3.5M13 2v3.5M17 2v3.5M9 20.5V24M13 20.5V24M17 20.5V24M2 9h3.5M2 13h3.5M2 17h3.5M20.5 9H24M20.5 13H24M20.5 17H24"/><circle cx="13" cy="13" r="3" stroke="#3DF2E0"/></svg><span>КВАНТ<b>·</b>ЛАБ</span></a>
+      <p class="abt">Исследовательский и&nbsp;производственный центр микроэлектроники. Фотонные схемы, сенсоры, контрактное производство пластин.</p>
+    </div>
+    <div><h4>Разделы</h4><ul><li><a href="#center">Центр</a></li><li><a href="#capabilities">Возможности</a></li><li><a href="#process">Техпроцесс</a></li><li><a href="#products">Продукция</a></li><li><a href="#quality">Качество</a></li></ul></div>
+    <div><h4>Заказчикам</h4><ul><li><a href="#contact">MPW-запуски</a></li><li><a href="#contact">Выделенные партии</a></li><li><a href="#contact">Запрос PDK</a></li><li><a href="#contact">Корпусирование</a></li></ul></div>
+    <div><h4>Контакты</h4><ul><li><a href="tel:+996709927895">0709&nbsp;927&nbsp;895</a></li><li><a href="#contact">hello@kvant.example</a></li><li style="color:var(--mute)">Технопарк, корпус&nbsp;0</li></ul></div>
+  </div>
+  <div class="wm" aria-hidden="true">КВАНТ·ЛАБ</div>
+  <div class="ft-b">
+    <span>© 2026 КВАНТ·ЛАБ. Компания вымышлена, все данные условны.</span>
+    <span>Концепт-сайт студии <a href="/" target="_top">Anteyko</a></span>
+  </div>
+</footer>
+
+<script>
+(function(){
+'use strict';
+var d=document,root=d.documentElement,W=window;
+var RM=W.matchMedia&&W.matchMedia('(prefers-reduced-motion: reduce)').matches;
+var FINE=W.matchMedia&&W.matchMedia('(hover:hover) and (pointer:fine)').matches;
+function $(s,c){return (c||d).querySelector(s)}
+function $$(s,c){return Array.prototype.slice.call((c||d).querySelectorAll(s))}
+function clamp(v,a,b){a=a===undefined?0:a;b=b===undefined?1:b;return v<a?a:v>b?b:v}
+function lerp(a,b,t){return a+(b-a)*t}
+function ss(a,b,v){var t=clamp((v-a)/(b-a));return t*t*(3-2*t)}
+function eio(t){return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2}
+function hsh(a,b){var x=Math.sin(a*127.1+b*311.7)*43758.5453;return x-Math.floor(x)}
+var NB=' ';
+function fmt(n,dec){var s=Math.abs(n).toFixed(dec||0).split('.');s[0]=s[0].replace(/\B(?=(\d{3})+(?!\d))/g,NB);return (n<0?'−':'')+s.join(',')}
+function setT(el,s){if(el&&el._t!==s){el._t=s;el.textContent=s}}
+
+/* ---------- wafer model ---------- */
+var N=16,P=1/N,GW=2*N+1,dies=[],TI=-1;
+var TGX=-4,TGY=2; /* target die grid cell */
+for(var j=-N;j<N;j++){for(var i=-N;i<N;i++){
+  var ok=true;for(var c=0;c<4;c++){var x=(i+(c&1))*P,y=(j+(c>>1))*P;if(x*x+y*y>.965)ok=false}
+  if(!ok)continue;
+  var cx=(i+.5)*P,cy=(j+.5)*P;
+  if(i===TGX&&j===TGY)TI=dies.length;
+  dies.push({a:(i+N)+(j+N)*GW,x:cx,y:cy,r:Math.sqrt(cx*cx+cy*cy),u:cx*.86+cy*.5,h:hsh(i,j),v:hsh(i+7,j-3)<.16});
+}}
+var ND=dies.length,TX=(TGX+.5)*P,TY=(TGY+.5)*P,OX=.067,OY=-.092;
+var vx=new Float32Array(GW*GW),vy=new Float32Array(GW*GW);
+var NBK=9,bk=[],bn=new Int32Array(NBK);
+for(var b=0;b<NBK;b++)bk.push(new Float32Array(ND*8));
+var BCOL=['rgba(125,170,205,.10)','rgba(61,242,224,.2)','rgba(61,242,224,.42)','rgba(61,242,224,.7)','rgba(150,255,244,.98)','rgba(139,92,255,.3)','rgba(139,92,255,.55)','rgba(160,120,255,.8)','rgba(200,180,255,.98)'];
+
+/* ---------- die svg ---------- */
+var dieEl=$('#die'),tr=[],flowG,anG,lblG,padG;
+(function(){
+  var o=[],pads='',fl='',k,m;
+  function t(dd,c){o.push('<path class="t '+c+'" pathLength="1" d="'+dd+'"/>')}
+  o.push('<rect x="24" y="24" width="552" height="552" fill="#090B11"/>');
+  o.push('<defs><pattern id="dg" width="12" height="12" patternUnits="userSpaceOnUse"><path d="M12 0H0V12" fill="none" stroke="rgba(150,180,210,.07)"/></pattern></defs><rect x="40" y="40" width="520" height="520" fill="url(#dg)"/>');
+  t('M24 24H576V576H24Z','fr');t('M40 40H560V560H40Z','fr2');
+  for(k=0;k<12;k++){var a=78+k*40.4-9;pads+='<rect x="'+a+'" y="46" width="18" height="18"/><rect x="'+a+'" y="536" width="18" height="18"/><rect x="536" y="'+a+'" width="18" height="18"/>'}
+  var ys=[179,259.8,340.6,421.4];
+  for(k=0;k<4;k++){var y=ys[k],r1=13+k,r2=12+k*.6,s=k<2?-1:1;
+    t('M58 '+(y-12)+'L96 '+y+'L58 '+(y+12)+'ZM66 '+(y-8)+'V'+(y+8)+'M73 '+(y-6)+'V'+(y+6)+'M80 '+(y-4)+'V'+(y+4),'op');
+    t('M96 '+y+'H150C166 '+y+' 166 '+(y-13)+' 182 '+(y-13)+'H262C278 '+(y-13)+' 278 '+y+' 294 '+y+'H468','op');
+    t('M150 '+y+'C166 '+y+' 166 '+(y+13)+' 182 '+(y+13)+'H262C278 '+(y+13)+' 278 '+y+' 294 '+y,'op');
+    fl+='<path class="flow" pathLength="1" style="animation-delay:-'+(k*.6)+'s" d="M96 '+y+'H150C166 '+y+' 166 '+(y-13)+' 182 '+(y-13)+'H262C278 '+(y-13)+' 278 '+y+' 294 '+y+'H468"/>';
+    var c1=y-3-r1,c2=y-3-r2;
+    t('M'+(340-r1)+' '+c1+'a'+r1+' '+r1+' 0 1 0 '+(2*r1)+' 0a'+r1+' '+r1+' 0 1 0 '+(-2*r1)+' 0','op');
+    t('M'+(396-r2)+' '+c2+'a'+r2+' '+r2+' 0 1 0 '+(2*r2)+' 0a'+r2+' '+r2+' 0 1 0 '+(-2*r2)+' 0','op');
+    t('M468 '+(y-9)+'H506V'+(y+9)+'H468Z','pd');
+    var hy=s<0?y-18:y+8;t('M196 '+hy+'H248V'+(hy+10)+'H196Z','el');
+    t('M506 '+(y-5)+'H510l15.2 -15.2H536M506 '+(y+5)+'H510l15.2 15.2H536','el');
+  }
+  t('M204 161V84l-4.8 -4.8V64M240 161V64','el');
+  t('M204 241.8V224H137V90L118.4 71.4V64M240 241.8V224H300V90L280 70V64','el');
+  t('M204 358.6V376.4H137V510L118.4 528.6V536M240 358.6V376.4H300V510L280 530V536','el');
+  t('M204 439.4V516l-4.8 4.8V536M240 439.4V536','el');
+  /* spiral delay line */
+  var sp='';for(m=0;m<=150;m++){var an=m/150*Math.PI*8,rr=4+an*1.12;sp+=(m?'L':'M')+(418+Math.cos(an)*rr*2.3).toFixed(1)+' '+(108+Math.sin(an)*rr).toFixed(1)}
+  t(sp,'op');
+  /* tia macros */
+  for(k=0;k<3;k++){var bx=330+k*66;t('M'+bx+' 466H'+(bx+52)+'V520H'+bx+'ZM'+(bx+8)+' 478H'+(bx+44)+'M'+(bx+8)+' 488H'+(bx+44)+'M'+(bx+8)+' 498H'+(bx+30)+'M'+(bx+8)+' 508H'+(bx+38),'el')}
+  t('M60 80H84M72 68V92M60 520H84M72 508V532','fr');
+  o.push('<g class="pads">'+pads+'</g>');
+  o.push('<g class="lbl"><text x="58" y="150">GC 1–4</text><text x="196" y="150">MZM</text><text x="322" y="150">RING λ1…λ4</text><text x="468" y="150">Ge PD</text><text x="330" y="458">TIA ×3</text><text x="330" y="76">DELAY 12 мм</text><text x="58" y="468">KL-PIC-04</text><text x="58" y="480">REV C · SOI 220</text></g>');
+  o.push('<g class="fl">'+fl+'</g>');
+  o.push('<g class="an"><path d="M354 242.8H386M386 239v8M318 268h10M318 251.6h10M323 251.6v16.4"/><text x="358" y="239">R = 14 мкм</text><text x="296" y="279">450 нм</text><path d="M340 226v-14h18"/><text x="361" y="214">Q ≈ 42 000</text></g>');
+  dieEl.innerHTML=o.join('');
+  tr=$$('.t',dieEl);flowG=$('.fl',dieEl);anG=$('.an',dieEl);lblG=$('.lbl',dieEl);padG=$('.pads',dieEl);
+  tr.forEach(function(e){e._o=1});
+})();
+function drawTraces(dp){
+  var n=tr.length,i,loc,off;
+  for(i=0;i<n;i++){loc=clamp((dp*1.3-i/n)/.3);off=1-loc;off=Math.round(off*500)/500;
+    if(tr[i]._o!==off){tr[i]._o=off;tr[i].style.strokeDashoffset=off}}
+}
+
+/* ---------- hero ---------- */
+var hero=$('#hero'),stick=$('.hero-st'),cv=$('#wafer'),ctx=cv.getContext('2d');
+var vw=0,vh=0,hw=0,hh=0,dpr=1,mob=false;
+var wx,wy,R0,tx,ty,S,Z1,ZS;
+var heroTop=0,heroH=1,heroP=0,heroVis=true;
+var TH0=62*Math.PI/180,KP=.34;
+var hl1=$('#hl1'),hl2=$('#hl2'),eyb=$('#eyb'),subs=$$('#subs p');
+var hX=$('#hX'),hY=$('#hY'),hZ=$('#hZ'),hS=$('#hS'),hObj=$('#hObj'),fNm=$('#fNm'),fW=$('#fW'),fY=$('#fY'),rulerM=$('#rulerM'),hint=$('.scale em');
+var HL=[['Чипы, которые','считают светом'],['Один из '+ND,'на пластине'],['Волновод','шириной 450'+NB+'нм']];
+var EY=['01 — Пластина · Ø'+NB+'200'+NB+'мм','02 — Кристалл · 6,25'+NB+'×'+NB+'6,25'+NB+'мм','03 — Топология · SOI 220'+NB+'нм'];
+var OBJ=['пластина Si · Ø'+NB+'200'+NB+'мм','кристалл C13 · R19','волновод · кольцо λ2'];
+var GL='АВЕЗИКЛНОПРСТУХЧЯ0123456789/+<>';
+function mix(a,b,f,seed){
+  if(f<=0)return a;if(f>=1)return b;
+  var L=Math.round(lerp(a.length,b.length,f)),s='',i,th,ch;
+  for(i=0;i<L;i++){th=i/Math.max(L,1)*.55;
+    if(f>th+.4)ch=b[i]||'';else if(f<th)ch=a[i]||GL[(hsh(i,seed)*GL.length)|0];
+    else ch=(b[i]===' '||b[i]===NB)?b[i]:GL[(hsh(i+3,seed)*GL.length)|0];
+    s+=ch}
+  return s;
+}
+var t0=performance.now(),introDone=false;
+function headline(p,now){
+  var f0=RM?1:clamp((now-t0-150)/850);
+  var seed,st,a,b,f;
+  if(f0<1){setT(hl1,mix('',HL[0][0],f0,(now/55)|0));setT(hl2,mix('',HL[0][1],f0,((now/55)|0)+9));return 0}
+  seed=(p*260)|0;
+  if(p<.44){a=0;b=1;f=clamp((p-.2)/.13)}else{a=1;b=2;f=clamp((p-.56)/.13)}
+  setT(hl1,mix(HL[a][0],HL[b][0],f,seed));setT(hl2,mix(HL[a][1],HL[b][1],f,seed+17));
+  st=p<.265?0:p<.625?1:2;
+  if(eyb._s!==st){eyb._s=st;eyb.textContent=EY[st];setT(hObj,OBJ[st]);subs.forEach(function(e,i){e.classList.toggle('on',i===st)})}
+  return st;
+}
+function sizeHero(){
+  vw=W.innerWidth;vh=W.innerHeight;hw=stick.clientWidth;hh=stick.clientHeight;mob=hw<=900;
+  dpr=Math.min(W.devicePixelRatio||1,2);cv.width=Math.round(hw*dpr);cv.height=Math.round(hh*dpr);
+  if(mob){R0=hw*.74;wx=hw*.5;wy=hh*.31;S=Math.min(hw*.8,hh*.4);tx=hw*.5;ty=hh*.36;ZS=3.2}
+  else{R0=Math.min(hw*.38,hh*.74);wx=hw*.69;wy=hh*.47;S=Math.min(hh*.62,hw*.4);tx=hw*.66;ty=hh*.5;ZS=2.3}
+  Z1=S/P;
+  dieEl.style.width=S+'px';dieEl.style.height=S+'px';dieEl.style.left=(tx-S/2)+'px';dieEl.style.top=(ty-S/2)+'px';
+}
+function fmtLen(mm){
+  if(mm>=1)return fmt(mm,mm<10?2:1)+NB+'мм';
+  var um=mm*1000;if(um>=1)return fmt(um,um<10?1:0)+NB+'мкм';
+  return fmt(um*1000,0)+NB+'нм';
+}
+function drawHero(now){
+  var p=heroP,pz=clamp(p/.55),ez=eio(pz),e3=ss(.6,.96,p),zs=lerp(1,ZS,e3);
+  var Z=R0*Math.exp(Math.log(Z1/R0)*ez)*zs;
+  var th=TH0*(1-eio(clamp(pz/.85)));
+  var ph=(-.42+(RM?0:.06*Math.sin(now*.00025)))*(1-eio(clamp(pz/.7)));
+  var cs=Math.cos(ph),sn=Math.sin(ph),ef=eio(clamp(pz/.9));
+  var Fx=(TX*cs-TY*sn)*ef+OX*P*e3,Fy=(TX*sn+TY*cs)*ef+OY*P*e3;
+  var Ax=lerp(wx,tx,ef),Ay=lerp(wy,ty,ef),ct=Math.cos(th),st=Math.sin(th)*KP;
+  var i,j,k,x,y,xr,yr,dx,dy,sc,idx;
+  function prX(x,y){xr=x*cs-y*sn;yr=x*sn+y*cs;dx=xr-Fx;dy=yr-Fy;sc=Z/(1-dy*st);return Ax+dx*sc}
+  function prY(){return Ay+dy*ct*sc}
+  ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,hw,hh);
+  /* vertices */
+  idx=0;for(j=-N;j<=N;j++){for(i=-N;i<=N;i++){vx[idx]=prX(i*P,j*P);vy[idx]=prY();idx++}}
+  /* disc */
+  var seg=120,a,pts=[];
+  for(k=0;k<seg;k++){a=k/seg*Math.PI*2;var rad=1;if(Math.abs(a-Math.PI/2)<.05)rad=.985;pts.push(prX(Math.cos(a)*rad,Math.sin(a)*rad),prY())}
+  function disc(oy){ctx.beginPath();for(k=0;k<seg;k++){if(k)ctx.lineTo(pts[k*2],pts[k*2+1]+oy);else ctx.moveTo(pts[0],pts[1]+oy)}ctx.closePath()}
+  var thick=9*Math.sin(th)*Math.min(Z/R0,3);
+  if(thick>.5){disc(thick);ctx.fillStyle='#05070A';ctx.fill();ctx.strokeStyle='rgba(61,242,224,.28)';ctx.lineWidth=1;ctx.stroke()}
+  disc(0);
+  var g=ctx.createLinearGradient(Ax-Z,Ay-Z*.4,Ax+Z,Ay+Z*.6);
+  g.addColorStop(0,'#0D1420');g.addColorStop(.45,'#141230');g.addColorStop(.75,'#0B1A22');g.addColorStop(1,'#0A0C12');
+  ctx.fillStyle=g;ctx.fill();
+  ctx.save();ctx.clip();
+  /* light sweep on surface */
+  var lit=(1-.78*ez)*(1-.92*ss(46,170,Z*P)),tt=RM?3000:now;
+  var sw=((tt*.00009)%1)*2.8-1.4,sxp=Ax+sw*Z,bw=Z*.45;
+  g=ctx.createLinearGradient(sxp-bw,0,sxp+bw,0);
+  g.addColorStop(0,'rgba(61,242,224,0)');g.addColorStop(.5,'rgba(120,150,255,'+(.2*lit)+')');g.addColorStop(1,'rgba(139,92,255,0)');
+  ctx.fillStyle=g;ctx.fillRect(0,0,hw,hh);
+  /* dies */
+  for(k=0;k<NBK;k++)bn[k]=0;
+  var ds=Z*P,m=ds*1.5,D,ia,x0,y0,x1,y1,x2,y2,x3,y3,mx,my,bb,q,arr,n,gi=.06;
+  var scan=((tt*.00021)%1)*2.9-1.45,ring=((tt*.00012)%1)*1.6,cur=((tt*.022)|0)%ND,dd;
+  for(i=0;i<ND;i++){D=dies[i];ia=D.a;
+    x0=vx[ia];y0=vy[ia];x2=vx[ia+GW+1];y2=vy[ia+GW+1];mx=(x0+x2)*.5;my=(y0+y2)*.5;
+    if(mx<-m||mx>hw+m||my<-m||my>hh+m)continue;
+    x1=vx[ia+1];y1=vy[ia+1];x3=vx[ia+GW];y3=vy[ia+GW];
+    bb=0;dd=D.u-scan;if(dd<0)dd=-dd;q=1-dd*7;if(q>bb)bb=q;
+    dd=D.r-ring;if(dd<0)dd=-dd;q=(1-dd*9)*.62;if(q>bb)bb=q;
+    if(Math.sin(tt*.0016+D.h*90)>.975&&.7>bb)bb=.7;
+    dd=cur-i;if(dd<0)dd+=ND;if(dd<16){q=1-dd/16;if(q>bb)bb=q}
+    bb*=lit;
+    q=bb<.1?0:(bb>=.99?4:1+((bb*3.99)|0));if(q>4)q=4;if(q&&D.v)q+=4;
+    arr=bk[q];n=bn[q];
+    arr[n]=x0+(mx-x0)*gi;arr[n+1]=y0+(my-y0)*gi;arr[n+2]=x1+(mx-x1)*gi;arr[n+3]=y1+(my-y1)*gi;
+    arr[n+4]=x2+(mx-x2)*gi;arr[n+5]=y2+(my-y2)*gi;arr[n+6]=x3+(mx-x3)*gi;arr[n+7]=y3+(my-y3)*gi;bn[q]=n+8;
+  }
+  for(k=0;k<NBK;k++){n=bn[k];if(!n)continue;arr=bk[k];ctx.beginPath();
+    for(i=0;i<n;i+=8){ctx.moveTo(arr[i],arr[i+1]);ctx.lineTo(arr[i+2],arr[i+3]);ctx.lineTo(arr[i+4],arr[i+5]);ctx.lineTo(arr[i+6],arr[i+7]);ctx.closePath()}
+    ctx.fillStyle=BCOL[k];ctx.fill()}
+  /* near-field die detail */
+  var da=ss(110,320,ds)*.5;
+  if(da>.01){ctx.strokeStyle='rgba(150,190,220,'+da+')';ctx.lineWidth=1;ctx.beginPath();
+    for(k=0;k<NBK;k++){n=bn[k];arr=bk[k];for(i=0;i<n;i+=8){
+      x0=arr[i];y0=arr[i+1];var w=arr[i+2]-x0,h=arr[i+7]-y0;
+      ctx.rect(x0+w*.06,y0+h*.06,w*.88,h*.88);ctx.rect(x0+w*.14,y0+h*.2,w*.3,h*.6);ctx.rect(x0+w*.52,y0+h*.2,w*.34,h*.22);ctx.rect(x0+w*.52,y0+h*.52,w*.34,h*.28);
+      for(j=0;j<6;j++){ctx.moveTo(x0+w*(.14+j*.06),y0+h*.06);ctx.lineTo(x0+w*(.14+j*.06),y0+h*.12)}
+    }}ctx.stroke()}
+  ctx.restore();
+  disc(0);ctx.strokeStyle='rgba(61,242,224,'+(.55*(1-ez)+.1)+')';ctx.lineWidth=1.2;ctx.stroke();
+  ctx.strokeStyle='rgba(61,242,224,'+(.1*(1-ez))+')';ctx.lineWidth=7;ctx.stroke();
+  /* target reticle */
+  D=dies[TI];ia=D.a;x0=vx[ia];y0=vy[ia];x1=vx[ia+1];y1=vy[ia+1];x2=vx[ia+GW+1];y2=vy[ia+GW+1];x3=vx[ia+GW];y3=vy[ia+GW];
+  var tcx=(x0+x2)/2,tcy=(y0+y2)/2,ra=1-ss(.36,.46,p);
+  if(ra>.01){
+    var bx0=Math.min(x0,x1,x2,x3)-6,bx1=Math.max(x0,x1,x2,x3)+6,by0=Math.min(y0,y1,y2,y3)-6,by1=Math.max(y0,y1,y2,y3)+6,L=Math.max(5,(bx1-bx0)*.22);
+    var pu=RM?0:(now*.001)%1.6;
+    ctx.globalAlpha=ra;ctx.strokeStyle='#fff';ctx.lineWidth=1.2;ctx.beginPath();
+    ctx.moveTo(bx0,by0+L);ctx.lineTo(bx0,by0);ctx.lineTo(bx0+L,by0);ctx.moveTo(bx1-L,by0);ctx.lineTo(bx1,by0);ctx.lineTo(bx1,by0+L);
+    ctx.moveTo(bx1,by1-L);ctx.lineTo(bx1,by1);ctx.lineTo(bx1-L,by1);ctx.moveTo(bx0+L,by1);ctx.lineTo(bx0,by1);ctx.lineTo(bx0,by1-L);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(x0,y0);ctx.lineTo(x1,y1);ctx.lineTo(x2,y2);ctx.lineTo(x3,y3);ctx.closePath();ctx.fillStyle='rgba(255,255,255,'+(.85*(1-ss(40,150,ds)))+')';ctx.fill();
+    if(pu<1&&ds<130){ctx.globalAlpha=ra*(1-pu);ctx.beginPath();ctx.arc(tcx,tcy,(bx1-bx0)*.6+pu*34,0,6.283);ctx.strokeStyle='#3DF2E0';ctx.stroke();ctx.globalAlpha=ra}
+    /* leader + label */
+    var lx=mob?bx0-18:bx0-70,ly=by0-(mob?44:58);
+    ctx.strokeStyle='rgba(233,238,243,.7)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(bx0-3,by0-3);ctx.lineTo(lx+26,ly+6);ctx.lineTo(lx-(mob?40:70),ly+6);ctx.stroke();
+    ctx.font='500 '+(mob?10:11)+'px "JetBrains Mono",ui-monospace,Menlo,monospace';ctx.fillStyle='#E9EEF3';ctx.textAlign='left';
+    ctx.fillText('КРИСТАЛЛ C13·R19',lx-(mob?40:70),ly-2);
+    ctx.globalAlpha=1;
+  }
+  /* svg die */
+  var so=ss(.37,.5,p);
+  if(dieEl._so!==so){dieEl._so=so;dieEl.style.opacity=so}
+  if(so>0){dieEl.style.transform='translate('+(tcx-tx).toFixed(2)+'px,'+(tcy-ty).toFixed(2)+'px) scale('+(ds/S).toFixed(4)+')';
+    drawTraces(ss(.36,.88,p));
+    var fo=ss(.74,.9,p);if(flowG._o!==fo||dieEl._p!==p){dieEl._p=p;flowG._o=fo;flowG.style.opacity=fo;flowG.style.display=fo>0?'':'none';anG.style.opacity=ss(.8,.94,p);lblG.style.opacity=ss(.5,.62,p)*(1-ss(.84,.95,p)*.6);padG.style.opacity=ss(.38,.48,p)}
+  }
+  /* hud */
+  var zx=Z/R0*Math.exp(Math.log(600)*e3);
+  setT(hX,(Fx>=0?'+':'−')+fmt(Math.abs(Fx*100),2).padStart(6,'0'));setT(hY,(Fy>=0?'+':'−')+fmt(Math.abs(Fy*100),2).padStart(6,'0'));
+  setT(hZ,'×'+fmt(zx,zx<100?1:0));
+  var mmpx=100/R0/zx;setT(hS,fmtLen(mmpx*(mob?80:120)));
+  setT(fNm,fmt(mmpx*1e6,0));
+  if(rulerM._p!==p){rulerM._p=p;rulerM.style.setProperty('--p',p.toFixed(4));hint.style.opacity=1-ss(0,.12,p)}
+}
+
+/* ---------- global scroll ---------- */
+var hd=$('#hd'),procSec=$('#process'),procSt=$('#procSt'),track=$('#track'),rail=$('.rail'),steps=$$('.step',track);
+var procTop=0,procDist=0,procPin=false,procAct=-1;
+var qPanel=$('#qPanel'),qTop=0,qv=-1;
+var stEl=$('#st'),stW=[],stTop=0,stH=1,stN=-1;
+function top(el){return el.getBoundingClientRect().top+W.scrollY}
+function measure(){
+  sizeHero();
+  heroTop=top(hero);heroH=hero.offsetHeight;
+  procPin=W.matchMedia('(min-width:1000px) and (min-height:700px)').matches&&!RM;
+  if(procPin){procSec.style.height='';track.style.transform='';
+    procDist=Math.max(0,track.scrollWidth-vw);procSec.style.height=(vh+procDist)+'px'}
+  else{procSec.style.height='';track.style.transform='';procDist=0;if(RM){procSt.style.position='static';procSt.style.height='auto';track.style.flexWrap='wrap'}}
+  procTop=top(procSec);qTop=top(qPanel);stTop=top(stEl);stH=stEl.offsetHeight;
+  dirty=true;
+}
+var dirty=true,raf=0,lastY=-1;
+function frame(now){
+  raf=0;
+  var sy=W.scrollY||W.pageYOffset||0;
+  if(dirty||sy!==lastY){
+    lastY=sy;dirty=false;
+    heroP=clamp((sy-heroTop)/Math.max(1,heroH-vh));
+    heroVis=sy<heroTop+heroH;
+    hd.classList.toggle('sc',sy>24);
+    if(procPin&&procDist>0){var pp=clamp((sy-procTop)/procDist);
+      track.style.transform='translate3d('+(-pp*procDist).toFixed(1)+'px,0,0)';rail.style.setProperty('--pp',pp.toFixed(4));
+      var ai=Math.min(4,Math.round(pp*4.4));if(ai!==procAct){procAct=ai;steps.forEach(function(s,i){s.classList.toggle('act',i===ai)})}}
+    if(!RM){var qp=1-eio(clamp((sy+vh-qTop)/(vh*.75)));qp=Math.round(qp*200)/200;
+      if(qp!==qv){qv=qp;qPanel.style.setProperty('--qi',(qp*7)+'vw');qPanel.style.setProperty('--qr',(qp*28)+'px')}}
+    if(stW.length){var sp=clamp((sy+vh*.82-stTop)/(stH+vh*.3)),sn=Math.round(sp*stW.length);
+      if(sn!==stN){stN=sn;for(var i=0;i<stW.length;i++)stW[i].classList.toggle('on',i<sn)}}
+  }
+  if(heroVis){headline(heroP,now);drawHero(now)}
+  if(heroVis&&!d.hidden&&!RM)req();
+}
+function req(){if(!raf)raf=requestAnimationFrame(frame)}
+W.addEventListener('scroll',req,{passive:true});
+var rt;W.addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(function(){measure();req()},120)},{passive:true});
+d.addEventListener('visibilitychange',function(){if(!d.hidden)req()});
+W.addEventListener('load',function(){measure();req()});
+if(d.fonts&&d.fonts.ready)d.fonts.ready.then(function(){measure();req()});
+
+/* statement words */
+(function(){
+  function walk(node,hl){
+    Array.prototype.slice.call(node.childNodes).forEach(function(n){
+      if(n.nodeType===3){var fr=d.createDocumentFragment();
+        n.nodeValue.split(/( +)/).forEach(function(tk){if(!tk)return;if(/^ +$/.test(tk)){fr.appendChild(d.createTextNode(' '));return}
+          var s=d.createElement('span');s.className='sx'+(hl?' hl':'');s.textContent=tk;fr.appendChild(s);stW.push(s)});
+        node.replaceChild(fr,n)}
+      else if(n.nodeType===1)walk(n,n.classList.contains('hl'))})
+  }
+  walk(stEl,false);
+})();
+
+/* split h2 into words */
+$$('.sw').forEach(function(h){
+  var i=0;
+  (function walk(node){
+    Array.prototype.slice.call(node.childNodes).forEach(function(n){
+      if(n.nodeType===3){var fr=d.createDocumentFragment();
+        n.nodeValue.split(/( +)/).forEach(function(tk){if(!tk)return;if(/^ +$/.test(tk)){fr.appendChild(d.createTextNode(' '));return}
+          var w=d.createElement('span');w.className='w';var inn=d.createElement('i');inn.style.setProperty('--i',i++);inn.textContent=tk;w.appendChild(inn);fr.appendChild(w)});
+        node.replaceChild(fr,n)}
+      else if(n.nodeType===1)walk(n)})
+  })(h);
+});
+$$('.draw').forEach(function(s){$$('rect,path,circle,ellipse',s).forEach(function(e){e.setAttribute('pathLength','1')})});
+
+/* yield map */
+(function(){
+  var svg=$('#mapSvg'),n=21,c=10,o='',cells=[],i,j,dx,dy,r,bad=9;
+  for(j=0;j<n;j++)for(i=0;i<n;i++){dx=i-c;dy=j-c;r=Math.sqrt(dx*dx+dy*dy);if(r>10.3)continue;
+    cells.push({i:i,j:j,s:hsh(i*1.7+3,j*2.3+1)-(r>8.4?.55:0)-((i===14||i===15)&&j===6?2:0)})}
+  cells.slice().sort(function(a,b){return a.s-b.s}).slice(0,bad).forEach(function(q){q.b=1});
+  var g=cells.length-bad;
+  cells.forEach(function(q){o+='<rect class="'+(q.b?'x':'g')+'" x="'+(q.i*20+2)+'" y="'+(q.j*20+2)+'" width="16" height="16" style="transition-delay:'+((q.i+q.j)*18)+'ms"/>'});
+  o+='<circle cx="210" cy="210" r="208" fill="none" stroke="rgba(7,8,11,.5)"/><path d="M200 417.5h20" stroke="#E8EDF0" stroke-width="4"/>';
+  svg.innerHTML=o;setT($('#mapG'),String(g));setT($('#mapB'),String(bad));setT($('#mapY'),fmt(g/(g+bad)*100,1));
+})();
+
+/* reveal */
+(function(){
+  var els=$$('.rv,.sw,.wipe,.map');
+  function show(e){e.classList.add('in');if(e.querySelector){$$('[data-to]',e).forEach(count)}}
+  if(RM||!('IntersectionObserver' in W)){els.forEach(show);return}
+  var io=new IntersectionObserver(function(en){en.forEach(function(x){if(x.isIntersecting){show(x.target);io.unobserve(x.target)}})},{rootMargin:'0px 0px -8% 0px',threshold:.08});
+  els.forEach(function(e){io.observe(e)});
+  setTimeout(function(){els.forEach(function(e){if(e.classList.contains('in'))return;var r=e.getBoundingClientRect();if(r.top<W.innerHeight&&r.bottom>0)show(e)})},2500);
+})();
+function count(el){
+  if(el._c)return;el._c=1;var to=parseFloat(el.getAttribute('data-to')),dec=+el.getAttribute('data-dec')||0;
+  if(RM){el.textContent=fmt(to,dec);return}
+  var s=performance.now(),du=1400;
+  (function tk(n){var t=clamp((n-s)/du),e=1-Math.pow(1-t,4);el.textContent=fmt(to*e,dec);if(t<1)requestAnimationFrame(tk);else el.textContent=fmt(to,dec)})(s);
+}
+/* hero facts tick on load */
+(function(){
+  if(RM)return;var s=performance.now();
+  (function tk(n){var t=clamp((n-s-100)/1000),e=1-Math.pow(1-t,3);fW.textContent=fmt(Math.round(1200*e/10)*10,0);fY.textContent=fmt(97.4*e,1);if(t<1)requestAnimationFrame(tk)})(s);
+})();
+
+/* pointer interactions */
+if(FINE&&!RM){
+  $$('.mag').forEach(function(b){
+    b.addEventListener('pointermove',function(e){var r=b.getBoundingClientRect();b.style.transform='translate('+((e.clientX-r.left-r.width/2)*.18).toFixed(1)+'px,'+((e.clientY-r.top-r.height/2)*.3).toFixed(1)+'px)'});
+    b.addEventListener('pointerleave',function(){b.style.transform=''});
+    b.style.transition='transform .35s cubic-bezier(.2,.7,.2,1),color .45s,border-color .45s';
+  });
+  $$('.cap').forEach(function(c){c.addEventListener('pointermove',function(e){var r=c.getBoundingClientRect();c.style.setProperty('--mx',(e.clientX-r.left)+'px')})});
+  $$('.tilt').forEach(function(c){
+    c.addEventListener('pointermove',function(e){var r=c.getBoundingClientRect(),px=(e.clientX-r.left)/r.width,py=(e.clientY-r.top)/r.height;
+      c.style.setProperty('--ry',((px-.5)*9).toFixed(2)+'deg');c.style.setProperty('--rx',((.5-py)*7).toFixed(2)+'deg');c.style.setProperty('--mx',(px*100)+'%');c.style.setProperty('--my',(py*100)+'%');c.style.transitionDelay='0s'});
+    c.addEventListener('pointerleave',function(){c.style.setProperty('--ry','0deg');c.style.setProperty('--rx','0deg')});
+  });
+}
+
+/* menu */
+(function(){
+  var b=$('#burger'),m=$('#mm');
+  function set(o){hd.classList.toggle('open',o);m.classList.toggle('open',o);b.setAttribute('aria-expanded',o);m.setAttribute('aria-hidden',!o)}
+  b.addEventListener('click',function(){set(!m.classList.contains('open'))});
+  $$('a',m).forEach(function(a){a.addEventListener('click',function(){set(false)})});
+  d.addEventListener('keydown',function(e){if(e.key==='Escape')set(false)});
+  W.addEventListener('resize',function(){if(W.innerWidth>900)set(false)},{passive:true});
+})();
+
+/* form */
+(function(){
+  var f=$('#form'),term=$('#term'),err=$('#err');
+  f.addEventListener('submit',function(e){
+    e.preventDefault();
+    var n=f.elements.name.value.trim(),em=f.elements.email.value.trim();
+    if(!n){err.textContent='› ошибка: укажите имя';f.elements.name.focus();return}
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)){err.textContent='› ошибка: проверьте адрес почты';f.elements.email.focus();return}
+    err.textContent='';
+    $('#lgP').textContent=f.elements.pf.value;$('#lgV').textContent=f.elements.vol.value;
+    $('#lgId').textContent='KL-'+String(1000+Math.floor(Math.random()*9000));
+    term.classList.add('done');
+    $$('#log p').forEach(function(p,i){setTimeout(function(){p.classList.add('on')},RM?0:120+i*320)});
+  });
+})();
+
+measure();req();
+})();
+</script>
+</body>
+</html>

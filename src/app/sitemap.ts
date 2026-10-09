@@ -1,5 +1,6 @@
 import { MetadataRoute } from "next";
 import { flagshipCases } from "@/lib/cases-data";
+import { visibleShowcaseItems } from "@/lib/showcase-data";
 import { SERVICE_SLUGS } from "@/lib/service-slugs";
 import { blogPosts } from "@/lib/blog-data";
 
@@ -42,9 +43,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     entry(`/services/${slug}`, "monthly", 0.7)
   );
 
-  const casePages: MetadataRoute.Sitemap = flagshipCases.map((c) =>
-    entry(`/cases/${c.slug}`, "monthly", 0.7)
-  );
+  const casePages: MetadataRoute.Sitemap = [
+    ...flagshipCases.map((c) => entry(`/cases/${c.slug}`, "monthly", 0.7)),
+    ...visibleShowcaseItems.map((s) => entry(`/cases/${s.slug}`, "monthly", 0.6)),
+  ];
 
   const blogPages: MetadataRoute.Sitemap = blogPosts.map((p) =>
     entry(`/blog/${p.slug}`, "monthly", 0.6)
