@@ -10,8 +10,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   title: locale === "ru" ? "Кейсы" : "Cases",
   description:
     locale === "ru"
-      ? "Избранные работы: Web3, MVP, корпоративные модули, гео/тепловые карты, платёжные потоки. Реальные проекты, реальные результаты. Anteyko — Кыргызстан и Дубай."
-      : "Selected work: Web3, MVP, enterprise modules, geo/heatmap, payment flows. Real projects, real outcomes. Anteyko — Kyrgyzstan & Dubai.",
+      ? "Избранные работы: Web3, MVP, корпоративные модули, гео/тепловые карты, платёжные потоки. Реальные проекты, реальные результаты. Anteyko — Бишкек, Дубай, Стамбул, Чикаго, Шэньчжэнь."
+      : "Selected work: Web3, MVP, enterprise modules, geo/heatmap, payment flows. Real projects, real outcomes. Anteyko — Bishkek, Dubai, Istanbul, Chicago, Shenzhen.",
     alternates: localeAlternates(locale, "/cases"),
   };
 }

@@ -8,6 +8,7 @@ import { PageHero } from "@/components/sections/page-hero";
 import { Section, SectionHeader, AnimatedItem } from "@/components/ui/section";
 import { ButtonLink } from "@/components/ui/link";
 import { PrincipleCard } from "@/components/ui/principle-card";
+import { OFFICES } from "@/lib/locations";
 
 const ClarityIcon = () => (
   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -248,13 +249,8 @@ export function AboutContent() {
                 <p className="text-body-md text-text-secondary mb-5 max-w-xl">
                   {about.geography.description[language]}
                 </p>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                  {[
-                    { city: language === "en" ? "Dubai" : "Дубай", role: language === "en" ? "HQ" : "Штаб", tz: "GMT+4" },
-                    { city: language === "en" ? "Bishkek" : "Бишкек", role: language === "en" ? "Office" : "Офис", tz: "GMT+6" },
-                    { city: language === "en" ? "Moscow" : "Москва", role: language === "en" ? "Clients" : "Клиенты", tz: "GMT+3" },
-                    { city: language === "en" ? "Remote" : "Удалённо", role: language === "en" ? "Worldwide" : "По миру", tz: "Async" },
-                  ].map((loc) => (
+                <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+                  {OFFICES.map((o) => ({ city: o.city[language], role: o.role[language], tz: o.gmt })).map((loc) => (
                     <div key={loc.city} className="rounded-xl border border-border bg-bg-primary p-3 text-center">
                       <p className="text-body-sm font-medium text-text-primary">{loc.city}</p>
                       <p className="text-caption text-text-tertiary">{loc.role}</p>
@@ -298,8 +294,8 @@ export function AboutContent() {
                   </p>
                   <p className="text-body-sm text-text-secondary leading-relaxed mt-3">
                     {language === "en"
-                      ? "Helps founders turn an idea into a production-grade product — no blown deadlines, no rewrites from scratch, no surprises on the invoice. Five years building Anteyko: 40+ products shipped, from startup MVPs to enterprise platforms, across Bishkek and Dubai."
-                      : "Помогает founder'ам превращать идею в production-grade продукт — без срывов сроков, переписывания с нуля и сюрпризов в счёте. Пять лет строит Anteyko: 40+ запущенных продуктов, от MVP стартапов до enterprise-платформ, в Бишкеке и Дубае."}
+                      ? "Helps founders turn an idea into a production-grade product — no blown deadlines, no rewrites from scratch, no surprises on the invoice. Five years building Anteyko: 40+ products shipped, from startup MVPs to enterprise platforms, with offices in Bishkek, Dubai, Istanbul, Chicago and Shenzhen."
+                      : "Помогает founder'ам превращать идею в production-grade продукт — без срывов сроков, переписывания с нуля и сюрпризов в счёте. Пять лет строит Anteyko: 40+ запущенных продуктов, от MVP стартапов до enterprise-платформ, с офисами в Бишкеке, Дубае, Стамбуле, Чикаго и Шэньчжэне."}
                   </p>
                   <div className="mt-4 flex flex-wrap gap-2 justify-center sm:justify-start">
                     <a
@@ -338,8 +334,8 @@ export function AboutContent() {
                 <div>
                   <p className="text-body-sm font-medium text-text-primary">
                     {language === "en"
-                      ? "5+ engineers across Bishkek & Dubai"
-                      : "5+ инженеров в Бишкеке и Дубае"}
+                      ? "A team across 5 cities"
+                      : "Команда в 5 городах"}
                   </p>
                   <p className="text-caption text-text-tertiary mt-0.5">
                     {language === "en"

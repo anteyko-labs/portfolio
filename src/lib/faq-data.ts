@@ -134,8 +134,8 @@ export const faqItems: FAQItem[] = [
       ru: "Работаете ли вы с международными клиентами?",
     },
     answer: {
-      en: "Yes. We're based in Kyrgyzstan with active presence in Dubai. We work with clients globally. Remote-first, timezone-flexible, async-friendly.",
-      ru: "Да. Мы базируемся в Кыргызстане с активным присутствием в Дубае. Работаем с клиентами по всему миру. Удалённо, гибко по часовым поясам, асинхронно.",
+      en: "Yes. We have offices in Bishkek, Dubai, Istanbul, Chicago and Shenzhen and work with clients globally. Remote-first, timezone-flexible, async-friendly.",
+      ru: "Да. У нас офисы в Бишкеке, Дубае, Стамбуле, Чикаго и Шэньчжэне, работаем с клиентами по всему миру. Удалённо, гибко по часовым поясам, асинхронно.",
     },
   },
   {

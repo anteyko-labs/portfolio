@@ -11,8 +11,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   title: locale === "ru" ? "Частые вопросы" : "FAQ",
   description:
     locale === "ru"
-      ? "Частые вопросы о ценах, сроках, правах собственности, NDA, поддержке, Web3 и о том, как мы работаем. Anteyko — Кыргызстан и Дубай."
-      : "Frequently asked questions about pricing, timelines, ownership, NDA, support, Web3, and how we work. Anteyko — Kyrgyzstan & Dubai.",
+      ? "Частые вопросы о ценах, сроках, правах собственности, NDA, поддержке, Web3 и о том, как мы работаем. Anteyko — Бишкек, Дубай, Стамбул, Чикаго, Шэньчжэнь."
+      : "Frequently asked questions about pricing, timelines, ownership, NDA, support, Web3, and how we work. Anteyko — Bishkek, Dubai, Istanbul, Chicago, Shenzhen.",
     alternates: localeAlternates(locale, "/faq"),
   };
 }

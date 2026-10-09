@@ -10,8 +10,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   title: locale === "ru" ? "Процесс" : "Process",
   description:
     locale === "ru"
-      ? "Исследование и объём, дизайн и архитектура, разработка и QA, запуск и поддержка. Четыре фазы с понятными результатами. Базируемся в Кыргызстане и Дубае."
-      : "Discovery & Scope, Design & Architecture, Build & QA, Launch & Support. Four phases with clear deliverables. Based in Kyrgyzstan & Dubai.",
+      ? "Исследование и объём, дизайн и архитектура, разработка и QA, запуск и поддержка. Четыре фазы с понятными результатами. Офисы в Бишкеке, Дубае, Стамбуле, Чикаго и Шэньчжэне."
+      : "Discovery & Scope, Design & Architecture, Build & QA, Launch & Support. Four phases with clear deliverables. Offices in Bishkek, Dubai, Istanbul, Chicago and Shenzhen.",
     alternates: localeAlternates(locale, "/process"),
   };
 }

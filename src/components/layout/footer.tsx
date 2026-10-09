@@ -4,6 +4,7 @@ import { Link as NextLink } from "@/i18n/navigation";
 import Image from "next/image";
 import { useLanguage } from "@/lib/language-context";
 import { ButtonLink } from "@/components/ui/link";
+import { OFFICES } from "@/lib/locations";
 
 const navLinks = [
   { href: "/services", key: "services" },
@@ -93,18 +94,13 @@ export function Footer() {
                 </div>
                 <div>
                   <p className="text-caption text-text-secondary mb-1">
-                    {language === "en" ? "Location" : "Локация"}
+                    {language === "en" ? "Offices" : "Офисы"}
                   </p>
-                  <p className="text-body-sm text-text-secondary">
-                    {language === "en"
-                      ? "Bishkek, Kyrgyzstan"
-                      : "Бишкек, Кыргызстан"}
-                  </p>
-                  <p className="text-body-sm text-text-secondary">
-                    {language === "en"
-                      ? "Dubai, UAE"
-                      : "Дубай, ОАЭ"}
-                  </p>
+                  {OFFICES.map((o) => (
+                    <p key={o.countryCode} className="text-body-sm text-text-secondary">
+                      {o.city[language]}, {o.country[language]}
+                    </p>
+                  ))}
                 </div>
                 {/* Language Switcher */}
                 <div className="pt-2">

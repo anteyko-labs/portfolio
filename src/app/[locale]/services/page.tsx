@@ -10,8 +10,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   title: locale === "ru" ? "Услуги" : "Services",
   description:
     locale === "ru"
-      ? "Launch Site, MVP Sprint, Startup Under Key, Web3 Add-on. Понятный объём, фиксированные сроки, предсказуемый результат. Базируемся в Кыргызстане и Дубае."
-      : "Launch Site, MVP Sprint, Startup Under Key, Web3 Add-on. Clear scope, fixed timeline, predictable outcomes. Based in Kyrgyzstan & Dubai.",
+      ? "Launch Site, MVP Sprint, Startup Under Key, Web3 Add-on. Понятный объём, фиксированные сроки, предсказуемый результат. Офисы в Бишкеке, Дубае, Стамбуле, Чикаго и Шэньчжэне."
+      : "Launch Site, MVP Sprint, Startup Under Key, Web3 Add-on. Clear scope, fixed timeline, predictable outcomes. Offices in Bishkek, Dubai, Istanbul, Chicago and Shenzhen.",
     alternates: localeAlternates(locale, "/services"),
   };
 }

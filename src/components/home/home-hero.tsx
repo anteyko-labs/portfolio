@@ -7,6 +7,7 @@ import { Link as NextLink } from "@/i18n/navigation";
 import { useLanguage } from "@/lib/language-context";
 import { useReducedMotion } from "@/lib/hooks";
 import { MagneticButton } from "@/components/ui/magnetic-button";
+import { OFFICES, localTime } from "@/lib/locations";
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
@@ -78,6 +79,42 @@ function LiveSite({ src, title, width = 1440, height = 900, poster }: { src: str
         style={{ width, height, transform: `scale(${scale})`, opacity: loaded ? 1 : 0 }}
       />
     </div>
+  );
+}
+
+/** Office cities cycling with their local time: "Istanbul 10:42" */
+function OfficeClock({ en }: { en: boolean }) {
+  const reduced = useReducedMotion();
+  const [i, setI] = useState(0);
+  const [now, setNow] = useState<Date | null>(null);
+  useEffect(() => {
+    const tick = () => setNow(new Date());
+    const first = window.setTimeout(tick, 0);
+    const clock = window.setInterval(tick, 15000);
+    const cycle = reduced ? 0 : window.setInterval(() => setI((n) => (n + 1) % OFFICES.length), 2400);
+    return () => {
+      window.clearTimeout(first);
+      window.clearInterval(clock);
+      if (cycle) window.clearInterval(cycle);
+    };
+  }, [reduced]);
+  const o = OFFICES[i];
+  return (
+    <span className="relative inline-flex h-4 min-w-[8.5rem] items-center overflow-hidden">
+      <AnimatePresence mode="popLayout" initial={false}>
+        <motion.span
+          key={o.countryCode}
+          initial={{ y: 14, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{ y: -14, opacity: 0 }}
+          transition={{ duration: 0.4, ease: EASE }}
+          className="inline-flex items-center gap-1.5 whitespace-nowrap"
+        >
+          {o.city[en ? "en" : "ru"]}
+          {now && <span className="tabular-nums text-white/45">{localTime(o.tz, now)}</span>}
+        </motion.span>
+      </AnimatePresence>
+    </span>
   );
 }
 
@@ -240,7 +277,9 @@ export function HomeHero() {
             className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-white/70 backdrop-blur"
           >
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-            {en ? "Product studio · Bishkek · Dubai" : "Студия продуктов · Бишкек · Дубай"}
+            {en ? "Product studio" : "Студия продуктов"}
+            <span className="text-white/30">·</span>
+            <OfficeClock en={en} />
           </motion.p>
 
           <h1 className="mt-7 font-brand text-[2.7rem] font-semibold leading-[0.98] tracking-[-0.035em] sm:text-6xl xl:text-[5.4rem]">
