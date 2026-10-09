@@ -1,0 +1,1208 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>МЕРИДИАН — мультимодальные контейнерные перевозки по Евразии</title>
+<meta name="description" content="«МЕРИДИАН» — логистический оператор: контейнерные поезда, автопарк, морские линии, склады и таможенное оформление от Шанхая до Санкт-Петербурга. Один договор на весь маршрут.">
+<meta name="theme-color" content="#1437FF">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%231437FF'/%3E%3Ccircle cx='16' cy='16' r='9' fill='none' stroke='%23fff' stroke-width='3'/%3E%3Cpath d='M16 3v26' stroke='%23FFD400' stroke-width='3'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=Unbounded:wght@500;700;800;900&display=swap" rel="stylesheet">
+<script>document.documentElement.className+=' js';</script>
+<style>
+:root{
+  --blue:#1437FF; --ink:#0A0F2C; --yel:#FFD400; --white:#fff; --paper:#F3F4FA;
+  --ink2:#161C45; --line:rgba(10,15,44,.14);
+  --fd:"Unbounded","Arial Black","Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --ft:"Onest","Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --pad:clamp(16px,2.8vw,40px);
+  --ease:cubic-bezier(.2,.8,.2,1);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--blue);color:var(--ink);font:400 17px/1.55 var(--ft);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+h1,h2,h3,p,ul,ol,dl,dd,figure{margin:0;padding:0}
+ul,ol{list-style:none}
+a{color:inherit;text-decoration:none}
+button,input,select,textarea{font:inherit;color:inherit}
+svg{display:block}
+:focus-visible{outline:3px solid var(--yel);outline-offset:3px;box-shadow:0 0 0 6px var(--ink)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.skip{position:fixed;left:16px;top:-80px;z-index:200;background:var(--yel);color:var(--ink);padding:12px 16px;font-weight:700}
+.skip:focus{top:16px}
+body::after{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;opacity:.07;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .9 0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* ---------- shared ---------- */
+.wrap{width:100%;max-width:1520px;margin:0 auto;padding:0 var(--pad)}
+.sec{position:relative;padding:clamp(72px,9vw,150px) 0}
+.shutter+.sec{padding-top:clamp(48px,5.5vw,90px)}
+.sec--white{background:var(--white);color:var(--ink)}
+.sec--ink{background:var(--ink);color:var(--white)}
+.sec--blue{background:var(--blue);color:var(--white)}
+.tag{display:inline-flex;align-items:center;gap:12px;font:700 12px/1 var(--fd);letter-spacing:.08em;text-transform:uppercase}
+.tag::before{content:"";width:44px;height:8px;background:currentColor}
+.h2{font:800 clamp(29px,5vw,78px)/1.02 var(--fd);letter-spacing:-.025em;text-transform:uppercase;overflow-wrap:break-word;text-wrap:balance}
+.h2 em{font-style:normal;color:var(--blue)}
+.sec--ink .h2 em,.sec--blue .h2 em,.hs .h2 em{color:var(--yel)}
+.ribs{background-image:repeating-linear-gradient(90deg,transparent 0 20px,rgba(10,15,44,.07) 20px 23px)}
+.btn{position:relative;display:inline-flex;align-items:center;gap:14px;padding:17px 22px;border:0;cursor:pointer;background:var(--yel);color:var(--ink);font:700 12px/1 var(--fd);letter-spacing:.06em;text-transform:uppercase;overflow:hidden;isolation:isolate;transition:color .35s var(--ease),transform .3s var(--ease)}
+.btn::before{content:"";position:absolute;inset:0;background:var(--ink);transform:scaleX(0);transform-origin:0 50%;transition:transform .45s var(--ease);z-index:-1}
+.btn svg{width:20px;height:20px;transition:transform .45s var(--ease)}
+.btn:hover,.btn:focus-visible{color:var(--white)}
+.btn:hover::before,.btn:focus-visible::before{transform:scaleX(1)}
+.btn:hover svg{transform:translateX(6px)}
+.btn--onink::before{background:var(--white)}
+.btn--onink:hover,.btn--onink:focus-visible{color:var(--ink)}
+.ul{background:linear-gradient(currentColor,currentColor) 0 100%/0 2px no-repeat;transition:background-size .4s var(--ease);padding-bottom:3px}
+.ul:hover,.ul:focus-visible{background-size:100% 2px}
+
+/* reveal */
+.js [data-r]{opacity:0;transform:translateY(28px);transition:opacity .8s var(--ease),transform .9s var(--ease);transition-delay:calc(var(--d,0)*90ms)}
+.js [data-r].in{opacity:1;transform:none}
+.js [data-r="wipe"]{opacity:0;transform:none;transition:none}
+.js [data-r="wipe"].in{opacity:1;animation:wipe 1.1s var(--ease) both}
+@keyframes wipe{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+.js [data-r="words"]{opacity:1;transform:none}
+.w{display:inline-block;overflow:hidden;vertical-align:top;padding:.12em 0 .1em;margin:-.12em 0 -.1em}
+.w>span{display:inline-block}
+.js [data-r="words"] .w>span{transform:translateY(112%);transition:transform .85s var(--ease);transition-delay:calc(var(--i,0)*45ms)}
+.js [data-r="words"].in .w>span{transform:none}
+
+/* ---------- header ---------- */
+.hd{position:fixed;z-index:60;top:16px;left:var(--pad);right:var(--pad);display:flex;align-items:stretch;gap:8px;height:46px;pointer-events:none}
+.hd>*{pointer-events:auto}
+.logo{box-shadow:0 0 0 2px var(--ink);display:flex;align-items:center;gap:10px;padding:0 16px 0 12px;background:var(--white);color:var(--ink);font:800 14px/1 var(--fd);letter-spacing:.02em}
+.logo svg{width:26px;height:26px}
+.nav{margin-left:auto;display:flex;align-items:center;gap:4px;padding:0 8px;background:var(--ink);color:var(--white);box-shadow:0 0 0 1px rgba(255,255,255,.14)}
+.nav a{padding:8px 12px;font:600 13px/1 var(--ft);letter-spacing:.02em;position:relative}
+.nav a::after{content:"";position:absolute;left:12px;right:12px;bottom:2px;height:3px;background:var(--yel);transform:scaleX(0);transform-origin:0 50%;transition:transform .35s var(--ease)}
+.nav a:hover::after,.nav a:focus-visible::after{transform:scaleX(1)}
+.hd .btn{padding:0 18px}
+.burger{display:none;margin-left:auto;width:46px;border:0;background:var(--ink);cursor:pointer;position:relative;box-shadow:0 0 0 1px rgba(255,255,255,.14)}
+.burger i{position:absolute;left:12px;right:12px;height:3px;background:var(--white);transition:transform .35s var(--ease),top .35s var(--ease)}
+.burger i:nth-child(1){top:16px}.burger i:nth-child(2){top:27px}
+.burger[aria-expanded="true"] i:nth-child(1){top:21px;transform:rotate(45deg)}
+.burger[aria-expanded="true"] i:nth-child(2){top:21px;transform:rotate(-45deg)}
+.mm{position:fixed;inset:0;z-index:55;background:var(--blue);color:var(--white);padding:96px var(--pad) 32px;display:flex;flex-direction:column;gap:6px;clip-path:inset(0 0 100% 0);visibility:hidden;transition:clip-path .55s var(--ease),visibility 0s .55s}
+.mm.open{clip-path:inset(0);visibility:visible;transition:clip-path .55s var(--ease)}
+.mm a{font:800 clamp(26px,8.4vw,44px)/1.1 var(--fd);text-transform:uppercase;letter-spacing:-.02em;padding:10px 0;border-bottom:4px solid rgba(255,255,255,.22);display:flex;justify-content:space-between;align-items:center}
+.mm a span{font:700 12px var(--fd);color:var(--yel)}
+.mm__ft{margin-top:auto;font-size:15px;opacity:.85}
+
+/* ---------- hero ---------- */
+.hero{position:relative;height:300vh;background:var(--blue);color:var(--white)}
+.hero__pin{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden}
+.map{position:absolute;top:92px;left:50%;width:min(100vw,calc((100svh - 86px)*1.7778));aspect-ratio:16/9;transform:translateX(-50%)}
+.map__in{position:absolute;inset:0;transform-origin:60% 45%;will-change:transform}
+.map svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.map__dots{will-change:transform}
+#dots{fill:none;stroke:#fff;stroke-opacity:.42;stroke-width:5.6;stroke-linecap:round}
+.rt-base{fill:none;stroke:#fff;stroke-opacity:.2;stroke-width:2}
+.rt{fill:none;stroke-linecap:butt}
+.rt--rail{stroke:var(--yel);stroke-width:7}
+.rt--sea{stroke:#fff;stroke-width:6;stroke-linecap:round}
+.rt--ns{stroke:#fff;stroke-width:4}
+.rt--road{stroke:#fff;stroke-width:4}
+.hub__ring{fill:var(--blue);stroke:#fff;stroke-opacity:.6;stroke-width:3}
+.hub__pin{fill:#fff;stroke:var(--ink);stroke-width:5;transform-box:fill-box;transform-origin:center;transform:scale(0);transition:transform .5s cubic-bezier(.3,1.7,.5,1)}
+.hub__lbl{font:700 19px/1 var(--fd);letter-spacing:.04em;fill:#fff;stroke:var(--blue);stroke-width:7;paint-order:stroke;stroke-linejoin:round;transform-box:fill-box;transform-origin:center;transform:scale(.4);opacity:0;transition:transform .5s cubic-bezier(.3,1.5,.5,1) .06s,opacity .25s .06s}
+.hub.on .hub__pin{transform:scale(1)}
+.hub.on .hub__lbl{transform:scale(1);opacity:1}
+.hub--main .hub__pin{fill:var(--yel)}
+.box{fill:#fff;stroke:var(--ink);stroke-width:3}
+.box--y{fill:var(--yel)}
+.mer{position:absolute;top:-4%;bottom:-6%;left:0;width:2px;background:var(--yel);opacity:.9;will-change:transform}
+.mer span{position:absolute;top:0;left:8px;white-space:nowrap;font:700 11px/1 var(--fd);letter-spacing:.06em;color:var(--ink);background:var(--yel);padding:5px 7px}
+
+.stack{position:absolute;left:var(--pad);bottom:clamp(28px,5vh,52px);display:grid;z-index:3;--fs:min(5.5vw,9.6vh)}
+.eyebrow{position:absolute;left:0;bottom:100%;margin-bottom:14px;white-space:nowrap;font:700 12px/1 var(--fd);letter-spacing:.08em;text-transform:uppercase;display:flex;align-items:center;gap:10px}
+.eyebrow::before{content:"";width:30px;height:8px;background:var(--yel)}
+.stack__set{grid-area:1/1;display:flex;flex-direction:column;align-items:flex-start;gap:6px;align-self:end}
+.stack__set:not(:first-of-type){display:none}
+.js .stack__set:not(:first-of-type){display:flex}
+.js .stack__set:not(:first-of-type) .blk{--x:1}
+.blk{position:relative;display:block;white-space:nowrap;padding:.15em .3em .13em;font:800 var(--fs)/1 var(--fd);letter-spacing:-.03em;text-transform:uppercase;transform:translate3d(calc(var(--x,0)*(-100% - 14vw)),0,0);will-change:transform;
+  background-image:repeating-linear-gradient(90deg,transparent 0 .3em,rgba(10,15,44,.07) .3em .34em)}
+.blk--w{background-color:var(--white);color:var(--ink)}
+.blk--y{background-color:var(--yel);color:var(--ink)}
+.blk--k{background-color:var(--ink);color:var(--white);background-image:repeating-linear-gradient(90deg,transparent 0 .3em,rgba(255,255,255,.06) .3em .34em)}
+.blk::after{content:attr(data-code);position:absolute;right:.5em;top:.45em;font:700 9px/1 var(--ft);letter-spacing:.12em;opacity:.55;writing-mode:vertical-rl;display:none}
+
+.lead{position:absolute;right:var(--pad);bottom:clamp(28px,5vh,52px);width:min(310px,24vw);background:var(--ink);color:var(--white);padding:22px 22px 0;z-index:3}
+.lead p{font-size:15.5px;line-height:1.5;margin-bottom:20px}
+.lead .btn{width:calc(100% + 44px);margin:0 -22px;justify-content:space-between}
+
+.bd{position:absolute;z-index:3;top:84px;right:var(--pad);width:min(560px,40vw);background:var(--ink);color:var(--white);padding:2.2cqw;container-type:inline-size;box-shadow:8px 8px 0 rgba(10,15,44,.28)}
+.bd__top{display:grid;grid-template-columns:20fr 4fr 2fr;gap:1.8cqw;align-items:end;padding:0 0 1.6cqw;font:700 max(8px,1.9cqw)/1 var(--fd);letter-spacing:.08em;text-transform:uppercase}
+.bd__top b{display:flex;align-items:center;gap:1.4cqw;color:var(--yel);font-weight:700}
+.bd__top b::before{content:"";width:1.6cqw;height:1.6cqw;border-radius:50%;background:var(--yel);animation:blink 1.6s steps(2) infinite}
+.bd__top b small{font:inherit;color:rgba(255,255,255,.62);margin-left:auto}
+.bd__top span{color:rgba(255,255,255,.62)}
+.bd__rows{display:grid;gap:1cqw}
+.bd__row{display:grid;grid-template-columns:20fr 4fr 2fr;gap:1.8cqw}
+.bd__g{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:.45cqw;perspective:300px}
+.fc{position:relative;aspect-ratio:1/1.5;background:#232B66;border-radius:2px;display:grid;place-items:center;font:700 max(9px,2.65cqw)/1 var(--ft);overflow:hidden}
+.fc::after{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:rgba(0,0,0,.55)}
+.fc i{font-style:normal;display:block;backface-visibility:hidden}
+.bd__g--d .fc{color:var(--yel);background:#2E3880}
+.bd__g--m .fc{color:#BFD0FF}
+.bd__plain{font:700 13px/1.8 var(--ft);letter-spacing:.08em}
+@keyframes blink{50%{opacity:.25}}
+
+.hero__foot{position:absolute;z-index:3;left:50%;bottom:clamp(28px,5vh,52px);transform:translateX(-50%);display:flex;align-items:center;gap:26px;font:600 12px/1 var(--ft);letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;margin-left:6vw}
+.ph{display:flex;align-items:center;gap:12px;font:800 13px/1 var(--fd)}
+.ph__bar{width:120px;height:8px;background:rgba(255,255,255,.25);position:relative;overflow:hidden}
+.ph__bar i{position:absolute;inset:0;background:var(--yel);transform-origin:0 50%;transform:scaleX(var(--p,0))}
+.lg{display:flex;gap:18px}
+.lg li{display:flex;align-items:center;gap:8px}
+.lg i{display:block;width:30px;height:0;border-top:5px solid var(--yel)}
+.lg li:nth-child(2) i{border-top:5px dotted #fff}
+.lg li:nth-child(3) i{border-top:3px dashed #fff}
+
+/* ---------- marquee ---------- */
+.mq{background:var(--yel);color:var(--ink);overflow:hidden;border-top:8px solid var(--ink);border-bottom:8px solid var(--ink);position:relative;z-index:2}
+.mq__in{will-change:transform}
+.mq__t{display:flex;width:max-content;animation:mq 30s linear infinite}
+.mq__t>div{display:flex;align-items:center;gap:28px;padding:18px 14px;font:800 clamp(22px,3.4vw,46px)/1 var(--fd);text-transform:uppercase;letter-spacing:-.02em;white-space:nowrap}
+.mq__t svg{width:.9em;height:.9em;flex:none}
+@keyframes mq{to{transform:translateX(-25%)}}
+
+/* ---------- shutter ---------- */
+.shutter{display:flex;height:20vh;background:var(--from);overflow:hidden;margin-bottom:-1px;position:relative;z-index:1}
+.shutter i{flex:1;margin-right:-1px;background:var(--to);transform-origin:50% 100%;transform:scaleY(var(--s,1));will-change:transform}
+
+/* ---------- about ---------- */
+.about__head{display:grid;gap:28px;margin-bottom:clamp(40px,6vw,96px)}
+.about__head .h2{max-width:24ch}
+.about__grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(32px,6vw,110px);align-items:start}
+.about__text p{font-size:clamp(17px,1.5vw,21px);line-height:1.5;max-width:34em}
+.about__text p+p{margin-top:1.1em;color:#343A5E}
+.facts{margin-top:36px;border-top:8px solid var(--ink)}
+.facts li{display:flex;gap:18px;align-items:baseline;padding:16px 0;border-bottom:2px solid var(--ink);font-weight:600;font-size:17px}
+.facts b{font:800 13px/1 var(--fd);color:var(--blue);min-width:2.2em}
+.yard{background:var(--paper);padding:clamp(14px,2vw,28px);position:relative}
+.yard svg{width:100%;height:auto}
+.yard__cap{position:absolute;left:clamp(14px,2vw,28px);top:clamp(14px,2vw,28px);font:700 11px/1.3 var(--fd);letter-spacing:.06em;text-transform:uppercase;color:var(--ink)}
+.nums{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:clamp(48px,7vw,110px)}
+.num{padding:clamp(18px,2vw,30px);min-height:clamp(190px,20vw,300px);display:flex;flex-direction:column;justify-content:space-between;gap:24px}
+.num__v{font:800 clamp(46px,5.6vw,92px)/.9 var(--fd);letter-spacing:-.04em;white-space:nowrap}
+.num__v small{font:700 .26em/1 var(--fd);letter-spacing:0;margin-left:.3em;text-transform:uppercase}
+.num__l{font-weight:600;font-size:15.5px;line-height:1.35;max-width:17em}
+.num--b{background-color:var(--blue);color:#fff}
+.num--o{background-color:var(--white);box-shadow:inset 0 8px 0 var(--ink),inset 0 0 0 2px var(--ink);background-image:none}
+.num--y{background-color:var(--yel)}
+.num--k{background-color:var(--ink);color:#fff}
+
+/* ---------- modes / horizontal ---------- */
+.hs{position:relative;background:var(--ink);color:var(--white)}
+.hs__pin{position:relative;padding:96px 0 40px;overflow:hidden}
+.hs__head{padding:0 var(--pad);display:flex;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:28px}
+.hs__head .h2{font-size:clamp(25px,4.1vw,64px);margin-top:18px}
+.hs__cnt{font:800 clamp(40px,6vw,96px)/.85 var(--fd);letter-spacing:-.04em;color:var(--yel);white-space:nowrap;display:flex;align-items:baseline}
+.hs__cnt small{font:700 14px/1 var(--fd);color:rgba(255,255,255,.6);letter-spacing:.04em;margin-left:10px}
+.hs__view{overflow-x:auto;overflow-y:hidden}
+.hs__track{position:relative;display:flex;align-items:flex-end;width:max-content;padding:0 8vw 26px 6vw;will-change:transform}
+.hs__track::before{content:"";position:absolute;left:0;right:0;bottom:16px;height:6px;background:#fff}
+.hs__track::after{content:"";position:absolute;left:0;right:0;bottom:0;height:12px;opacity:.35;background:repeating-linear-gradient(90deg,#fff 0 6px,transparent 6px 36px)}
+.loco{flex:none;width:clamp(200px,22vw,330px);margin-right:26px;position:relative}
+.loco svg{width:100%;height:auto}
+.car{flex:none;width:clamp(350px,31vw,470px);margin-right:26px;position:relative}
+.car::after{content:"";position:absolute;right:-26px;bottom:26px;width:26px;height:8px;background:#fff}
+.loco::after{content:"";position:absolute;right:-26px;bottom:26px;width:26px;height:8px;background:#fff}
+.car__box{height:clamp(400px,calc(100svh - 370px),560px);padding:clamp(18px,1.7vw,26px);display:flex;flex-direction:column;position:relative}
+.car--b .car__box{background-color:var(--blue);color:#fff;background-image:repeating-linear-gradient(90deg,transparent 0 20px,rgba(255,255,255,.07) 20px 23px)}
+.car--y .car__box{background-color:var(--yel);color:var(--ink)}
+.car--w .car__box{background-color:#fff;color:var(--ink)}
+.car__top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.car__n{font:800 clamp(44px,4.6vw,72px)/.8 var(--fd);letter-spacing:-.04em}
+.car__code{font:700 10.5px/1.5 var(--ft);letter-spacing:.14em;text-transform:uppercase;text-align:right;opacity:.8}
+.car__pic{width:clamp(110px,12.5vw,190px);margin:auto 0 auto auto;color:inherit}
+.car__pic *{fill:none;stroke:currentColor;stroke-width:6;stroke-dasharray:1;stroke-dashoffset:calc(1 - var(--draw,1))}
+.car h3{font:800 clamp(20px,2.1vw,31px)/1.05 var(--fd);text-transform:uppercase;letter-spacing:-.02em;margin-bottom:10px}
+.car p{font-size:15px;line-height:1.45;margin-bottom:16px;max-width:30em}
+.fig{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;border-top:6px solid currentColor;padding-top:12px}
+.fig dt{font:800 clamp(19px,1.9vw,28px)/1 var(--fd);letter-spacing:-.03em;white-space:nowrap}
+.fig dd{font-size:12.5px;line-height:1.3;font-weight:600;margin-top:6px;overflow-wrap:break-word}
+.fig>div{min-width:0}
+.ch{height:26px;position:relative;border-top:8px solid #fff;margin:0 14px}
+.wh{position:absolute;top:-2px;width:34px;height:34px;border-radius:50%;background:var(--ink);border:6px solid #fff;transform:rotate(var(--rot,0deg));will-change:transform}
+.wh::after{content:"";position:absolute;left:50%;top:1px;bottom:1px;width:4px;margin-left:-2px;background:var(--yel)}
+.wh:nth-child(1){left:6%}.wh:nth-child(2){left:calc(6% + 42px)}.wh:nth-child(3){right:calc(6% + 42px)}.wh:nth-child(4){right:6%}
+.hs__end{flex:none;width:clamp(260px,26vw,380px);align-self:stretch;display:flex;flex-direction:column;justify-content:center;gap:22px;padding:0 0 60px 20px}
+.hs__end b{font:800 clamp(22px,2.4vw,36px)/1.08 var(--fd);text-transform:uppercase;letter-spacing:-.02em}
+.hs__bar{position:absolute;left:var(--pad);right:var(--pad);bottom:16px;height:4px;background:rgba(255,255,255,.18);display:none}
+.hs__bar i{position:absolute;inset:0;background:var(--yel);transform-origin:0 50%;transform:scaleX(var(--q,0))}
+.js .hs.pin .hs__pin{position:sticky;top:0;height:100vh;height:100svh;display:flex;flex-direction:column;justify-content:flex-end;padding-bottom:44px}
+.js .hs.pin .hs__view{overflow:visible}
+.js .hs.pin .hs__bar{display:block}
+
+/* ---------- calculator ---------- */
+.calc__grid{display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);gap:clamp(28px,5vw,90px);align-items:start;margin-top:clamp(36px,5vw,72px)}
+.calc__intro{max-width:30em;font-size:clamp(17px,1.4vw,20px);margin-top:22px;color:rgba(255,255,255,.92)}
+.fld{display:block;margin-bottom:22px}
+.fld>span,.fld>legend{display:block;font:700 11px/1 var(--fd);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;padding:0}
+fieldset.fld{border:0;padding:0;margin:0 0 22px;min-width:0}
+.sel{position:relative}
+.sel select{width:100%;appearance:none;-webkit-appearance:none;border:0;border-radius:0;background:var(--ink);color:#fff;padding:18px 54px 18px 18px;font:700 clamp(17px,1.6vw,22px)/1.2 var(--fd);letter-spacing:-.01em;cursor:pointer}
+.sel::after{content:"";position:absolute;right:20px;top:50%;width:12px;height:12px;border-right:4px solid var(--yel);border-bottom:4px solid var(--yel);transform:translateY(-70%) rotate(45deg);pointer-events:none}
+.calc__ft{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.chips{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.chip{position:relative;display:block;cursor:pointer}
+.chip input{position:absolute;opacity:0;inset:0;width:100%;height:100%;margin:0;cursor:pointer}
+.chip span{display:flex;align-items:center;min-height:54px;padding:10px 14px;border:3px solid #fff;font-weight:700;font-size:15px;line-height:1.2;transition:background .25s,color .25s,border-color .25s}
+.chip:hover span{background:rgba(255,255,255,.14)}
+.chip input:checked+span{background:var(--yel);border-color:var(--yel);color:var(--ink)}
+.chip input:focus-visible+span{outline:3px solid var(--yel);outline-offset:3px}
+.out{display:block;background:#fff;color:var(--ink);padding:clamp(20px,2.6vw,40px);position:relative;box-shadow:12px 12px 0 var(--ink)}
+.out__top{display:flex;justify-content:space-between;gap:12px;align-items:center;font:700 11px/1.3 var(--fd);letter-spacing:.08em;text-transform:uppercase}
+.out__demo{background:var(--yel);padding:7px 9px;white-space:nowrap}
+.out__route{font:800 clamp(17px,2vw,28px)/1.1 var(--fd);text-transform:uppercase;letter-spacing:-.02em;margin-top:22px;display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px}
+.out__route svg{width:26px;height:26px;color:var(--blue)}
+.out__days{display:flex;align-items:flex-end;gap:16px;margin:10px 0 22px;color:var(--blue)}
+.out__days b{font:900 clamp(84px,13vw,200px)/.82 var(--fd);letter-spacing:-.06em;font-variant-numeric:tabular-nums}
+.out__days span{font:700 clamp(13px,1.2vw,17px)/1.25 var(--fd);text-transform:uppercase;color:var(--ink);padding-bottom:.4em}
+.segs{display:flex;height:54px;gap:4px}
+.seg{flex:var(--g) 1 0;min-width:0;display:flex;align-items:center;justify-content:center;font:800 13px/1 var(--fd);overflow:hidden;white-space:nowrap;animation:segin .6s var(--ease) both;animation-delay:calc(var(--i)*70ms)}
+.seg--sea{background:var(--blue);color:#fff}.seg--rail{background:var(--yel)}.seg--road{background:var(--ink);color:#fff}.seg--cus{background:#fff;box-shadow:inset 0 0 0 3px var(--ink)}.seg--ext{background:repeating-linear-gradient(135deg,#fff 0 7px,var(--yel) 7px 14px);box-shadow:inset 0 0 0 3px var(--ink)}
+@keyframes segin{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+.out__lg{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:16px;font-size:14px;font-weight:600}
+.out__lg li{display:flex;align-items:center;gap:8px}
+.out__lg i{width:14px;height:14px;flex:none}
+.out__note{margin-top:20px;padding-top:16px;border-top:2px solid var(--ink);font-size:14px;line-height:1.45;color:#343A5E}
+
+/* ---------- tracking ---------- */
+.trk__grid{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(28px,6vw,110px);margin-top:clamp(36px,5vw,80px);align-items:start}
+.tkt{position:sticky;top:92px;background:var(--blue);color:#fff;padding:clamp(20px,2.4vw,34px);background-image:repeating-linear-gradient(90deg,transparent 0 20px,rgba(255,255,255,.06) 20px 23px)}
+.tkt__row{display:flex;justify-content:space-between;gap:16px;font:700 11px/1.4 var(--fd);letter-spacing:.08em;text-transform:uppercase}
+.tkt__row span:last-child{color:var(--yel);text-align:right}
+.tkt__no{font:800 clamp(22px,2.6vw,38px)/1 var(--fd);letter-spacing:-.02em;margin:22px 0 6px}
+.tkt__rt{font-weight:600;font-size:16px}
+.tkt__pc{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-top:clamp(24px,4vw,56px)}
+.tkt__pc b{font:900 clamp(60px,8vw,124px)/.82 var(--fd);letter-spacing:-.05em;font-variant-numeric:tabular-nums}
+.tkt__pc b small{font-size:.35em;letter-spacing:0;margin-left:.1em}
+.tkt__pc>span{font:700 12px/1.4 var(--fd);text-transform:uppercase;letter-spacing:.06em;text-align:right;padding-bottom:6px}
+.tkt__bar{position:relative;height:8px;background:rgba(255,255,255,.28);margin-top:34px}
+.tkt__bar i{position:absolute;inset:0;background:var(--yel);transform-origin:0 50%;transform:scaleX(var(--tp,1))}
+.tkt__box{position:absolute;left:0;top:-22px;width:38px;height:18px;margin-left:-19px;background:var(--yel);border:3px solid var(--ink);will-change:transform}
+.tkt__ends{display:flex;justify-content:space-between;margin-top:12px;font:700 11px/1 var(--fd);letter-spacing:.06em;text-transform:uppercase}
+.tl{position:relative;padding-left:44px}
+.tl::before{content:"";position:absolute;left:10px;top:0;bottom:0;width:8px;background:var(--line)}
+.tl__fill{position:absolute;left:10px;top:0;bottom:0;width:8px;background:var(--blue);transform-origin:50% 0;transform:scaleY(var(--tp,1));will-change:transform}
+.ev{position:relative;padding:0 0 clamp(30px,4vw,56px);transition:opacity .5s var(--ease)}
+.ev:last-child{padding-bottom:0}
+.ev::before{content:"";position:absolute;left:-44px;top:2px;width:28px;height:28px;background:#fff;border:6px solid var(--blue);transition:background .35s,transform .45s cubic-bezier(.3,1.7,.5,1)}
+.js .ev{opacity:.3}
+.js .ev::before{border-color:#B9BFD9}
+.js .ev.on{opacity:1}
+.js .ev.on::before{border-color:var(--blue);background:var(--yel);transform:rotate(45deg) scale(.9)}
+.ev__d{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;font:700 11px/1 var(--fd);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px}
+.ev__d span{background:var(--ink);color:#fff;padding:6px 8px}
+.ev__d em{font-style:normal;color:var(--blue)}
+.ev h3{font:800 clamp(18px,2vw,28px)/1.1 var(--fd);text-transform:uppercase;letter-spacing:-.02em;margin-bottom:8px}
+.ev p{max-width:34em;color:#343A5E}
+
+/* ---------- contacts ---------- */
+.ct__grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(32px,6vw,110px);align-items:start}
+.ct .h2{margin:24px 0 28px}
+.ct__lead{font-size:clamp(17px,1.4vw,20px);max-width:28em;color:rgba(255,255,255,.86)}
+.ct__list{margin-top:40px;border-top:8px solid #fff}
+.ct__list li{display:grid;grid-template-columns:8.5em minmax(0,1fr);gap:16px;padding:16px 0;border-bottom:2px solid rgba(255,255,255,.3);align-items:baseline}
+.ct__list span{font:700 11px/1.3 var(--fd);letter-spacing:.08em;text-transform:uppercase;color:var(--yel)}
+.ct__list a,.ct__list b{font:700 clamp(16px,1.7vw,24px)/1.2 var(--fd);letter-spacing:-.01em;overflow-wrap:anywhere}
+.form{background:var(--blue);padding:clamp(20px,2.6vw,40px);box-shadow:12px 12px 0 var(--yel);position:relative}
+.form__row{display:grid;grid-template-columns:1fr 1fr;gap:0 20px}
+.inp{display:block;margin-bottom:22px}
+.inp span{display:block;font:700 11px/1 var(--fd);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px}
+.inp input,.inp textarea{width:100%;background:transparent;border:0;border-bottom:4px solid #fff;border-radius:0;padding:10px 0;font-size:18px;font-weight:500;color:#fff;transition:border-color .25s}
+.inp textarea{resize:vertical;min-height:84px}
+.inp input::placeholder,.inp textarea::placeholder{color:rgba(255,255,255,.6)}
+.inp input:focus,.inp textarea:focus{outline:0;border-color:var(--yel)}
+.form__ft{display:flex;flex-wrap:wrap;gap:16px 24px;align-items:center;justify-content:space-between}
+.form__ft small{font-size:13px;line-height:1.4;color:rgba(255,255,255,.82);max-width:22em}
+.form__ok{position:absolute;inset:0;background:var(--yel);color:var(--ink);padding:clamp(20px,2.6vw,40px);display:flex;flex-direction:column;justify-content:center;gap:16px;clip-path:inset(0 100% 0 0);visibility:hidden;transition:clip-path .7s var(--ease),visibility 0s .7s}
+.form.sent .form__ok{clip-path:inset(0);visibility:visible;transition:clip-path .7s var(--ease)}
+.form__ok b{font:800 clamp(24px,3vw,44px)/1.02 var(--fd);text-transform:uppercase;letter-spacing:-.02em}
+.form__ok svg{width:64px;height:64px}
+
+/* ---------- footer ---------- */
+.ft{background:var(--blue);color:#fff;padding:clamp(40px,5vw,72px) 0 28px;position:relative;overflow:hidden}
+.ft__word{width:100%;height:auto;margin-bottom:clamp(24px,3vw,44px)}
+.ft__word text{font:900 150px/1 var(--fd);fill:none;stroke:#fff;stroke-width:2.5}
+.ft__word .f{fill:var(--yel);stroke:none}
+.ft__cols{display:flex;flex-wrap:wrap;justify-content:space-between;gap:20px 40px;border-top:8px solid #fff;padding-top:22px;font-size:15px}
+.ft__cols nav{display:flex;flex-wrap:wrap;gap:8px 22px;font-weight:600}
+.ft__sm{margin-top:28px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 24px;font-size:13px;color:rgba(255,255,255,.85)}
+.ft__sm a{text-decoration:underline;text-underline-offset:3px}
+
+/* ---------- responsive ---------- */
+@media (max-width:1100px){
+  .nav a{padding:8px 8px}
+  .hero__foot .lg{display:none}
+}
+@media (max-width:899px){
+  body{font-size:16px}
+  .nav,.hd .btn{display:none}
+  .burger{display:block}
+  .hero{height:280vh}
+  .map{top:29svh;left:0;height:50svh;width:auto;transform:none}
+  .map__in{transform-origin:0 0}
+  .hub__lbl{font-size:36px;stroke-width:12}
+  .hub__pin{stroke-width:8}
+  #dots{stroke-width:6.4}
+  .rt--rail{stroke-width:11}.rt--sea{stroke-width:9}.rt--ns,.rt--road{stroke-width:7}
+  .mer span{font-size:9px}
+  .stack{top:78px;bottom:auto;left:var(--pad);--fs:min(11.4vw,7.2svh)}
+  .stack__set{align-self:start;gap:4px}
+  .eyebrow{display:none}
+  .lead{display:none}
+  .bd{top:auto;bottom:14px;left:var(--pad);right:var(--pad);width:auto;padding:10px;box-shadow:5px 5px 0 rgba(10,15,44,.28)}
+  .hero__foot{left:var(--pad);right:var(--pad);bottom:auto;top:calc(79svh + 14px);transform:none;margin:0;justify-content:space-between;gap:12px;font-size:10px}
+  .hero__foot .lg{display:flex;gap:12px}
+  .lg i{width:18px}
+  .ph__bar{width:54px}
+  .about__grid,.calc__grid,.trk__grid,.ct__grid{grid-template-columns:minmax(0,1fr)}
+  .nums{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .num{min-height:170px}
+  .num__v{font-size:clamp(34px,10.4vw,64px)}
+  .hs__pin{padding-top:76px}
+  .hs__head{margin-bottom:18px}
+  .hs__cnt small{display:none}
+  .car{width:min(82vw,400px);margin-right:20px}
+  .car::after,.loco::after{right:-20px;width:20px}
+  .loco{width:44vw;margin-right:20px}
+  .car__box{height:clamp(380px,calc(100svh - 300px),520px)}
+  .car__pic{width:84px}
+  .hs__end{width:78vw}
+  .tkt{position:relative;top:0}
+  .form__row{grid-template-columns:1fr}
+  .shutter{height:14vh}
+  .out{box-shadow:8px 8px 0 var(--ink)}
+  .form{box-shadow:8px 8px 0 var(--yel)}
+}
+@media (max-width:899px) and (max-height:700px){
+  .hero__foot{display:none}
+  .car p{display:none}
+}
+@media (max-width:430px){
+  .calc__ft{grid-template-columns:1fr}
+  .fig{gap:8px}
+  .fig dd{font-size:11.5px}
+  .ct__list li{grid-template-columns:1fr;gap:6px}
+}
+@media (min-width:900px) and (max-height:760px){
+  .car p{display:none}
+  .car__box{height:clamp(330px,calc(100svh - 330px),560px)}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001s!important;animation-iteration-count:1!important;transition-duration:.001s!important;transition-delay:0s!important}
+  .mq__t{animation:none}
+  .js [data-r]{opacity:1;transform:none;clip-path:none;animation:none}
+  .js [data-r="words"] .w>span{transform:none}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#about">К содержанию</a>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="i-arr" viewBox="0 0 24 24"><path d="M2 12h17M12 4l8 8-8 8" fill="none" stroke="currentColor" stroke-width="3.4"/></symbol>
+    <pattern id="ribs" width="14" height="10" patternUnits="userSpaceOnUse"><rect x="10" width="3" height="10" fill="#0A0F2C" opacity=".14"/></pattern>
+  </defs>
+</svg>
+
+<header class="hd">
+  <a class="logo" href="#top" aria-label="МЕРИДИАН — в начало">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="11" fill="none" stroke="#0A0F2C" stroke-width="3.5"/><path d="M16 1v30" stroke="#1437FF" stroke-width="3.5"/><path d="M5 16h22" stroke="#0A0F2C" stroke-width="3.5"/></svg>
+    МЕРИДИАН
+  </a>
+  <nav class="nav" aria-label="Основная навигация">
+    <a href="#about">О компании</a>
+    <a href="#modes">Перевозки</a>
+    <a href="#calc">Сроки</a>
+    <a href="#track">Трекинг</a>
+    <a href="#contact">Контакты</a>
+  </nav>
+  <a class="btn" href="#calc" data-magnet>Рассчитать срок <svg aria-hidden="true"><use href="#i-arr"/></svg></a>
+  <button class="burger" id="burger" aria-expanded="false" aria-controls="mm" aria-label="Меню"><i></i><i></i></button>
+</header>
+<div class="mm" id="mm" aria-hidden="true">
+  <a href="#about">О компании <span>01</span></a>
+  <a href="#modes">Перевозки <span>02</span></a>
+  <a href="#calc">Сроки <span>03</span></a>
+  <a href="#track">Трекинг <span>04</span></a>
+  <a href="#contact">Контакты <span>05</span></a>
+  <p class="mm__ft">0709&nbsp;927&nbsp;895<br>hello@meridian.example</p>
+</div>
+
+<main>
+<!-- ================= HERO ================= -->
+<section class="hero" id="top" aria-label="МЕРИДИАН: перевозки через Евразию">
+  <div class="hero__pin">
+    <div class="map" aria-hidden="true">
+      <div class="map__in" id="mapIn">
+        <svg class="map__dots" viewBox="0 0 1600 900" preserveAspectRatio="none"><path id="dots" d=""/></svg>
+        <svg class="map__routes" viewBox="0 0 1600 900" preserveAspectRatio="none" id="routes"></svg>
+        <div class="mer" id="mer"><span id="merLbl">121° в. д.</span></div>
+      </div>
+    </div>
+
+    <div class="bd" id="board" role="img" aria-label="Табло ближайших отправлений: Шанхай — Москва, железная дорога, 18 суток; Владивосток — Москва, 11 суток; Шанхай — Алматы, 9 суток">
+      <div class="bd__top"><b>Отправления <small id="clock">МСК</small></b><span>Тип</span><span>Сут.</span></div>
+      <div class="bd__rows" id="bdRows">
+        <div class="bd__plain">ШАНХАЙ–МОСКВА · ЖД · 18</div>
+        <div class="bd__plain">ВЛАДИВОСТОК–МОСКВА · ЖД · 11</div>
+        <div class="bd__plain">ШАНХАЙ–АЛМАТЫ · ЖД · 9</div>
+      </div>
+    </div>
+
+    <div class="stack" id="stack">
+      <p class="eyebrow">Контейнерный оператор · ЖД · авто · море</p>
+      <h1 class="stack__set"><span class="blk blk--w">Везём</span><span class="blk blk--y">через</span><span class="blk blk--k">Евразию</span></h1>
+      <p class="stack__set" aria-hidden="true"><span class="blk blk--y">Поездом</span><span class="blk blk--k">фурой</span><span class="blk blk--w">морем</span></p>
+      <p class="stack__set" aria-hidden="true"><span class="blk blk--k">Точно</span><span class="blk blk--w">в&nbsp;срок</span><span class="blk blk--y">18&nbsp;суток</span></p>
+    </div>
+
+    <div class="lead">
+      <p>Контейнер из Шанхая в&nbsp;Москву&nbsp;— за&nbsp;18&nbsp;суток по&nbsp;одному договору. Поезд, фура, судно, склад и&nbsp;таможня в&nbsp;одних руках.</p>
+      <a class="btn" href="#calc">Узнать срок <svg aria-hidden="true"><use href="#i-arr"/></svg></a>
+    </div>
+
+    <div class="hero__foot" aria-hidden="true">
+      <div class="ph"><span id="phN">01</span><span class="ph__bar"><i id="phBar"></i></span><span>03</span></div>
+      <ul class="lg"><li><i></i>ЖД</li><li><i></i>Море</li><li><i></i>Авто</li></ul>
+    </div>
+  </div>
+</section>
+
+<div class="mq" aria-hidden="true"><div class="mq__in" id="mq"><div class="mq__t" id="mqT"></div></div></div>
+
+<!-- ================= ABOUT ================= -->
+<section class="sec sec--white" id="about">
+  <div class="wrap">
+    <div class="about__head">
+      <span class="tag" data-r>01 — О компании</span>
+      <h2 class="h2" data-r="words">Один договор — и&nbsp;груз едет <em>от&nbsp;завода в&nbsp;Азии</em> до&nbsp;вашей рампы</h2>
+    </div>
+    <div class="about__grid">
+      <div class="about__text">
+        <p data-r>«МЕРИДИАН» собирает маршрут из&nbsp;железной дороги, автотранспорта и&nbsp;морских линий так, чтобы контейнер не&nbsp;ждал на&nbsp;стыках. Свои терминалы, свой парк и&nbsp;свой таможенный представитель&nbsp;— за&nbsp;срок отвечает один оператор, а&nbsp;не&nbsp;пять подрядчиков.</p>
+        <p data-r style="--d:1">Возим всё, что помещается в&nbsp;контейнер: электронику, автокомпоненты, станки, продукты с&nbsp;температурным режимом. Каждый рейс виден в&nbsp;личном кабинете с&nbsp;точностью до&nbsp;перегона.</p>
+        <ul class="facts">
+          <li data-r><b>A</b>Фиксируем ставку на&nbsp;30&nbsp;дней с&nbsp;момента расчёта</li>
+          <li data-r style="--d:1"><b>B</b>Страхуем груз на&nbsp;полную инвойсную стоимость</li>
+          <li data-r style="--d:2"><b>C</b>Диспетчер на&nbsp;связи 24/7 — один на&nbsp;весь рейс</li>
+        </ul>
+      </div>
+      <figure class="yard" data-r="wipe" aria-label="Схема: козловой кран ставит контейнер в штабель">
+        <figcaption class="yard__cap">Терминал «Восток»<br>штабель 4 × 3</figcaption>
+        <svg viewBox="0 0 640 470" id="yard" aria-hidden="true">
+          <!-- crane -->
+          <g fill="none" stroke="#0A0F2C" stroke-width="10">
+            <path d="M40 78h560"/><path d="M78 78v352M562 78v352"/><path d="M50 430h56M534 430h56"/>
+            <path d="M78 150l56-72M562 150l-56-72" stroke-width="6"/>
+          </g>
+          <g id="yTrolley">
+            <rect x="-34" y="60" width="68" height="26" fill="#0A0F2C"/>
+            <line id="yCable1" x1="-22" y1="86" x2="-22" y2="150" stroke="#0A0F2C" stroke-width="4"/>
+            <line id="yCable2" x1="22" y1="86" x2="22" y2="150" stroke="#0A0F2C" stroke-width="4"/>
+            <g id="yLoad">
+              <rect x="-62" y="0" width="124" height="10" fill="#0A0F2C"/>
+              <rect x="-58" y="10" width="116" height="62" fill="#FFD400"/><rect x="-58" y="10" width="116" height="62" fill="url(#ribs)"/>
+              <text x="-48" y="64" font-family="Arial,sans-serif" font-weight="700" font-size="11" fill="#0A0F2C" letter-spacing="1.5">MRDU 204 518</text>
+            </g>
+          </g>
+          <!-- stack -->
+          <g id="yStack">
+            <g><rect x="122" y="358" width="116" height="62" fill="#1437FF"/><rect x="122" y="358" width="116" height="62" fill="url(#ribs)"/></g>
+            <g><rect x="246" y="358" width="116" height="62" fill="#0A0F2C"/></g>
+            <g><rect x="370" y="358" width="116" height="62" fill="#1437FF"/><rect x="370" y="358" width="116" height="62" fill="url(#ribs)"/></g>
+            <g><rect x="122" y="290" width="116" height="62" fill="#FFD400"/><rect x="122" y="290" width="116" height="62" fill="url(#ribs)"/></g>
+            <g><rect x="246" y="290" width="116" height="62" fill="#1437FF"/><rect x="246" y="290" width="116" height="62" fill="url(#ribs)"/></g>
+            <g><rect x="370" y="290" width="116" height="62" fill="#fff" stroke="#0A0F2C" stroke-width="4"/><rect x="370" y="290" width="116" height="62" fill="url(#ribs)"/></g>
+            <g><rect x="122" y="222" width="116" height="62" fill="#0A0F2C"/></g>
+            <g><rect x="370" y="222" width="116" height="62" fill="#1437FF"/><rect x="370" y="222" width="116" height="62" fill="url(#ribs)"/></g>
+            <g><rect x="122" y="154" width="116" height="62" fill="#1437FF"/><rect x="122" y="154" width="116" height="62" fill="url(#ribs)"/></g>
+          </g>
+          <path d="M20 430h600" stroke="#0A0F2C" stroke-width="10"/>
+          <path d="M20 446h600" stroke="#0A0F2C" stroke-width="4" stroke-dasharray="6 24"/>
+        </svg>
+      </figure>
+    </div>
+
+    <div class="nums">
+      <div class="num num--b ribs" data-r><div class="num__v"><span data-count="14">14</span></div><p class="num__l">стран в&nbsp;маршрутной сети — от&nbsp;Китая до&nbsp;Турции</p></div>
+      <div class="num num--o" data-r style="--d:1"><div class="num__v"><span data-count="38">38</span></div><p class="num__l">собственных терминалов и&nbsp;складов класса&nbsp;А</p></div>
+      <div class="num num--y ribs" data-r style="--d:2"><div class="num__v"><span data-count="126">126</span><small>тыс.</small></div><p class="num__l">TEU перевезли за&nbsp;2025&nbsp;год</p></div>
+      <div class="num num--k" data-r style="--d:3"><div class="num__v"><span data-count="97.4" data-dec="1">97,4</span><small>%</small></div><p class="num__l">рейсов прибыли по&nbsp;графику или раньше</p></div>
+    </div>
+  </div>
+</section>
+
+<div class="shutter" style="--from:var(--white);--to:var(--ink)" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+
+<!-- ================= MODES ================= -->
+<section class="hs" id="modes" aria-labelledby="modesH">
+  <div class="hs__pin">
+    <div class="hs__head">
+      <div>
+        <span class="tag">02 — Перевозки</span>
+        <h2 class="h2" id="modesH">Пять звеньев <em>одного состава</em></h2>
+      </div>
+      <div class="hs__cnt" aria-hidden="true"><span id="hsN">01</span><small>/ 05</small></div>
+    </div>
+    <div class="hs__view" id="hsView" tabindex="-1">
+      <div class="hs__track" id="hsTrack">
+        <div class="loco" aria-hidden="true">
+          <svg viewBox="0 0 330 250">
+            <path d="M0 250V96L70 20h260v230z" fill="#FFD400"/>
+            <path d="M34 108l52-58h74v58z" fill="#0A0F2C"/>
+            <rect x="186" y="50" width="58" height="58" fill="#0A0F2C"/><rect x="258" y="50" width="58" height="58" fill="#0A0F2C"/>
+            <rect x="0" y="150" width="330" height="26" fill="#1437FF"/>
+            <rect x="0" y="194" width="330" height="10" fill="#0A0F2C"/>
+            <circle cx="30" cy="222" r="11" fill="#fff" stroke="#0A0F2C" stroke-width="5"/>
+            <text x="186" y="236" font-family="Arial Black,Arial,sans-serif" font-weight="900" font-size="24" fill="#0A0F2C" letter-spacing="1">МРД-2048</text>
+          </svg>
+          <div class="ch"><span class="wh"></span><span class="wh"></span><span class="wh"></span><span class="wh"></span></div>
+        </div>
+
+        <article class="car car--b">
+          <div class="car__box">
+            <div class="car__top"><span class="car__n">01</span><span class="car__code">MRDU 110 482<br>40HC · Rail</span></div>
+            <svg class="car__pic" viewBox="0 0 160 120" aria-hidden="true"><path pathLength="1" d="M20 30h90l22 28v26H20z"/><path pathLength="1" d="M34 44h30v16H34z"/><path pathLength="1" d="M78 44h22l12 16H78z"/><circle pathLength="1" cx="44" cy="94" r="9"/><circle pathLength="1" cx="76" cy="94" r="9"/><circle pathLength="1" cx="108" cy="94" r="9"/><path pathLength="1" d="M6 110h148"/></svg>
+            <h3>Железная дорога</h3>
+            <p>Регулярные контейнерные поезда из&nbsp;Китая и&nbsp;с&nbsp;Дальнего Востока. Расписание публикуем на&nbsp;квартал вперёд.</p>
+            <dl class="fig"><div><dt>18&nbsp;сут.</dt><dd>Шанхай — Москва</dd></div><div><dt>62</dt><dd>поезда в&nbsp;месяц</dd></div><div><dt>1&nbsp;520</dt><dd>мм: перегруз на&nbsp;границе за&nbsp;6&nbsp;ч</dd></div></dl>
+          </div>
+          <div class="ch"><span class="wh"></span><span class="wh"></span><span class="wh"></span><span class="wh"></span></div>
+        </article>
+
+        <article class="car car--y">
+          <div class="car__box ribs">
+            <div class="car__top"><span class="car__n">02</span><span class="car__code">MRDU 227 905<br>Truck · FTL</span></div>
+            <svg class="car__pic" viewBox="0 0 160 120" aria-hidden="true"><path pathLength="1" d="M10 30h84v54H10z"/><path pathLength="1" d="M94 46h30l22 22v16H94z"/><path pathLength="1" d="M106 56h14l10 12h-24z"/><circle pathLength="1" cx="34" cy="92" r="9"/><circle pathLength="1" cx="60" cy="92" r="9"/><circle pathLength="1" cx="122" cy="92" r="9"/><path pathLength="1" d="M6 108h148"/></svg>
+            <h3>Автопарк</h3>
+            <p>Последняя миля и&nbsp;прямые рейсы Турция — Россия — Казахстан. Тягачи не&nbsp;старше четырёх лет, экипажи по&nbsp;два водителя.</p>
+            <dl class="fig"><div><dt>480</dt><dd>своих тягачей</dd></div><div><dt>900&nbsp;км</dt><dd>в&nbsp;сутки на&nbsp;магистрали</dd></div><div><dt>±25&nbsp;°C</dt><dd>рефрижераторы с&nbsp;телеметрией</dd></div></dl>
+          </div>
+          <div class="ch"><span class="wh"></span><span class="wh"></span><span class="wh"></span><span class="wh"></span></div>
+        </article>
+
+        <article class="car car--w">
+          <div class="car__box ribs">
+            <div class="car__top"><span class="car__n">03</span><span class="car__code">MRDU 318 077<br>Sea · FCL / LCL</span></div>
+            <svg class="car__pic" viewBox="0 0 160 120" aria-hidden="true"><path pathLength="1" d="M12 70h136l-16 26H28z"/><path pathLength="1" d="M38 50h28v20H38z"/><path pathLength="1" d="M66 50h28v20H66z"/><path pathLength="1" d="M52 30h28v20H52z"/><path pathLength="1" d="M108 38h22v32h-22z"/><path pathLength="1" d="M6 112q12-10 24 0t24 0 24 0 24 0 24 0 24 0"/></svg>
+            <h3>Морские линии</h3>
+            <p>Слоты на&nbsp;судах из&nbsp;портов Китая, Индии, ОАЭ и&nbsp;Сингапура выкуплены на&nbsp;квартал — место есть даже в&nbsp;пик сезона.</p>
+            <dl class="fig"><div><dt>9</dt><dd>линий со&nbsp;своим слотом</dd></div><div><dt>24&nbsp;сут.</dt><dd>Сингапур — Стамбул</dd></div><div><dt>FCL+LCL</dt><dd>от&nbsp;одной паллеты</dd></div></dl>
+          </div>
+          <div class="ch"><span class="wh"></span><span class="wh"></span><span class="wh"></span><span class="wh"></span></div>
+        </article>
+
+        <article class="car car--b">
+          <div class="car__box">
+            <div class="car__top"><span class="car__n">04</span><span class="car__code">MRDU 406 131<br>Hub · Class A</span></div>
+            <svg class="car__pic" viewBox="0 0 160 120" aria-hidden="true"><path pathLength="1" d="M10 50L80 16l70 34"/><path pathLength="1" d="M22 46v60h116V46"/><path pathLength="1" d="M58 106V66h44v40"/><path pathLength="1" d="M58 80h44"/><path pathLength="1" d="M58 93h44"/><path pathLength="1" d="M6 108h148"/></svg>
+            <h3>Склады и&nbsp;хабы</h3>
+            <p>Кросс-док, ответственное хранение, комплектация. Контейнер с&nbsp;поезда уходит на&nbsp;фуру в&nbsp;ту&nbsp;же смену.</p>
+            <dl class="fig"><div><dt>212</dt><dd>тыс. м² класса&nbsp;А</dd></div><div><dt>6&nbsp;ч</dt><dd>кросс-док «поезд — фура»</dd></div><div><dt>11</dt><dd>хабов у&nbsp;магистралей</dd></div></dl>
+          </div>
+          <div class="ch"><span class="wh"></span><span class="wh"></span><span class="wh"></span><span class="wh"></span></div>
+        </article>
+
+        <article class="car car--y">
+          <div class="car__box ribs">
+            <div class="car__top"><span class="car__n">05</span><span class="car__code">MRDU 512 660<br>Customs · Broker</span></div>
+            <svg class="car__pic" viewBox="0 0 160 120" aria-hidden="true"><path pathLength="1" d="M30 10h62l28 28v72H30z"/><path pathLength="1" d="M92 10v28h28"/><path pathLength="1" d="M46 50h40"/><path pathLength="1" d="M46 66h54"/><path pathLength="1" d="M48 88l12 12 24-26"/></svg>
+            <h3>Таможня</h3>
+            <p>Собственный таможенный представитель: декларацию подаём, пока груз ещё в&nbsp;пути, и&nbsp;выпускаем в&nbsp;день прибытия.</p>
+            <dl class="fig"><div><dt>2&nbsp;ч</dt><dd>медианный выпуск декларации</dd></div><div><dt>14</dt><dd>постов оформления</dd></div><div><dt>ЭДО</dt><dd>все документы без&nbsp;бумаги</dd></div></dl>
+          </div>
+          <div class="ch"><span class="wh"></span><span class="wh"></span><span class="wh"></span><span class="wh"></span></div>
+        </article>
+
+        <div class="hs__end">
+          <b>Соберём состав под&nbsp;ваш груз</b>
+          <a class="btn btn--onink" href="#calc">Рассчитать срок <svg aria-hidden="true"><use href="#i-arr"/></svg></a>
+        </div>
+      </div>
+    </div>
+    <div class="hs__bar" aria-hidden="true"><i id="hsBar"></i></div>
+  </div>
+</section>
+
+<div class="shutter" style="--from:var(--ink);--to:var(--blue)" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+
+<!-- ================= CALC ================= -->
+<section class="sec sec--blue" id="calc">
+  <div class="wrap">
+    <span class="tag" data-r>03 — Сроки</span>
+    <div class="calc__grid">
+      <div>
+        <h2 class="h2" data-r="words">Прикиньте срок <em>за&nbsp;десять секунд</em></h2>
+        <p class="calc__intro" data-r>Выберите, откуда и&nbsp;куда едет груз. Покажем цепочку перевозки и&nbsp;сколько суток займёт каждое звено.</p>
+        <form id="calcForm" style="margin-top:36px" data-r>
+          <div class="calc__ft">
+            <label class="fld"><span>Откуда</span>
+              <div class="sel"><select id="cFrom" name="from">
+                <option value="sh">Шанхай</option><option value="vl">Владивосток</option><option value="sg">Сингапур</option><option value="mb">Мумбаи</option><option value="db">Дубай</option><option value="st">Стамбул</option>
+              </select></div>
+            </label>
+            <label class="fld"><span>Куда</span>
+              <div class="sel"><select id="cTo" name="to">
+                <option value="msk">Москва</option><option value="spb">Санкт-Петербург</option><option value="nsk">Новосибирск</option><option value="ala">Алматы</option>
+              </select></div>
+            </label>
+          </div>
+          <fieldset class="fld"><legend>Тип груза</legend>
+            <div class="chips">
+              <label class="chip"><input type="radio" name="cargo" value="gen" checked><span>Генеральный</span></label>
+              <label class="chip"><input type="radio" name="cargo" value="ref"><span>Температурный</span></label>
+              <label class="chip"><input type="radio" name="cargo" value="big"><span>Негабаритный</span></label>
+              <label class="chip"><input type="radio" name="cargo" value="adr"><span>Опасный (ADR)</span></label>
+            </div>
+          </fieldset>
+        </form>
+      </div>
+      <output class="out" for="cFrom cTo" aria-live="polite" data-r="wipe">
+        <span class="out__top"><span>Оценка транзита</span><span class="out__demo">≈ Демо-расчёт</span></span>
+        <span class="out__route" id="cRoute">Шанхай <svg aria-hidden="true"><use href="#i-arr"/></svg> Москва</span>
+        <span class="out__days"><b id="cDays">18</b><span><span id="cUnit">суток</span><br>от&nbsp;двери до&nbsp;двери</span></span>
+        <span class="segs" id="cSegs" aria-hidden="true"></span>
+        <ul class="out__lg" id="cLg"></ul>
+        <span class="out__note" id="cNote" style="display:block">Расчёт приблизительный: это демонстрационная таблица, а&nbsp;не&nbsp;оферта. Точный срок и&nbsp;ставку диспетчер подтвердит после заявки.</span>
+      </output>
+    </div>
+  </div>
+</section>
+
+<div class="shutter" style="--from:var(--blue);--to:var(--white)" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+
+<!-- ================= TRACK ================= -->
+<section class="sec sec--white" id="track">
+  <div class="wrap">
+    <span class="tag" data-r>04 — Трекинг</span>
+    <h2 class="h2" data-r="words" style="margin-top:24px;max-width:18ch">Груз видно <em>на&nbsp;каждом перегоне</em></h2>
+    <div class="trk__grid">
+      <aside class="tkt" id="tkt" data-r aria-label="Карточка рейса">
+        <div class="tkt__row"><span>Рейс</span><span id="tkStatus">В пути</span></div>
+        <p class="tkt__no">MRD-2048-117</p>
+        <p class="tkt__rt">Шанхай → Москва · 40HC · автокомпоненты, 21,6&nbsp;т</p>
+        <div class="tkt__pc"><b><span id="tkPc">100</span><small>%</small></b><span>пройдено<br><span id="tkDay">день 18 из 18</span></span></div>
+        <div class="tkt__bar"><i></i><span class="tkt__box" id="tkBox"></span></div>
+        <div class="tkt__ends"><span>Шанхай</span><span>Москва</span></div>
+      </aside>
+      <ol class="tl" id="tl">
+        <li class="tl__fill" aria-hidden="true"></li>
+        <li class="ev" data-day="0"><div class="ev__d"><span>День 0</span><em>Шанхай · терминал</em></div><h3>Контейнер принят</h3><p>Осмотр, взвешивание, пломба. Фото пломбы и&nbsp;акт приёма сразу в&nbsp;личном кабинете.</p></li>
+        <li class="ev" data-day="1"><div class="ev__d"><span>День 1</span><em>Шанхай · ЖД</em></div><h3>Поезд отправлен</h3><p>Платформа в&nbsp;составе контейнерного поезда, 41&nbsp;вагон. Отправление по&nbsp;расписанию.</p></li>
+        <li class="ev" data-day="6"><div class="ev__d"><span>День 6</span><em>Граница КНР — Казахстан</em></div><h3>Перегруз на&nbsp;колею 1&nbsp;520&nbsp;мм</h3><p>Контейнер переставлен на&nbsp;широкую колею за&nbsp;5&nbsp;ч&nbsp;40&nbsp;мин. Транзитная декларация открыта.</p></li>
+        <li class="ev" data-day="8"><div class="ev__d"><span>День 8</span><em>Алматы · хаб</em></div><h3>Проследовал хаб</h3><p>Смена локомотива, проверка пломбы. Отклонение от&nbsp;графика — 0&nbsp;часов.</p></li>
+        <li class="ev" data-day="14"><div class="ev__d"><span>День 14</span><em>Поволжье · ЖД</em></div><h3>На&nbsp;магистрали</h3><p>Декларация подана заранее: документы проверены, пока поезд ещё в&nbsp;пути.</p></li>
+        <li class="ev" data-day="17"><div class="ev__d"><span>День 17</span><em>Москва · терминал</em></div><h3>Выпуск за&nbsp;1&nbsp;ч&nbsp;50&nbsp;мин</h3><p>Таможня выпустила груз в&nbsp;день прибытия. Контейнер снят с&nbsp;платформы на&nbsp;автопоезд.</p></li>
+        <li class="ev" data-day="18"><div class="ev__d"><span>День 18</span><em>Склад получателя</em></div><h3>Доставлено</h3><p>Выгрузка на&nbsp;рампе, пломба цела. Закрывающие документы подписаны в&nbsp;ЭДО.</p></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<div class="shutter" style="--from:var(--white);--to:var(--ink)" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+
+<!-- ================= CONTACT ================= -->
+<section class="sec sec--ink ct" id="contact">
+  <div class="wrap ct__grid">
+    <div>
+      <span class="tag" data-r>05 — Контакты</span>
+      <h2 class="h2" data-r="words">Скажите, что везём, — <em>вернёмся с&nbsp;маршрутом</em></h2>
+      <p class="ct__lead" data-r>Диспетчер ответит в&nbsp;течение двух часов в&nbsp;рабочее время: маршрут, срок по&nbsp;звеньям и&nbsp;ставка, зафиксированная на&nbsp;30&nbsp;дней.</p>
+      <ul class="ct__list">
+        <li data-r><span>Телефон</span><a class="ul" href="tel:+996709927895">0709&nbsp;927&nbsp;895</a></li>
+        <li data-r style="--d:1"><span>Почта</span><a class="ul" href="#contact">hello@meridian.example</a></li>
+        <li data-r style="--d:2"><span>Офис</span><b>Бишкек, Ololo Planet,<br>ул.&nbsp;Юнусалиева,&nbsp;80</b></li>
+      </ul>
+    </div>
+    <form class="form" id="form" novalidate data-r="wipe">
+      <div class="form__row">
+        <label class="inp"><span>Имя</span><input type="text" name="name" autocomplete="name" placeholder="Как к вам обращаться" required></label>
+        <label class="inp"><span>Компания</span><input type="text" name="company" autocomplete="organization" placeholder="Название"></label>
+      </div>
+      <div class="form__row">
+        <label class="inp"><span>Телефон или почта</span><input type="text" name="contact" placeholder="0709 927 895" required></label>
+        <label class="inp"><span>Маршрут</span><input type="text" name="route" placeholder="Шанхай → Москва"></label>
+      </div>
+      <label class="inp"><span>Что везём</span><textarea name="cargo" rows="3" placeholder="Груз, вес, количество контейнеров, желаемая дата"></textarea></label>
+      <div class="form__ft">
+        <small>Нажимая кнопку, вы соглашаетесь на&nbsp;обработку данных. Это концепт: форма ничего не&nbsp;отправляет.</small>
+        <button class="btn btn--onink" type="submit" data-magnet>Отправить заявку <svg aria-hidden="true"><use href="#i-arr"/></svg></button>
+      </div>
+      <div class="form__ok" role="status" aria-live="polite" id="formOk">
+        <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" fill="#0A0F2C"/><path d="M16 33l11 11 22-24" fill="none" stroke="#FFD400" stroke-width="7"/></svg>
+        <b>Заявка принята. Состав формируется</b>
+        <p>Это демонстрационная форма — данные никуда не&nbsp;ушли. В&nbsp;рабочем проекте диспетчер ответил&nbsp;бы вам в&nbsp;течение двух часов.</p>
+      </div>
+    </form>
+  </div>
+</section>
+</main>
+
+<footer class="ft">
+  <div class="wrap">
+    <svg class="ft__word" viewBox="0 0 1000 158" role="img" aria-label="МЕРИДИАН"><text x="0" y="120" textLength="1000" lengthAdjust="spacingAndGlyphs">МЕРИДИАН</text><rect class="f" x="0" y="0" width="1000" height="8" id="ftRule"/></svg>
+    <div class="ft__cols">
+      <p>Мультимодальные контейнерные перевозки:<br>ЖД, авто, море, склад и&nbsp;таможня.</p>
+      <nav aria-label="Навигация в подвале"><a class="ul" href="#about">О компании</a><a class="ul" href="#modes">Перевозки</a><a class="ul" href="#calc">Сроки</a><a class="ul" href="#track">Трекинг</a><a class="ul" href="#contact">Контакты</a><a class="ul" href="#top">Наверх ↑</a></nav>
+    </div>
+    <div class="ft__sm">
+      <span>© 2026 «МЕРИДИАН». Вымышленная компания, все цифры условны.</span>
+      <span>Концепт-сайт студии <a href="/" target="_top">Anteyko</a></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+'use strict';
+var D=document, W=window, root=D.documentElement;
+var RM=W.matchMedia&&W.matchMedia('(prefers-reduced-motion: reduce)').matches;
+var FINE=W.matchMedia&&W.matchMedia('(hover:hover) and (pointer:fine)').matches;
+function $(s,c){return (c||D).querySelector(s)}
+function $$(s,c){return Array.prototype.slice.call((c||D).querySelectorAll(s))}
+function c01(v){return v<0?0:v>1?1:v}
+function seg(v,a,b){return c01((v-a)/(b-a))}
+function eo(t){return 1-Math.pow(1-t,3)}
+function ei(t){return t*t*t}
+function eio(t){return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2}
+var NS='http://www.w3.org/2000/svg';
+function S(n,a,p){var e=D.createElementNS(NS,n);for(var k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e}
+
+/* ============ MAP ============ */
+var MW=1600,MH=900;
+function PX(lon){return (lon+12)/162*MW}
+function PY(lat){return (76-lat)/88*MH}
+var LAND=[
+ // Eurasia mainland
+ [-9,37,-9,43,-2,43.5,-1,46,-4.5,48.5,1,50,4,52,8,54,8.2,57,10.5,57.5,10.8,55.5,10,54.2,14,54,19,54.4,21,55.5,21,57,24,57.5,23.5,59.2,28,59.5,30,60,28.5,60.5,24,60,21.5,60.6,21.3,63,25,65,24,65.8,22,65.6,21,64,17.3,62,17.2,60.5,18.8,59.6,16.6,57.5,16,56.2,14.3,55.5,12.8,55.5,12.5,57,11.2,59,10,59,7.5,58,5.5,59,5,61.5,8,63.5,12,65.5,14.5,68,19,70,25.5,71,30,70,33,69.3,40.5,67.8,40,65,44,66.2,44,68.3,54,68.3,60,69,66.5,68.6,67,71.5,72.5,72.8,80,73,87,75,98,76,104,76,112,75.5,113.5,73.6,126,73,130,71,140,72.5,150,71,160,69.8,165,69,165,60,156,59,155,57,160,54,156.5,51,155.5,56,152,59,143,59.3,137,55,141,53.3,140.3,48,135.5,43.8,131.9,43,130.5,42.3,129.5,40.8,127.5,39.5,129.5,37,129,35,126.5,34.3,126,37,125,39.5,121.5,39,122,40.5,118,39,119,37.5,122.5,37,119.5,35,121,32,122,30,120,26,117,23.5,113.5,22,110,21,108.5,21.5,106,19,109,13,109,11.5,105,8.5,105,10.5,101,13,100,10,103.5,2,103.5,1.3,101,3,98.5,8,98,14,97,16.5,94.5,16,92,21.5,89,22,87,20.5,82,16.5,80,13,80,10,77.5,8,75,12,73,17,72.5,21,70.5,20.8,68,23.5,66.5,25.3,61.5,25.2,57,25.6,56.5,27,54,26.6,51.5,27.8,50.2,30,48.6,30.2,48,29.3,50,26.5,51.2,24.3,54,24.1,56.2,26.2,56.6,24.5,59.8,22.5,57.5,19,55,17,52,16,45,12.8,43.3,12.7,42.7,16.5,39,21.5,35,28,34.4,31.3,35.8,33.5,36,36.6,32,36.2,30.5,36.5,27.5,37,26.5,39.5,29,41,31,41.2,35,42,38,41,41.5,41.5,41,43,37,45,39,47,35,46,33.5,44.5,33,46,30.5,46.3,28.5,44,28,41.5,26,40.7,24,40.8,23,40,24,38,23,36.5,21.5,37,19.5,40.5,19.5,42,15,44.5,13.7,45.6,12.3,45.3,12.5,44,16,41.8,18.5,40.2,17,40.4,16.5,38.5,15.7,38,16,40,14,41,12,42,10.3,43.5,8.7,44.4,6,43,3.5,43.3,3,41.8,0,39.5,-0.5,38,-2,36.8,-5.5,36],
+ // Africa (north part)
+ [-14,24,-12,28,-9.5,31,-6,35.8,-2,35.2,3,36.8,10,37.3,11,33.5,15,32.3,20,30.8,20,32.6,25,31.7,31,31.4,34.3,31.2,32.5,29.8,35.5,24,37.3,21,37.5,18.5,39.5,15.5,43,12,43.5,11.3,51,12,49,6,44,1,41,-2,39,-6,39.5,-10,40,-14,-14,-14],
+ [-5.5,50,1.5,51,1.7,52.8,-0.5,54.5,-2,56,-2,57.6,-3.5,58.6,-6,57.5,-5,55,-3,54,-4.5,53.2,-4.5,51.8,-3,51.4],
+ [-10,52,-6,52.2,-6,55,-8,55.3,-10,54],
+ [130,31.5,132,33.5,135.5,34,137,34.7,140,35.3,141,38,142,39.8,141.3,41.4,140,41,139.8,38.5,137,37,136,35.7,132.5,35.5,130.8,34,129.7,33],
+ [140,42,141,45.4,145.3,43.4,143,42],
+ [142,46,143.5,49.5,143,54,142,53,142,50],
+ [120.2,23,121,25.2,122,25,121,22],
+ [79.8,8,80.2,9.7,81.8,7.5,80.5,6],
+ [95.3,5.5,98,4,104,-2,106,-5.8,104.5,-5.8,100.5,-1,97,2.5],
+ [105.5,-6.3,108.5,-6.3,113,-6.8,114.5,-8.5,108,-7.9,105.5,-7.2],
+ [109,1.5,111.5,2,114,4.5,117,7,119,5,117.8,1,116.5,-3.5,114.5,-4,110.3,-3,109.2,0],
+ [120,16,120.5,18.5,122.3,18.3,122,14,124,12.5,121,13.7],
+ [122,7,125.5,9.5,126.5,7,125.5,5.8,124,7],
+ [119.5,.5,121,1,125,1.5,121,-1,123,-4.5,120.3,-5.5,119.5,-3],
+ [131,-1,135,-3.3,141,-2.7,147,-6,150,-10,145,-8,141,-9,138,-8,133,-4],
+ [52,71,56,73.5,60,75.8,66,76,58,72.5,54,70.7],
+ [12.5,38,15.5,38.2,15,36.7],
+ [8.3,39,9.6,41,9.6,39.2]
+];
+var HOLES=[[47,45,51,47,53,45,51,42,54,40,53.5,37,50,37.3,49,40,47,43]];
+function inPoly(p,x,y){var c=false,n=p.length;for(var i=0,j=n-2;i<n;j=i,i+=2){var xi=p[i],yi=p[i+1],xj=p[j],yj=p[j+1];if(((yi>y)!==(yj>y))&&(x<(xj-xi)*(y-yi)/(yj-yi)+xi))c=!c}return c}
+(function(){
+  var d='',st=14,x,y,lon,lat,i,land;
+  for(y=7;y<MH;y+=st)for(x=7;x<MW;x+=st){
+    lon=x/MW*162-12;lat=76-y/MH*88;land=false;
+    for(i=0;i<LAND.length;i++)if(inPoly(LAND[i],lon,lat)){land=true;break}
+    if(land)for(i=0;i<HOLES.length;i++)if(inPoly(HOLES[i],lon,lat)){land=false;break}
+    if(land)d+='M'+x+' '+y+'h.01';
+  }
+  $('#dots').setAttribute('d',d);
+})();
+
+function smooth(ll){
+  var p=[],i;for(i=0;i<ll.length;i+=2)p.push([PX(ll[i]),PY(ll[i+1])]);
+  var d='M'+p[0][0].toFixed(1)+' '+p[0][1].toFixed(1);
+  for(i=0;i<p.length-1;i++){
+    var a=p[i-1]||p[i],b=p[i],c=p[i+1],e=p[i+2]||c;
+    d+='C'+(b[0]+(c[0]-a[0])/6).toFixed(1)+' '+(b[1]+(c[1]-a[1])/6).toFixed(1)+' '+(c[0]-(e[0]-b[0])/6).toFixed(1)+' '+(c[1]-(e[1]-b[1])/6).toFixed(1)+' '+c[0].toFixed(1)+' '+c[1].toFixed(1);
+  }
+  return d;
+}
+var ROUTES=[
+ {k:'rail',a:0,b:.2,n:2,sp:.05,ll:[121.5,31.2,112,34.5,103.8,36.2,88,44,77,43.3,66,47,55,51.5,46,54,37.6,55.75,30.3,59.9]},
+ {k:'rail',a:.03,b:.25,n:2,sp:.045,ll:[131.9,43.1,127,47.5,113,51.5,104,52.2,93,55.6,82.9,55,73.4,55,60.6,56.6,49,55.8,37.6,55.75]},
+ {k:'sea',a:.25,b:.58,n:3,sp:.035,pat:[1,15],ll:[121.5,31.2,124.5,27,123.5,21,115,12,108.5,5.5,105.6,2.4,103.8,1,101.6,2,98.2,5.2,94,6.4,86,4.6,80.5,4.4,75,8.2,71.4,14.5,72.8,18.9,67,21.6,61,24.2,57.4,26,56.3,26.7,55.3,25.3]},
+ {k:'ns',a:.55,b:.8,n:1,sp:.07,ll:[55.3,25.3,53,29.6,51.6,34,50.7,37.6,50.2,41.5,48.6,45.6,45,49.6,41,53,37.6,55.75]},
+ {k:'road',a:.72,b:.97,n:1,sp:.08,pat:[16,11],ll:[37.6,55.75,39.6,51,40.2,47.4,43,43.6,42,41.3,37,39.9,32.5,40.3,29,41]}
+];
+var HUBS=[
+ {n:'Шанхай',ll:[121.5,31.2],e:0,p:'r',m:1},
+ {n:'Владивосток',ll:[131.9,43.1],e:.03,p:'b',pm:'t'},
+ {n:'Алматы',ll:[77,43.3],e:.1,p:'b'},
+ {n:'Новосибирск',ll:[82.9,55],e:.14,p:'b',pm:'t'},
+ {n:'Москва',ll:[37.6,55.75],e:.18,p:'l',m:1},
+ {n:'Санкт-Петербург',ll:[30.3,59.9],e:.2,p:'t'},
+ {n:'Сингапур',ll:[103.8,1],e:.37,p:'b'},
+ {n:'Мумбаи',ll:[72.8,18.9],e:.48,p:'r'},
+ {n:'Дубай',ll:[55.3,25.3],e:.57,p:'b'},
+ {n:'Стамбул',ll:[29,41],e:.95,p:'l'}
+];
+var rsvg=$('#routes');
+var gBase=S('g',{},rsvg),gDraw=S('g',{},rsvg),gBox=S('g',{},rsvg),gHub=S('g',{},rsvg);
+ROUTES.forEach(function(r,ri){
+  var d=smooth(r.ll);
+  S('path',{d:d,'class':'rt-base'},gBase);
+  r.el=S('path',{d:d,'class':'rt rt--'+r.k},gDraw);
+  r.len=r.el.getTotalLength();
+  r.el.style.strokeDasharray=r.len+' '+r.len;
+  r.el.style.strokeDashoffset=RM?0:r.len;
+  r.tab=[];var N=180;
+  for(var i=0;i<=N;i++){var pt=r.el.getPointAtLength(r.len*i/N);r.tab.push(pt.x,pt.y)}
+  r.boxes=[];
+  for(var j=0;j<r.n;j++){
+    var g=S('g',{opacity:0},gBox);
+    S('rect',{x:-11,y:-6,width:22,height:12,'class':'box'+(r.k==='rail'?'':' box--y')},g);
+    r.boxes.push({g:g,off:j/r.n+ri*.13});
+  }
+  r.lastN=-1;r.lastD=-1;
+});
+HUBS.forEach(function(h){
+  var x=PX(h.ll[0]),y=PY(h.ll[1]);
+  var g=S('g',{'class':'hub'+(h.m?' hub--main':''),transform:'translate('+x.toFixed(1)+' '+y.toFixed(1)+')'},gHub);
+  S('circle',{r:6,'class':'hub__ring'},g);
+  S('circle',{r:h.m?11:9,'class':'hub__pin'},g);
+  var t=S('text',{'class':'hub__lbl'},g);
+  t.textContent=h.n.toUpperCase();
+  h.g=g;h.t=t;h.on=false;
+  if(RM){g.classList.add('on');h.on=true}
+});
+
+var lblMode=null;
+function placeLabels(m){
+  if(m===lblMode)return;lblMode=m;
+  HUBS.forEach(function(h){
+    var p=(m&&h.pm)||h.p,k=m?1.7:1,tx=0,ty=7*k,an='middle';
+    if(p==='r'){tx=20*k;an='start'}else if(p==='l'){tx=-20*k;an='end'}else if(p==='t'){ty=-22*k}else{ty=38*k}
+    h.t.setAttribute('x',tx);h.t.setAttribute('y',ty);h.t.setAttribute('text-anchor',an);
+  });
+}
+/* ============ SPLIT-FLAP BOARD ============ */
+var ABC='АБВГДЕЖЗИКЛМНОПРСТУФХЧШЫЯ0123456789';
+var BOARD=[
+ [['ШАНХАЙ–МОСКВА','ЖД','18'],['ВЛАДИВОСТОК–МОСКВА','ЖД','11'],['ШАНХАЙ–АЛМАТЫ','ЖД',' 9']],
+ [['МУМБАИ–МОСКВА','М+ЖД','23'],['ДУБАЙ–С.-ПЕТЕРБУРГ','М+ЖД','18'],['СИНГАПУР–НОВОСИБИРСК','М+ЖД','22']],
+ [['СТАМБУЛ–МОСКВА','АВТО',' 8'],['СТАМБУЛ–АЛМАТЫ','АВТО','11'],['ВЛАДИВОСТОК–НОВОСИБ.','ЖД',' 7']]
+];
+var cells=[],flipTimer=null;
+(function(){
+  var host=$('#bdRows');host.textContent='';
+  for(var r=0;r<3;r++){
+    var row=D.createElement('div');row.className='bd__row';var rc=[];
+    [[20,''],[4,' bd__g--m'],[2,' bd__g--d']].forEach(function(gr){
+      var g=D.createElement('div');g.className='bd__g'+gr[1];
+      for(var i=0;i<gr[0];i++){var c=D.createElement('span');c.className='fc';var ii=D.createElement('i');ii.textContent=' ';c.appendChild(ii);g.appendChild(c);rc.push({el:ii,cur:' ',tgt:' ',steps:0,delay:0,busy:false})}
+      row.appendChild(g);
+    });
+    host.appendChild(row);cells.push(rc);
+  }
+})();
+function pad(s,n){while(s.length<n)s+=' ';return s.slice(0,n)}
+function flipTo(c,ch){
+  c.cur=ch;c.el.textContent=ch;
+  if(c.el.animate)c.el.animate([{transform:'rotateX(-88deg)',opacity:.4},{transform:'rotateX(0)',opacity:1}],{duration:70,easing:'ease-out'});
+}
+function flipTick(){
+  var any=false;
+  for(var r=0;r<cells.length;r++)for(var i=0;i<cells[r].length;i++){
+    var c=cells[r][i];if(!c.busy)continue;any=true;
+    if(c.delay>0){c.delay--;continue}
+    if(c.steps>0){c.steps--;flipTo(c,ABC.charAt(Math.random()*ABC.length|0))}
+    else{flipTo(c,c.tgt);c.busy=false}
+  }
+  if(!any){clearInterval(flipTimer);flipTimer=null}
+}
+function setBoard(ph,instant){
+  var rows=BOARD[ph];
+  for(var r=0;r<3;r++){
+    var s=pad(rows[r][0],20)+pad(rows[r][1],4)+pad(rows[r][2],2);
+    for(var i=0;i<26;i++){
+      var c=cells[r][i],ch=s.charAt(i);
+      if(instant||RM){c.tgt=c.cur=ch;c.el.textContent=ch;c.busy=false;continue}
+      if(c.tgt===ch&&!c.busy)continue;
+      c.tgt=ch;c.steps=ch===' '?1:2+(Math.random()*4|0);c.delay=(i*.3|0)+r*2;c.busy=true;
+    }
+  }
+  if(!instant&&!RM&&!flipTimer)flipTimer=setInterval(flipTick,48);
+}
+(function(){
+  var el=$('#clock');
+  function t(){var d=new Date(),h=d.getHours(),m=d.getMinutes();el.textContent=(h<10?'0':'')+h+':'+(m<10?'0':'')+m}
+  t();setInterval(t,30000);
+})();
+
+/* ============ MARQUEE ============ */
+(function(){
+  var t=$('#mqT'),words=['ЖД','Авто','Море','Склад','Таможня'],h='';
+  words.forEach(function(w){h+='<span>'+w+'</span><svg><use href="#i-arr"/></svg>'});
+  var out='';for(var i=0;i<4;i++)out+='<div>'+h+'</div>';
+  t.innerHTML=out;
+})();
+
+/* ============ WORD SPLIT + REVEAL ============ */
+$$('[data-r="words"]').forEach(function(el){
+  var i=0;
+  (function walk(node){
+    Array.prototype.slice.call(node.childNodes).forEach(function(n){
+      if(n.nodeType===3){
+        var parts=n.nodeValue.split(/( +)/),f=D.createDocumentFragment();
+        parts.forEach(function(p){
+          if(!p)return;
+          if(/^ +$/.test(p)){f.appendChild(D.createTextNode(' '));return}
+          var w=D.createElement('span');w.className='w';var s=D.createElement('span');s.textContent=p;s.style.setProperty('--i',i++);w.appendChild(s);f.appendChild(w);
+        });
+        node.replaceChild(f,n);
+      }else if(n.nodeType===1)walk(n);
+    });
+  })(el);
+});
+var ioFired=false;
+function countUp(el){
+  if(el._done)return;el._done=true;
+  var to=parseFloat(el.getAttribute('data-count')),dec=+el.getAttribute('data-dec')||0;
+  function fmt(v){return v.toFixed(dec).replace('.',',')}
+  if(RM){el.textContent=fmt(to);return}
+  var t0=null;
+  (function step(t){if(t0===null)t0=t;var k=c01((t-t0)/1500);el.textContent=fmt(to*eo(k));if(k<1)requestAnimationFrame(step)})(performance.now());
+}
+function revealAll(){$$('[data-r]').forEach(function(e){e.classList.add('in')})}
+if('IntersectionObserver' in W){
+  var io=new IntersectionObserver(function(es){
+    ioFired=true;
+    es.forEach(function(e){
+      if(!e.isIntersecting)return;
+      e.target.classList.add('in');
+      $$('[data-count]',e.target).forEach(countUp);
+      io.unobserve(e.target);
+    });
+  },{rootMargin:'0px 0px -8% 0px',threshold:.08});
+  $$('[data-r]').forEach(function(e){io.observe(e)});
+  setTimeout(function(){if(!ioFired)revealAll()},3000);
+}else revealAll();
+
+/* ============ ELEMENTS ============ */
+var hero=$('.hero'),pinEl=$('.hero__pin'),mapEl=$('.map'),mapIn=$('#mapIn'),mer=$('#mer'),merLbl=$('#merLbl');
+var blks=$$('.stack__set').map(function(s){return $$('.blk',s)});
+var phN=$('#phN'),phBar=$('#phBar');
+var hs=$('.hs'),hsTrack=$('#hsTrack'),hsN=$('#hsN'),hsBar=$('#hsBar'),cars=$$('.car'),carPics=cars.map(function(c){return $('.car__pic',c)});
+var shutters=$$('.shutter').map(function(el){return {el:el,cols:$$('i',el),top:0,last:-1}});
+var tl=$('#tl'),evs=$$('.ev'),tkt=$('#tkt'),tkPc=$('#tkPc'),tkDay=$('#tkDay'),tkBox=$('#tkBox'),tkBar=$('.tkt__bar'),tkStatus=$('#tkStatus');
+var yard=$('#yard'),yTrolley=$('#yTrolley'),yLoad=$('#yLoad'),yC1=$('#yCable1'),yC2=$('#yCable2');
+var mq=$('#mq'),mqT=$('#mqT');
+var PIN=!RM;
+if(PIN)hs.classList.add('pin');
+
+var vw=0,vh=0,sy=0,mobile=false,heroTop=0,heroLen=1,heroEnd=0,mapW=0,mapH=0;
+var hsTop=0,hsDist=0,carGeo=[],tlTop=0,tlH=1,evPos=[],tkW=0,yardTop=0,yardH=1,mqTop=0,mqUnit=1;
+function top(el){return el.getBoundingClientRect().top+sy}
+function measure(){
+  sy=W.pageYOffset;vw=root.clientWidth;vh=pinEl.offsetHeight||W.innerHeight;mobile=vw<900;placeLabels(mobile);
+  if(PIN){hsDist=Math.max(0,hsTrack.offsetWidth-vw);hs.style.height=(vh+hsDist)+'px'}
+  heroTop=top(hero);heroLen=Math.max(1,hero.offsetHeight-vh);heroEnd=heroTop+hero.offsetHeight;
+  mapW=mapEl.offsetWidth;mapH=mapEl.offsetHeight;
+  hsTop=top(hs);
+  carGeo=cars.map(function(c){return [c.offsetLeft,c.offsetWidth]});
+  shutters.forEach(function(s){s.top=top(s.el)});
+  tlTop=top(tl);tlH=Math.max(1,tl.offsetHeight);
+  evPos=evs.map(function(e){return (e.offsetTop+14)/tlH});
+  tkW=tkBar.offsetWidth;
+  yardTop=top(yard);yardH=yard.getBoundingClientRect().height||1;
+  mqTop=top(mq);mqUnit=mqT.offsetWidth/4||1;
+}
+
+/* ============ FRAME ============ */
+var intro=RM?1:0,introT0=null,par={x:0,y:0,tx:0,ty:0},phase=-1,lastHsN=-1,lastDay=-1,lastPc=-1,lastLon=-1,ticking=false,heroVis=true;
+function dashPat(r,drawn){
+  var u=r.pat[0]+r.pat[1],n=Math.floor(drawn/u);
+  if(n===r.lastN)return;r.lastN=n;
+  var s='';for(var i=0;i<n;i++)s+=r.pat[0]+' '+r.pat[1]+' ';
+  r.el.style.strokeDasharray=s+'0 99999';r.el.style.strokeDashoffset=0;
+}
+function update(t){
+  sy=W.pageYOffset;
+  if(intro<1){if(introT0===null)introT0=t;intro=c01((t-introT0)/1300)}
+  heroVis=sy<heroEnd;
+  /* ---- hero ---- */
+  if(heroVis){
+    var p=c01((sy-heroTop)/heroLen),e=RM?1:eo(intro)*.25+p*.75;
+    // headline blocks
+    for(var s=0;s<3;s++)for(var j=0;j<3;j++){
+      var x=0,d=j*.02;
+      if(s===0){x=ei(seg(p,.22+d,.31+d));if(intro<1)x=Math.max(x,1-eo(c01(intro*1.5-j*.2)))}
+      else if(s===1)x=(1-eo(seg(p,.33+d,.43+d)))+ei(seg(p,.56+d,.65+d));
+      else x=1-eo(seg(p,.67+d,.77+d));
+      if(RM)x=s===0?0:1;
+      blks[s][j].style.setProperty('--x',x.toFixed(4));
+    }
+    // routes
+    var tt=t*.001;
+    for(var i=0;i<ROUTES.length;i++){
+      var r=ROUTES[i],dr=RM?1:eio(seg(e,r.a,r.b)),drawn=r.len*dr;
+      if(dr!==r.lastD){
+        r.lastD=dr;
+        if(r.pat)dashPat(r,drawn);else r.el.style.strokeDashoffset=(r.len-drawn).toFixed(1);
+      }
+      for(var b=0;b<r.boxes.length;b++){
+        var bx=r.boxes[b];
+        if(drawn<40){bx.g.setAttribute('opacity',0);continue}
+        var u=RM?(b+1)/(r.boxes.length+1):((tt*r.sp+bx.off)%1),L=u*drawn,f=L/r.len*180,k=Math.min(179,f|0),fr=f-k,T=r.tab;
+        var x0=T[k*2],y0=T[k*2+1],x1=T[k*2+2],y1=T[k*2+3];
+        bx.g.setAttribute('transform','translate('+(x0+(x1-x0)*fr).toFixed(1)+' '+(y0+(y1-y0)*fr).toFixed(1)+') rotate('+(Math.atan2(y1-y0,x1-x0)*57.3).toFixed(1)+')');
+        bx.g.setAttribute('opacity',Math.min(1,L/26,(drawn-L)/26).toFixed(2));
+      }
+    }
+    for(var h=0;h<HUBS.length;h++){var hb=HUBS[h],on=RM||e>=hb.e+(hb.e?0:.02);if(on!==hb.on){hb.on=on;hb.g.classList.toggle('on',on)}}
+    // map transform
+    if(!RM){
+      if(mobile){mapIn.style.transform='translate3d('+(-(mapW-vw)*(1-eio(p))).toFixed(1)+'px,0,0)'}
+      else{
+        par.x+=(par.tx-par.x)*.07;par.y+=(par.ty-par.y)*.07;
+        mapIn.style.transform='translate3d('+(-p*mapW*.025+par.x).toFixed(2)+'px,'+(-p*8+par.y).toFixed(2)+'px,0) scale('+(1+p*.07).toFixed(4)+')';
+      }
+    }else if(mobile){mapIn.style.transform='translate3d('+(-(mapW-vw)*.55).toFixed(1)+'px,0,0)'}
+    // meridian
+    var lon=121.5-(121.5-29)*c01(e*1.02);
+    mer.style.transform='translate3d('+(PX(lon)/MW*mapW).toFixed(1)+'px,0,0)';
+    var li=Math.round(lon);if(li!==lastLon){lastLon=li;merLbl.textContent=li+'° в. д.'}
+    // phase
+    var ph=p<.33?0:p<.67?1:2;
+    if(ph!==phase){setBoard(ph,phase===-1&&RM);phase=ph;phN.textContent='0'+(ph+1)}
+    phBar.style.setProperty('--p',p.toFixed(3));
+  }
+  /* ---- marquee ---- */
+  if(!RM&&sy+vh>mqTop-200&&sy<mqTop+400)mq.style.transform='translate3d('+(-((sy*.35)%mqUnit)).toFixed(1)+'px,0,0)';
+  /* ---- crane ---- */
+  if(sy+vh>yardTop&&sy<yardTop+yardH+vh){
+    var yp=RM?1:c01((sy+vh*.85-yardTop)/(yardH+vh*.25)),tx=eio(seg(yp,0,.55)),dn=eio(seg(yp,.5,1));
+    var cx=520-(520-304)*tx,ly=150+(222-150)*dn-10;
+    yTrolley.setAttribute('transform','translate('+cx.toFixed(1)+' 0)');
+    yLoad.setAttribute('transform','translate(0 '+ly.toFixed(1)+')');
+    yC1.setAttribute('y2',ly.toFixed(1));yC2.setAttribute('y2',ly.toFixed(1));
+  }
+  /* ---- shutters ---- */
+  for(var si=0;si<shutters.length;si++){
+    var sh=shutters[si],sp=RM?1:c01((sy+vh-sh.top)/(vh*.5));
+    if(sp===sh.last)continue;sh.last=sp;
+    for(var ci=0;ci<sh.cols.length;ci++)sh.cols[ci].style.setProperty('--s',eio(c01(sp*1.7-ci*.1)).toFixed(4));
+  }
+  /* ---- horizontal train ---- */
+  if(PIN&&sy+vh>hsTop&&sy<hsTop+hsDist+vh){
+    var q=hsDist?c01((sy-hsTop)/hsDist):0,X=-q*hsDist;
+    hsTrack.style.transform='translate3d('+X.toFixed(1)+'px,0,0)';
+    hsTrack.style.setProperty('--rot',(X/17*57.3).toFixed(1)+'deg');
+    hsBar.style.setProperty('--q',q.toFixed(4));
+    var best=0,bd=1e9;
+    for(var c=0;c<carGeo.length;c++){
+      var left=carGeo[c][0]+X,cen=left+carGeo[c][1]/2,dd=Math.abs(cen-vw*.42);
+      if(dd<bd){bd=dd;best=c}
+      carPics[c].style.setProperty('--draw',c01((vw*.98-left)/(vw*.45)).toFixed(3));
+    }
+    if(best!==lastHsN){lastHsN=best;hsN.textContent='0'+(best+1)}
+  }
+  /* ---- tracking ---- */
+  if(sy+vh>tlTop-200&&sy<tlTop+tlH+vh){
+    var tp=RM?1:c01((sy+vh*.62-tlTop)/tlH),day=0;
+    tl.style.setProperty('--tp',tp.toFixed(4));tkt.style.setProperty('--tp',tp.toFixed(4));
+    for(var ei2=0;ei2<evs.length;ei2++){
+      var on2=tp>=evPos[ei2]-.001;
+      if(on2!==evs[ei2]._on){evs[ei2]._on=on2;evs[ei2].classList.toggle('on',on2)}
+      if(on2)day=+evs[ei2].getAttribute('data-day');
+    }
+    // interpolate day between events
+    var pc=Math.round(tp*100);
+    if(pc!==lastPc){lastPc=pc;tkPc.textContent=pc}
+    if(day!==lastDay){lastDay=day;tkDay.textContent='день '+day+' из 18';tkStatus.textContent=day>=18?'Доставлен':day>=17?'На терминале':'В пути'}
+    tkBox.style.transform='translate3d('+(tp*tkW).toFixed(1)+'px,0,0)';
+  }
+}
+function needLoop(){return !D.hidden&&!RM&&(intro<1||heroVis)}
+function frame(t){ticking=false;update(t);if(needLoop())req()}
+function req(){if(!ticking){ticking=true;requestAnimationFrame(frame)}}
+W.addEventListener('scroll',req,{passive:true});
+D.addEventListener('visibilitychange',req);
+var rsT;
+function remeasure(){measure();shutters.forEach(function(s){s.last=-1});req()}
+W.addEventListener('resize',function(){clearTimeout(rsT);rsT=setTimeout(remeasure,120)},{passive:true});
+W.addEventListener('load',remeasure);
+if(D.fonts&&D.fonts.ready)D.fonts.ready.then(remeasure);
+setTimeout(remeasure,900);
+measure();req();
+
+if(FINE&&!RM){
+  pinEl.addEventListener('pointermove',function(e){par.tx=(e.clientX/vw-.5)*-22;par.ty=(e.clientY/vh-.5)*-14},{passive:true});
+  $$('[data-magnet]').forEach(function(b){
+    b.addEventListener('pointermove',function(e){var r=b.getBoundingClientRect();b.style.transform='translate('+((e.clientX-r.left-r.width/2)*.22).toFixed(1)+'px,'+((e.clientY-r.top-r.height/2)*.3).toFixed(1)+'px)'});
+    b.addEventListener('pointerleave',function(){b.style.transform=''});
+  });
+}
+
+/* ============ MENU ============ */
+(function(){
+  var b=$('#burger'),m=$('#mm');
+  function set(o){b.setAttribute('aria-expanded',o);m.classList.toggle('open',o);m.setAttribute('aria-hidden',!o)}
+  b.addEventListener('click',function(){set(b.getAttribute('aria-expanded')!=='true')});
+  $$('a',m).forEach(function(a){a.addEventListener('click',function(){set(false)})});
+  D.addEventListener('keydown',function(e){if(e.key==='Escape')set(false)});
+})();
+
+/* ============ CALCULATOR ============ */
+(function(){
+  var T={
+    sh:{msk:[0,16,1,1],spb:[0,17,2,1],nsk:[0,11,1,1],ala:[0,8,0,1]},
+    vl:{msk:[0,10,1,0],spb:[0,11,1,0],nsk:[0,6,1,0],ala:[0,9,1,1]},
+    sg:{msk:[9,16,1,1],spb:[9,17,2,1],nsk:[9,11,1,1],ala:[9,8,0,1]},
+    mb:{msk:[12,9,1,1],spb:[12,11,1,1],nsk:[12,13,1,1],ala:[10,9,1,1]},
+    db:{msk:[5,9,1,1],spb:[5,11,1,1],nsk:[5,12,1,1],ala:[3,9,1,1]},
+    st:{msk:[0,0,7,1],spb:[0,0,8,1],nsk:[0,5,7,1],ala:[0,0,10,1]}
+  };
+  var SEG=[['sea','Море'],['rail','ЖД'],['road','Авто'],['cus','Таможня']];
+  var EXT={gen:[0,''],ref:[1,'подбор реф-контейнера и подключение к питанию'],big:[5,'согласование схемы погрузки негабарита'],adr:[3,'разрешения на перевозку опасного груза']};
+  var f=$('#calcForm'),from=$('#cFrom'),to=$('#cTo'),days=$('#cDays'),unit=$('#cUnit'),segs=$('#cSegs'),lg=$('#cLg'),route=$('#cRoute'),cur=18,raf;
+  function plural(n){return (n%10===1&&n%100!==11)?'сутки':'суток'}
+  function calc(anim){
+    var row=T[from.value][to.value],cargo=(f.querySelector('input[name=cargo]:checked')||{}).value||'gen',ex=EXT[cargo],total=ex[0],sh='',lh='',i,n=0;
+    for(i=0;i<4;i++)total+=row[i];
+    if(from.value==='st'&&ex[0]===0){}
+    var order=from.value==='st'?[2,3,1,0]:[0,1,3,2];
+    if(ex[0]){sh+='<span class="seg seg--ext" style="--g:'+ex[0]+';--i:'+(n++)+'">+'+ex[0]+'</span>';lh+='<li><i class="seg--ext"></i>Подготовка: '+ex[0]+' сут. — '+ex[1]+'</li>'}
+    order.forEach(function(k){
+      if(!row[k])return;
+      sh+='<span class="seg seg--'+SEG[k][0]+'" style="--g:'+row[k]+';--i:'+(n++)+'">'+row[k]+'</span>';
+      lh+='<li><i class="seg--'+SEG[k][0]+'"></i>'+SEG[k][1]+' — '+row[k]+' сут.</li>';
+    });
+    segs.innerHTML=sh;lg.innerHTML=lh;
+    route.firstChild.nodeValue=from.options[from.selectedIndex].text+' ';route.lastChild.nodeValue=' '+to.options[to.selectedIndex].text;
+    unit.textContent=plural(total);
+    cancelAnimationFrame(raf);
+    if(!anim||RM){days.textContent=total;cur=total;return}
+    var a=cur,t0=null;
+    (function step(t){if(t0===null)t0=t;var k=c01((t-t0)/500);cur=Math.round(a+(total-a)*eo(k));days.textContent=cur;if(k<1)raf=requestAnimationFrame(step)})(performance.now());
+  }
+  f.addEventListener('change',function(){calc(true)});
+  f.addEventListener('submit',function(e){e.preventDefault()});
+  calc(false);
+})();
+
+/* ============ FORM ============ */
+(function(){
+  var f=$('#form');
+  f.addEventListener('submit',function(e){
+    e.preventDefault();
+    var bad=null;
+    $$('[required]',f).forEach(function(i){var ok=i.value.trim().length>1;i.style.borderColor=ok?'':'#FFD400';i.setAttribute('aria-invalid',!ok);if(!ok&&!bad)bad=i});
+    if(bad){bad.focus();return}
+    f.classList.add('sent');$('#formOk').focus&&0;
+  });
+})();
+})();
+</script>
+</body>
+</html>

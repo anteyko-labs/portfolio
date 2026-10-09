@@ -5,6 +5,7 @@ import {
   flagshipCases,
   microCases,
 } from "@/lib/cases-data";
+import { getShowcaseItem, visibleShowcaseItems } from "@/lib/showcase-data";
 
 export const alt = "Anteyko — case study";
 export const size = { width: 1200, height: 630 };
@@ -15,6 +16,7 @@ export function generateStaticParams() {
   return [
     ...flagshipCases.map((c) => ({ slug: c.slug })),
     ...microCases.map((c) => ({ slug: c.id })),
+    ...visibleShowcaseItems.map((s) => ({ slug: s.slug })),
   ];
 }
 
@@ -36,12 +38,13 @@ export default async function Image({ params }: Props) {
   const { slug } = await params;
   const flagship = getFlagshipCaseBySlug(slug);
   const micro = flagship ? null : getMicroCaseById(slug);
-  const item = flagship ?? micro;
+  const showcase = flagship || micro ? null : getShowcaseItem(slug);
+  const item = flagship ?? micro ?? showcase;
 
   const title = item?.title.en ?? "Case study";
   const category = item ? CATEGORY_LABEL[item.category] ?? "" : "";
-  const year = flagship ? String(flagship.year) : "";
-  const industry = flagship ? flagship.industry.en : "";
+  const year = flagship ? String(flagship.year) : showcase ? String(showcase.year) : "";
+  const industry = flagship ? flagship.industry.en : showcase ? showcase.sphere.en : "";
   const metaLine = [category, industry, year].filter(Boolean).join("   ·   ");
   const titleSize = title.length > 46 ? 60 : title.length > 30 ? 72 : 82;
 

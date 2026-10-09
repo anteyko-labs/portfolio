@@ -10,8 +10,10 @@ import {
   type FlagshipCase,
   type MicroCase,
 } from "@/lib/cases-data";
+import { getShowcaseItem, visibleShowcaseItems, type ShowcaseItem } from "@/lib/showcase-data";
 import { CaseDetailContent } from "./case-detail-content";
 import { MicroCaseDetailContent } from "./micro-case-detail-content";
+import { ShowcaseDetailContent } from "./showcase-detail-content";
 
 type Props = { params: Promise<{ locale: string; slug: string }> };
 
@@ -31,7 +33,8 @@ export async function generateStaticParams() {
   // Generate paths for both flagship and micro cases
   const flagshipPaths = flagshipCases.map((c) => ({ slug: c.slug }));
   const microPaths = microCases.map((c) => ({ slug: c.id }));
-  return [...flagshipPaths, ...microPaths];
+  const showcasePaths = visibleShowcaseItems.map((s) => ({ slug: s.slug }));
+  return [...flagshipPaths, ...microPaths, ...showcasePaths];
 }
 
 export async function generateMetadata({ params }: Props) {
@@ -79,6 +82,24 @@ export async function generateMetadata({ params }: Props) {
     };
   }
 
+  // Website / product showcase
+  const showcase = getShowcaseItem(slug);
+  if (showcase) {
+    const title = `${showcase.title[isRu ? "ru" : "en"]} — ${showcase.client[isRu ? "ru" : "en"]}`;
+    const description = clampDescription(showcase.summary[isRu ? "ru" : "en"]);
+    return {
+      title,
+      description,
+      alternates: localeAlternates(locale, `/cases/${slug}`),
+      openGraph: {
+        type: "article",
+        title,
+        description,
+        url: `${SITE}/cases/${slug}`,
+      },
+    };
+  }
+
   return { title: "Case" };
 }
 
@@ -90,7 +111,7 @@ const ORG = {
 };
 
 // Build Article + BreadcrumbList structured data for a case study.
-function caseJsonLd(slug: string, c: FlagshipCase | MicroCase) {
+function caseJsonLd(slug: string, c: FlagshipCase | MicroCase | ShowcaseItem) {
   const url = `${SITE}/cases/${slug}`;
   const article: Record<string, unknown> = {
     "@context": "https://schema.org",
@@ -102,10 +123,14 @@ function caseJsonLd(slug: string, c: FlagshipCase | MicroCase) {
     author: ORG,
     publisher: ORG,
   };
-  if ("year" in c) {
+  if ("industry" in c) {
     article.datePublished = `${c.year}-01-01`;
     article.about = c.industry.en;
     if (c.techStack?.length) article.keywords = c.techStack.join(", ");
+  } else if ("sphere" in c) {
+    article.datePublished = `${c.year}-01-01`;
+    article.about = c.sphere.en;
+    article.keywords = [...c.tags.en, ...(c.stack ?? [])].join(", ");
   }
   const breadcrumb = {
     "@context": "https://schema.org",
@@ -140,6 +165,16 @@ export default async function CasePage({ params }: Props) {
       <PageWrapper>
         <JsonLd data={caseJsonLd(slug, microCase)} />
         <MicroCaseDetailContent caseItem={microCase} />
+      </PageWrapper>
+    );
+  }
+
+  const showcase = getShowcaseItem(slug);
+  if (showcase) {
+    return (
+      <PageWrapper>
+        <JsonLd data={caseJsonLd(slug, showcase)} />
+        <ShowcaseDetailContent item={showcase} />
       </PageWrapper>
     );
   }
