@@ -21,7 +21,6 @@ const LOGO_RULES: { match: RegExp; src: string; label: string }[] = [
   // a public logo even though the company name in the role is KUT Resources AG.
   { match: /KutWallet|KUT Resources/i, src: "/logos/kutwallet.png", label: "KutWallet" },
   { match: /M7[-\s]?Finance/i, src: "/logos/m7-finance.png", label: "M7-Finance" },
-  { match: /ArmaDEX/i, src: "/logos/armadex.png", label: "ArmaDEX" },
 ];
 
 function logoFor(t: Testimonial): LogoMatch | null {

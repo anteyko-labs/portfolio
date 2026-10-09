@@ -1,67 +1,109 @@
 "use client";
 
 import Image from "next/image";
+import { motion } from "framer-motion";
 import { useLanguage } from "@/lib/language-context";
+import { useReducedMotion } from "@/lib/hooks";
 
-// Logos approved for public display. NDA clients are represented by the
-// follow-up line (industry + count) rather than fake silhouettes.
-// `dark: true` wraps the logo in a dark capsule — used for brands whose
-// official wordmark is white and only reads on dark backgrounds.
-// Heights are tuned so each mark carries similar visual weight on the row.
-const LOGOS: {
+// Clients whose names we show publicly. Logos come from the projects themselves
+// (Asaki's brand kit, Paddock's site, TRM's file); ShoeStreet and Avtodom use a
+// text wordmark in their own UI, so they are set in type the same way.
+// Each tile lifts and glows in the brand colour on hover, with a one-line caption.
+type Client = {
   name: string;
-  src: string;
-  /** Target render height in CSS px — the row's visual scale knob. */
-  h: number;
-  dark?: boolean;
-}[] = [
-  { name: "TRM", src: "/logos/trm.png", h: 64 },
-  { name: "KutWallet", src: "/logos/kutwallet.png", h: 64 },
-  { name: "KUT Energy Investments", src: "/logos/kut-energy.png", h: 64 },
-  { name: "M7-Finance", src: "/logos/m7-finance.png", h: 64 },
-  { name: "ArmaDEX", src: "/logos/armadex.png", h: 48, dark: true },
+  what: { en: string; ru: string };
+  color: string;
+  logo: React.ReactNode;
+};
+
+const CLIENTS: Client[] = [
+  {
+    name: "Asaki Sushi",
+    what: { en: "Ordering PWA", ru: "PWA заказов" },
+    color: "#E11D2E",
+    logo: (
+      <span className="flex items-center gap-2">
+        <Image src="/logos/asaki-mark.svg" alt="" width={40} height={40} className="h-9 w-9" />
+        <Image src="/logos/asaki-wordmark.svg" alt="Asaki Sushi" width={120} height={44} className="h-8 w-auto" />
+      </span>
+    ),
+  },
+  {
+    name: "TRM",
+    what: { en: "Offer acceptance", ru: "Акцепт оферты" },
+    color: "#F97316",
+    logo: <Image src="/logos/trm.png" alt="TRM" width={160} height={80} className="h-12 w-auto object-contain" />,
+  },
+  {
+    name: "Paddock Rent a Car",
+    what: { en: "Car rental, Dubai", ru: "Прокат авто, Дубай" },
+    color: "#E4252A",
+    logo: <Image src="/logos/paddock.png" alt="Paddock Rent a Car" width={443} height={33} className="h-6 w-auto" />,
+  },
+  {
+    name: "ShoeStreet",
+    what: { en: "Sneaker store", ru: "Магазин кроссовок" },
+    color: "#B08968",
+    logo: (
+      <span className="inline-block origin-center scale-x-[0.86] font-sans text-[26px] font-extrabold uppercase leading-none tracking-[0.08em]">
+        ShoeStreet
+      </span>
+    ),
+  },
+  {
+    name: "Avtodom",
+    what: { en: "Auto service accounting", ru: "Учёт для автосервиса" },
+    color: "#2563EB",
+    logo: (
+      <span className="flex items-center gap-2 font-sans text-[24px] font-bold leading-none tracking-tight">
+        <span className="grid h-8 w-8 place-items-center rounded-lg bg-current">
+          <span className="text-[15px] font-black text-bg-secondary">A</span>
+        </span>
+        Avtodom
+      </span>
+    ),
+  },
 ];
 
 export function TrustedBySection() {
   const { language } = useLanguage();
-  const heading =
-    language === "en" ? "Trusted by" : "Нам доверяют";
-  const ndaLine =
-    language === "en"
-      ? "15 flagship case studies below — and 40+ products shipped to production, many under NDA."
-      : "15 флагманских кейсов ниже — и 40+ продуктов, выпущенных в прод, большинство под NDA.";
+  const reduced = useReducedMotion();
+  const en = language === "en";
 
   return (
-    <section className="py-14 md:py-20 border-y border-border/50 bg-bg-primary">
+    <section className="border-b border-border bg-bg-primary py-16 md:py-20">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <p className="text-center text-caption font-mono text-text-tertiary uppercase tracking-widest mb-10">
-          {heading}
-        </p>
-        <div className="flex flex-wrap justify-center items-center gap-x-8 gap-y-8 md:gap-x-10 lg:gap-x-12 mb-8 max-w-6xl mx-auto">
-          {LOGOS.map(({ name, src, h, dark }) => (
-            <div
-              key={name}
-              className={
-                dark
-                  ? "rounded-xl bg-text-primary px-4 py-2.5 opacity-85 hover:opacity-100 transition-opacity duration-300 flex items-center"
-                  : "opacity-70 hover:opacity-100 transition-opacity duration-300 flex items-center"
-              }
-              title={name}
-            >
-              <Image
-                src={src}
-                alt={`${name} logo`}
-                width={480}
-                height={160}
-                style={{ width: "auto", height: `${h}px` }}
-                className="object-contain"
-              />
-            </div>
-          ))}
+        <div className="mb-10 flex flex-col items-center gap-3 text-center">
+          <p className="font-mono text-caption uppercase tracking-[0.2em] text-text-tertiary">{en ? "Trusted by" : "Нам доверяют"}</p>
+          <p className="text-body-md text-text-secondary">
+            {en ? "And 40+ more products in production — many of them under NDA." : "И ещё 40+ продуктов в продакшене — многие из них под NDA."}
+          </p>
         </div>
-        <p className="text-center text-body-sm text-text-tertiary max-w-2xl mx-auto">
-          {ndaLine}
-        </p>
+
+        <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+          {CLIENTS.map((c, i) => (
+            <motion.li
+              key={c.name}
+              initial={reduced ? false : { opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ duration: 0.5, delay: i * 0.07, ease: [0.22, 1, 0.36, 1] }}
+              className={i === CLIENTS.length - 1 ? "col-span-2 sm:col-span-1" : undefined}
+            >
+              <div
+                className="logo-tile group relative flex h-32 flex-col items-center justify-center overflow-hidden rounded-2xl border border-border bg-bg-secondary px-4 text-text-primary transition-[border-color,box-shadow,transform,color] duration-500 hover:-translate-y-1 motion-reduce:hover:translate-y-0"
+                style={{ ["--brand" as string]: c.color }}
+                title={c.name}
+              >
+                <span aria-hidden="true" className="logo-tile__glow pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+                <span className="relative flex h-12 items-center transition-transform duration-500 group-hover:-translate-y-2 group-hover:scale-105">{c.logo}</span>
+                <span className="relative mt-1 translate-y-2 font-mono text-[11px] uppercase tracking-wider text-text-tertiary opacity-0 transition-[opacity,transform] duration-500 group-hover:translate-y-0 group-hover:opacity-100">
+                  {c.what[language]}
+                </span>
+              </div>
+            </motion.li>
+          ))}
+        </ul>
       </div>
     </section>
   );

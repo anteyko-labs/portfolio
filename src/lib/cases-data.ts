@@ -47,7 +47,7 @@ export interface MicroCase {
 }
 
 // ORDERING RULE:
-//   1. case-1 (web3-l1-dex / ArmaDEX) is PINNED at index 0 — always first.
+//   1. case-1 (web3-l1-dex, the L1 chain) is PINNED at index 0 — always first.
 //   2. New cases go at index 1 (right after case-1) so newest projects appear second.
 //   3. Older cases follow in chronological order (newest → oldest).
 const _flagshipCases: FlagshipCase[] = [
@@ -228,13 +228,16 @@ const _flagshipCases: FlagshipCase[] = [
       ru: "L1 блокчейн со встроенной DEX перпетуалов (end\u2011to\u2011end)",
     },
     summary: {
-      en: "Performance\u2011oriented Layer\u20111 on Rust with deterministic EVM, native token economics, on\u2011chain perpetual orderbook, privacy layer (Bulletproofs), and a full product suite: DEX UI, Explorer, Operator Panel, Faucet, SDK.",
-      ru: "Производительный Layer\u20111 на Rust с детерминированным EVM, экономикой нативного токена, ончейн\u2011ордербуком перпетуалов, слоем приватности (Bulletproofs) и полным продуктовым контуром: DEX UI, Explorer, Operator Panel, Faucet, SDK.",
+      en: "Performance\u2011oriented Layer\u20111 on Rust with deterministic EVM, native token economics, on\u2011chain perpetual orderbook, privacy layer (Bulletproofs), and a full product suite: DEX UI, Explorer, Operator Panel, Faucet, SDK. Running as a public testnet with 23M+ finalized batches.",
+      ru: "Производительный Layer\u20111 на Rust с детерминированным EVM, экономикой нативного токена, ончейн\u2011ордербуком перпетуалов, слоем приватности (Bulletproofs) и полным продуктовым контуром: DEX UI, Explorer, Operator Panel, Faucet, SDK. Работает как публичный тестнет: финализировано 23M+ батчей.",
     },
     metrics: [
       { label: { en: "Rust core modules", ru: "Модулей ядра на Rust" }, value: "25+" },
       { label: { en: "Frontend apps shipped", ru: "Отправленных фронтенд\u2011приложений" }, value: "4" },
       { label: { en: "API endpoints", ru: "API\u2011эндпоинтов" }, value: "90+" },
+      { label: { en: "Batches finalized on public testnet", ru: "Батчей финализировано в публичном тестнете" }, value: "23M+" },
+      { label: { en: "Active validators", ru: "Активных валидаторов" }, value: "5/5" },
+      { label: { en: "Max leverage on perps", ru: "Максимальное плечо на перпетуалах" }, value: "25x" },
     ],
     artifactHint: { en: "L1 node + 4 UIs + 2 SDKs", ru: "L1 нода + 4 UI + 2 SDK" },
     industry: { en: "Blockchain / DeFi", ru: "Блокчейн / DeFi" },
@@ -266,8 +269,8 @@ const _flagshipCases: FlagshipCase[] = [
       ],
     },
     solution: {
-      en: "Built a single\u2011binary Rust node (25+ core modules) integrating consensus, validator registry, governance, slashing, fee market, EVM executor (revm, EIP\u20111559/2930 + BN256 pairing precompiles EIP\u2011196/197 for full Ethereum precompile compatibility), native token state, DEX engine (orderbook, positions, trades, OHLC candles), privacy primitives (Bulletproofs), checkpoint sync, and hybrid storage. The node exposes 90+ HTTP endpoints, JSON\u2011RPC (Ethereum\u2011compatible), and WebSocket (EVM subscriptions + DEX realtime streams). Shipped four Next.js applications: DEX trading terminal, public block explorer with contract verification, operator UI for node management/governance/staking, and testnet faucet. Two TypeScript SDKs: @armadex/sdk (explorer/contracts) + DEX SDK (trading integration).",
-      ru: "Построили Rust\u2011ноду в одном бинарнике (25+ модулей ядра): консенсус, реестр валидаторов, governance, слэшинг, fee market, EVM\u2011исполнитель (revm, EIP\u20111559/2930 + прекомпайлы BN256 pairing EIP\u2011196/197 для полной совместимости с прекомпайлами Ethereum), состояние нативного токена, DEX\u2011движок (ордербук, позиции, сделки, OHLC\u2011свечи), криптопримитивы (Bulletproofs), checkpoint sync, гибридное хранилище. Нода предоставляет 90+ HTTP\u2011эндпоинтов, JSON\u2011RPC (Ethereum\u2011совместимый) и WebSocket (EVM\u2011подписки + DEX realtime\u2011стримы). Отправили четыре Next.js приложения: DEX\u2011терминал, эксплорер с верификацией контрактов, Operator UI для управления нодой/governance/стейкинга и тестнет\u2011фаукнет. Два TypeScript SDK: @armadex/sdk (эксплорер/контракты) + DEX SDK (трейдинг\u2011интеграция).",
+      en: "Built a single\u2011binary Rust node (25+ core modules) integrating consensus, validator registry, governance, slashing, fee market, EVM executor (revm, EIP\u20111559/2930 + BN256 pairing precompiles EIP\u2011196/197 for full Ethereum precompile compatibility), native token state, DEX engine (orderbook, positions, trades, OHLC candles), privacy primitives (Bulletproofs), checkpoint sync, and hybrid storage. The node exposes 90+ HTTP endpoints, JSON\u2011RPC (Ethereum\u2011compatible), and WebSocket (EVM subscriptions + DEX realtime streams). Shipped four Next.js applications: DEX trading terminal, public block explorer with contract verification, operator UI for node management/governance/staking, and testnet faucet. Two TypeScript SDKs: an explorer/contracts SDK + DEX SDK (trading integration).",
+      ru: "Построили Rust\u2011ноду в одном бинарнике (25+ модулей ядра): консенсус, реестр валидаторов, governance, слэшинг, fee market, EVM\u2011исполнитель (revm, EIP\u20111559/2930 + прекомпайлы BN256 pairing EIP\u2011196/197 для полной совместимости с прекомпайлами Ethereum), состояние нативного токена, DEX\u2011движок (ордербук, позиции, сделки, OHLC\u2011свечи), криптопримитивы (Bulletproofs), checkpoint sync, гибридное хранилище. Нода предоставляет 90+ HTTP\u2011эндпоинтов, JSON\u2011RPC (Ethereum\u2011совместимый) и WebSocket (EVM\u2011подписки + DEX realtime\u2011стримы). Отправили четыре Next.js приложения: DEX\u2011терминал, эксплорер с верификацией контрактов, Operator UI для управления нодой/governance/стейкинга и тестнет\u2011фаукнет. Два TypeScript SDK: SDK эксплорера/контрактов + DEX SDK (трейдинг\u2011интеграция).",
     },
     deliverables: {
       en: [
@@ -280,7 +283,7 @@ const _flagshipCases: FlagshipCase[] = [
         "Block Explorer: batches, transactions, contract verification, statistics, gas tracker",
         "Operator Panel: node status, governance, staking, fraud proof, sync, rolling updates",
         "Testnet Faucet with MetaMask integration",
-        "2 TypeScript SDKs: @armadex/sdk (explorer/contracts) + DEX SDK (trading integration)",
+        "2 TypeScript SDKs: an explorer/contracts SDK + DEX SDK (trading integration)",
         "Solidity contracts + Hardhat deployment scripts",
         "CI/CD, Prometheus/Grafana, OpenTelemetry, Nginx rate limiting (77 automation scripts, 28 documentation files)",
       ],
@@ -294,7 +297,7 @@ const _flagshipCases: FlagshipCase[] = [
         "Эксплорер: батчи, транзакции, верификация контрактов, статистика, gas tracker",
         "Operator Panel: статус ноды, governance, стейкинг, fraud proof, sync, rolling updates",
         "Тестнет\u2011фаукнет с интеграцией MetaMask",
-        "2 TypeScript SDK: @armadex/sdk (эксплорер/контракты) + DEX SDK (трейдинг\u2011интеграция)",
+        "2 TypeScript SDK: SDK эксплорера/контрактов + DEX SDK (трейдинг\u2011интеграция)",
         "Solidity\u2011контракты + скрипты деплоя Hardhat",
         "CI/CD, Prometheus/Grafana, OpenTelemetry, rate limiting Nginx (77 скриптов автоматизации, 28 файлов документации)",
       ],
@@ -336,8 +339,8 @@ const _flagshipCases: FlagshipCase[] = [
       {
         title: { en: "Four production\u2011grade frontends", ru: "Четыре фронтенда продакшн\u2011уровня" },
         description: {
-          en: "DEX Trading UI with realtime charts, orderbook depth, and wallet connection. ArmaScan explorer with contract verification via solc, gas tracker with cost calculator, and data export. Operator Panel for node monitoring, governance, staking, fraud proof, sync, and rolling updates. Faucet with MetaMask auto\u2011fill and rate limiting.",
-          ru: "DEX Trading UI с realtime\u2011графиками, глубиной стакана и подключением кошелька. Эксплорер ArmaScan с верификацией контрактов через solc, gas tracker с калькулятором стоимости и экспортом. Operator Panel для мониторинга ноды, governance, стейкинга, fraud proof, sync и rolling updates. Фаукнет с автозаполнением MetaMask и rate limiting.",
+          en: "DEX Trading UI with realtime charts, orderbook depth, and wallet connection. Block explorer with contract verification via solc, gas tracker with cost calculator, and data export. Operator Panel for node monitoring, governance, staking, fraud proof, sync, and rolling updates. Faucet with MetaMask auto\u2011fill and rate limiting.",
+          ru: "DEX Trading UI с realtime\u2011графиками, глубиной стакана и подключением кошелька. Эксплорер блоков с верификацией контрактов через solc, gas tracker с калькулятором стоимости и экспортом. Operator Panel для мониторинга ноды, governance, стейкинга, fraud proof, sync и rolling updates. Фаукнет с автозаполнением MetaMask и rate limiting.",
         },
       },
     ],
@@ -351,30 +354,30 @@ const _flagshipCases: FlagshipCase[] = [
       { name: { en: "Wallet compatibility (MetaMask, ethers)", ru: "Совместимость кошельков (MetaMask, ethers)" }, passed: true },
       { name: { en: "Testnet Alpha deployment", ru: "Деплой Testnet Alpha" }, passed: true },
     ],
-    imageUrl: "/images/cases/armadex/dex-trading.png",
-    heroImage: "/images/cases/armadex/operator-overview.png",
+    imageUrl: "/images/cases/l1-chain/dex-trading.png",
+    heroImage: "/images/cases/l1-chain/operator-overview.png",
     screenshots: [
-      { src: "/images/cases/armadex/dex-trading.png", alt: { en: "DEX Trading Terminal: orderbook, price chart, buy/sell forms, market list", ru: "DEX\u2011терминал: ордербук, ценовой график, формы покупки/продажи, список рынков" } },
-      { src: "/images/cases/armadex/markets.png", alt: { en: "Markets: all trading pairs with price, volume, and action buttons", ru: "Рынки: торговые пары с ценой, объёмом и кнопками действий" } },
-      { src: "/images/cases/armadex/explorer-blocks.png", alt: { en: "Block Explorer: batch list with hash, transactions, timestamp, status", ru: "Эксплорер: список батчей с хешем, транзакциями, временем и статусом" } },
-      { src: "/images/cases/armadex/network-statistics.png", alt: { en: "Network Statistics: block height, TPS, total batches, success rate", ru: "Статистика сети: высота блока, TPS, всего батчей, процент успеха" } },
-      { src: "/images/cases/armadex/gas-tracker.png", alt: { en: "Gas Tracker: gas price, average usage, network activity chart", ru: "Gas Tracker: цена газа, среднее использование, график активности" } },
-      { src: "/images/cases/armadex/gas-calculator.png", alt: { en: "Gas Calculator: transaction type estimation and cost formula", ru: "Калькулятор газа: оценка типов транзакций и формула стоимости" } },
-      { src: "/images/cases/armadex/verify-contract.png", alt: { en: "Verify Contract: Solidity source submission for bytecode verification", ru: "Верификация контракта: отправка Solidity\u2011кода для проверки байткода" } },
-      { src: "/images/cases/armadex/developer-portal.png", alt: { en: "Developer Portal: Remix IDE, Faucet, RPC, Chain ID, deployment docs", ru: "Портал разработчика: Remix IDE, Faucet, RPC, Chain ID, доки деплоя" } },
-      { src: "/images/cases/armadex/operator-overview.png", alt: { en: "Operator Panel: node overview, block height, role, latency, verification", ru: "Панель оператора: обзор ноды, высота блока, роль, латентность" } },
-      { src: "/images/cases/armadex/dex-orderbook.png", alt: { en: "Operator DEX: price chart, asks/bids, last price, spread, depth", ru: "Ордербук DEX: график цены, asks/bids, последняя цена, спред, глубина" } },
-      { src: "/images/cases/armadex/network-overview.png", alt: { en: "Network Overview: chain params, activity metrics, health status", ru: "Обзор сети: параметры чейна, метрики, статус здоровья" } },
-      { src: "/images/cases/armadex/governance.png", alt: { en: "Governance: create proposals, validator management, voting", ru: "Governance: создание предложений, управление валидаторами, голосование" } },
-      { src: "/images/cases/armadex/staking.png", alt: { en: "Staking: validators with stake, delegation, voting power", ru: "Стейкинг: валидаторы со стейком, делегированием, voting power" } },
-      { src: "/images/cases/armadex/fraud-proof.png", alt: { en: "Fraud Proof: batch verification, valid/fraudulent counts", ru: "Fraud Proof: верификация батчей, счётчики валидных/мошеннических" } },
-      { src: "/images/cases/armadex/sync-status.png", alt: { en: "Sync Status: progress, current height, latest checkpoint", ru: "Статус синхронизации: прогресс, текущая высота, чекпоинт" } },
-      { src: "/images/cases/armadex/rolling-updates.png", alt: { en: "Rolling Updates: version management, admin auth", ru: "Rolling Updates: управление версиями, аутентификация" } },
-      { src: "/images/cases/armadex/evm-registrations.png", alt: { en: "EVM Registrations: address\u2011to\u2011trader mapping, balances", ru: "EVM\u2011регистрации: маппинг адресов к трейдерам, балансы" } },
-      { src: "/images/cases/armadex/register-validator.png", alt: { en: "Register Validator: ID, public key, stake, signature", ru: "Регистрация валидатора: ID, публичный ключ, стейк, подпись" } },
-      { src: "/images/cases/armadex/faucet.png", alt: { en: "Faucet: request test tokens, MetaMask integration", ru: "Фаукнет: запрос тестовых токенов, интеграция MetaMask" } },
-      { src: "/images/cases/armadex/recent-activity.png", alt: { en: "Explorer: recent activity, network info, stats", ru: "Эксплорер: активность, информация о сети, статистика" } },
-      { src: "/images/cases/armadex/peer-network.png", alt: { en: "Peer Network: connected peers discovery and monitoring", ru: "Peer Network: обнаружение и мониторинг пиров" } },
+      { src: "/images/cases/l1-chain/dex-trading.png", alt: { en: "DEX Trading Terminal: orderbook, price chart, buy/sell forms, market list", ru: "DEX\u2011терминал: ордербук, ценовой график, формы покупки/продажи, список рынков" } },
+      { src: "/images/cases/l1-chain/markets.png", alt: { en: "Markets: all trading pairs with price, volume, and action buttons", ru: "Рынки: торговые пары с ценой, объёмом и кнопками действий" } },
+      { src: "/images/cases/l1-chain/explorer-blocks.png", alt: { en: "Block Explorer: batch list with hash, transactions, timestamp, status", ru: "Эксплорер: список батчей с хешем, транзакциями, временем и статусом" } },
+      { src: "/images/cases/l1-chain/network-statistics.png", alt: { en: "Network Statistics: block height, TPS, total batches, success rate", ru: "Статистика сети: высота блока, TPS, всего батчей, процент успеха" } },
+      { src: "/images/cases/l1-chain/gas-tracker.png", alt: { en: "Gas Tracker: gas price, average usage, network activity chart", ru: "Gas Tracker: цена газа, среднее использование, график активности" } },
+      { src: "/images/cases/l1-chain/gas-calculator.png", alt: { en: "Gas Calculator: transaction type estimation and cost formula", ru: "Калькулятор газа: оценка типов транзакций и формула стоимости" } },
+      { src: "/images/cases/l1-chain/verify-contract.png", alt: { en: "Verify Contract: Solidity source submission for bytecode verification", ru: "Верификация контракта: отправка Solidity\u2011кода для проверки байткода" } },
+      { src: "/images/cases/l1-chain/developer-portal.png", alt: { en: "Developer Portal: Remix IDE, Faucet, RPC, Chain ID, deployment docs", ru: "Портал разработчика: Remix IDE, Faucet, RPC, Chain ID, доки деплоя" } },
+      { src: "/images/cases/l1-chain/operator-overview.png", alt: { en: "Operator Panel: node overview, block height, role, latency, verification", ru: "Панель оператора: обзор ноды, высота блока, роль, латентность" } },
+      { src: "/images/cases/l1-chain/dex-orderbook.png", alt: { en: "Operator DEX: price chart, asks/bids, last price, spread, depth", ru: "Ордербук DEX: график цены, asks/bids, последняя цена, спред, глубина" } },
+      { src: "/images/cases/l1-chain/network-overview.png", alt: { en: "Network Overview: chain params, activity metrics, health status", ru: "Обзор сети: параметры чейна, метрики, статус здоровья" } },
+      { src: "/images/cases/l1-chain/governance.png", alt: { en: "Governance: create proposals, validator management, voting", ru: "Governance: создание предложений, управление валидаторами, голосование" } },
+      { src: "/images/cases/l1-chain/staking.png", alt: { en: "Staking: validators with stake, delegation, voting power", ru: "Стейкинг: валидаторы со стейком, делегированием, voting power" } },
+      { src: "/images/cases/l1-chain/fraud-proof.png", alt: { en: "Fraud Proof: batch verification, valid/fraudulent counts", ru: "Fraud Proof: верификация батчей, счётчики валидных/мошеннических" } },
+      { src: "/images/cases/l1-chain/sync-status.png", alt: { en: "Sync Status: progress, current height, latest checkpoint", ru: "Статус синхронизации: прогресс, текущая высота, чекпоинт" } },
+      { src: "/images/cases/l1-chain/rolling-updates.png", alt: { en: "Rolling Updates: version management, admin auth", ru: "Rolling Updates: управление версиями, аутентификация" } },
+      { src: "/images/cases/l1-chain/evm-registrations.png", alt: { en: "EVM Registrations: address\u2011to\u2011trader mapping, balances", ru: "EVM\u2011регистрации: маппинг адресов к трейдерам, балансы" } },
+      { src: "/images/cases/l1-chain/register-validator.png", alt: { en: "Register Validator: ID, public key, stake, signature", ru: "Регистрация валидатора: ID, публичный ключ, стейк, подпись" } },
+      { src: "/images/cases/l1-chain/faucet.png", alt: { en: "Faucet: request test tokens, MetaMask integration", ru: "Фаукнет: запрос тестовых токенов, интеграция MetaMask" } },
+      { src: "/images/cases/l1-chain/recent-activity.png", alt: { en: "Explorer: recent activity, network info, stats", ru: "Эксплорер: активность, информация о сети, статистика" } },
+      { src: "/images/cases/l1-chain/peer-network.png", alt: { en: "Peer Network: connected peers discovery and monitoring", ru: "Peer Network: обнаружение и мониторинг пиров" } },
     ],
   },
   {
@@ -2069,7 +2072,7 @@ const _flagshipCases: FlagshipCase[] = [
   },
 ];
 
-// Pin ArmaDEX (case-1 / web3-l1-dex) to index 0; everything else keeps its order.
+// Pin the L1 case (case-1 / web3-l1-dex) to index 0; everything else keeps its order.
 const PINNED_SLUG = "web3-l1-dex";
 const _pinned = _flagshipCases.find((c) => c.slug === PINNED_SLUG);
 const _rest = _flagshipCases.filter((c) => c.slug !== PINNED_SLUG);
