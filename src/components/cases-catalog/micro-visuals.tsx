@@ -634,6 +634,13 @@ function TokenOrbit({ t, on, tr, utilities }: SceneProps & { utilities: L[] }) {
       <motion.g animate={on ? { rotate: 360 } : { rotate: 0 }} transition={{ duration: 30, repeat: Infinity, ease: "linear" }} style={{ transformOrigin: "600px 320px" }}>
         <ellipse cx={600} cy={320} rx={400} ry={220} fill="none" stroke={t.soft} strokeWidth={4} strokeDasharray="10 12" />
       </motion.g>
+      {on && ["₿", "Ξ", "₮"].map((c, i) => (
+        <motion.g key={c} animate={{ offsetDistance: ["0%", "100%"] }} transition={{ duration: 9, repeat: Infinity, ease: "linear", delay: i * -3 }}
+          style={{ offsetPath: 'path("M200 320 a400 220 0 1 0 800 0 a400 220 0 1 0 -800 0")', offsetRotate: "0deg" }}>
+          <circle r={24} fill={[t.b, t.a, "#26A17B"][i]} />
+          <text y={9} textAnchor="middle" fontSize={26} fontWeight={800} fill="#fff" fontFamily={SANS}>{c}</text>
+        </motion.g>
+      ))}
       {utilities.map((u, i) => {
         const a = (i / utilities.length) * Math.PI * 2 - Math.PI / 2;
         const x = r2(600 + Math.cos(a) * 400);

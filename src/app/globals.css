@@ -1033,3 +1033,50 @@ body {
   12%, 30% { background: rgba(139, 92, 246, 0.28); border-color: rgba(217, 70, 239, 0.6); color: #fff; }
 }
 @media (prefers-reduced-motion: reduce) { .home-module { animation: none; } }
+
+/* Web3 card: crypto wallet with coins flying in */
+.cw-scene .cw-phone { transition: transform 1s cubic-bezier(.22,1,.36,1); }
+.cw-scene .cw-phone--front { transform: rotateY(-18deg) rotateX(8deg); animation: gm-float 6s ease-in-out infinite; }
+.cw-scene .cw-phone--back { transform: translateX(-42%) rotateY(-26deg) rotateZ(-6deg) scale(0.88); opacity: 0.85; }
+.cw-scene[data-active="true"] .cw-phone--front { transform: rotateY(-4deg) rotateX(2deg) scale(1.04); }
+.cw-scene[data-active="true"] .cw-phone--back { transform: translateX(-62%) rotateY(-12deg) rotateZ(-3deg) scale(0.9); opacity: 1; }
+.cw-scene .cw-coin { left: 0; top: 0; opacity: 0; animation: cw-coin 4.8s cubic-bezier(.5,0,.3,1) infinite; }
+.cw-scene[data-active="true"] .cw-coin { animation-duration: 2.4s; }
+@keyframes cw-coin {
+  0% { translate: var(--from); scale: 1.15; rotate: -30deg; opacity: 0; }
+  12% { opacity: 1; }
+  60% { translate: 0 0; scale: 0.35; rotate: 20deg; opacity: 1; }
+  70%, 100% { translate: 0 0; scale: 0.2; opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cw-scene .cw-phone--front { animation: none; }
+  .cw-scene .cw-coin { display: none; }
+}
+
+/* L1 terminal illustration */
+.l1-candle-new { animation: l1-candle 0.5s cubic-bezier(.22,1,.36,1) both; transform-box: fill-box; transform-origin: bottom; }
+@keyframes l1-candle { from { opacity: 0; transform: scaleY(0.2); } }
+.l1-tape { animation: l1-tape 0.45s cubic-bezier(.22,1,.36,1) both; }
+@keyframes l1-tape { from { opacity: 0; transform: translateX(-12px); } }
+@media (prefers-reduced-motion: reduce) { .l1-candle-new, .l1-tape { animation: none; } }
+
+/* Hero details */
+.home-spotlight { background: radial-gradient(420px circle at var(--sx, 70%) var(--sy, 40%), rgba(165, 180, 252, 0.13), transparent 70%); }
+.home-ring { animation: home-spin 18s linear infinite; }
+.phone-pan { animation: phone-pan 2.6s ease-in-out both; }
+@keyframes phone-pan { from { object-position: 50% 0%; } to { object-position: 50% 18%; } }
+.l1-spark { stroke-dasharray: 1; animation: l1-spark 3.2s ease-in-out infinite; }
+@keyframes l1-spark { 0% { stroke-dashoffset: 1; } 55%, 100% { stroke-dashoffset: 0; } }
+@media (prefers-reduced-motion: reduce) { .home-ring, .phone-pan, .l1-spark { animation: none; } }
+
+/* Web3 details */
+.cw-scene .cw-pulse { opacity: 0; animation: cw-pulse 1.6s ease-out infinite; }
+.cw-scene[data-active="true"] .cw-pulse { animation-duration: 0.8s; }
+@keyframes cw-pulse { 0% { opacity: 0.8; transform: translate(-50%, -50%) scale(0.4); } 100% { opacity: 0; transform: translate(-50%, -50%) scale(1.3); } }
+.cw-scene .cw-toast { animation: cw-toast 4.8s cubic-bezier(.22,1,.36,1) infinite; }
+@keyframes cw-toast { 0%, 8% { opacity: 0; transform: translateY(-10px); } 16%, 70% { opacity: 1; transform: translateY(0); } 80%, 100% { opacity: 0; transform: translateY(-6px); } }
+.gcover .gc-spark { animation: gc-spark 2.4s ease-in-out infinite; }
+@keyframes gc-spark { 50% { opacity: 0.15; } }
+.gcover .gc-progress { transform-box: fill-box; transform-origin: left; animation: gc-progress 3s ease-in-out infinite; }
+@keyframes gc-progress { 0% { transform: scaleX(0); } 60%, 100% { transform: scaleX(1); } }
+@media (prefers-reduced-motion: reduce) { .cw-pulse, .cw-toast, .gc-spark, .gc-progress { animation: none !important; } }

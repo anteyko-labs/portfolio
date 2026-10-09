@@ -1,10 +1,10 @@
 "use client";
 
-import Image from "next/image";
 import { motion } from "framer-motion";
 import { Link as NextLink } from "@/i18n/navigation";
 import { useLanguage } from "@/lib/language-context";
 import { useReducedMotion } from "@/lib/hooks";
+import { L1Terminal } from "@/components/cases-catalog/l1-terminal";
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
@@ -57,7 +57,6 @@ export function HomeL1() {
     { v: "2", l: en ? "TypeScript SDKs" : "TypeScript SDK" },
   ];
   const tech = ["EVM · revm", "EIP-1559", "Bulletproofs", en ? "Governance" : "Governance", en ? "Slashing" : "Слэшинг", "Fraud proofs", "Checkpoint sync", "TypeScript SDK"];
-  const screens = ["/images/cases/l1-chain/explorer-blocks.png", "/images/cases/l1-chain/dex-trading.png", "/images/cases/l1-chain/operator-overview.png"];
 
   return (
     <section className="relative isolate overflow-hidden bg-[#06060B] py-24 text-white md:py-32">
@@ -69,11 +68,11 @@ export function HomeL1() {
             <h2 className="mt-5 font-brand text-4xl font-semibold leading-[1.02] tracking-[-0.03em] md:text-6xl">
               {en ? (
                 <>
-                  Our own <span className="home-gradient-text">L1 blockchain</span> with a built-in perp DEX
+                  An <span className="home-gradient-text">L1 blockchain</span> with a built-in perp DEX
                 </>
               ) : (
                 <>
-                  Собственный <span className="home-gradient-text">L1-блокчейн</span> со встроенной DEX
+                  <span className="home-gradient-text">L1-блокчейн</span> со встроенной DEX
                 </>
               )}
             </h2>
@@ -121,23 +120,15 @@ export function HomeL1() {
           <div className="lg:col-span-6">
             <NodeModules en={en} />
 
-            <div className="relative mt-10 h-64 [perspective:1400px] md:h-80">
-              {screens.map((src, i) => (
-                <motion.div
-                  key={src}
-                  initial={reduced ? false : { opacity: 0, y: 40, rotateY: 0 }}
-                  whileInView={{ opacity: 1, y: 0, rotateY: -18 }}
-                  viewport={{ once: true, margin: "-60px" }}
-                  transition={{ duration: 0.9, delay: 0.15 + i * 0.12, ease: EASE }}
-                  className="absolute top-0 w-[70%] overflow-hidden rounded-xl border border-white/15 shadow-[0_40px_80px_-30px_rgba(0,0,0,0.9)]"
-                  style={{ left: `${i * 15}%`, top: `${i * 8}%`, zIndex: i }}
-                >
-                  <div className="relative aspect-[2048/1180]">
-                    <Image src={src} alt="" fill sizes="(max-width: 1024px) 70vw, 420px" className="object-cover object-top" />
-                  </div>
-                </motion.div>
-              ))}
-            </div>
+            <motion.div
+              initial={reduced ? false : { opacity: 0, y: 40, rotateX: 14 }}
+              whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ duration: 0.9, ease: EASE }}
+              className="relative mt-6 aspect-[16/10] overflow-hidden rounded-2xl border border-white/15 shadow-[0_50px_100px_-30px_rgba(124,58,237,0.6)] [transform-origin:50%_100%]"
+            >
+              <L1Terminal />
+            </motion.div>
           </div>
         </div>
       </div>

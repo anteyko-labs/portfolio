@@ -47,19 +47,67 @@ function Phones({ active }: { active: boolean }) {
   );
 }
 
-/** Blocks chaining up, the newest one pulsing */
-function Chain({ active }: { active: boolean }) {
+const COINS = [
+  { sym: "₿", bg: "#F7931A", from: "-46cqw -28cqw", delay: 0 },
+  { sym: "Ξ", bg: "#627EEA", from: "44cqw -30cqw", delay: -0.8 },
+  { sym: "₮", bg: "#26A17B", from: "-48cqw 14cqw", delay: -1.6 },
+  { sym: "◎", bg: "#9945FF", from: "46cqw 18cqw", delay: -2.4 },
+  { sym: "₿", bg: "#F7931A", from: "10cqw -44cqw", delay: -3.2 },
+  { sym: "Ξ", bg: "#627EEA", from: "-20cqw 30cqw", delay: -4 },
+];
+
+/** Crypto wallet (our KutWallet screens) with coins flying in and a chain running underneath */
+function CryptoWallet({ active }: { active: boolean }) {
   return (
-    <div className="absolute inset-0 flex items-center overflow-hidden" style={{ background: "radial-gradient(circle at 70% 40%, #7C3AED40, transparent 60%), #0B0B14" }}>
-      <div className={clsx("home-chain flex gap-3 pl-6", active && "home-chain--fast")}>
-        {Array.from({ length: 14 }, (_, i) => (
-          <div key={i} className="flex items-center gap-3">
-            <div className="grid h-20 w-24 shrink-0 place-content-center rounded-xl border border-white/15 bg-gradient-to-br from-indigo-500/30 to-fuchsia-500/20 text-center">
-              <span className="font-mono text-[10px] text-white/50">block</span>
-              <span className="font-mono text-sm font-semibold text-white">#{(1024 + i).toString(16)}</span>
+    <div
+      className="cw-scene @container absolute inset-0 overflow-hidden"
+      data-active={active}
+      style={{ background: "radial-gradient(circle at 70% 30%, #7C3AED55, transparent 55%), radial-gradient(circle at 20% 90%, #EC489933, transparent 50%), #0B0B14" }}
+    >
+      {/* chain of blocks along the bottom */}
+      <div className="absolute inset-x-0 bottom-3 opacity-60">
+        <div className={clsx("home-chain flex gap-2 pl-4", active && "home-chain--fast")}>
+          {Array.from({ length: 16 }, (_, i) => (
+            <div key={i} className="flex items-center gap-2">
+              <div className="grid h-9 w-14 shrink-0 place-content-center rounded-md border border-white/15 bg-gradient-to-br from-indigo-500/30 to-fuchsia-500/20">
+                <span className="font-mono text-[9px] text-white/60">#{(4096 + i).toString(16)}</span>
+              </div>
+              <span className="h-px w-3 bg-gradient-to-r from-indigo-400 to-fuchsia-400" />
             </div>
-            <span className="h-px w-6 bg-gradient-to-r from-indigo-400 to-fuchsia-400" />
-          </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="absolute inset-0 flex items-start justify-center pt-4 [perspective:1000px]">
+        <div className="cw-phone cw-phone--back absolute aspect-[796/1636] h-[96%]">
+          <Image src="/images/cases/kut-wallet/exchange-chart.png" alt="" fill sizes="160px" className="object-contain" />
+        </div>
+        <div className="cw-phone cw-phone--front relative aspect-[796/1636] h-[104%] drop-shadow-[0_30px_40px_rgba(0,0,0,0.6)]">
+          <Image src="/images/cases/kut-wallet/dashboard.png" alt="" fill sizes="180px" className="object-contain" />
+        </div>
+      </div>
+
+      {/* landing pulse on the wallet */}
+      <span className="cw-pulse pointer-events-none absolute left-1/2 top-[46%] h-[22cqw] w-[22cqw] -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-fuchsia-300/70" />
+      {/* wallet notifications */}
+      <div className="absolute left-[4cqw] top-[6cqw] flex flex-col gap-[1.6cqw]">
+        <span className="cw-toast inline-flex items-center gap-[1.2cqw] rounded-full border border-white/15 bg-white/10 px-[2cqw] py-[1cqw] text-[2.4cqw] font-semibold text-white backdrop-blur">
+          <span className="grid aspect-square w-[3.6cqw] place-items-center rounded-full bg-[#F7931A] text-[2cqw]">₿</span>+0.0425 BTC
+        </span>
+        <span className="cw-toast inline-flex items-center gap-[1.2cqw] rounded-full border border-white/15 bg-white/10 px-[2cqw] py-[1cqw] text-[2.4cqw] font-semibold text-white backdrop-blur [animation-delay:-2.4s]">
+          <span className="text-emerald-300">⇄</span>ETH → USDT ✓
+        </span>
+      </div>
+      {/* coins flying into the wallet */}
+      <div className="absolute left-1/2 top-[46%] h-0 w-0">
+        {COINS.map((c, i) => (
+          <span
+            key={i}
+            className="cw-coin absolute grid -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full font-bold text-white shadow-[0_8px_20px_rgba(0,0,0,0.45)]"
+            style={{ background: c.bg, ["--from" as string]: c.from, animationDelay: `${c.delay}s`, width: "clamp(24px, 7cqw, 44px)", height: "clamp(24px, 7cqw, 44px)", fontSize: "clamp(12px, 3.6cqw, 22px)" }}
+          >
+            {c.sym}
+          </span>
         ))}
       </div>
     </div>
@@ -98,10 +146,10 @@ export function HomeServices() {
       span: "lg:col-span-5",
       href: "/services/web3-addon",
       tag: "Web3",
-      title: en ? "From a token to your own L1" : "От токена до собственного L1",
-      text: en ? "Smart contracts, wallets, tokenization platforms and a full blockchain with a perp DEX." : "Смарт-контракты, кошельки, платформы токенизации и целый блокчейн с DEX перпетуалов.",
-      chips: ["Rust", "EVM", "Solidity"],
-      visual: (a: boolean) => <Chain active={a} />,
+      title: en ? "Crypto wallets, tokens and blockchains" : "Криптокошельки, токены и блокчейн",
+      text: en ? "Non-custodial wallets with a built-in exchange, smart contracts, tokenization platforms and a full blockchain with a DEX." : "Некастодиальные кошельки со встроенной биржей, смарт-контракты, платформы токенизации и целый блокчейн с DEX.",
+      chips: [en ? "Wallets" : "Кошельки", "Solidity", "Rust"],
+      visual: (a: boolean) => <CryptoWallet active={a} />,
       dark: true,
     },
     {
