@@ -975,3 +975,49 @@ body {
 }
 @keyframes admin-progress { from { width: 0%; } to { width: 100%; } }
 @media (prefers-reduced-motion: reduce) { .admin-sheen { animation: none; } }
+
+/* ── Home page ──────────────────────────────────────────────── */
+.home-aurora {
+  background:
+    radial-gradient(40% 50% at 15% 20%, rgba(79, 70, 229, 0.45), transparent 70%),
+    radial-gradient(35% 45% at 85% 30%, rgba(219, 39, 119, 0.28), transparent 70%),
+    radial-gradient(45% 40% at 60% 95%, rgba(6, 182, 212, 0.22), transparent 70%);
+  filter: blur(20px);
+  animation: home-aurora 18s ease-in-out infinite alternate;
+}
+.home-aurora--violet {
+  background:
+    radial-gradient(40% 50% at 80% 30%, rgba(124, 58, 237, 0.45), transparent 70%),
+    radial-gradient(35% 45% at 10% 80%, rgba(236, 72, 153, 0.25), transparent 70%);
+}
+@keyframes home-aurora {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to { transform: translate3d(-3%, 2%, 0) scale(1.08); }
+}
+.home-gradient-text {
+  background: linear-gradient(100deg, #A5B4FC 0%, #F0ABFC 45%, #FDE68A 100%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: home-gradient 8s ease-in-out infinite alternate;
+}
+@keyframes home-gradient { to { background-position: 100% 0; } }
+.home-cta-glow { box-shadow: 0 0 0 0 rgba(165, 180, 252, 0.6), 0 20px 50px -15px rgba(129, 140, 248, 0.7); animation: home-pulse 2.8s ease-out infinite; }
+@keyframes home-pulse { 0% { box-shadow: 0 0 0 0 rgba(165, 180, 252, 0.5), 0 20px 50px -15px rgba(129, 140, 248, 0.7); } 70%, 100% { box-shadow: 0 0 0 18px rgba(165, 180, 252, 0), 0 20px 50px -15px rgba(129, 140, 248, 0.7); } }
+.home-float { animation: home-float 6s ease-in-out infinite; }
+@keyframes home-float { 50% { translate: 0 -8px; } }
+.home-scroll-cue { animation: home-cue 2s ease-in-out infinite; transform-origin: top; }
+@keyframes home-cue { 0% { transform: scaleY(0); } 50% { transform: scaleY(1); } 100% { transform: scaleY(1); opacity: 0; } }
+.home-chain { animation: home-chain 22s linear infinite; }
+.home-chain--fast { animation-duration: 7s; }
+@keyframes home-chain { to { transform: translateX(-50%); } }
+.home-spin-slow { animation: home-spin 24s linear infinite; }
+@keyframes home-spin { to { transform: rotate(360deg); } }
+.home-blink { animation: home-blink 1.8s ease-in-out infinite; }
+@keyframes home-blink { 50% { opacity: 0.35; transform: translate(-50%, -50%) scale(0.8); } }
+.home-marquee { animation: catalog-marquee 40s linear infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .home-aurora, .home-gradient-text, .home-cta-glow, .home-float, .home-scroll-cue,
+  .home-chain, .home-spin-slow, .home-blink, .home-marquee { animation: none; }
+}

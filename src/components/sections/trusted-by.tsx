@@ -19,7 +19,6 @@ const LOGOS: {
   { name: "KutWallet", src: "/logos/kutwallet.png", h: 64 },
   { name: "KUT Energy Investments", src: "/logos/kut-energy.png", h: 64 },
   { name: "M7-Finance", src: "/logos/m7-finance.png", h: 64 },
-  { name: "ArmaDEX", src: "/logos/armadex.png", h: 48, dark: true },
 ];
 
 export function TrustedBySection() {
@@ -28,8 +27,8 @@ export function TrustedBySection() {
     language === "en" ? "Trusted by" : "Нам доверяют";
   const ndaLine =
     language === "en"
-      ? "15 flagship case studies below — and 40+ products shipped to production, many under NDA."
-      : "15 флагманских кейсов ниже — и 40+ продуктов, выпущенных в прод, большинство под NDA.";
+      ? "40+ products shipped to production — many of them under NDA."
+      : "40+ продуктов выпущены в прод — многие из них под NDA.";
 
   return (
     <section className="py-14 md:py-20 border-y border-border/50 bg-bg-primary">

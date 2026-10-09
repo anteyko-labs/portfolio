@@ -2,30 +2,20 @@ import { PageWrapper } from "@/components/layout/page-wrapper";
 import { JsonLd } from "@/components/seo/json-ld";
 import { SITE_BASE } from "@/components/seo/breadcrumbs";
 import { localeAlternates } from "@/i18n/metadata";
-import { HeroSection } from "@/components/sections/hero";
-import { MarqueeBanner } from "@/components/sections/marquee-banner";
-import { WhatWeBuildSection } from "@/components/sections/what-we-build";
-import { WhyUsSection } from "@/components/sections/why-us";
+import { HomeHero } from "@/components/home/home-hero";
+import { HomeServices } from "@/components/home/home-services";
+import { HomeWork } from "@/components/home/home-work";
+import { HomeL1 } from "@/components/home/home-l1";
+import { HomeProcess } from "@/components/home/home-process";
+import { HomeCta } from "@/components/home/home-cta";
 import { TrustedBySection } from "@/components/sections/trusted-by";
-import { FeaturedCasesSection } from "@/components/sections/featured-cases";
-import { FlagshipShowcase } from "@/components/sections/flagship-showcase";
 import { TestimonialsSection } from "@/components/sections/testimonials";
 import { PackagesSection } from "@/components/sections/packages";
-import { ProcessPreviewSection } from "@/components/sections/process-preview";
 import { FAQPreviewSection } from "@/components/sections/faq-preview";
-import { FinalCTASection } from "@/components/sections/final-cta";
-import { SectionBeam } from "@/components/effects/section-beam";
+import { getL1Snapshot } from "@/lib/l1-stats";
 
-// Thin relative wrapper that hosts a <SectionBeam> between two sections so the
-// indigo "energy line" reads as a deliberate connector in the scroll. The beam
-// itself centers + offsets inside this container; the height gives it room.
-function BeamConnector() {
-  return (
-    <div className="relative h-20 md:h-24" aria-hidden="true">
-      <SectionBeam height="full" />
-    </div>
-  );
-}
+// Re-read the L1 height every 10 minutes; the client extrapolates in between.
+export const revalidate = 600;
 
 // WebSite entity for the home page. No SearchAction is included because the site
 // exposes no on-site search endpoint. publisher points at the Organization that
@@ -48,26 +38,21 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   return { alternates: localeAlternates(locale, "/") };
 }
 
-export default function Home() {
+export default async function Home() {
+  const l1 = await getL1Snapshot();
   return (
     <PageWrapper>
       <JsonLd data={websiteSchema} />
-      <HeroSection />
-      <MarqueeBanner />
-      {/* Beam connector — energy flows out of the marquee into the first content section. */}
-      <BeamConnector />
-      <WhatWeBuildSection />
-      <WhyUsSection />
+      <HomeHero l1={l1} />
       <TrustedBySection />
-      <FeaturedCasesSection />
-      {/* Beam connector — leads the eye into the dark flagship moment. */}
-      <BeamConnector />
-      <FlagshipShowcase />
+      <HomeServices />
+      <HomeWork />
+      <HomeL1 snapshot={l1} />
+      <HomeProcess />
       <TestimonialsSection />
       <PackagesSection />
-      <ProcessPreviewSection />
       <FAQPreviewSection />
-      <FinalCTASection />
+      <HomeCta />
     </PageWrapper>
   );
 }
