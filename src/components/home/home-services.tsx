@@ -124,7 +124,7 @@ export function HomeServices() {
   const items = [
     {
       span: "lg:col-span-7",
-      href: "/services/launch-site",
+      href: "/cases?type=web",
       tag: en ? "Websites" : "Сайты",
       title: en ? "Websites that sell — and that people scroll to the end" : "Сайты, которые продают и которые хочется долистать",
       text: en ? "Corporate sites, catalogs with booking, landing pages with scroll scenes. SEO, speed and analytics from day one." : "Корпоративные сайты, каталоги с бронированием, лендинги со скролл-сценами. SEO, скорость и аналитика с первого дня.",
@@ -134,7 +134,7 @@ export function HomeServices() {
     },
     {
       span: "lg:col-span-5",
-      href: "/services/mvp-sprint",
+      href: "/cases?type=mobile",
       tag: en ? "Products & MVP" : "Продукты и MVP",
       title: en ? "Apps your customers install" : "Приложения, которые ставят на телефон",
       text: en ? "Ordering, booking and loyalty PWAs with an owner's cabinet." : "PWA для заказов, записи и лояльности — с кабинетом владельца.",
@@ -144,7 +144,7 @@ export function HomeServices() {
     },
     {
       span: "lg:col-span-5",
-      href: "/services/web3-addon",
+      href: "/cases?type=web3",
       tag: "Web3",
       title: en ? "Crypto wallets, tokens and blockchains" : "Криптокошельки, токены и блокчейн",
       text: en ? "Non-custodial wallets with a built-in exchange, smart contracts, tokenization platforms and a full blockchain with a DEX." : "Некастодиальные кошельки со встроенной биржей, смарт-контракты, платформы токенизации и целый блокчейн с DEX.",
@@ -154,7 +154,7 @@ export function HomeServices() {
     },
     {
       span: "lg:col-span-7",
-      href: "/services/startup-under-key",
+      href: "/cases?type=product",
       tag: en ? "ERP, CRM, analytics" : "ERP, CRM, аналитика",
       title: en ? "Systems the business runs on" : "Системы, на которых держится бизнес",
       text: en ? "Accounting, marking and logistics, BI dashboards — built around how your team actually works." : "Учёт, маркировка и логистика, BI-дашборды — под то, как реально работает ваша команда.",

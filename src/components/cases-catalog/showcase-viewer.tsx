@@ -123,7 +123,7 @@ function ScrollShot({ item }: { item: ShowcaseItem }) {
   const { language } = useLanguage();
   return (
     <div className="grid gap-6 lg:grid-cols-[1fr_auto] lg:items-start">
-      <div className="overflow-hidden rounded-2xl border border-border bg-bg-elevated shadow-[0_40px_80px_-40px_rgba(10,10,10,0.35)]">
+      <div className="min-w-0 overflow-hidden rounded-2xl border border-border bg-bg-elevated shadow-[0_40px_80px_-40px_rgba(10,10,10,0.35)]">
         <Chrome domain={item.domain} />
         <div className="relative h-[62vh] max-h-[760px] min-h-[360px] overflow-y-auto overscroll-contain" tabIndex={0} aria-label={language === "en" ? "Full page screenshot, scrollable" : "Скриншот всей страницы, можно листать"}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -149,7 +149,7 @@ function Gallery({ item }: { item: ShowcaseItem }) {
 
   return (
     <div className="grid gap-6 lg:grid-cols-[1fr_auto] lg:items-start">
-      <div>
+      <div className="min-w-0">
         <div className="overflow-hidden rounded-2xl border border-border bg-bg-elevated shadow-[0_40px_80px_-40px_rgba(10,10,10,0.35)]">
           <Chrome domain={item.domain} />
           <div className="relative aspect-[16/10] bg-bg-tertiary">

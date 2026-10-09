@@ -7,7 +7,7 @@ import { visibleShowcaseItems, type ShowcaseStatus } from "./showcase-data";
 type L = { en: string; ru: string };
 
 export type CatalogStatus = ShowcaseStatus | "case";
-export type CatalogFilter = "all" | CaseCategory | "motion";
+export type CatalogFilter = "all" | CaseCategory | "motion" | "mobile";
 export type CatalogSort = "featured" | "newest" | "oldest" | "az";
 
 export interface CatalogEntry {
@@ -157,6 +157,7 @@ export const catalogEntries: CatalogEntry[] = [...fromShowcase, ...fromCases];
 export function matchesFilter(e: CatalogEntry, f: CatalogFilter): boolean {
   if (f === "all") return true;
   if (f === "motion") return Boolean(e.signature);
+  if (f === "mobile") return Boolean(e.phones?.length || e.mobileFirst);
   return e.category === f;
 }
 

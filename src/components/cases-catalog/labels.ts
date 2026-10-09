@@ -14,6 +14,7 @@ export const FILTER_LABEL: Record<CatalogFilter, L> = {
   all: { en: "All work", ru: "Все работы" },
   motion: { en: "✦ Animation", ru: "✦ Анимации" },
   web: { en: "Websites", ru: "Сайты" },
+  mobile: { en: "Mobile", ru: "Мобильные" },
   product: { en: "Products", ru: "Продукты" },
   web3: { en: "Web3", ru: "Web3" },
   infrastructure: { en: "Infrastructure", ru: "Инфраструктура" },

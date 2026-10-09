@@ -39,8 +39,6 @@ export function CatalogHero() {
   const ref = useRef<HTMLElement>(null);
 
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-  const wallY = useTransform(scrollYProgress, [0, 1], [0, -140]);
-  const wallTilt = useTransform(scrollYProgress, [0, 1], [24, 8]);
   const fade = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
 
   const withCover = sortEntries(catalogEntries.filter((e) => e.cover && !e.mobileFirst && !e.phones), "featured", language);
@@ -72,9 +70,9 @@ export function CatalogHero() {
       <motion.div
         aria-hidden="true"
         className="catalog-wall pointer-events-none absolute inset-x-0 -top-10 -z-10 h-[125%]"
-        style={reduced ? undefined : { y: wallY, opacity: fade }}
+        style={reduced ? undefined : { opacity: fade }}
       >
-        <motion.div className="catalog-wall__plane" style={reduced ? undefined : { rotateX: wallTilt, rotateZ: -7 }}>
+        <div className="catalog-wall__plane">
           {rows.map((row, r) => (
             <div key={r} className="catalog-wall__row" data-dir={r % 2 ? "rev" : "fwd"} style={{ ["--dur" as string]: `${70 + r * 14}s` }}>
               {[...row, ...row].map((e, i) => (
@@ -84,7 +82,7 @@ export function CatalogHero() {
               ))}
             </div>
           ))}
-        </motion.div>
+        </div>
       </motion.div>
       <div aria-hidden="true" className="catalog-wall__veil pointer-events-none absolute inset-0 -z-10" />
 

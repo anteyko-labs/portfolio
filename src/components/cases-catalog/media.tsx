@@ -9,6 +9,9 @@ import { GENERATIVE_COVERS } from "./generative-covers";
 
 const BASE_W = 1440;
 
+// Only one live demo runs at a time: mounting a new one unloads the previous.
+let unloadCurrent: (() => void) | null = null;
+
 interface MediaProps {
   entry: CatalogEntry;
   title: string;
@@ -59,6 +62,8 @@ function LivePreview({ entry, title, active, sizes, priority }: { entry: Catalog
   const frame = useRef<HTMLIFrameElement>(null);
   const [near, setNear] = useState(false);
   const [loaded, setLoaded] = useState(false);
+  const [wanted, setWanted] = useState(false);
+  const [touchOn, setTouchOn] = useState(false);
   const [size, setSize] = useState({ scale: 0.5, h: 900 });
   const activeRef = useRef(false);
   const touchActive = useRef(false);
@@ -96,6 +101,7 @@ function LivePreview({ entry, title, active, sizes, priority }: { entry: Catalog
         ([e]) => {
           touchActive.current = e.intersectionRatio > 0.8;
           activeRef.current = touchActive.current;
+          setTouchOn(touchActive.current);
         },
         { threshold: [0, 0.8, 1] }
       );
@@ -107,6 +113,30 @@ function LivePreview({ entry, title, active, sizes, priority }: { entry: Catalog
       centerIO?.disconnect();
     };
   }, []);
+
+  // Mount the demo only while it is being looked at; keep it a moment after
+  // the pointer leaves so a quick re-hover doesn't reload it.
+  useEffect(() => {
+    const on = near && (active || touchOn);
+    if (on) {
+      // Dwell before loading so scrolling past cards doesn't start every demo
+      const id = window.setTimeout(() => {
+        const unload = () => {
+          setWanted(false);
+          setLoaded(false);
+        };
+        if (unloadCurrent && unloadCurrent !== unload) unloadCurrent();
+        unloadCurrent = unload;
+        setWanted(true);
+      }, 350);
+      return () => window.clearTimeout(id);
+    }
+    const id = window.setTimeout(() => {
+      setWanted(false);
+      setLoaded(false);
+    }, 2500);
+    return () => window.clearTimeout(id);
+  }, [near, active, touchOn]);
 
   useEffect(() => {
     if (!loaded) return;
@@ -147,7 +177,7 @@ function LivePreview({ entry, title, active, sizes, priority }: { entry: Catalog
           className={clsx("object-cover object-top transition-opacity duration-700", loaded && "opacity-0")}
         />
       )}
-      {near && entry.demo && (
+      {wanted && entry.demo && (
         <iframe
           ref={frame}
           src={entry.demo}

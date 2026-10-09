@@ -1080,3 +1080,17 @@ body {
 .gcover .gc-progress { transform-box: fill-box; transform-origin: left; animation: gc-progress 3s ease-in-out infinite; }
 @keyframes gc-progress { 0% { transform: scaleX(0); } 60%, 100% { transform: scaleX(1); } }
 @media (prefers-reduced-motion: reduce) { .cw-pulse, .cw-toast, .gc-spark, .gc-progress { animation: none !important; } }
+
+/* Floating WhatsApp button */
+.wa-button__ring { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.55); animation: wa-ring 2.4s ease-out infinite; }
+@keyframes wa-ring { 70%, 100% { box-shadow: 0 0 0 16px rgba(37, 211, 102, 0); } }
+@media (prefers-reduced-motion: reduce) { .wa-button__ring { animation: none; } }
+
+/* Performance: GPU layers for the marquee, motion only where it is visible */
+.catalog-wall__row { will-change: transform; }
+.catalog-wall__tile { contain: paint; }
+/* signature rim spins only while hovered — idle cards keep a still gradient */
+.catalog-card--signature::before { animation-play-state: paused; }
+.catalog-card--signature:hover::before { animation-play-state: running; }
+/* geo heatmap columns: still at rest, the wave plays on hover */
+.gcover[data-active="false"] .geo-col { animation: none; }
