@@ -228,16 +228,13 @@ const _flagshipCases: FlagshipCase[] = [
       ru: "L1 блокчейн со встроенной DEX перпетуалов (end\u2011to\u2011end)",
     },
     summary: {
-      en: "Performance\u2011oriented Layer\u20111 on Rust with deterministic EVM, native token economics, on\u2011chain perpetual orderbook, privacy layer (Bulletproofs), and a full product suite: DEX UI, Explorer, Operator Panel, Faucet, SDK. Running as a public testnet with 23M+ finalized batches.",
-      ru: "Производительный Layer\u20111 на Rust с детерминированным EVM, экономикой нативного токена, ончейн\u2011ордербуком перпетуалов, слоем приватности (Bulletproofs) и полным продуктовым контуром: DEX UI, Explorer, Operator Panel, Faucet, SDK. Работает как публичный тестнет: финализировано 23M+ батчей.",
+      en: "Performance\u2011oriented Layer\u20111 on Rust with deterministic EVM, native token economics, on\u2011chain perpetual orderbook, privacy layer (Bulletproofs), and a full product suite: DEX UI, Explorer, Operator Panel, Faucet, SDK.",
+      ru: "Производительный Layer\u20111 на Rust с детерминированным EVM, экономикой нативного токена, ончейн\u2011ордербуком перпетуалов, слоем приватности (Bulletproofs) и полным продуктовым контуром: DEX UI, Explorer, Operator Panel, Faucet, SDK.",
     },
     metrics: [
       { label: { en: "Rust core modules", ru: "Модулей ядра на Rust" }, value: "25+" },
       { label: { en: "Frontend apps shipped", ru: "Отправленных фронтенд\u2011приложений" }, value: "4" },
       { label: { en: "API endpoints", ru: "API\u2011эндпоинтов" }, value: "90+" },
-      { label: { en: "Batches finalized on public testnet", ru: "Батчей финализировано в публичном тестнете" }, value: "23M+" },
-      { label: { en: "Active validators", ru: "Активных валидаторов" }, value: "5/5" },
-      { label: { en: "Max leverage on perps", ru: "Максимальное плечо на перпетуалах" }, value: "25x" },
     ],
     artifactHint: { en: "L1 node + 4 UIs + 2 SDKs", ru: "L1 нода + 4 UI + 2 SDK" },
     industry: { en: "Blockchain / DeFi", ru: "Блокчейн / DeFi" },

@@ -7,7 +7,6 @@ import { Link as NextLink } from "@/i18n/navigation";
 import { useLanguage } from "@/lib/language-context";
 import { useReducedMotion } from "@/lib/hooks";
 import { MagneticButton } from "@/components/ui/magnetic-button";
-import { estimateHeight, type L1Snapshot } from "@/lib/l1-stats";
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
@@ -82,41 +81,21 @@ function LiveSite({ src, title, width = 1440, height = 900, poster }: { src: str
   );
 }
 
-function L1Ticker({ snapshot, en }: { snapshot: L1Snapshot; en: boolean }) {
-  const [h, setH] = useState(snapshot.height);
-  useEffect(() => {
-    const tick = () => setH(estimateHeight(snapshot));
-    const first = window.setTimeout(tick, 0);
-    const id = window.setInterval(tick, 1000);
-    return () => {
-      window.clearTimeout(first);
-      window.clearInterval(id);
-    };
-  }, [snapshot]);
+/** Decorative card for the L1 work: modules lighting up in turn (no live data) */
+function L1Card({ en }: { en: boolean }) {
+  const mods = ["Consensus", "EVM", "DEX", "Privacy", "Governance", "SDK"];
   return (
     <div className="w-[220px] rounded-2xl border border-white/10 bg-[#0E0E18]/90 p-4 shadow-2xl backdrop-blur-xl">
       <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-wider text-white/50">
-        <span className="relative flex h-2 w-2">
-          <span className="absolute inset-0 animate-ping rounded-full bg-emerald-400/70 motion-reduce:animate-none" />
-          <span className="relative h-2 w-2 rounded-full bg-emerald-400" />
-        </span>
-        {en ? "Our L1 · finalized" : "Наш L1 · финализирован"}
+        <span className="h-2 w-2 rounded-full bg-fuchsia-400" />
+        {en ? "Our own L1" : "Свой L1-блокчейн"}
       </div>
-      <AnimatePresence mode="popLayout" initial={false}>
-        <motion.p
-          key={h}
-          initial={{ y: 14, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          exit={{ y: -14, opacity: 0 }}
-          transition={{ duration: 0.35 }}
-          className="mt-2 font-mono text-xl font-semibold tabular-nums text-white"
-        >
-          #{h.toLocaleString("ru-RU")}
-        </motion.p>
-      </AnimatePresence>
-      <div className="mt-3 flex gap-1">
-        {Array.from({ length: 12 }, (_, i) => (
-          <span key={i} className="h-5 flex-1 rounded-sm bg-gradient-to-t from-indigo-500/40 to-fuchsia-400/80" style={{ opacity: 0.35 + ((h + i) % 5) * 0.15 }} />
+      <p className="mt-2 font-brand text-lg font-semibold text-white">Rust · EVM · DEX</p>
+      <div className="mt-3 grid grid-cols-3 gap-1">
+        {mods.map((m, i) => (
+          <span key={m} className="home-module rounded-md border border-white/10 px-1.5 py-1 text-center font-mono text-[9px] text-white/70" style={{ animationDelay: `${i * 0.4}s` }}>
+            {m}
+          </span>
         ))}
       </div>
     </div>
@@ -135,7 +114,7 @@ function Counter({ to, suffix = "", delay = 0 }: { to: number; suffix?: string; 
   return <span ref={ref} className="tabular-nums">{`${to}${suffix}`}</span>;
 }
 
-export function HomeHero({ l1 }: { l1: L1Snapshot }) {
+export function HomeHero() {
   const { t, language } = useLanguage();
   const en = language === "en";
   const reduced = useReducedMotion();
@@ -317,9 +296,9 @@ export function HomeHero({ l1 }: { l1: L1Snapshot }) {
                 </div>
               </motion.div>
 
-              {/* L1 ticker */}
+              {/* L1 card */}
               <motion.div style={reduced ? undefined : layerTicker} className="absolute -right-[3%] top-[-4%] hidden sm:block">
-                <L1Ticker snapshot={l1} en={en} />
+                <L1Card en={en} />
               </motion.div>
 
               {/* result chips */}

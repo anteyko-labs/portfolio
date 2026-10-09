@@ -1025,3 +1025,11 @@ body {
 /* Trusted-by tiles: lift and glow in the brand colour on hover */
 .logo-tile:hover { border-color: color-mix(in srgb, var(--brand) 45%, transparent); box-shadow: 0 24px 50px -28px var(--brand); color: var(--brand); }
 .logo-tile__glow { background: radial-gradient(120% 90% at 50% 120%, color-mix(in srgb, var(--brand) 22%, transparent), transparent 70%); }
+
+/* L1 node modules lighting up in turn */
+.home-module { animation: home-module 5.4s ease-in-out infinite; }
+@keyframes home-module {
+  0%, 100% { background: rgba(255, 255, 255, 0.02); border-color: rgba(255, 255, 255, 0.1); }
+  12%, 30% { background: rgba(139, 92, 246, 0.28); border-color: rgba(217, 70, 239, 0.6); color: #fff; }
+}
+@media (prefers-reduced-motion: reduce) { .home-module { animation: none; } }

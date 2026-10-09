@@ -55,7 +55,7 @@ function Chain({ active }: { active: boolean }) {
         {Array.from({ length: 14 }, (_, i) => (
           <div key={i} className="flex items-center gap-3">
             <div className="grid h-20 w-24 shrink-0 place-content-center rounded-xl border border-white/15 bg-gradient-to-br from-indigo-500/30 to-fuchsia-500/20 text-center">
-              <span className="font-mono text-[10px] text-white/50">batch</span>
+              <span className="font-mono text-[10px] text-white/50">block</span>
               <span className="font-mono text-sm font-semibold text-white">#{(1024 + i).toString(16)}</span>
             </div>
             <span className="h-px w-6 bg-gradient-to-r from-indigo-400 to-fuchsia-400" />
