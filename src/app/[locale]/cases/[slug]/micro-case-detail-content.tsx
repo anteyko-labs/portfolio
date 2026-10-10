@@ -11,29 +11,25 @@ import { TiltCard } from "@/components/ui/tilt-card";
 import { CategoryBadge } from "@/components/ui/badge";
 import { MetricPill } from "@/components/ui/metric-pill";
 import { ButtonLink } from "@/components/ui/link";
-import {
-  type MicroCase,
-  getRelatedFlagshipCases,
-  microCases,
-} from "@/lib/cases-data";
+import type { FlagshipCase, MicroCase } from "@/lib/cases-data";
 import { CaseBottomCTA } from "@/components/case-bottom-cta";
 import { MicroVisual } from "@/components/cases-catalog/micro-visuals";
 
 interface MicroCaseDetailContentProps {
   caseItem: MicroCase;
+  /** Same-category flagship and micro cases, picked on the server */
+  relatedFlagship: FlagshipCase[];
+  relatedMicro: MicroCase[];
+  /** Next micro case and this one's place in the list */
+  next: MicroCase;
+  index: number;
+  total: number;
 }
 
-export function MicroCaseDetailContent({ caseItem }: MicroCaseDetailContentProps) {
+export function MicroCaseDetailContent({ caseItem, relatedFlagship, relatedMicro, next, index, total }: MicroCaseDetailContentProps) {
   const { language, t } = useLanguage();
   const prefersReducedMotion = useReducedMotion();
   
-  // Get related flagship cases by same category
-  const relatedFlagship = getRelatedFlagshipCases(caseItem.category, 2);
-  
-  // Get other micro cases in same category (excluding current)
-  const relatedMicro = microCases
-    .filter((c) => c.category === caseItem.category && c.id !== caseItem.id)
-    .slice(0, 4);
 
   // Category descriptions for context
   const categoryDescriptions = {
@@ -67,8 +63,6 @@ export function MicroCaseDetailContent({ caseItem }: MicroCaseDetailContentProps
     },
   };
 
-  const index = microCases.findIndex((c) => c.id === caseItem.id);
-  const next = microCases[(index + 1) % microCases.length];
   const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
   return (
@@ -81,7 +75,7 @@ export function MicroCaseDetailContent({ caseItem }: MicroCaseDetailContentProps
               <span aria-hidden="true">←</span> {pick({ en: "All work", ru: "Все работы", zh: "全部作品", tr: "Tüm işler", ar: "جميع الأعمال" }, language)}
             </NextLink>
             <span>
-              {String(index + 1).padStart(2, "0")} / {String(microCases.length).padStart(2, "0")}
+              {String(index + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
             </span>
           </div>
           <div className="mt-8">

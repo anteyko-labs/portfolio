@@ -16,6 +16,8 @@ import { WhatsAppButton } from "@/components/whatsapp-button";
 import { OFFICES } from "@/lib/locations";
 import { PortalTransition } from "@/components/effects/portal-transition";
 import { isRtl, pick, type Language } from "@/lib/i18n-text";
+import { SITE_DESCRIPTION, SITE_TITLE } from "@/i18n/site-copy";
+import { localeAlternates } from "@/i18n/metadata";
 
 // Refined-light type system: Manrope (geometric grotesque, RU+EN, premium)
 // for both UI and display weights; Geist Mono for technical labels.
@@ -69,26 +71,8 @@ export async function generateMetadata({
   const { locale } = await params;
   const lang = locale as Language;
 
-  const title = pick(
-    {
-      en: "Anteyko — End-to-end Product Development Studio",
-      ru: "Anteyko — студия полного цикла продуктовой разработки",
-      zh: "Anteyko——端到端产品开发工作室",
-      tr: "Anteyko — Uçtan Uca Ürün Geliştirme Stüdyosu",
-      ar: "Anteyko — استوديو تطوير منتجات متكامل",
-    },
-    lang
-  );
-  const description = pick(
-    {
-      en: "Design, frontend, backend, admin panels, integrations, infrastructure, and launch. Web2 + Web3 — in one delivery loop. Offices in Bishkek, Dubai, Istanbul, Chicago and Shenzhen.",
-      ru: "Дизайн, фронтенд, бэкенд, админ-панели, интеграции, инфраструктура и запуск. Web2 + Web3 — в одном цикле поставки. Офисы в Бишкеке, Дубае, Стамбуле, Чикаго и Шэньчжэне.",
-      zh: "设计、前端、后端、管理后台、系统集成、基础设施到上线。Web2 + Web3——同一交付闭环。办公室遍布比什凯克、迪拜、伊斯坦布尔、芝加哥和深圳。",
-      tr: "Tasarım, frontend, backend, yönetim panelleri, entegrasyonlar, altyapı ve lansman. Web2 + Web3 — tek bir teslimat döngüsünde. Bişkek, Dubai, İstanbul, Chicago ve Shenzhen'de ofisler.",
-      ar: "التصميم، الواجهة الأمامية، الواجهة الخلفية، لوحات الإدارة، التكاملات، البنية التحتية، والإطلاق. Web2 + Web3 — في دورة تسليم واحدة. مكاتب في بيشكيك ودبي وإسطنبول وشيكاغو وشنتشن.",
-    },
-    lang
-  );
+  const title = pick(SITE_TITLE, lang);
+  const description = pick(SITE_DESCRIPTION, lang);
   const ogDescription = pick(
     {
       en: "Design, frontend, backend, admin panels, integrations, infrastructure, and launch. Web2 + Web3 — in one delivery loop.",
@@ -142,7 +126,7 @@ export async function generateMetadata({
     type: "website",
     locale: ogLocale[lang],
     alternateLocale: Object.values(ogLocale).filter((l) => l !== ogLocale[lang]),
-    url: "https://anteyko.com",
+    url: localeAlternates(locale, "/").canonical,
     siteName: "Anteyko",
     title,
     description: ogDescription,
@@ -173,7 +157,11 @@ export async function generateMetadata({
       "max-snippet": -1,
     },
   },
-  // verification: { google: "..." } — add when using Search Console
+  // Search Console / Yandex Webmaster ownership: set the tokens in Vercel env
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || undefined,
+    yandex: process.env.NEXT_PUBLIC_YANDEX_VERIFICATION || undefined,
+  },
   };
 }
 
@@ -269,7 +257,7 @@ export default async function LocaleLayout({
               "@context": "https://schema.org",
               "@type": "Organization",
               name: "Anteyko",
-              url: "https://anteyko.com",
+              url: "https://www.anteyko.com",
               description:
                 "End-to-end product development studio. Design, frontend, backend, admin panels, integrations, infrastructure. Web2 + Web3. Offices in Bishkek, Dubai, Istanbul, Chicago and Shenzhen.",
               email: "labs@anteyko.com",

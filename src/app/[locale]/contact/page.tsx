@@ -2,13 +2,13 @@ import { PageWrapper } from "@/components/layout/page-wrapper";
 import { JsonLd } from "@/components/seo/json-ld";
 import { homeBreadcrumb } from "@/components/seo/breadcrumbs";
 import { pick, type Language } from "@/lib/i18n-text";
-import { localeAlternates } from "@/i18n/metadata";
+import { seo } from "@/i18n/metadata";
 import { ContactContent } from "./contact-content";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   const language = locale as Language;
-  return {
+  return seo(locale, "/contact", {
     title: pick({ en: "Contact", ru: "Контакты", zh: "联系我们", tr: "İletişim", ar: "تواصل معنا" }, language),
     description: pick(
       {
@@ -20,8 +20,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       },
       language,
     ),
-    alternates: localeAlternates(locale, "/contact"),
-  };
+  });
 }
 
 export default function ContactPage() {

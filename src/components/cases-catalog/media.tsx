@@ -224,16 +224,17 @@ function PanShot({ src, cover, title, active, sizes, priority }: { src: string; 
       {cover && (
         <Image src={cover} alt="" fill sizes={sizes} priority={priority} className="object-cover object-top" />
       )}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
+      <Image
         ref={pic}
         src={src}
         alt={title}
-        loading="lazy"
+        width={1200}
+        height={6000}
+        sizes={sizes}
         onLoad={() => {
           if (box.current && pic.current) setShift(Math.max(0, pic.current.offsetHeight - box.current.offsetHeight));
         }}
-        className="absolute left-0 top-0 w-full will-change-transform"
+        className="absolute left-0 top-0 h-auto w-full will-change-transform"
         style={{
           transform: `translateY(${active ? -shift : 0}px)`,
           transition: `transform ${active ? duration : 1.1}s ${active ? "cubic-bezier(.45,.05,.4,1)" : "cubic-bezier(.2,.8,.2,1)"}`,

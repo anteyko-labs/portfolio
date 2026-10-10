@@ -26,6 +26,8 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   // Only minified bundles reach the browser — no source maps with the original code.
   productionBrowserSourceMaps: false,
+  // AVIF first (smaller than WebP), WebP for browsers without AVIF
+  images: { formats: ["image/avif", "image/webp"] },
   async headers() {
     return [
       {

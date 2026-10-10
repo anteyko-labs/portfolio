@@ -2,12 +2,12 @@ import { PageWrapper } from "@/components/layout/page-wrapper";
 import { JsonLd } from "@/components/seo/json-ld";
 import { homeBreadcrumb, SITE_BASE } from "@/components/seo/breadcrumbs";
 import { pick, type Language } from "@/lib/i18n-text";
-import { localeAlternates } from "@/i18n/metadata";
+import { seo } from "@/i18n/metadata";
 import { ServicesContent } from "./services-content";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
-  return {
+  return seo(locale, "/services", {
   title: pick({ en: "Services", ru: "Услуги", zh: "服务", tr: "Hizmetler", ar: "الخدمات" }, locale as Language),
   description: pick(
     {
@@ -19,8 +19,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     },
     locale as Language
   ),
-    alternates: localeAlternates(locale, "/services"),
-  };
+  });
 }
 
 const PROVIDER = {

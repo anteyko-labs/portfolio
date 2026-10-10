@@ -1,17 +1,20 @@
 import { notFound } from "next/navigation";
 import { PageWrapper } from "@/components/layout/page-wrapper";
 import { JsonLd } from "@/components/seo/json-ld";
-import { localeAlternates } from "@/i18n/metadata";
+import { seo } from "@/i18n/metadata";
 import { pick, type Language } from "@/lib/i18n-text";
 import {
   getFlagshipCaseBySlug,
   getMicroCaseById,
+  getRelatedFlagshipCases,
   flagshipCases,
   microCases,
   type FlagshipCase,
   type MicroCase,
 } from "@/lib/cases-data";
 import { getShowcaseItem, visibleShowcaseItems, type ShowcaseItem } from "@/lib/showcase-data";
+import { catalogEntries, sortEntries } from "@/lib/catalog";
+import { localize } from "@/lib/localize";
 import { CaseDetailContent } from "./case-detail-content";
 import { MicroCaseDetailContent } from "./micro-case-detail-content";
 import { ShowcaseDetailContent } from "./showcase-detail-content";
@@ -50,17 +53,7 @@ export async function generateMetadata({ params }: Props) {
     const description = clampDescription(
       pick(flagshipCase.summary, lang)
     );
-    return {
-      title,
-      description,
-      alternates: localeAlternates(locale, `/cases/${slug}`),
-      openGraph: {
-        type: "article",
-        title,
-        description,
-        url: `${SITE}/cases/${slug}`,
-      },
-    };
+    return seo(locale, `/cases/${slug}`, { title, description, type: "article" });
   }
 
   // Try micro case
@@ -70,17 +63,7 @@ export async function generateMetadata({ params }: Props) {
     const description = clampDescription(
       pick(microCase.what, lang)
     );
-    return {
-      title,
-      description,
-      alternates: localeAlternates(locale, `/cases/${slug}`),
-      openGraph: {
-        type: "article",
-        title,
-        description,
-        url: `${SITE}/cases/${slug}`,
-      },
-    };
+    return seo(locale, `/cases/${slug}`, { title, description, type: "article" });
   }
 
   // Website / product showcase
@@ -88,17 +71,7 @@ export async function generateMetadata({ params }: Props) {
   if (showcase) {
     const title = `${showcase.title[lang]} — ${showcase.client[lang]}`;
     const description = clampDescription(showcase.summary[lang]);
-    return {
-      title,
-      description,
-      alternates: localeAlternates(locale, `/cases/${slug}`),
-      openGraph: {
-        type: "article",
-        title,
-        description,
-        url: `${SITE}/cases/${slug}`,
-      },
-    };
+    return seo(locale, `/cases/${slug}`, { title, description, type: "article" });
   }
 
   return { title: "Case" };
@@ -146,36 +119,59 @@ function caseJsonLd(slug: string, c: FlagshipCase | MicroCase | ShowcaseItem) {
 }
 
 export default async function CasePage({ params }: Props) {
-  const { slug } = await params;
+  const { locale, slug } = await params;
+  const lang = locale as Language;
 
-  // Try flagship first
+  // Client components get this case (and its neighbours) in one language only
   const flagshipCase = getFlagshipCaseBySlug(slug);
   if (flagshipCase) {
+    const i = flagshipCases.indexOf(flagshipCase);
+    const related = flagshipCases
+      .filter((c) => c.id !== flagshipCase.id && c.category === flagshipCase.category)
+      .slice(0, 3);
     return (
       <PageWrapper>
         <JsonLd data={caseJsonLd(slug, flagshipCase)} />
-        <CaseDetailContent caseItem={flagshipCase} />
+        <CaseDetailContent
+          caseItem={localize(flagshipCase, lang)}
+          prevCase={i > 0 ? localize(flagshipCases[i - 1], lang) : null}
+          nextCase={i < flagshipCases.length - 1 ? localize(flagshipCases[i + 1], lang) : null}
+          related={localize(related, lang)}
+        />
       </PageWrapper>
     );
   }
 
-  // Try micro case
   const microCase = getMicroCaseById(slug);
   if (microCase) {
+    const mi = microCases.indexOf(microCase);
+    const relatedMicro = microCases
+      .filter((c) => c.category === microCase.category && c.id !== microCase.id)
+      .slice(0, 4);
     return (
       <PageWrapper>
         <JsonLd data={caseJsonLd(slug, microCase)} />
-        <MicroCaseDetailContent caseItem={microCase} />
+        <MicroCaseDetailContent
+          caseItem={localize(microCase, lang)}
+          relatedFlagship={localize(getRelatedFlagshipCases(microCase.category, 2), lang)}
+          relatedMicro={localize(relatedMicro, lang)}
+          next={localize(microCases[(mi + 1) % microCases.length], lang)}
+          index={mi}
+          total={microCases.length}
+        />
       </PageWrapper>
     );
   }
 
   const showcase = getShowcaseItem(slug);
   if (showcase) {
+    const ordered = sortEntries(catalogEntries, "featured", lang);
+    const si = ordered.findIndex((e) => e.slug === slug);
+    const next = ordered[(si + 1) % ordered.length];
     return (
       <PageWrapper>
         <JsonLd data={caseJsonLd(slug, showcase)} />
-        <ShowcaseDetailContent item={showcase} />
+        <ShowcaseDetailContent item={localize(showcase, lang)} next={localize(next, lang)} index={si} total={ordered.length} />
       </PageWrapper>
     );
   }

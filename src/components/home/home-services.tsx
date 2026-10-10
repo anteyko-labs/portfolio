@@ -16,12 +16,13 @@ const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 function SitePan({ active }: { active: boolean }) {
   return (
     <div className="absolute inset-0 overflow-hidden rounded-t-xl">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
+      <Image
         src="/images/showcase/paddock/full.jpg"
         alt=""
-        loading="lazy"
-        className="absolute left-0 top-0 w-full"
+        width={1200}
+        height={6000}
+        sizes="(max-width: 768px) 90vw, 480px"
+        className="absolute left-0 top-0 h-auto w-full"
         style={{ transform: `translateY(${active ? "-72%" : "0%"})`, transition: `transform ${active ? 9 : 1.2}s cubic-bezier(.45,.05,.4,1)` }}
       />
     </div>

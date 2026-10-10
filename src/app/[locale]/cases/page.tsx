@@ -1,13 +1,19 @@
 import { PageWrapper } from "@/components/layout/page-wrapper";
 import { JsonLd } from "@/components/seo/json-ld";
 import { homeBreadcrumb } from "@/components/seo/breadcrumbs";
-import { localeAlternates } from "@/i18n/metadata";
+import { seo } from "@/i18n/metadata";
+import { catalogEntries } from "@/lib/catalog";
+import { countIndustries } from "@/lib/catalog-utils";
+import { microCases } from "@/lib/cases-data";
+import { CaseDataProvider } from "@/lib/case-data-context";
+import { localize } from "@/lib/localize";
+
 import { pick, type Language } from "@/lib/i18n-text";
 import { CasesContent } from "./cases-content";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
-  return {
+  return seo(locale, "/cases", {
   title: pick({ en: "Cases", ru: "Кейсы", zh: "案例", tr: "Projeler", ar: "المشاريع" }, locale as Language),
   description:
     pick(
@@ -20,15 +26,23 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       },
       locale as Language,
     ),
-    alternates: localeAlternates(locale, "/cases"),
-  };
+  });
 }
 
-export default function CasesPage() {
+export default async function CasesPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  const lang = locale as Language;
+  const data = {
+    catalogEntries: localize(catalogEntries, lang),
+    microCases: localize(microCases, lang),
+    industries: countIndustries(catalogEntries),
+  };
   return (
     <PageWrapper>
       <JsonLd data={homeBreadcrumb("Cases", "/cases")} />
-      <CasesContent />
+      <CaseDataProvider value={data}>
+        <CasesContent />
+      </CaseDataProvider>
     </PageWrapper>
   );
 }

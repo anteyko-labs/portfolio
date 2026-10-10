@@ -317,9 +317,9 @@ export function ContactContent() {
                   <motion.div key="step1" custom={stepDir} variants={stepVariants} initial="enter" animate="center" exit="exit" transition={stepTransition} className="ms-rise space-y-6">
                     {/* Step 1 header */}
                     <div className="pb-2">
-                      <h3 className="text-heading-md font-medium text-text-primary">
+                      <h2 className="text-heading-md font-medium text-text-primary">
                         {pick({ en: "Let\u2019s start with you", ru: "Начнём с вас", zh: "先从您开始", tr: "Önce sizinle başlayalım", ar: "لنبدأ بك" }, language)}
-                      </h3>
+                      </h2>
                       <p className="text-body-sm text-text-tertiary mt-1">
                         {pick({ en: "So we know who to get back to.", ru: "Чтобы мы знали, кому ответить.", zh: "方便我们知道该联系谁。", tr: "Size kime dönmemiz gerektiğini bilelim.", ar: "لنعرف من نردّ عليه." }, language)}
                       </p>
@@ -371,9 +371,9 @@ export function ContactContent() {
                     {/* Step 2 header */}
                     <div className="flex items-center justify-between pb-2">
                       <div>
-                        <h3 className="text-heading-md font-medium text-text-primary">
+                        <h2 className="text-heading-md font-medium text-text-primary">
                           {pick({ en: "About the project", ru: "О проекте", zh: "项目信息", tr: "Proje hakkında", ar: "عن المشروع" }, language)}
-                        </h3>
+                        </h2>
                         <p className="text-body-sm text-text-tertiary mt-1">
                           {pick({ en: "Help us understand the scope.", ru: "Помогите нам понять масштаб.", zh: "帮助我们了解项目规模。", tr: "Kapsamı anlamamıza yardımcı olun.", ar: "ساعدنا في فهم نطاق المشروع." }, language)}
                         </p>
@@ -492,9 +492,9 @@ export function ContactContent() {
                 className="ms-rim rounded-3xl border border-border bg-bg-primary p-5 shadow-[0_30px_80px_-40px_rgba(79,70,229,0.35)] sm:p-8"
               >
                 <div className="pb-4">
-                  <h3 className="text-heading-md font-medium text-text-primary">
+                  <h2 className="text-heading-md font-medium text-text-primary">
                     {pick({ en: "Book a 45-min scoping call", ru: "Забронируйте scoping-звонок на 45 мин", zh: "预约 45 分钟需求沟通会", tr: "45 dakikalık kapsam görüşmesi planlayın", ar: "احجز مكالمة لتحديد النطاق مدتها 45 دقيقة" }, language)}
-                  </h3>
+                  </h2>
                   <p className="text-body-sm text-text-tertiary mt-1">
                     {pick({ en: "Pick a slot that works for you — we’ll talk through your project and next steps.", ru: "Выберите удобный слот — обсудим ваш проект и следующие шаги.", zh: "选择适合您的时间段——我们将聊聊您的项目和后续步骤。", tr: "Size uygun bir saat seçin — projenizi ve sonraki adımları birlikte konuşalım.", ar: "اختر الموعد المناسب لك — سنناقش مشروعك والخطوات التالية." }, language)}
                   </p>

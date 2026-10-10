@@ -3,12 +3,12 @@ import { FAQContent } from "./faq-content";
 import { FAQSchema } from "@/components/seo/faq-schema";
 import { JsonLd } from "@/components/seo/json-ld";
 import { homeBreadcrumb } from "@/components/seo/breadcrumbs";
-import { localeAlternates } from "@/i18n/metadata";
+import { seo } from "@/i18n/metadata";
 import { pick, type Language } from "@/lib/i18n-text";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
-  return {
+  return seo(locale, "/faq", {
   title: pick({ en: "FAQ", ru: "Частые вопросы", zh: "常见问题", tr: "SSS", ar: "الأسئلة الشائعة" }, locale as Language),
   description:
     pick(
@@ -21,8 +21,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       },
       locale as Language
     ),
-    alternates: localeAlternates(locale, "/faq"),
-  };
+  });
 }
 
 export default async function FAQPage({ params }: { params: Promise<{ locale: string }> }) {

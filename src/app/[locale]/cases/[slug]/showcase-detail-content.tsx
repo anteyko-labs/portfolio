@@ -10,18 +10,26 @@ import { CaseBottomCTA } from "@/components/case-bottom-cta";
 import { ShowcaseViewer } from "@/components/cases-catalog/showcase-viewer";
 import { AdminShowcase } from "@/components/cases-catalog/admin-showcase";
 import { CATEGORY_LABEL, pad } from "@/components/cases-catalog/labels";
-import { catalogEntries, sortEntries } from "@/lib/catalog";
+import type { CatalogEntry } from "@/lib/catalog";
 import type { ShowcaseItem } from "@/lib/showcase-data";
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
-export function ShowcaseDetailContent({ item }: { item: ShowcaseItem }) {
+export function ShowcaseDetailContent({
+  item,
+  next,
+  index,
+  total,
+}: {
+  item: ShowcaseItem;
+  /** Next work in the catalog order and this one's place in it */
+  next: CatalogEntry;
+  index: number;
+  total: number;
+}) {
   const { language } = useLanguage();
   const reduced = useReducedMotion();
 
-  const ordered = sortEntries(catalogEntries, "featured", language);
-  const index = ordered.findIndex((e) => e.slug === item.slug);
-  const next = ordered[(index + 1) % ordered.length];
   const external = item.url && /^https?:/.test(item.url);
 
   const meta: [string, string][] = [
@@ -50,7 +58,7 @@ export function ShowcaseDetailContent({ item }: { item: ShowcaseItem }) {
               <span aria-hidden="true">←</span> {pick({ en: "All work", ru: "Все работы", zh: "全部作品", tr: "Tüm işler", ar: "جميع الأعمال" }, language)}
             </NextLink>
             <span>
-              {pad(index + 1)} / {pad(ordered.length)}
+              {pad(index + 1)} / {pad(total)}
             </span>
           </div>
 
@@ -120,7 +128,7 @@ export function ShowcaseDetailContent({ item }: { item: ShowcaseItem }) {
       <Section background="secondary" padding="lg" className="border-t border-border">
         <div className="grid gap-10 lg:grid-cols-[14rem_1fr]">
           <AnimatedItem>
-            <p className="font-mono text-caption uppercase tracking-[0.16em] text-text-tertiary">{pick({ en: "Review", ru: "Разбор", zh: "解析", tr: "İnceleme", ar: "مراجعة" }, language)}</p>
+            <h2 className="font-mono text-caption uppercase tracking-[0.16em] text-text-tertiary">{pick({ en: "Review", ru: "Разбор", zh: "解析", tr: "İnceleme", ar: "مراجعة" }, language)}</h2>
           </AnimatedItem>
           <div className="max-w-3xl">
             <AnimatedItem>
@@ -154,7 +162,7 @@ export function ShowcaseDetailContent({ item }: { item: ShowcaseItem }) {
       <Section background="primary" padding="lg">
         <div className="grid gap-10 lg:grid-cols-[14rem_1fr]">
           <AnimatedItem>
-            <p className="font-mono text-caption uppercase tracking-[0.16em] text-text-tertiary">{pick({ en: "Techniques", ru: "Приёмы", zh: "技法", tr: "Teknikler", ar: "التقنيات والأساليب" }, language)}</p>
+            <h2 className="font-mono text-caption uppercase tracking-[0.16em] text-text-tertiary">{pick({ en: "Techniques", ru: "Приёмы", zh: "技法", tr: "Teknikler", ar: "التقنيات والأساليب" }, language)}</h2>
           </AnimatedItem>
           <ol className="grid gap-px overflow-hidden rounded-2xl border border-border bg-border md:grid-cols-3">
             {item.features.map((f, i) => (
@@ -172,7 +180,7 @@ export function ShowcaseDetailContent({ item }: { item: ShowcaseItem }) {
 
         <div className="mt-16 grid gap-10 lg:grid-cols-[14rem_1fr]">
           <AnimatedItem>
-            <p className="font-mono text-caption uppercase tracking-[0.16em] text-text-tertiary">{pick({ en: "Palette", ru: "Палитра", zh: "配色", tr: "Palet", ar: "لوحة الألوان" }, language)}</p>
+            <h2 className="font-mono text-caption uppercase tracking-[0.16em] text-text-tertiary">{pick({ en: "Palette", ru: "Палитра", zh: "配色", tr: "Palet", ar: "لوحة الألوان" }, language)}</h2>
           </AnimatedItem>
           <AnimatedItem>
             <ul className="grid grid-cols-2 gap-3 sm:grid-cols-4">

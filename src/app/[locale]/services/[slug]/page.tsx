@@ -3,7 +3,7 @@ import { PageWrapper } from "@/components/layout/page-wrapper";
 import { JsonLd } from "@/components/seo/json-ld";
 import { SITE_BASE } from "@/components/seo/breadcrumbs";
 import { pick, type Language } from "@/lib/i18n-text";
-import { localeAlternates } from "@/i18n/metadata";
+import { seo } from "@/i18n/metadata";
 import { SERVICE_SLUGS, getPackageBySlug } from "@/lib/service-slugs";
 import { ServiceDetailContent } from "./service-detail-content";
 
@@ -26,17 +26,10 @@ export async function generateMetadata({ params }: Props) {
     pick({ en: "Timeline", ru: "Срок", zh: "周期", tr: "Süre", ar: "المدة" }, lang)
   }: ${pkg.timeline[lang]}. ${pkg.startingPrice[lang]}.`;
 
-  return {
+  return seo(locale, `/services/${slug}`, {
     title: `${pkg.title[lang]} — ${pkg.startingPrice[lang]}`,
     description,
-    alternates: localeAlternates(locale, `/services/${slug}`),
-    openGraph: {
-      type: "website",
-      title: pkg.title.en,
-      description: pkg.description.en,
-      url: `${SITE_BASE}/services/${slug}`,
-    },
-  };
+  });
 }
 
 const PROVIDER = {

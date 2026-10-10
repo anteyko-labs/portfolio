@@ -2,13 +2,13 @@ import { PageWrapper } from "@/components/layout/page-wrapper";
 import { JsonLd } from "@/components/seo/json-ld";
 import { homeBreadcrumb, SITE_BASE } from "@/components/seo/breadcrumbs";
 import { pick, type Language } from "@/lib/i18n-text";
-import { localeAlternates } from "@/i18n/metadata";
+import { seo } from "@/i18n/metadata";
 import { translations } from "@/lib/translations";
 import { PricingContent } from "./pricing-content";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
-  return {
+  return seo(locale, "/pricing", {
     title: pick({ en: "Pricing", ru: "Цены", zh: "价格", tr: "Fiyatlar", ar: "الأسعار" }, locale as Language),
     description: pick(
       {
@@ -20,8 +20,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       },
       locale as Language
     ),
-    alternates: localeAlternates(locale, "/pricing"),
-  };
+  });
 }
 
 const PROVIDER = {

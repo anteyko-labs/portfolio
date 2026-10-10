@@ -90,6 +90,8 @@ interface SectionHeaderProps {
   align?: "left" | "center";
   animate?: boolean;
   size?: "default" | "lg";
+  /** The page title uses "h1"; section titles stay "h2". */
+  as?: "h1" | "h2";
 }
 
 export function SectionHeader({
@@ -99,6 +101,7 @@ export function SectionHeader({
   align = "left",
   animate = true,
   size = "default",
+  as: Heading = "h2",
 }: SectionHeaderProps) {
   const prefersReducedMotion = useReducedMotion();
 
@@ -124,7 +127,7 @@ export function SectionHeader({
           tokens are stepped down one notch vs. the old Manrope sizing to keep
           the headings composed rather than overflowing. The `.heading-brand`
           recipe carries the tight tracking/line-height. */}
-      <h2
+      <Heading
         className={clsx(
           "heading-brand [overflow-wrap:break-word] [hyphens:auto] text-text-primary",
           size === "lg"
@@ -133,7 +136,7 @@ export function SectionHeader({
         )}
       >
         {title}
-      </h2>
+      </Heading>
 
       {/* Subtitle */}
       {subtitle && (

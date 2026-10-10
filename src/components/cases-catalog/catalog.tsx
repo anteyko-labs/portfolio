@@ -5,14 +5,9 @@ import clsx from "clsx";
 import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
 import { useLanguage } from "@/lib/language-context";
 import { useReducedMotion, useDebounce } from "@/lib/hooks";
-import {
-  catalogEntries,
-  matchesFilter,
-  searchEntries,
-  sortEntries,
-  type CatalogFilter,
-  type CatalogSort,
-} from "@/lib/catalog";
+import type { CatalogFilter, CatalogSort } from "@/lib/catalog";
+import { matchesFilter, searchEntries, sortEntries } from "@/lib/catalog-utils";
+import { useCaseData } from "@/lib/case-data-context";
 import { CatalogCard, type CardSize } from "./catalog-card";
 import { CatalogList } from "./catalog-list";
 import { FILTER_LABEL, SORT_LABEL, plural } from "./labels";
@@ -68,6 +63,7 @@ function readParams(): { filter?: CatalogFilter; sort?: CatalogSort; view?: View
 }
 
 export function Catalog() {
+  const { catalogEntries } = useCaseData();
   const { language } = useLanguage();
   const reduced = useReducedMotion();
   const [filter, setFilter] = useState<CatalogFilter>("all");
@@ -104,7 +100,7 @@ export function Catalog() {
     window.history.replaceState(window.history.state, "", `${window.location.pathname}${qs ? `?${qs}` : ""}${window.location.hash}`);
   }, [filter, sort, view, debounced]);
 
-  const searched = useMemo(() => searchEntries(catalogEntries, debounced, language), [debounced, language]);
+  const searched = useMemo(() => searchEntries(catalogEntries, debounced, language), [catalogEntries, debounced, language]);
   const counts = useMemo(
     () => Object.fromEntries(FILTERS.map((f) => [f, searched.filter((e) => matchesFilter(e, f)).length])) as Record<CatalogFilter, number>,
     [searched]

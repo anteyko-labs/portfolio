@@ -11,7 +11,6 @@ import { ScrollSpyRail } from "@/components/ui/scrollspy-rail";
 import { Lightbox } from "@/components/ui/lightbox";
 import Image from "next/image";
 import type { FlagshipCase } from "@/lib/cases-data";
-import { flagshipCases } from "@/lib/cases-data";
 import { CaseBottomCTA } from "@/components/case-bottom-cta";
 import { L1CaseScenes } from "@/components/cases-catalog/l1-case-scenes";
 import { L1Terminal } from "@/components/cases-catalog/l1-terminal";
@@ -95,7 +94,18 @@ function CaseSummaryRail({ caseItem, language, t }: { caseItem: FlagshipCase; la
   );
 }
 
-export function CaseDetailContent({ caseItem }: { caseItem: FlagshipCase }) {
+export function CaseDetailContent({
+  caseItem,
+  prevCase,
+  nextCase,
+  related,
+}: {
+  caseItem: FlagshipCase;
+  /** Neighbours in the flagship list and same-category cases, picked on the server */
+  prevCase: FlagshipCase | null;
+  nextCase: FlagshipCase | null;
+  related: FlagshipCase[];
+}) {
   const { t, language } = useLanguage();
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
@@ -104,11 +114,6 @@ export function CaseDetailContent({ caseItem }: { caseItem: FlagshipCase }) {
     setLightboxIndex(index);
     setLightboxOpen(true);
   };
-
-  // Get prev/next cases for navigation
-  const currentIndex = flagshipCases.findIndex((c) => c.id === caseItem.id);
-  const prevCase = currentIndex > 0 ? flagshipCases[currentIndex - 1] : null;
-  const nextCase = currentIndex < flagshipCases.length - 1 ? flagshipCases[currentIndex + 1] : null;
 
   const hasScreenshots = caseItem.screenshots && caseItem.screenshots.length > 0;
   const isL1 = caseItem.slug === "web3-l1-dex";
@@ -512,9 +517,6 @@ export function CaseDetailContent({ caseItem }: { caseItem: FlagshipCase }) {
 
       {/* Related Cases */}
       {(() => {
-        const related = flagshipCases
-          .filter((c) => c.id !== caseItem.id && c.category === caseItem.category)
-          .slice(0, 3);
         if (related.length === 0) return null;
         return (
           <Section background="primary" padding="lg" className="!pt-0">
