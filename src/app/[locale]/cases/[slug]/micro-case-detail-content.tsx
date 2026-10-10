@@ -275,8 +275,8 @@ export function MicroCaseDetailContent({ caseItem }: MicroCaseDetailContentProps
       {/* Back to all cases */}
       <Section background="primary" padding="md">
         <div className="text-center">
-          <ButtonLink href="/cases" buttonVariant="ghost" className="inline-flex items-center gap-2">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <ButtonLink href="/cases" buttonVariant="ghost" className="group inline-flex items-center gap-2">
+            <svg className="w-4 h-4 transition-transform duration-300 group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
             {language === "en" ? "Back to all cases" : "Назад ко всем кейсам"}

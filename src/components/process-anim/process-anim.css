@@ -1,0 +1,80 @@
+/* /process page animations. Every class is prefixed with pr- and every
+   infinite animation is paused by [data-run="false"] on its scene root and
+   switched off entirely with reduced motion. */
+
+.pr-aurora {
+  background:
+    radial-gradient(38% 22% at 12% 8%, rgba(99, 102, 241, 0.28), transparent 70%),
+    radial-gradient(34% 18% at 92% 32%, rgba(217, 70, 239, 0.18), transparent 70%),
+    radial-gradient(36% 20% at 6% 62%, rgba(6, 182, 212, 0.16), transparent 70%),
+    radial-gradient(40% 20% at 88% 92%, rgba(16, 185, 129, 0.18), transparent 70%);
+  filter: blur(10px);
+  animation: pr-drift 20s ease-in-out infinite alternate;
+}
+@keyframes pr-drift { to { transform: translate3d(-2%, 1%, 0) scale(1.05); } }
+
+.pr-grid {
+  background-image: linear-gradient(rgba(255, 255, 255, 0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.5) 1px, transparent 1px);
+  background-size: 56px 56px;
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, #000 20%, transparent 75%);
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, #000 20%, transparent 75%);
+}
+
+/* number gradient per phase */
+.pr-num {
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  background-size: 200% 100%;
+  animation: pr-shine 6s ease-in-out infinite alternate;
+}
+@keyframes pr-shine { to { background-position: 100% 0; } }
+
+/* radar sweep (phase 01) */
+.pr-sweep { transform-box: view-box; animation: pr-spin 3.6s linear infinite; }
+@keyframes pr-spin { to { transform: rotate(360deg); } }
+
+/* data flowing along architecture edges (phase 02) */
+.pr-flow { stroke-dasharray: 3 6; animation: pr-flow 1.1s linear infinite; }
+@keyframes pr-flow { to { stroke-dashoffset: -18; } }
+
+/* running stage spinner (phase 03) */
+.pr-spin { transform-box: fill-box; transform-origin: center; animation: pr-spin 0.9s linear infinite; }
+
+/* live pulse (phase 04, hero, nav) */
+.pr-ping { animation: pr-ping 1.8s cubic-bezier(0, 0, 0.2, 1) infinite; transform-box: fill-box; transform-origin: center; }
+@keyframes pr-ping { 0% { transform: scale(1); opacity: 0.7; } 80%, 100% { transform: scale(2.6); opacity: 0; } }
+
+.pr-blink { animation: pr-blink 1s steps(2, start) infinite; }
+@keyframes pr-blink { to { visibility: hidden; } }
+
+/* glowing dot travelling down the timeline */
+.pr-dot {
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.08), 0 0 18px 4px var(--pr-glow, rgba(165, 180, 252, 0.8)), 0 0 42px 10px var(--pr-glow, rgba(165, 180, 252, 0.35));
+}
+
+/* CTA: slow rotating conic halo */
+.pr-ring {
+  background: conic-gradient(from 0deg, rgba(99, 102, 241, 0), rgba(99, 102, 241, 0.55), rgba(217, 70, 239, 0.45), rgba(6, 182, 212, 0.4), rgba(16, 185, 129, 0.45), rgba(99, 102, 241, 0));
+  -webkit-mask-image: radial-gradient(circle, transparent 54%, #000 56%, #000 60%, transparent 72%);
+  mask-image: radial-gradient(circle, transparent 54%, #000 56%, #000 60%, transparent 72%);
+  filter: blur(6px);
+  animation: pr-spin 18s linear infinite;
+}
+
+/* deliverable chip: lift on hover */
+.pr-chip { transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.35s, background-color 0.35s; }
+.pr-chip:hover { transform: translateY(-3px); border-color: rgb(var(--spot) / 0.45); background-color: rgba(255, 255, 255, 0.06); }
+.pr-chip:hover .pr-chip__icon { transform: rotate(-6deg) scale(1.06); }
+.pr-chip__icon { transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1); }
+
+[data-run="false"] .pr-sweep,
+[data-run="false"] .pr-flow,
+[data-run="false"] .pr-spin,
+[data-run="false"] .pr-ping,
+[data-run="false"] .pr-blink { animation-play-state: paused; }
+
+@media (prefers-reduced-motion: reduce) {
+  .pr-aurora, .pr-num, .pr-sweep, .pr-flow, .pr-spin, .pr-ping, .pr-blink, .pr-ring { animation: none; }
+  .pr-chip:hover { transform: none; }
+}

@@ -1,0 +1,215 @@
+/* ── Case detail page animations (prefix: ca-) ──────────────────────────
+   Loops are paused by default and only run inside an element carrying
+   `.ca-run`, which the components toggle while they are on screen. */
+
+@property --ca-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.ca-grad-text {
+  background: linear-gradient(90deg, #6366f1, #d946ef 55%, #f59e0b);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.ca-grad-text-dark {
+  background: linear-gradient(90deg, #a5b4fc, #f0abfc 55%, #fcd34d);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Gentle floating (tech chips) */
+.ca-float {
+  animation: ca-float 5.5s ease-in-out infinite;
+  animation-play-state: paused;
+}
+@keyframes ca-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+/* Marquee */
+.ca-marquee {
+  display: flex;
+  width: max-content;
+  animation: ca-marquee 38s linear infinite;
+  animation-play-state: paused;
+}
+@keyframes ca-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* Packet travelling down the solution pipeline */
+.ca-packet {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 10px;
+  height: 10px;
+  margin-left: -5px;
+  border-radius: 9999px;
+  background: #a855f7;
+  box-shadow: 0 0 0 4px rgb(168 85 247 / 0.18), 0 0 18px 4px rgb(168 85 247 / 0.55);
+  animation: ca-packet 4.2s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  animation-play-state: paused;
+  opacity: 0;
+}
+@keyframes ca-packet {
+  0% { top: 0%; opacity: 0; }
+  8% { opacity: 1; }
+  92% { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+
+/* Rotating gradient rim (hard parts) */
+.ca-rim {
+  position: relative;
+  isolation: isolate;
+}
+.ca-rim::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: conic-gradient(from var(--ca-angle), transparent 0deg, rgb(99 102 241 / 0.85) 60deg, rgb(217 70 239 / 0.85) 110deg, transparent 170deg, transparent 360deg);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0.35;
+  transition: opacity 0.5s;
+  animation: ca-spin-angle 6s linear infinite;
+  animation-play-state: paused;
+  pointer-events: none;
+  z-index: 1;
+}
+.ca-rim:hover::before { opacity: 1; }
+@keyframes ca-spin-angle { to { --ca-angle: 360deg; } }
+
+/* Shimmer sweep across a card */
+.ca-shimmer {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  pointer-events: none;
+}
+.ca-shimmer::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -60%;
+  width: 50%;
+  background: linear-gradient(100deg, transparent, rgb(255 255 255 / 0.09), transparent);
+  animation: ca-shimmer 5s ease-in-out infinite;
+  animation-delay: var(--ca-delay, 0s);
+  animation-play-state: paused;
+}
+@keyframes ca-shimmer {
+  0%, 55% { left: -60%; }
+  100% { left: 120%; }
+}
+
+/* Spinner for running gates */
+.ca-spinner {
+  width: 16px;
+  height: 16px;
+  border-radius: 9999px;
+  border: 2px solid rgb(255 255 255 / 0.15);
+  border-top-color: #a5b4fc;
+  animation: ca-rot 0.7s linear infinite;
+}
+@keyframes ca-rot { to { transform: rotate(360deg); } }
+
+/* Live pulse dot */
+.ca-pulse {
+  position: relative;
+}
+.ca-pulse::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 9999px;
+  border: 1px solid currentColor;
+  animation: ca-ping 1.8s ease-out infinite;
+  animation-play-state: paused;
+}
+@keyframes ca-ping {
+  0% { transform: scale(0.6); opacity: 0.9; }
+  100% { transform: scale(1.8); opacity: 0; }
+}
+
+/* Running row scan line */
+.ca-scan {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  pointer-events: none;
+}
+.ca-scan::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 35%;
+  background: linear-gradient(90deg, transparent, rgb(129 140 248 / 0.22), transparent);
+  animation: ca-scan 1s linear infinite;
+}
+@keyframes ca-scan {
+  from { left: -35%; }
+  to { left: 100%; }
+}
+
+/* Drifting orbs behind the CTA */
+.ca-orb {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(60px);
+  animation: ca-drift 14s ease-in-out infinite alternate;
+  animation-play-state: paused;
+  pointer-events: none;
+}
+@keyframes ca-drift {
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  100% { transform: translate3d(40px, -30px, 0) scale(1.15); }
+}
+
+.ca-run .ca-float,
+.ca-run .ca-marquee,
+.ca-run .ca-packet,
+.ca-run.ca-rim::before,
+.ca-run .ca-rim::before,
+.ca-run .ca-shimmer::after,
+.ca-run .ca-pulse::after,
+.ca-run .ca-orb {
+  animation-play-state: running;
+}
+
+/* Document card: folded corner + ruled lines */
+.ca-doc {
+  position: relative;
+  clip-path: polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 0 100%);
+}
+.ca-doc__fold {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 22px;
+  height: 22px;
+  background: linear-gradient(225deg, transparent 50%, var(--ca-fold, #e4e4e7) 50%);
+  border-bottom-left-radius: 6px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ca-float, .ca-marquee, .ca-packet, .ca-rim::before, .ca-shimmer::after,
+  .ca-spinner, .ca-pulse::after, .ca-scan::after, .ca-orb {
+    animation: none !important;
+  }
+  .ca-packet { opacity: 0; }
+}

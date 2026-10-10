@@ -1,0 +1,75 @@
+/* Services / pricing / service detail animations. Everything is prefixed sv-. */
+
+/* Rotating gradient rim around the highlighted package card */
+@property --sv-a { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
+.sv-ring {
+  position: relative;
+  background: conic-gradient(from var(--sv-a), rgb(var(--sv-c, 99 102 241) / 0.35), rgb(var(--sv-c, 99 102 241)), #e879f9, #22d3ee, rgb(var(--sv-c, 99 102 241) / 0.35) 75%, rgb(var(--sv-c, 99 102 241) / 0.35));
+  animation: sv-spin-a 6s linear infinite;
+}
+.sv-ring::before {
+  content: ""; position: absolute; inset: 8px; z-index: -1; border-radius: inherit; filter: blur(24px); opacity: 0.45;
+  background: inherit;
+}
+@keyframes sv-spin-a { to { --sv-a: 360deg; } }
+
+/* Shimmering badge */
+.sv-shimmer { position: relative; overflow: hidden; isolation: isolate; }
+.sv-shimmer::after {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background: linear-gradient(110deg, transparent 30%, rgba(255, 255, 255, 0.55) 50%, transparent 70%);
+  background-size: 250% 100%; animation: sv-sheen 2.8s ease-in-out infinite;
+}
+@keyframes sv-sheen { 0% { background-position: 130% 0; } 60%, 100% { background-position: -30% 0; } }
+
+/* Dark mini scene panels */
+.sv-scene {
+  position: relative; overflow: hidden; isolation: isolate;
+  background:
+    radial-gradient(60% 80% at 85% 10%, rgb(var(--sv-c) / 0.35), transparent 70%),
+    radial-gradient(50% 70% at 10% 100%, rgba(236, 72, 153, 0.18), transparent 70%),
+    #0B0B14;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08), 0 20px 40px -24px rgb(var(--sv-c) / 0.7);
+}
+.sv-scene::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 20px 20px;
+  -webkit-mask-image: radial-gradient(ellipse at center, #000 20%, transparent 75%); mask-image: radial-gradient(ellipse at center, #000 20%, transparent 75%);
+}
+.sv-scene svg text { font-family: var(--font-mono, ui-monospace, monospace); }
+
+.sv-bob { animation: sv-bob 4s ease-in-out infinite; transform-box: fill-box; }
+@keyframes sv-bob { 50% { transform: translateY(-5px); } }
+.sv-twinkle { animation: sv-twinkle 3s ease-in-out infinite; }
+@keyframes sv-twinkle { 50% { opacity: 0.15; } }
+.sv-flame { animation: sv-flame 0.25s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: 50% 0%; }
+@keyframes sv-flame { to { transform: scaleY(1.45); opacity: 0.75; } }
+.sv-ping { animation: sv-ping 1.6s ease-out infinite; transform-box: fill-box; transform-origin: center; }
+@keyframes sv-ping { 0% { transform: scale(0.6); opacity: 0.9; } 100% { transform: scale(2.4); opacity: 0; } }
+.sv-spin { animation: sv-spin 1.4s linear infinite; transform-box: fill-box; transform-origin: center; }
+@keyframes sv-spin { to { transform: rotate(360deg); } }
+.sv-caret { animation: sv-caret 1s steps(1) infinite; }
+@keyframes sv-caret { 50% { opacity: 0; } }
+
+/* CTA panel: floating chips */
+.sv-float { animation: sv-float 7s ease-in-out infinite; }
+@keyframes sv-float { 0%, 100% { transform: translate3d(0, 0, 0) rotate(var(--r, 0deg)); } 50% { transform: translate3d(0, -12px, 0) rotate(calc(var(--r, 0deg) * -1)); } }
+.sv-orbit { animation: sv-orbit 40s linear infinite; }
+@keyframes sv-orbit { to { transform: translate(-50%, -50%) rotate(360deg); } }
+
+/* Comparison: bars in a hovered column */
+.sv-col-dim { opacity: 0.38; filter: saturate(0.4); }
+
+/* End result panel sheen */
+.sv-sheen-panel { position: relative; overflow: hidden; isolation: isolate; }
+.sv-sheen-panel::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: linear-gradient(115deg, transparent 35%, rgba(255, 255, 255, 0.10) 48%, transparent 60%);
+  background-size: 260% 100%; animation: sv-sheen 7s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sv-ring, .sv-shimmer::after, .sv-bob, .sv-twinkle, .sv-flame, .sv-ping, .sv-spin, .sv-caret, .sv-float, .sv-orbit, .sv-sheen-panel::before { animation: none !important; }
+  .sv-ping { opacity: 0; }
+}

@@ -36,7 +36,11 @@ function MetricValue({ value }: { value: string }) {
     const target = parseFloat(num.replace(",", "."));
     const decimals = /[.,]/.test(num) ? num.split(/[.,]/)[1].length : 0;
     const c = animate(0, target, { duration: 1.4, delay: 0.5, ease: EASE, onUpdate: (v) => (el.textContent = `${pre}${v.toFixed(decimals)}${post}`) });
-    return () => c.stop();
+    // If the count is cut short (e.g. reduced motion turns on after mount), show the real value
+    return () => {
+      c.stop();
+      el.textContent = value;
+    };
   }, [value, reduced]);
   return <span ref={ref}>{value}</span>;
 }

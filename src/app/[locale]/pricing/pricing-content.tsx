@@ -3,8 +3,8 @@
 import { useLanguage } from "@/lib/language-context";
 import { PageHero } from "@/components/sections/page-hero";
 import { Section, AnimatedItem } from "@/components/ui/section";
-import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { AuroraCta, CheckList, MilestoneTrack, PackageShell, Price, ShineBadge } from "@/components/services-anim/parts";
+import { PKG_COLOR } from "@/components/services-anim/package-visuals";
 import { ButtonLink, Link } from "@/components/ui/link";
 import { PACKAGE_SLUGS } from "@/lib/service-slugs";
 
@@ -32,6 +32,7 @@ export function PricingContent() {
                 ? "Prices are starting points in US dollars. Every project is scoped individually — you get a fixed-scope estimate within 24 hours, billed in milestones."
                 : "Цены указаны в долларах США как стартовая точка. Каждый проект оценивается индивидуально — фиксированную оценку по объёму вы получаете в течение 24 часов, оплата по этапам."}
             </p>
+            <MilestoneTrack />
           </div>
         }
       />
@@ -42,39 +43,21 @@ export function PricingContent() {
             const slug = PACKAGE_SLUGS[pkg.id];
             const isRecommended = pkg.id === "mvp-sprint";
             return (
-              <AnimatedItem key={pkg.id} delay={index * 0.08} className="h-full">
-                <Card
-                  variant="bordered"
-                  padding="lg"
-                  className={`h-full flex flex-col bg-bg-primary ${
-                    isRecommended
-                      ? "border-accent-primary ring-1 ring-accent-primary/20"
-                      : pkg.id === "web3-addon"
-                        ? "border-accent-primary/30"
-                        : ""
-                  }`}
-                >
+              <AnimatedItem key={pkg.id} delay={(index % 2) * 0.1} className="h-full">
+                <PackageShell id={pkg.id} highlight={isRecommended}>
                   <div className="flex-1">
                     {/* Header */}
                     <div className="flex items-start justify-between gap-4 mb-4">
                       <div>
-                        <div className="flex items-center gap-3">
+                        <div className="flex flex-wrap items-center gap-3">
                           <h2 className="text-heading-lg font-display font-bold text-text-primary">
                             {pkg.title[language]}
                           </h2>
-                          {isRecommended && (
-                            <Badge variant="primary" size="md">
-                              {language === "en" ? "Popular" : "Популярный"}
-                            </Badge>
-                          )}
-                          {pkg.id === "web3-addon" && (
-                            <Badge variant="primary" size="md">
-                              Add-on
-                            </Badge>
-                          )}
+                          {isRecommended && <ShineBadge>{language === "en" ? "Popular" : "Популярный"}</ShineBadge>}
+                          {pkg.id === "web3-addon" && <ShineBadge tone="soft">Add-on</ShineBadge>}
                         </div>
-                        <p className="text-heading-sm font-display font-semibold text-accent-primary mt-2">
-                          {pkg.startingPrice[language]}
+                        <p className="mt-2 font-brand text-3xl font-semibold tracking-[-0.02em] text-accent-primary">
+                          <Price value={pkg.startingPrice[language]} />
                         </p>
                         <p className="text-body-sm text-text-muted mt-1">
                           {pkg.timeline[language]}
@@ -92,32 +75,12 @@ export function PricingContent() {
                       <h3 className="text-caption text-text-muted uppercase tracking-wider mb-3">
                         {language === "en" ? "What's included" : "Что входит"}
                       </h3>
-                      <ul className="space-y-2">
-                        {pkg.deliverables[language].map((item, i) => (
-                          <li
-                            key={`${pkg.id}-del-${i}`}
-                            className="text-body-sm text-text-secondary flex items-start gap-2"
-                          >
-                            <svg
-                              className="w-4 h-4 text-success shrink-0 mt-0.5"
-                              fill="currentColor"
-                              viewBox="0 0 20 20"
-                              aria-hidden="true"
-                            >
-                              <path
-                                fillRule="evenodd"
-                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                clipRule="evenodd"
-                              />
-                            </svg>
-                            {item}
-                          </li>
-                        ))}
-                      </ul>
+                      <CheckList items={pkg.deliverables[language]} />
                     </div>
 
                     {/* Result */}
-                    <div className="p-4 bg-bg-tertiary/60 rounded-xl">
+                    <div className="relative overflow-hidden rounded-xl border border-border bg-gradient-to-br from-bg-tertiary/70 to-bg-secondary p-4">
+                      <span aria-hidden="true" className="absolute inset-y-3 left-0 w-1 rounded-r-full" style={{ background: `rgb(${PKG_COLOR[pkg.id]})` }} />
                       <h3 className="text-caption text-text-muted uppercase tracking-wider mb-2">
                         {language === "en" ? "End result" : "Итоговый результат"}
                       </h3>
@@ -145,7 +108,7 @@ export function PricingContent() {
                       {language === "en" ? "See full details" : "Подробнее об услуге"}
                     </Link>
                   </div>
-                </Card>
+                </PackageShell>
               </AnimatedItem>
             );
           })}
@@ -163,26 +126,17 @@ export function PricingContent() {
 
       {/* Not sure which? CTA */}
       <Section background="primary" padding="lg">
-        <div className="p-5 sm:p-8 rounded-2xl border border-border bg-bg-secondary/60 text-center">
-          <h3 className="text-heading-lg font-medium text-text-primary mb-2">
-            {language === "en"
-              ? "Not sure which package fits?"
-              : "Не уверены, какой пакет подходит?"}
-          </h3>
-          <p className="text-body-md text-text-secondary mb-6 max-w-xl mx-auto">
-            {language === "en"
+        <AuroraCta
+          as="h3"
+          title={language === "en" ? "Not sure which package fits?" : "Не уверены, какой пакет подходит?"}
+          text={
+            language === "en"
               ? "Tell us about your project and we'll recommend the right approach based on your goals and constraints."
-              : "Расскажите о проекте, и мы порекомендуем подходящий подход на основе ваших целей и ограничений."}
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <ButtonLink href="/contact" buttonVariant="primary" size="lg">
-              {t("cta.primary")}
-            </ButtonLink>
-            <ButtonLink href="/services" buttonVariant="secondary" size="lg">
-              {language === "en" ? "Compare packages" : "Сравнить пакеты"}
-            </ButtonLink>
-          </div>
-        </div>
+              : "Расскажите о проекте, и мы порекомендуем подходящий подход на основе ваших целей и ограничений."
+          }
+          primary={{ href: "/contact", label: t("cta.primary") }}
+          secondary={{ href: "/services", label: language === "en" ? "Compare packages" : "Сравнить пакеты" }}
+        />
       </Section>
     </>
   );

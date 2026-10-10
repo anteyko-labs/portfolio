@@ -133,10 +133,17 @@ export function ShowcaseDetailContent({ item }: { item: ShowcaseItem }) {
             ))}
             <AnimatedItem>
               <ul className="mt-8 flex flex-wrap gap-2">
-                {Array.from(new Set([...item.tags[language], ...(item.stack ?? [])])).map((t) => (
-                  <li key={t} className="rounded-full border border-border bg-bg-primary px-3 py-1 text-body-sm text-text-secondary">
+                {Array.from(new Set([...item.tags[language], ...(item.stack ?? [])])).map((t, i) => (
+                  <motion.li
+                    key={t}
+                    initial={reduced ? false : { opacity: 0, scale: 0.6, y: 8 }}
+                    whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ type: "spring", stiffness: 320, damping: 18, delay: i * 0.04 }}
+                    className="rounded-full border border-border bg-bg-primary px-3 py-1 text-body-sm text-text-secondary transition-colors hover:border-accent-primary/40 hover:text-text-primary"
+                  >
                     {t}
-                  </li>
+                  </motion.li>
                 ))}
               </ul>
             </AnimatedItem>
@@ -152,7 +159,8 @@ export function ShowcaseDetailContent({ item }: { item: ShowcaseItem }) {
           <ol className="grid gap-px overflow-hidden rounded-2xl border border-border bg-border md:grid-cols-3">
             {item.features.map((f, i) => (
               <AnimatedItem key={f.title.en} delay={i * 0.08}>
-                <li className="h-full bg-bg-primary p-6 md:p-8">
+                <li className="group relative h-full bg-bg-primary p-6 transition-colors duration-500 hover:bg-bg-secondary md:p-8">
+                  <span aria-hidden="true" className="absolute inset-x-0 top-0 h-[2px] origin-left scale-x-0 bg-gradient-to-r from-indigo-500 via-fuchsia-500 to-amber-400 transition-transform duration-700 group-hover:scale-x-100" />
                   <span className="font-mono text-caption text-accent-primary">{pad(i + 1)}</span>
                   <h3 className="mt-6 text-heading-md font-semibold text-text-primary">{f.title[language]}</h3>
                   <p className="mt-2 text-body-md text-text-secondary">{f.text[language]}</p>
@@ -169,8 +177,17 @@ export function ShowcaseDetailContent({ item }: { item: ShowcaseItem }) {
           <AnimatedItem>
             <ul className="grid grid-cols-2 gap-3 sm:grid-cols-4">
               {item.palette.map((c, i) => (
-                <li key={`${c}-${i}`} className="overflow-hidden rounded-xl border border-border">
-                  <span className="block h-20" style={{ background: c }} />
+                <li key={`${c}-${i}`} className="group overflow-hidden rounded-xl border border-border transition-transform duration-500 hover:-translate-y-1">
+                  <span className="block h-20 overflow-hidden">
+                    <motion.span
+                      className="block h-full origin-bottom transition-transform duration-500 group-hover:scale-y-110"
+                      style={{ background: c }}
+                      initial={reduced ? false : { scaleY: 0 }}
+                      whileInView={{ scaleY: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.8, delay: i * 0.1, ease: EASE }}
+                    />
+                  </span>
                   <code className="block bg-bg-primary px-3 py-2 font-mono text-caption text-text-secondary">{c.toUpperCase()}</code>
                 </li>
               ))}
@@ -182,12 +199,12 @@ export function ShowcaseDetailContent({ item }: { item: ShowcaseItem }) {
       {next && (
         <NextLink
           href={`/cases/${next.slug}`}
-          className="group block border-t border-border bg-text-primary text-white"
+          className="group block overflow-hidden border-t border-border bg-text-primary text-white"
           data-cursor={en ? "Next" : "Дальше"}
         >
           <div className="container mx-auto flex flex-col gap-3 px-4 py-14 sm:px-6 md:py-20 lg:px-8">
             <span className="font-mono text-caption uppercase tracking-[0.16em] text-white/50">{en ? "Next work" : "Следующая работа"}</span>
-            <span className="flex items-center gap-4 font-brand text-4xl font-semibold tracking-[-0.03em] md:text-7xl">
+            <span className="flex flex-wrap items-center gap-x-4 font-brand text-4xl font-semibold tracking-[-0.03em] [overflow-wrap:anywhere] md:text-7xl">
               {next.title[language]}
               <span className="transition-transform duration-500 group-hover:translate-x-3 motion-reduce:group-hover:translate-x-0" aria-hidden="true">
                 →

@@ -1,0 +1,225 @@
+/* Motion layer for /contact, /faq, /blog and the 404 page.
+   Every class is prefixed with `ms-`. Loops honour [data-run="false"] (set by
+   the components while off screen) and prefers-reduced-motion. */
+
+@property --ms-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+/* ── Pause switch ───────────────────────────────────────────────────────── */
+[data-run="false"] *,
+[data-run="false"]::before,
+[data-run="false"]::after {
+  animation-play-state: paused !important;
+}
+
+/* ── Glass card with a rotating gradient rim that lights up on focus ───── */
+.ms-rim {
+  position: relative;
+  isolation: isolate;
+}
+.ms-rim::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  z-index: -1;
+  border-radius: inherit;
+  padding: 1px;
+  background: conic-gradient(from var(--ms-angle), rgba(99, 102, 241, 0.15), rgba(99, 102, 241, 0.9), rgba(217, 70, 239, 0.8), rgba(251, 191, 36, 0.7), rgba(99, 102, 241, 0.15) 70%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.5s;
+  animation: ms-spin-angle 6s linear infinite;
+}
+.ms-rim:focus-within::before,
+.ms-rim:hover::before {
+  opacity: 1;
+}
+@keyframes ms-spin-angle {
+  to { --ms-angle: 360deg; }
+}
+
+/* ── Form fields: soft glow + label tint while focused ─────────────────── */
+.ms-field label,
+.ms-field legend {
+  transition: color 0.25s, transform 0.25s;
+  transform-origin: left center;
+}
+.ms-field:focus-within label,
+.ms-field:focus-within legend {
+  color: var(--color-accent-primary);
+  transform: translateX(2px);
+}
+.ms-field input:focus,
+.ms-field textarea:focus,
+.ms-field select:focus {
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.12), 0 14px 34px -18px rgba(79, 70, 229, 0.55);
+}
+
+/* Staggered rise for the fields of a freshly shown form step */
+.ms-rise > * {
+  animation: ms-rise 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.ms-rise > *:nth-child(1) { animation-delay: 0.04s; }
+.ms-rise > *:nth-child(2) { animation-delay: 0.09s; }
+.ms-rise > *:nth-child(3) { animation-delay: 0.14s; }
+.ms-rise > *:nth-child(4) { animation-delay: 0.19s; }
+.ms-rise > *:nth-child(5) { animation-delay: 0.24s; }
+.ms-rise > *:nth-child(6) { animation-delay: 0.29s; }
+.ms-rise > *:nth-child(7) { animation-delay: 0.34s; }
+.ms-rise > *:nth-child(8) { animation-delay: 0.39s; }
+.ms-rise > *:nth-child(n + 9) { animation-delay: 0.44s; }
+@keyframes ms-rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* ── Progress bar sheen ─────────────────────────────────────────────────── */
+.ms-sheen {
+  position: relative;
+  overflow: hidden;
+}
+.ms-sheen::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(100deg, transparent 20%, rgba(255, 255, 255, 0.65) 50%, transparent 80%);
+  transform: translateX(-100%);
+  animation: ms-sheen 2.2s ease-in-out infinite;
+}
+@keyframes ms-sheen {
+  60%, 100% { transform: translateX(100%); }
+}
+
+/* ── Live dot ping + typing dots ────────────────────────────────────────── */
+.ms-ping {
+  animation: ms-ping 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+@keyframes ms-ping {
+  75%, 100% { transform: scale(2.4); opacity: 0; }
+}
+.ms-typing span {
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 9999px;
+  background: currentColor;
+  animation: ms-typing 1.2s ease-in-out infinite;
+}
+.ms-typing span:nth-child(2) { animation-delay: 0.15s; }
+.ms-typing span:nth-child(3) { animation-delay: 0.3s; }
+@keyframes ms-typing {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.35; }
+  30% { transform: translateY(-4px); opacity: 1; }
+}
+
+/* ── Messenger buttons: each icon has its own hover gesture ─────────────── */
+.ms-msg {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.ms-msg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(110deg, transparent 30%, rgba(165, 180, 252, 0.4) 50%, transparent 70%);
+  transform: translateX(-120%);
+  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.ms-msg:hover::after { transform: translateX(120%); }
+.ms-msg:hover .ms-ico-fly { animation: ms-fly 0.7s cubic-bezier(0.22, 1, 0.36, 1); }
+.ms-msg:hover .ms-ico-ring { animation: ms-ring 0.6s ease-in-out; }
+.ms-msg:hover .ms-ico-mail { animation: ms-mail 0.6s cubic-bezier(0.22, 1, 0.36, 1); }
+.ms-msg .ms-arrow { transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.35s; opacity: 0; transform: translateX(-6px); }
+.ms-msg:hover .ms-arrow { opacity: 1; transform: none; }
+@keyframes ms-fly {
+  0% { transform: none; }
+  45% { transform: translate(14px, -12px) scale(0.6); opacity: 0; }
+  46% { transform: translate(-14px, 12px) scale(0.6); opacity: 0; }
+  100% { transform: none; opacity: 1; }
+}
+@keyframes ms-ring {
+  0%, 100% { transform: rotate(0); }
+  20% { transform: rotate(-16deg); }
+  40% { transform: rotate(14deg); }
+  60% { transform: rotate(-10deg); }
+  80% { transform: rotate(6deg); }
+}
+@keyframes ms-mail {
+  0%, 100% { transform: none; }
+  40% { transform: translateY(-4px) rotate(-8deg); }
+}
+
+/* ── Generative covers ─────────────────────────────────────────────────── */
+.ms-flow { animation: ms-dash 3.2s linear infinite; }
+@keyframes ms-dash { to { stroke-dashoffset: -120; } }
+.ms-drift { animation: ms-drift 7s ease-in-out infinite alternate; }
+@keyframes ms-drift { to { transform: translate(var(--dx, 12px), var(--dy, -10px)); } }
+.ms-spin { animation: ms-spin 24s linear infinite; transform-box: fill-box; transform-origin: center; }
+.ms-spin-rev { animation: ms-spin 36s linear infinite reverse; transform-box: fill-box; transform-origin: center; }
+@keyframes ms-spin { to { transform: rotate(360deg); } }
+.ms-blink { animation: ms-blink 2.4s ease-in-out infinite; }
+@keyframes ms-blink { 50% { opacity: 0.25; } }
+.ms-grow { animation: ms-grow 3.6s cubic-bezier(0.22, 1, 0.36, 1) infinite; transform-box: fill-box; transform-origin: bottom; }
+@keyframes ms-grow { 0% { transform: scaleY(0.15); } 45%, 80% { transform: scaleY(1); } 100% { transform: scaleY(0.15); } }
+.ms-cover[data-active="true"] .ms-flow { animation-duration: 1.4s; }
+.ms-cover[data-active="true"] .ms-spin { animation-duration: 9s; }
+
+/* ── Aurora / gradient helpers for light sections ──────────────────────── */
+.ms-orb {
+  animation: ms-orb 14s ease-in-out infinite alternate;
+}
+@keyframes ms-orb {
+  to { transform: translate3d(6%, -8%, 0) scale(1.15); }
+}
+.ms-float { animation: ms-float 5s ease-in-out infinite; }
+@keyframes ms-float { 50% { transform: translateY(-10px) rotate(var(--rot, 0deg)); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .ms-rim::before,
+  .ms-rise > *,
+  .ms-sheen::after,
+  .ms-ping,
+  .ms-typing span,
+  .ms-flow,
+  .ms-drift,
+  .ms-spin,
+  .ms-spin-rev,
+  .ms-blink,
+  .ms-grow,
+  .ms-orb,
+  .ms-float,
+  .ms-glitch::before,
+  .ms-glitch::after,
+  .ms-twinkle,
+  .ms-caret {
+    animation: none !important;
+  }
+  .ms-msg:hover .ms-ico-fly,
+  .ms-msg:hover .ms-ico-ring,
+  .ms-msg:hover .ms-ico-mail { animation: none; }
+  .ms-glitch::before,
+  .ms-glitch::after { display: none; }
+}
+
+/* A field that just got a validation error gives a short shake */
+.ms-field:has(.text-error) input,
+.ms-field:has(.text-error) select,
+.ms-field:has(.text-error) textarea {
+  animation: ms-shake 0.42s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+}
+@keyframes ms-shake {
+  20%, 60% { transform: translateX(-5px); }
+  40%, 80% { transform: translateX(5px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ms-field:has(.text-error) input,
+  .ms-field:has(.text-error) select,
+  .ms-field:has(.text-error) textarea { animation: none; }
+}
