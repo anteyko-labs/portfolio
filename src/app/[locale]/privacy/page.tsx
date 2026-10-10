@@ -1,7 +1,7 @@
 import { PageWrapper } from "@/components/layout/page-wrapper";
 import { Section, SectionHeader } from "@/components/ui/section";
 import { localeAlternates } from "@/i18n/metadata";
-import type { Language } from "@/lib/translations";
+import { pick, type Language } from "@/lib/i18n-text";
 import { privacyCopy, type Block } from "./privacy-content";
 
 const EMAIL = "labs@anteyko.com";
@@ -15,11 +15,9 @@ export async function generateMetadata({
 }) {
   const { locale } = await params;
   return {
-    title: locale === "ru" ? "Политика конфиденциальности" : "Privacy policy",
+    title: pick({ en: "Privacy policy", ru: "Политика конфиденциальности" }, locale as Language),
     description:
-      locale === "ru"
-        ? "Как Anteyko Labs собирает, обрабатывает и хранит ваши данные: сайт и аналитика, переписка в мессенджерах и почте, ИИ-помощник, удаление данных."
-        : "How Anteyko Labs collects, processes and stores your data: website and analytics, messenger and email conversations, the AI assistant, data deletion.",
+      pick({ en: "How Anteyko Labs collects, processes and stores your data: website and analytics, messenger and email conversations, the AI assistant, data deletion.", ru: "Как Anteyko Labs собирает, обрабатывает и хранит ваши данные: сайт и аналитика, переписка в мессенджерах и почте, ИИ-помощник, удаление данных." }, locale as Language),
     alternates: localeAlternates(locale, "/privacy"),
   };
 }
@@ -80,7 +78,7 @@ export default async function PrivacyPage({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  const copy = privacyCopy[(locale === "ru" ? "ru" : "en") as Language];
+  const copy = privacyCopy[locale as Language] ?? privacyCopy.en;
 
   return (
     <PageWrapper>

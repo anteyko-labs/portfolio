@@ -3,24 +3,25 @@ import { flagshipCases } from "@/lib/cases-data";
 import { visibleShowcaseItems } from "@/lib/showcase-data";
 import { SERVICE_SLUGS } from "@/lib/service-slugs";
 import { blogPosts } from "@/lib/blog-data";
+import { LANGUAGES } from "@/lib/i18n-text";
 
 const BASE = "https://www.anteyko.com";
 
-// One entry per path with hreflang alternates for both locales. en is unprefixed;
-// ru lives under /ru (matches localePrefix "as-needed").
+// One entry per path with hreflang alternates for every locale. en is unprefixed;
+// the rest live under /ru, /zh, /tr, /ar (matches localePrefix "as-needed").
 function entry(
   path: string,
   changeFrequency: "weekly" | "monthly" | "yearly",
   priority: number
 ): MetadataRoute.Sitemap[number] {
   const en = `${BASE}${path}`;
-  const ru = `${BASE}/ru${path}`;
+  const languages = Object.fromEntries(LANGUAGES.map((l) => [l, l === "en" ? en : `${BASE}/${l}${path}`]));
   return {
     url: en,
     lastModified: new Date(),
     changeFrequency,
     priority,
-    alternates: { languages: { en, ru } },
+    alternates: { languages },
   };
 }
 

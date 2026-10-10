@@ -5,8 +5,9 @@ import { motion } from "framer-motion";
 import { EASE, SpotlightCard, Stagger, useLoop } from "@/components/motion/kit";
 import { useReducedMotion } from "@/lib/hooks";
 import { RevealTitle } from "./shared";
+import { useLanguage } from "@/lib/language-context";
+import { type L, type Language, pick } from "@/lib/i18n-text";
 
-type L = { en: string; ru: string };
 type Item = { title: L; description: L };
 
 function Screen({ children, label, status }: { children: ReactNode; label: string; status?: ReactNode }) {
@@ -28,17 +29,18 @@ function Screen({ children, label, status }: { children: ReactNode; label: strin
 }
 
 /** Tests: suites whose pass counters tick up, next to a coverage ring */
-function TestsWidget({ en }: { en: boolean }) {
+function TestsWidget() {
+  const { language } = useLanguage();
   const { ref, tick } = useLoop<HTMLDivElement>(900);
   const suites = [
-    { n: en ? "unit" : "юнит", base: 412, step: 3 },
-    { n: en ? "integration" : "интеграция", base: 128, step: 1 },
-    { n: en ? "contract" : "контракты", base: 36, step: 1 },
+    { n: pick({ en: "unit", ru: "юнит", zh: "单元", tr: "birim", ar: "وحدة" }, language), base: 412, step: 3 },
+    { n: pick({ en: "integration", ru: "интеграция", zh: "集成", tr: "entegrasyon", ar: "تكامل" }, language), base: 128, step: 1 },
+    { n: pick({ en: "contract", ru: "контракты", zh: "合约", tr: "kontrat", ar: "عقود" }, language), base: 36, step: 1 },
   ];
   const reduced = useReducedMotion();
   return (
     <div ref={ref}>
-      <Screen label="ci · tests" status={<span className="text-emerald-300">● {en ? "passing" : "зелёные"}</span>}>
+      <Screen label="ci · tests" status={<span className="text-emerald-300">● {pick({ en: "passing", ru: "зелёные", zh: "通过", tr: "başarılı", ar: "ناجحة" }, language)}</span>}>
         <div className="flex items-center justify-between gap-3">
           <ul className="min-w-0 space-y-1.5 font-mono text-[12px]">
             {suites.map((s, i) => (
@@ -72,18 +74,17 @@ function TestsWidget({ en }: { en: boolean }) {
             </div>
           </div>
         </div>
-        <p className="mt-2 font-mono text-[10px] uppercase tracking-[0.14em] text-white/35">{en ? "coverage ≥ 85%" : "покрытие ≥ 85%"}</p>
+        <p className="mt-2 font-mono text-[10px] uppercase tracking-[0.14em] text-white/35">{pick({ en: "coverage ≥ 85%", ru: "покрытие ≥ 85%", zh: "覆盖率 ≥ 85%", tr: "kapsam ≥ %85", ar: "التغطية ≥ 85%" }, language)}</p>
       </Screen>
     </div>
   );
 }
 
 /** Release gates: seven checks light up in turn, then the deploy unlocks */
-function GatesWidget({ en }: { en: boolean }) {
+function GatesWidget() {
+  const { language } = useLanguage();
   const { ref, tick, reduced } = useLoop<HTMLDivElement>(650);
-  const names = en
-    ? ["build", "unit", "integration", "contracts", "env parity", "smoke", "security"]
-    : ["сборка", "юнит", "интеграция", "контракты", "паритет", "smoke", "безопасность"];
+  const names = pick({ en: ["build", "unit", "integration", "contracts", "env parity", "smoke", "security"], ru: ["сборка", "юнит", "интеграция", "контракты", "паритет", "smoke", "безопасность"], zh: ["构建", "单元", "集成", "合约", "环境一致", "冒烟", "安全"], tr: ["derleme", "birim", "entegrasyon", "kontratlar", "ortam eşitliği", "smoke", "güvenlik"], ar: ["البناء", "الوحدة", "التكامل", "العقود", "تطابق البيئات", "Smoke", "الأمان"] }, language);
   const cycle = 10;
   const step = reduced ? 7 : tick % cycle; // 0..6 checking, 7..9 deployed
   const done = step >= 7;
@@ -91,7 +92,7 @@ function GatesWidget({ en }: { en: boolean }) {
     <div ref={ref}>
       <Screen
         label="release · gates"
-        status={<span className={`transition-colors ${done ? "text-emerald-300" : "text-amber-300"}`}>● {done ? (en ? "deploy" : "деплой") : `${step + 1}/7`}</span>}
+        status={<span className={`transition-colors ${done ? "text-emerald-300" : "text-amber-300"}`}>● {done ? (pick({ en: "deploy", ru: "деплой", zh: "部署", tr: "dağıtım", ar: "النشر" }, language)) : `${step + 1}/7`}</span>}
       >
         <div className="relative mt-3 flex items-center justify-between">
           <div aria-hidden="true" className="absolute inset-x-3 top-1/2 h-[2px] -translate-y-1/2 bg-white/10" />
@@ -112,7 +113,7 @@ function GatesWidget({ en }: { en: boolean }) {
           })}
         </div>
         <div className="mt-5 flex items-center justify-between font-mono text-[12px]">
-          <span className="text-white/50">{done ? (en ? "all 7 gates green" : "все 7 стадий зелёные") : names[step]}</span>
+          <span className="text-white/50">{done ? (pick({ en: "all 7 gates green", ru: "все 7 стадий зелёные", zh: "7 道关卡全部通过", tr: "7 kapının tamamı yeşil", ar: "جميع البوابات السبع خضراء" }, language)) : names[step]}</span>
           <span className={`rounded-md px-2 py-0.5 transition-colors duration-300 ${done ? "bg-emerald-400/15 text-emerald-300" : "bg-white/5 text-white/30"}`}>{done ? "→ prod" : "prod"}</span>
         </div>
       </Screen>
@@ -121,13 +122,14 @@ function GatesWidget({ en }: { en: boolean }) {
 }
 
 /** Handover docs: a stack of documents that shuffles, the front one always readable */
-function DocsWidget({ en }: { en: boolean }) {
+function DocsWidget() {
+  const { language } = useLanguage();
   const { ref, tick } = useLoop<HTMLDivElement>(1800);
   const docs = [
-    { t: "ADR-014", s: en ? "Why a modular monolith" : "Почему модульный монолит", c: "#818CF8" },
-    { t: "Runbook", s: en ? "Restore from backup" : "Восстановление из бэкапа", c: "#F0ABFC" },
-    { t: en ? "Video" : "Видео", s: en ? "Codebase walkthrough · 18 min" : "Разбор кодовой базы · 18 мин", c: "#FDE68A" },
-    { t: en ? "Onboarding" : "Онбординг", s: en ? "Day 1: run it locally" : "День 1: запуск локально", c: "#67E8F9" },
+    { t: "ADR-014", s: pick({ en: "Why a modular monolith", ru: "Почему модульный монолит", zh: "为什么选择模块化单体", tr: "Neden modüler monolit", ar: "لماذا النمط الأحادي المعياري (Modular Monolith)" }, language), c: "#818CF8" },
+    { t: "Runbook", s: pick({ en: "Restore from backup", ru: "Восстановление из бэкапа", zh: "从备份恢复", tr: "Yedekten geri yükleme", ar: "الاستعادة من النسخة الاحتياطية" }, language), c: "#F0ABFC" },
+    { t: pick({ en: "Video", ru: "Видео", zh: "视频", tr: "Video", ar: "فيديو" }, language), s: pick({ en: "Codebase walkthrough · 18 min", ru: "Разбор кодовой базы · 18 мин", zh: "代码库讲解 · 18 分钟", tr: "Kod tabanı turu · 18 dk", ar: "جولة في الشيفرة المصدرية · 18 دقيقة" }, language), c: "#FDE68A" },
+    { t: pick({ en: "Onboarding", ru: "Онбординг", zh: "上手引导", tr: "Onboarding", ar: "الإعداد والتأهيل" }, language), s: pick({ en: "Day 1: run it locally", ru: "День 1: запуск локально", zh: "第 1 天：本地运行", tr: "1. gün: yerelde çalıştırın", ar: "اليوم الأول: التشغيل محليًا" }, language), c: "#67E8F9" },
   ];
   return (
     <div ref={ref}>
@@ -174,9 +176,10 @@ const SPARK = (() => {
 })();
 
 /** Monitoring: a live latency sparkline under the alert threshold */
-function MonitorWidget({ en }: { en: boolean }) {
+function MonitorWidget() {
+  const { language } = useLanguage();
   return (
-    <Screen label="prod · metrics" status={<span className="text-emerald-300">● {en ? "healthy" : "в норме"}</span>}>
+    <Screen label="prod · metrics" status={<span className="text-emerald-300">● {pick({ en: "healthy", ru: "в норме", zh: "运行正常", tr: "sağlıklı", ar: "سليم" }, language)}</span>}>
       <div className="relative h-14 overflow-hidden">
         <svg viewBox="0 0 240 48" preserveAspectRatio="none" className="absolute inset-0 h-full w-full" aria-hidden="true">
           <line x1="0" y1="10" x2="240" y2="10" stroke="rgba(251,113,133,0.5)" strokeDasharray="3 4" />
@@ -195,9 +198,9 @@ function MonitorWidget({ en }: { en: boolean }) {
         </div>
       </div>
       <div className="mt-2 flex items-center justify-between font-mono text-[11px] text-white/50">
-        <span>{en ? "error budget" : "бюджет ошибок"} <span className="text-emerald-300">✓</span></span>
-        <span>{en ? "alerts" : "алерты"}: <span className="text-white">0</span></span>
-        <span className="text-rose-300/70">{en ? "threshold" : "порог"}</span>
+        <span>{pick({ en: "error budget", ru: "бюджет ошибок", zh: "错误预算", tr: "hata bütçesi", ar: "ميزانية الأخطاء" }, language)} <span className="text-emerald-300">✓</span></span>
+        <span>{pick({ en: "alerts", ru: "алерты", zh: "告警", tr: "uyarılar", ar: "التنبيهات" }, language)}: <span className="text-white">0</span></span>
+        <span className="text-rose-300/70">{pick({ en: "threshold", ru: "порог", zh: "阈值", tr: "eşik", ar: "الحد الأقصى" }, language)}</span>
       </div>
     </Screen>
   );
@@ -206,17 +209,16 @@ function MonitorWidget({ en }: { en: boolean }) {
 const WIDGETS = [TestsWidget, GatesWidget, DocsWidget, MonitorWidget];
 
 /** "How we guarantee quality": each guarantee shown as a small live console */
-export function Quality({ title, items, language }: { title: L; items: readonly Item[]; language: "en" | "ru" }) {
-  const en = language === "en";
+export function Quality({ title, items, language }: { title: L; items: readonly Item[]; language: Language }) {
   return (
     <div>
-      <RevealTitle eyebrow={en ? "Quality" : "Качество"} title={title[language]} className="max-w-4xl" />
+      <RevealTitle eyebrow={pick({ en: "Quality", ru: "Качество", zh: "质量", tr: "Kalite", ar: "الجودة" }, language)} title={title[language]} className="max-w-4xl" />
       <Stagger className="mt-10 grid gap-4 sm:grid-cols-2" gap={0.1}>
         {items.map((item, i) => {
           const W = WIDGETS[i % WIDGETS.length];
           return (
             <SpotlightCard key={item.title.en} className="h-full rounded-3xl border border-border bg-bg-primary p-3 transition-shadow duration-500 hover:shadow-[0_30px_60px_-30px_rgba(79,70,229,0.45)]">
-              <W en={en} />
+              <W />
               <div className="px-3 pb-3 pt-5">
                 <h3 className="font-brand text-lg font-semibold tracking-tight text-text-primary">{item.title[language]}</h3>
                 <p className="mt-2 text-body-sm leading-relaxed text-text-secondary">{item.description[language]}</p>

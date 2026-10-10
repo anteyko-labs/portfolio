@@ -1,17 +1,19 @@
-export type Language = "en" | "ru";
+import type { Language } from "./i18n-text";
+
+export type { Language };
 
 export const translations = {
   // Navigation
   nav: {
-    home: { en: "Home", ru: "Главная" },
-    services: { en: "Services", ru: "Услуги" },
-    cases: { en: "Cases", ru: "Кейсы" },
-    process: { en: "Process", ru: "Процесс" },
-    faq: { en: "FAQ", ru: "FAQ" },
-    about: { en: "About", ru: "О нас" },
-    contact: { en: "Contact", ru: "Контакты" },
-    pricing: { en: "Pricing", ru: "Цены" },
-    blog: { en: "Blog", ru: "Блог" },
+    home: { en: "Home", ru: "Главная", zh: "首页", tr: "Ana sayfa", ar: "الرئيسية" },
+    services: { en: "Services", ru: "Услуги", zh: "服务", tr: "Hizmetler", ar: "الخدمات" },
+    cases: { en: "Cases", ru: "Кейсы", zh: "案例", tr: "Projeler", ar: "المشاريع" },
+    process: { en: "Process", ru: "Процесс", zh: "流程", tr: "Süreç", ar: "آلية العمل" },
+    faq: { en: "FAQ", ru: "FAQ", zh: "FAQ", tr: "SSS", ar: "FAQ" },
+    about: { en: "About", ru: "О нас", zh: "关于", tr: "Hakkımızda", ar: "من نحن" },
+    contact: { en: "Contact", ru: "Контакты", zh: "联系我们", tr: "İletişim", ar: "تواصل معنا" },
+    pricing: { en: "Pricing", ru: "Цены", zh: "价格", tr: "Fiyatlar", ar: "الأسعار" },
+    blog: { en: "Blog", ru: "Блог", zh: "博客", tr: "Blog", ar: "المدونة" },
   },
 
   // CTAs
@@ -19,19 +21,25 @@ export const translations = {
     primary: {
       en: "Get an estimate in 24\u00A0hours",
       ru: "Получить оценку за 24\u00A0часа",
+      zh: "24 小时内获取报价",
+      tr: "24 saat içinde teklif alın",
+      ar: "احصلوا على تقدير خلال 24 ساعة",
     },
     secondary: {
       en: "Book a 45-min scoping call",
       ru: "Звонок на 45\u00A0минут",
+      zh: "预约 45 分钟需求沟通",
+      tr: "45 dakikalık kapsam görüşmesi ayarlayın",
+      ar: "احجزوا مكالمة لمدة 45 دقيقة",
     },
-    viewCase: { en: "View case", ru: "Смотреть кейс" },
-    viewAll: { en: "View all", ru: "Смотреть все" },
-    finalLine1: { en: "We don't want briefs.", ru: "Нам не нужны брифы." },
-    finalLine2: { en: "We want problems. That's where the magic happens.", ru: "Нам нужны задачи. Там и рождается результат." },
-    finalAction: { en: "Get an estimate in 24\u00A0hours", ru: "Получить оценку за 24\u00A0часа" },
-    learnMore: { en: "Learn more", ru: "Подробнее" },
-    getStarted: { en: "Get started", ru: "Начать" },
-    sendRequest: { en: "Send request", ru: "Отправить заявку" },
+    viewCase: { en: "View case", ru: "Смотреть кейс", zh: "查看案例", tr: "Projeyi görüntüle", ar: "عرض الحالة" },
+    viewAll: { en: "View all", ru: "Смотреть все", zh: "查看全部", tr: "Tümünü gör", ar: "عرض الكل" },
+    finalLine1: { en: "We don't want briefs.", ru: "Нам не нужны брифы.", zh: "我们不要需求文档。", tr: "Brief istemiyoruz.", ar: "لا نريد ملخصات مشاريع." },
+    finalLine2: { en: "We want problems. That's where the magic happens.", ru: "Нам нужны задачи. Там и рождается результат.", zh: "我们要的是问题。奇迹就发生在那里。", tr: "Sorun istiyoruz. Sihir tam orada başlıyor.", ar: "نريد المشكلات. فهنا يبدأ السحر." },
+    finalAction: { en: "Get an estimate in 24\u00A0hours", ru: "Получить оценку за 24\u00A0часа", zh: "24 小时内获取报价", tr: "24 saat içinde teklif alın", ar: "احصلوا على تقدير خلال 24 ساعة" },
+    learnMore: { en: "Learn more", ru: "Подробнее", zh: "了解更多", tr: "Daha fazla bilgi", ar: "اعرف المزيد" },
+    getStarted: { en: "Get started", ru: "Начать", zh: "立即开始", tr: "Başlayın", ar: "ابدأوا الآن" },
+    sendRequest: { en: "Send request", ru: "Отправить заявку", zh: "提交需求", tr: "Talebi gönder", ar: "إرسال الطلب" },
   },
 
   // Hero
@@ -39,60 +47,93 @@ export const translations = {
     tagline: {
       en: "Build · Ship · Iterate",
       ru: "Собираем · Запускаем · Улучшаем",
+      zh: "构建 · 发布 · 迭代",
+      tr: "Geliştir · Yayınla · İyileştir",
+      ar: "نبني · نُطلق · نُحسّن",
     },
     title: {
       en: "Launch a product you're proud of.",
       ru: "Запустим продукт, которым гордитесь.",
+      zh: "发布一款让您引以为傲的产品。",
+      tr: "Gurur duyacağınız bir ürün çıkarın.",
+      ar: "أطلقوا منتجًا تفخرون به.",
     },
     titleAccent: {
       en: "Launch",
       ru: "Запустим",
+      zh: "发布",
+      tr: "Gurur duyacağınız",
+      ar: "أطلقوا",
     },
     titleRest: {
       en: "a product you're proud of.",
       ru: "продукт, которым гордитесь.",
+      zh: "一款让您引以为傲的产品。",
+      tr: "bir ürünü hayata geçirin.",
+      ar: "منتجًا تفخرون به.",
     },
     heroMetric: {
       en: "24h",
       ru: "24\u00A0ч",
+      zh: "24 小时",
+      tr: "24 sa",
+      ar: "24 ساعة",
     },
     heroMetricLabel: {
       en: "estimate response",
       ru: "ответ по оценке",
+      zh: "报价响应",
+      tr: "teklif yanıtı",
+      ar: "للرد بالتقدير",
     },
     subtitle: {
       en: "No missed deadlines. Pay per stage. Your code from day one.",
       ru: "Без срывов сроков. Этапная оплата. Код ваш с первого дня.",
+      zh: "不误工期。分阶段付款。代码从第一天起归您。",
+      tr: "Kaçırılan teslim tarihi yok. Aşama başına ödeme. İlk günden itibaren kodunuz sizin.",
+      ar: "دون تأخير في المواعيد. دفع حسب المراحل. شيفرتكم ملكٌ لكم من اليوم الأول.",
     },
     trustLine: {
       en: "40+ projects delivered. Bishkek · Dubai · Istanbul · Chicago · Shenzhen. Milestone-based. NDA on request.",
       ru: "40+ проектов. Бишкек · Дубай · Стамбул · Чикаго · Шэньчжэнь. Работаем по этапам. NDA по запросу.",
+      zh: "已交付 40 多个项目。比什凯克 · 迪拜 · 伊斯坦布尔 · 芝加哥 · 深圳。按里程碑推进。可签署 NDA。",
+      tr: "40'tan fazla proje teslim edildi. Bişkek · Dubai · İstanbul · Chicago · Shenzhen. Aşama bazlı. İsteğe bağlı NDA.",
+      ar: "أكثر من 40 مشروعًا منجزًا. بيشكيك · دبي · إسطنبول · شيكاغو · شنتشن. عمل على أساس المراحل. اتفاقية سرية عند الطلب.",
     },
   },
 
   // What we build
   whatWeBuild: {
-    title: { en: "What we build", ru: "Что мы делаем" },
+    title: { en: "What we build", ru: "Что мы делаем", zh: "我们打造什么", tr: "Ne inşa ediyoruz", ar: "ما نبنيه" },
     items: [
       {
-        title: { en: "Websites & landing pages", ru: "Сайты и лендинги" },
+        title: { en: "Websites & landing pages", ru: "Сайты и лендинги", zh: "网站与落地页", tr: "Web siteleri ve açılış sayfaları", ar: "المواقع وصفحات الهبوط" },
         description: {
           en: "High-converting pages with clear UX, fast load, and SEO.",
           ru: "Конверсионные страницы с понятным UX, быстрой загрузкой и SEO.",
+          zh: "高转化页面，体验清晰、加载迅速、SEO 完善。",
+          tr: "Net UX, hızlı yükleme ve SEO ile yüksek dönüşümlü sayfalar.",
+          ar: "صفحات عالية التحويل بتجربة مستخدم واضحة وتحميل سريع وتحسين لمحركات البحث.",
         },
       },
       {
-        title: { en: "MVP & startup products", ru: "MVP и стартап-продукты" },
+        title: { en: "MVP & startup products", ru: "MVP и стартап-продукты", zh: "MVP 与创业产品", tr: "MVP ve startup ürünleri", ar: "MVP ومنتجات الشركات الناشئة" },
         description: {
           en: "From idea to working product in weeks, not months.",
           ru: "От идеи до работающего продукта за недели, не месяцы.",
+          zh: "从创意到可用产品，只需数周，而非数月。",
+          tr: "Fikirden çalışan ürüne aylar değil, haftalar içinde.",
+          ar: "من الفكرة إلى منتج يعمل في أسابيع لا أشهر.",
         },
       },
       {
-        title: { en: "Web3 modules & integrations", ru: "Web3 модули и интеграции" },
+        title: { en: "Web3 modules & integrations", ru: "Web3 модули и интеграции", zh: "Web3 模块与集成", tr: "Web3 modülleri ve entegrasyonları", ar: "وحدات Web3 والتكاملات" },
         description: {
           en: "Wallets, tokens, smart contracts, DeFi modules.",
           ru: "Кошельки, токены, смарт-контракты, DeFi модули.",
+          zh: "钱包、代币、智能合约、DeFi 模块。",
+          tr: "Cüzdanlar, tokenlar, akıllı sözleşmeler, DeFi modülleri.",
+          ar: "محافظ ورموز وعقود ذكية ووحدات DeFi.",
         },
       },
     ],
@@ -100,49 +141,67 @@ export const translations = {
 
   // Why us
   whyUs: {
-    title: { en: "Why teams choose us", ru: "Почему выбирают нас" },
-    statsLine: { en: "40+ projects · 5+ years", ru: "40+\u00A0проектов · 5+\u00A0лет" },
+    title: { en: "Why teams choose us", ru: "Почему выбирают нас", zh: "团队为什么选择我们", tr: "Ekipler neden bizi seçiyor", ar: "لماذا تختارنا الفرق" },
+    statsLine: { en: "40+ projects · 5+ years", ru: "40+\u00A0проектов · 5+\u00A0лет", zh: "40+ 个项目 · 5 年以上", tr: "40'tan fazla proje · 5+ yıl", ar: "أكثر من 40 مشروعًا · أكثر من 5 سنوات" },
     items: [
       {
-        title: { en: "End-to-end delivery", ru: "Полный цикл" },
+        title: { en: "End-to-end delivery", ru: "Полный цикл", zh: "端到端交付", tr: "Uçtan uca teslimat", ar: "تنفيذ متكامل" },
         description: {
           en: "One partner from design to deployment. No vendor juggling.",
           ru: "Один партнёр от дизайна до деплоя. Без жонглирования подрядчиками.",
+          zh: "从设计到部署，一个合作伙伴搞定。无需在多个供应商之间周旋。",
+          tr: "Tasarımdan yayına tek iş ortağı. Tedarikçi koordinasyonu yok.",
+          ar: "شريك واحد من التصميم إلى النشر. دون تشتت بين الموردين.",
         },
       },
       {
-        title: { en: "Engineering discipline", ru: "Инженерная дисциплина" },
+        title: { en: "Engineering discipline", ru: "Инженерная дисциплина", zh: "工程纪律", tr: "Mühendislik disiplini", ar: "انضباط هندسي" },
         description: {
           en: "Tests, release checklists, documented decisions. Not cowboy coding.",
           ru: "Тесты, чеклисты релизов, документированные решения. Не код «на коленке».",
+          zh: "测试、发布清单、有据可查的决策。拒绝野路子式编码。",
+          tr: "Testler, yayın kontrol listeleri, belgelenmiş kararlar. Başıboş kodlama değil.",
+          ar: "اختبارات وقوائم تحقق للإصدارات وقرارات موثّقة. لا شيفرة ارتجالية.",
         },
       },
       {
-        title: { en: "Product thinking", ru: "Продуктовое мышление" },
+        title: { en: "Product thinking", ru: "Продуктовое мышление", zh: "产品思维", tr: "Ürün odaklı düşünce", ar: "تفكير المنتج" },
         description: {
           en: "We track KPIs and funnels, not just ship features.",
           ru: "Отслеживаем KPI и воронки, а не просто отгружаем фичи.",
+          zh: "我们追踪 KPI 和转化漏斗，而不只是交付功能。",
+          tr: "Yalnızca özellik çıkarmıyoruz; KPI'ları ve huniyi takip ediyoruz.",
+          ar: "نتابع مؤشرات KPI ومسارات التحويل، ولا نكتفي بتسليم الميزات.",
         },
       },
       {
-        title: { en: "Transparent process", ru: "Прозрачный процесс" },
+        title: { en: "Transparent process", ru: "Прозрачный процесс", zh: "透明的流程", tr: "Şeffaf süreç", ar: "عملية شفافة" },
         description: {
           en: "Weekly demos, async updates, no surprises.",
           ru: "Еженедельные демо, асинхронные обновления, без сюрпризов.",
+          zh: "每周演示、异步更新，没有意外。",
+          tr: "Haftalık demolar, asenkron güncellemeler, sürpriz yok.",
+          ar: "عروض تجريبية أسبوعية، وتحديثات غير متزامنة، ودون مفاجآت.",
         },
       },
       {
-        title: { en: "Speed with quality gates", ru: "Скорость с контролем качества" },
+        title: { en: "Speed with quality gates", ru: "Скорость с контролем качества", zh: "速度与质量关卡并重", tr: "Kalite kapılarıyla hız", ar: "سرعة مع بوابات جودة" },
         description: {
           en: "Scoped delivery, not endless sprints. Ship fast, ship right.",
           ru: "Чёткие границы поставки, не бесконечные спринты. Быстро и качественно.",
+          zh: "范围明确的交付，而非没完没了的冲刺。又快又好。",
+          tr: "Kapsamlı teslimat, bitmeyen sprintler değil. Hızlı yayınlayın, doğru yayınlayın.",
+          ar: "تسليم بنطاق محدد لا سباقات لا تنتهي. نُنجز بسرعة وبإتقان.",
         },
       },
       {
-        title: { en: "Support after launch", ru: "Поддержка после запуска" },
+        title: { en: "Support after launch", ru: "Поддержка после запуска", zh: "上线后的支持", tr: "Yayın sonrası destek", ar: "دعم بعد الإطلاق" },
         description: {
           en: "First month of support is included. We don't disappear after deploy.",
           ru: "Первый месяц поддержки включён. Не бросаем после деплоя.",
+          zh: "包含首月支持。部署之后我们不会消失。",
+          tr: "İlk ayın desteği dahil. Deploy'dan sonra ortadan kaybolmuyoruz.",
+          ar: "الشهر الأول من الدعم مشمول. لا نختفي بعد النشر.",
         },
       },
     ],
@@ -150,40 +209,61 @@ export const translations = {
 
   // Packages
   packages: {
-    title: { en: "Packages", ru: "Пакеты услуг" },
+    title: { en: "Packages", ru: "Пакеты услуг", zh: "服务套餐", tr: "Paketler", ar: "الباقات" },
     subtitle: {
       en: "Clear scope. Fixed timeline. Predictable outcomes.",
       ru: "Чёткий объём. Фиксированные сроки. Предсказуемый результат.",
+      zh: "范围清晰。工期固定。结果可预期。",
+      tr: "Net kapsam. Sabit takvim. Öngörülebilir sonuçlar.",
+      ar: "نطاق واضح. جدول زمني ثابت. نتائج يمكن توقعها.",
     },
     compareTitle: {
       en: "Compare packages",
       ru: "Сравнение пакетов",
+      zh: "套餐对比",
+      tr: "Paketleri karşılaştırın",
+      ar: "مقارنة الباقات",
     },
     compareSubtitle: {
       en: "A quick view of speed, depth, risk control and support.",
       ru: "Быстрый взгляд на скорость, глубину, контроль рисков и поддержку.",
+      zh: "速度、深度、风险控制和支持，一目了然。",
+      tr: "Hız, derinlik, risk kontrolü ve desteğe hızlı bir bakış.",
+      ar: "نظرة سريعة على السرعة والعمق وضبط المخاطر والدعم.",
     },
     scopeTitle: {
       en: "Scope summary",
       ru: "Сводка по пакету",
+      zh: "范围概览",
+      tr: "Kapsam özeti",
+      ar: "ملخص النطاق",
     },
     scopeSubtitle: {
       en: "What you get at this level",
       ru: "Что входит в этот уровень",
+      zh: "该级别包含的内容",
+      tr: "Bu seviyede neler elde edersiniz",
+      ar: "ما تحصلون عليه في هذا المستوى",
     },
     items: [
       {
         id: "launch-site",
-        title: { en: "Launch Site", ru: "Быстрый старт" },
-        startingPrice: { en: "From $800", ru: "От $800" },
-        timeline: { en: "7–14 days", ru: "7–14\u00A0дней" },
+        title: { en: "Launch Site", ru: "Быстрый старт", zh: "快速上线", tr: "Launch Site", ar: "إطلاق سريع" },
+        startingPrice: { en: "From $800", ru: "От $800", zh: "$800 起", tr: "800 $'dan başlayan", ar: "ابتداءً من $800" },
+        timeline: { en: "7–14 days", ru: "7–14\u00A0дней", zh: "7–14 天", tr: "7–14 gün", ar: "7–14 يومًا" },
         description: {
           en: "Landing page or corporate site that converts. Design, development, deployment.",
           ru: "Лендинг или корпоративный сайт, который конвертирует. Дизайн, разработка, запуск.",
+          zh: "真正能转化的落地页或企业官网。含设计、开发和上线部署。",
+          tr: "Dönüşüm sağlayan açılış sayfası veya kurumsal site. Tasarım, geliştirme, yayına alma.",
+          ar: "صفحة هبوط أو موقع مؤسسي يحقق التحويل. تصميم وتطوير ونشر.",
         },
         forWhom: {
           en: "For founders launching a product, agencies needing a fast turnkey site.",
           ru: "Для основателей, запускающих продукт, агентств, которым нужен быстрый сайт под ключ.",
+          zh: "适合正在推出产品的创始人，以及需要快速交钥匙网站的机构。",
+          tr: "Ürün çıkaran kurucular ve hızlı, anahtar teslim site isteyen ajanslar için.",
+          ar: "للمؤسسين الذين يطلقون منتجًا، وللوكالات التي تحتاج إلى موقع جاهز بسرعة.",
         },
         deliverables: {
           en: [
@@ -200,24 +280,36 @@ export const translations = {
             "SEO и аналитика",
             "Деплой и SSL",
           ],
+          zh: ["响应式设计（Figma）", "Next.js / React 实现", "CMS 集成（可选）", "SEO 配置与数据分析", "部署与 SSL"],
+          tr: ["Responsive tasarım (Figma)", "Next.js / React uygulaması", "CMS entegrasyonu (opsiyonel)", "SEO kurulumu ve analitik", "Deploy ve SSL"],
+          ar: ["تصميم متجاوب (Figma)", "تنفيذ بـ Next.js / React", "تكامل مع نظام إدارة المحتوى (اختياري)", "إعداد SEO والتحليلات", "النشر وشهادة SSL"],
         },
         result: {
           en: "Live site with source code, CMS access, and documentation.",
           ru: "Работающий сайт с исходниками, доступом к CMS и документацией.",
+          zh: "可运行的网站，含源代码、CMS 访问权限和文档。",
+          tr: "Kaynak kodu, CMS erişimi ve belgelerle canlı site.",
+          ar: "موقع يعمل مع الشيفرة المصدرية والوصول إلى نظام إدارة المحتوى والتوثيق.",
         },
       },
       {
         id: "mvp-sprint",
-        title: { en: "MVP Sprint", ru: "MVP-спринт" },
-        startingPrice: { en: "From $3k", ru: "От $3k" },
-        timeline: { en: "3–6 weeks", ru: "3–6\u00A0недель" },
+        title: { en: "MVP Sprint", ru: "MVP-спринт", zh: "MVP 冲刺", tr: "MVP Sprint", ar: "سباق MVP" },
+        startingPrice: { en: "From $3k", ru: "От $3k", zh: "$3k 起", tr: "3 bin $'dan başlayan", ar: "ابتداءً من $3k" },
+        timeline: { en: "3–6 weeks", ru: "3–6\u00A0недель", zh: "3–6 周", tr: "3–6 hafta", ar: "3–6 أسابيع" },
         description: {
           en: "Working product with core features. Validate your idea with real users.",
           ru: "Работающий продукт с ключевыми фичами. Проверьте идею на реальных пользователях.",
+          zh: "具备核心功能的可用产品。用真实用户验证您的创意。",
+          tr: "Temel özelliklere sahip çalışan ürün. Fikrinizi gerçek kullanıcılarla doğrulayın.",
+          ar: "منتج يعمل بميزاته الأساسية. تحققوا من فكرتكم مع مستخدمين حقيقيين.",
         },
         forWhom: {
           en: "For startups testing market fit, founders preparing for investment rounds.",
           ru: "Для стартапов, тестирующих product-market fit, основателей перед раундом.",
+          zh: "适合验证市场契合度的初创公司，以及筹备融资轮次的创始人。",
+          tr: "Pazar uyumunu test eden startup'lar ve yatırım turuna hazırlanan kurucular için.",
+          ar: "للشركات الناشئة التي تختبر ملاءمة المنتج للسوق، وللمؤسسين المستعدين لجولات الاستثمار.",
         },
         deliverables: {
           en: [
@@ -236,24 +328,36 @@ export const translations = {
             "Тестовый и боевой сервер",
             "2\u00A0недели поддержки после запуска",
           ],
+          zh: ["UX/UI 设计", "前端 + 后端", "管理后台", "API 文档", "预发布与生产环境部署", "上线后 2 周支持"],
+          tr: ["UX/UI tasarımı", "Frontend + Backend", "Yönetim paneli", "API dokümantasyonu", "Staging ve production deploy", "Yayın sonrası 2 hafta destek"],
+          ar: ["تصميم UX/UI", "الواجهة الأمامية + الخلفية", "لوحة إدارة", "توثيق API", "النشر على بيئة الاختبار والإنتاج", "أسبوعان من الدعم بعد الإطلاق"],
         },
         result: {
           en: "Production-ready MVP with source code, infrastructure, and handover docs.",
           ru: "MVP, готовый к запуску, с исходниками, инфраструктурой и документацией.",
+          zh: "可直接投产的 MVP，含源代码、基础设施和交接文档。",
+          tr: "Kaynak kodu, altyapı ve devir belgeleriyle production'a hazır MVP.",
+          ar: "MVP جاهز للإنتاج مع الشيفرة المصدرية والبنية التحتية ووثائق التسليم.",
         },
       },
       {
         id: "startup-key",
-        title: { en: "Startup Under Key", ru: "Стартап под ключ" },
-        startingPrice: { en: "From $5k", ru: "От $5k" },
-        timeline: { en: "6–12+ weeks", ru: "6–12+\u00A0недель" },
+        title: { en: "Startup Under Key", ru: "Стартап под ключ", zh: "创业项目交钥匙", tr: "Startup Under Key", ar: "شركة ناشئة جاهزة للتشغيل" },
+        startingPrice: { en: "From $5k", ru: "От $5k", zh: "$5k 起", tr: "5 bin $'dan başlayan", ar: "ابتداءً من $5k" },
+        timeline: { en: "6–12+ weeks", ru: "6–12+\u00A0недель", zh: "6–12+ 周", tr: "6–12+ hafta", ar: "6–12+ أسبوعًا" },
         description: {
           en: "Full product build with complex features, integrations, and scale considerations.",
           ru: "Полная сборка продукта со сложными фичами, интеграциями и учётом масштабирования.",
+          zh: "完整的产品构建，涵盖复杂功能、系统集成和可扩展性考量。",
+          tr: "Karmaşık özellikler, entegrasyonlar ve ölçeklenme gereksinimleriyle eksiksiz ürün geliştirme.",
+          ar: "بناء منتج متكامل بميزات معقدة وتكاملات ومراعاة للتوسع.",
         },
         forWhom: {
           en: "For funded startups, enterprises building new digital products.",
           ru: "Для профинансированных стартапов, компаний, создающих новые цифровые продукты.",
+          zh: "适合已获融资的初创公司，以及打造新数字产品的企业。",
+          tr: "Yatırım almış startup'lar ve yeni dijital ürünler geliştiren kurumlar için.",
+          ar: "للشركات الناشئة الممولة، وللمؤسسات التي تبني منتجات رقمية جديدة.",
         },
         deliverables: {
           en: [
@@ -274,24 +378,36 @@ export const translations = {
             "Аудит безопасности",
             "1\u00A0месяц поддержки после запуска",
           ],
+          zh: ["需求探索与架构", "设计系统", "全栈开发", "第三方集成", "DevOps 与 CI/CD", "安全审计", "上线后 1 个月支持"],
+          tr: ["Keşif ve mimari", "Tasarım sistemi", "Full-stack geliştirme", "Üçüncü taraf entegrasyonlar", "DevOps ve CI/CD", "Güvenlik denetimi", "Yayın sonrası 1 ay destek"],
+          ar: ["الاستكشاف والبنية المعمارية", "نظام التصميم", "تطوير متكامل Full-stack", "تكاملات مع جهات خارجية", "DevOps وCI/CD", "تدقيق أمني", "شهر واحد من الدعم بعد الإطلاق"],
         },
         result: {
           en: "Scalable product with full ownership transfer, technical docs, and support plan.",
           ru: "Масштабируемый продукт с полной передачей прав, тех. документацией и планом поддержки.",
+          zh: "可扩展的产品，含完整所有权转移、技术文档和支持方案。",
+          tr: "Tam mülkiyet devri, teknik belgeler ve destek planıyla ölçeklenebilir ürün.",
+          ar: "منتج قابل للتوسع مع نقل ملكية كامل ووثائق تقنية وخطة دعم.",
         },
       },
       {
         id: "web3-addon",
-        title: { en: "Web3 Add-on", ru: "Web3-модуль" },
-        startingPrice: { en: "From $3k", ru: "От $3k" },
-        timeline: { en: "Modular", ru: "Модульно" },
+        title: { en: "Web3 Add-on", ru: "Web3-модуль", zh: "Web3 附加模块", tr: "Web3 Eklentisi", ar: "إضافة Web3" },
+        startingPrice: { en: "From $3k", ru: "От $3k", zh: "$3k 起", tr: "3 bin $'dan başlayan", ar: "ابتداءً من $3k" },
+        timeline: { en: "Modular", ru: "Модульно", zh: "模块化", tr: "Modüler", ar: "معياري" },
         description: {
           en: "Blockchain modules for existing or new products. Wallets, tokens, DeFi.",
           ru: "Блокчейн-модули для существующих или новых продуктов. Кошельки, токены, DeFi.",
+          zh: "面向现有或新产品的区块链模块。钱包、代币、DeFi。",
+          tr: "Mevcut veya yeni ürünler için blockchain modülleri. Cüzdanlar, tokenlar, DeFi.",
+          ar: "وحدات بلوكتشين لمنتجات قائمة أو جديدة. محافظ ورموز وDeFi.",
         },
         forWhom: {
           en: "For teams adding Web3 to existing products or building crypto-native apps.",
           ru: "Для команд, добавляющих Web3 в существующие продукты или создающих крипто-нативные приложения.",
+          zh: "适合为现有产品加入 Web3，或打造加密原生应用的团队。",
+          tr: "Mevcut ürünlerine Web3 ekleyen veya kripto odaklı uygulamalar geliştiren ekipler için.",
+          ar: "للفرق التي تضيف Web3 إلى منتجاتها القائمة أو تبني تطبيقات أصيلة للعملات المشفرة.",
         },
         deliverables: {
           en: [
@@ -308,10 +424,16 @@ export const translations = {
             "Интеграция с DEX",
             "Координация аудита смарт-контрактов",
           ],
+          zh: ["钱包集成（MetaMask、WalletConnect 等）", "代币合约（ERC-20、ERC-721 等）", "质押 / 归属（vesting）模块", "DEX 集成", "智能合约审计协调"],
+          tr: ["Cüzdan entegrasyonu (MetaMask, WalletConnect vb.)", "Token sözleşmeleri (ERC-20, ERC-721 vb.)", "Staking / vesting modülleri", "DEX entegrasyonu", "Akıllı sözleşme denetimi koordinasyonu"],
+          ar: ["تكامل المحافظ (MetaMask وWalletConnect وغيرهما)", "عقود الرموز (ERC-20 وERC-721 وغيرهما)", "وحدات الإيداع والاستحقاق التدريجي (Staking / Vesting)", "التكامل مع DEX", "تنسيق تدقيق العقود الذكية"],
         },
         result: {
           en: "Working Web3 features integrated into your product with documentation.",
           ru: "Работающие Web3 фичи, интегрированные в ваш продукт, с документацией.",
+          zh: "可运行的 Web3 功能，已集成到您的产品中，并附有文档。",
+          tr: "Belgelerle birlikte ürününüze entegre edilmiş çalışan Web3 özellikleri.",
+          ar: "ميزات Web3 عاملة مدمجة في منتجكم مع التوثيق.",
         },
       },
     ],
@@ -319,19 +441,25 @@ export const translations = {
 
   // Process
   process: {
-    title: { en: "How we work", ru: "Как мы работаем" },
+    title: { en: "How we work", ru: "Как мы работаем", zh: "我们如何工作", tr: "Nasıl çalışırız", ar: "كيف نعمل" },
     subtitle: {
       en: "Four phases. Clear deliverables. No black boxes.",
       ru: "Четыре фазы. Чёткие результаты. Никаких чёрных ящиков.",
+      zh: "四个阶段。交付物清晰。没有黑箱。",
+      tr: "Dört aşama. Net çıktılar. Kara kutu yok.",
+      ar: "أربع مراحل. مخرجات واضحة. لا صناديق سوداء.",
     },
     steps: [
       {
         number: "01",
-        title: { en: "Discovery & Scope", ru: "Исследование и объём" },
-        duration: { en: "3–5 days", ru: "3–5\u00A0дней" },
+        title: { en: "Discovery & Scope", ru: "Исследование и объём", zh: "探索与范围界定", tr: "Keşif ve Kapsam", ar: "الاستكشاف وتحديد النطاق" },
+        duration: { en: "3–5 days", ru: "3–5\u00A0дней", zh: "3–5 天", tr: "3–5 gün", ar: "3–5 أيام" },
         description: {
           en: "We understand your goals, constraints, and success criteria. Map risks, define scope.",
           ru: "Понимаем цели, ограничения и критерии успеха. Карта рисков, определение объёма работ.",
+          zh: "我们了解您的目标、约束和成功标准，梳理风险，界定范围。",
+          tr: "Hedeflerinizi, kısıtlarınızı ve başarı ölçütlerinizi anlıyoruz. Riskleri haritalıyor, kapsamı belirliyoruz.",
+          ar: "نفهم أهدافكم وقيودكم ومعايير النجاح. نرسم خريطة المخاطر ونحدد النطاق.",
         },
         deliverables: {
           en: [
@@ -348,15 +476,21 @@ export const translations = {
             "График и вехи",
             "Предложение с фиксированным объёмом",
           ],
+          zh: ["含 KPI 的项目简报", "风险评估", "技术方案", "时间表与里程碑", "固定范围的方案"],
+          tr: ["KPI'lı proje brief'i", "Risk değerlendirmesi", "Teknik yaklaşım", "Takvim ve kilometre taşları", "Sabit kapsamlı teklif"],
+          ar: ["ملخص المشروع مع مؤشرات KPI", "تقييم المخاطر", "المنهج التقني", "الجدول الزمني والمراحل", "عرض بنطاق ثابت"],
         },
       },
       {
         number: "02",
-        title: { en: "Design & Architecture", ru: "Дизайн и архитектура" },
-        duration: { en: "1–2 weeks", ru: "1–2\u00A0недели" },
+        title: { en: "Design & Architecture", ru: "Дизайн и архитектура", zh: "设计与架构", tr: "Tasarım ve Mimari", ar: "التصميم والبنية المعمارية" },
+        duration: { en: "1–2 weeks", ru: "1–2\u00A0недели", zh: "1–2 周", tr: "1–2 hafta", ar: "1–2 أسبوع" },
         description: {
           en: "Create UX flows, visual design, and technical architecture. Validate before coding.",
           ru: "Создаём UX-сценарии, визуальный дизайн и техническую архитектуру. Проверяем до кода.",
+          zh: "制定 UX 流程、视觉设计和技术架构。在编码之前先验证。",
+          tr: "UX akışlarını, görsel tasarımı ve teknik mimariyi oluşturuyoruz. Kodlamadan önce doğruluyoruz.",
+          ar: "نُنشئ مسارات تجربة المستخدم والتصميم البصري والبنية التقنية. ونتحقق قبل كتابة الشيفرة.",
         },
         deliverables: {
           en: [
@@ -375,15 +509,21 @@ export const translations = {
             "Контракты API (черновик)",
             "Приоритизированный бэклог",
           ],
+          zh: ["线框图与用户流程", "Figma 中的 UI 设计", "设计系统组件", "架构图", "API 契约（草案）", "已排优先级的待办清单"],
+          tr: ["Wireframe'ler ve kullanıcı akışları", "Figma'da UI tasarımı", "Tasarım sistemi bileşenleri", "Mimari diyagram", "API sözleşmeleri (taslak)", "Önceliklendirilmiş backlog"],
+          ar: ["مخططات هيكلية ومسارات المستخدم", "تصميم الواجهة في Figma", "مكونات نظام التصميم", "مخطط البنية المعمارية", "عقود API (مسودة)", "قائمة مهام مرتبة الأولويات"],
         },
       },
       {
         number: "03",
-        title: { en: "Build & QA", ru: "Разработка и тестирование" },
-        duration: { en: "Varies", ru: "Зависит от объёма" },
+        title: { en: "Build & QA", ru: "Разработка и тестирование", zh: "开发与测试", tr: "Geliştirme ve QA", ar: "التطوير والاختبار" },
+        duration: { en: "Varies", ru: "Зависит от объёма", zh: "视项目而定", tr: "Değişken", ar: "يختلف حسب النطاق" },
         description: {
           en: "Iterative development with weekly demos. Tests, code review, continuous integration.",
           ru: "Итеративная разработка с еженедельными демо. Тесты, код-ревью, непрерывная интеграция.",
+          zh: "迭代式开发，每周演示。测试、代码评审、持续集成。",
+          tr: "Haftalık demolarla iteratif geliştirme. Testler, kod incelemesi, sürekli entegrasyon.",
+          ar: "تطوير تكراري مع عروض تجريبية أسبوعية. اختبارات ومراجعة شيفرة وتكامل مستمر.",
         },
         deliverables: {
           en: [
@@ -400,15 +540,21 @@ export const translations = {
             "Чеклисты релизов",
             "Обновления прогресса (асинхронно)",
           ],
+          zh: ["预发布环境中的可运行代码", "每周演示录屏", "测试覆盖率报告", "发布清单", "进度更新（异步）"],
+          tr: ["Staging'de çalışan kod", "Haftalık demo kayıtları", "Test kapsamı raporları", "Yayın kontrol listeleri", "İlerleme güncellemeleri (asenkron)"],
+          ar: ["شيفرة تعمل على بيئة الاختبار", "تسجيلات العروض التجريبية الأسبوعية", "تقارير تغطية الاختبارات", "قوائم تحقق الإصدارات", "تحديثات التقدّم (غير متزامنة)"],
         },
       },
       {
         number: "04",
-        title: { en: "Launch & Support", ru: "Запуск и поддержка" },
-        duration: { en: "1–4 weeks", ru: "1–4\u00A0недели" },
+        title: { en: "Launch & Support", ru: "Запуск и поддержка", zh: "上线与支持", tr: "Yayın ve Destek", ar: "الإطلاق والدعم" },
+        duration: { en: "1–4 weeks", ru: "1–4\u00A0недели", zh: "1–4 周", tr: "1–4 hafta", ar: "1–4 أسابيع" },
         description: {
           en: "Production deploy, monitoring setup, knowledge transfer. Optional ongoing support.",
           ru: "Запуск в продакшн, настройка мониторинга, передача знаний. Опционально — постоянная поддержка.",
+          zh: "生产环境部署、监控配置、知识转移。可选持续支持。",
+          tr: "Production deploy, izleme kurulumu, bilgi aktarımı. İsteğe bağlı sürekli destek.",
+          ar: "النشر على الإنتاج، وإعداد المراقبة، ونقل المعرفة. دعم مستمر اختياري.",
         },
         deliverables: {
           en: [
@@ -425,6 +571,9 @@ export const translations = {
             "Сессия передачи",
             "SLA поддержки (опционально)",
           ],
+          zh: ["生产环境部署", "监控与告警", "技术文档", "交接会议", "支持 SLA（可选）"],
+          tr: ["Production deploy", "İzleme ve uyarılar", "Teknik dokümantasyon", "Devir oturumu", "Destek SLA'sı (opsiyonel)"],
+          ar: ["النشر على الإنتاج", "المراقبة والتنبيهات", "الوثائق التقنية", "جلسة التسليم", "اتفاقية مستوى خدمة للدعم SLA (اختياري)"],
         },
       },
     ],
@@ -432,241 +581,301 @@ export const translations = {
 
   // Cases
   cases: {
-    title: { en: "Selected work", ru: "Избранные работы" },
+    title: { en: "Selected work", ru: "Избранные работы", zh: "精选作品", tr: "Seçilmiş işler", ar: "أعمال مختارة" },
     subtitle: {
       en: "Real projects. Real outcomes. Names changed for NDA compliance.",
       ru: "Реальные проекты. Реальные результаты. Имена изменены согласно NDA.",
+      zh: "真实的项目。真实的成果。因 NDA 要求，名称已作更改。",
+      tr: "Gerçek projeler. Gerçek sonuçlar. NDA uyumu için isimler değiştirildi.",
+      ar: "مشاريع حقيقية. نتائج حقيقية. الأسماء مغيَّرة التزامًا باتفاقيات السرية.",
     },
-    scenariosCount: { en: "47 scenarios", ru: "47 сценариев" },
-    filterAll: { en: "All", ru: "Все" },
-    filterWeb: { en: "Web", ru: "Веб" },
-    filterProduct: { en: "Product", ru: "Продукт" },
-    filterWeb3: { en: "Web3", ru: "Web3" },
-    filterInfra: { en: "Infrastructure", ru: "Инфраструктура" },
-    featured: { en: "Featured cases", ru: "Ключевые кейсы" },
-    keyCases: { en: "Key case studies", ru: "Ключевые кейсы" },
-    micro: { en: "More work", ru: "Другие работы" },
+    scenariosCount: { en: "47 scenarios", ru: "47 сценариев", zh: "47 个场景", tr: "47 senaryo", ar: "47 سيناريو" },
+    filterAll: { en: "All", ru: "Все", zh: "全部", tr: "Tümü", ar: "الكل" },
+    filterWeb: { en: "Web", ru: "Веб", zh: "Web", tr: "Web", ar: "ويب" },
+    filterProduct: { en: "Product", ru: "Продукт", zh: "产品", tr: "Ürün", ar: "منتج" },
+    filterWeb3: { en: "Web3", ru: "Web3", zh: "Web3", tr: "Web3", ar: "Web3" },
+    filterInfra: { en: "Infrastructure", ru: "Инфраструктура", zh: "基础设施", tr: "Altyapı", ar: "بنية تحتية" },
+    featured: { en: "Featured cases", ru: "Ключевые кейсы", zh: "重点案例", tr: "Öne çıkan vakalar", ar: "حالات مميزة" },
+    keyCases: { en: "Key case studies", ru: "Ключевые кейсы", zh: "核心案例研究", tr: "Başlıca vaka çalışmaları", ar: "دراسات حالة رئيسية" },
+    micro: { en: "More work", ru: "Другие работы", zh: "更多作品", tr: "Daha fazla iş", ar: "المزيد من الأعمال" },
   },
 
   // FAQ
   faq: {
-    title: { en: "Frequently asked questions", ru: "Частые вопросы" },
+    title: { en: "Frequently asked questions", ru: "Частые вопросы", zh: "常见问题", tr: "Sık sorulan sorular", ar: "الأسئلة الشائعة" },
     subtitle: {
       en: "Straight answers. No fluff.",
       ru: "Прямые ответы. Без воды.",
+      zh: "直截了当的回答。不说废话。",
+      tr: "Net yanıtlar. Gereksiz laf yok.",
+      ar: "إجابات مباشرة. دون حشو.",
     },
-    viewAll: { en: "View all FAQ", ru: "Все вопросы" },
+    viewAll: { en: "View all FAQ", ru: "Все вопросы", zh: "查看全部 FAQ", tr: "Tüm SSS'yi gör", ar: "كل الأسئلة الشائعة" },
     searchPlaceholder: {
       en: "Search by topic or keyword...",
       ru: "Поиск по теме или ключевому слову...",
+      zh: "按主题或关键词搜索...",
+      tr: "Konuya veya anahtar kelimeye göre ara...",
+      ar: "ابحث بموضوع أو كلمة مفتاحية...",
     },
     categories: {
-      all: { en: "All", ru: "Все" },
-      pricing: { en: "Pricing", ru: "Цена" },
-      timeline: { en: "Timeline", ru: "Сроки" },
-      legal: { en: "Legal", ru: "Юр." },
-      support: { en: "Support", ru: "Поддержка" },
-      web3: { en: "Web3", ru: "Web3" },
-      process: { en: "Process", ru: "Процесс" },
-      quality: { en: "Quality", ru: "Качество" },
-      tech: { en: "Tech", ru: "Тех." },
-      design: { en: "Design", ru: "Дизайн" },
-      general: { en: "General", ru: "Общее" },
+      all: { en: "All", ru: "Все", zh: "全部", tr: "Tümü", ar: "الكل" },
+      pricing: { en: "Pricing", ru: "Цена", zh: "价格", tr: "Fiyatlandırma", ar: "الأسعار" },
+      timeline: { en: "Timeline", ru: "Сроки", zh: "周期", tr: "Takvim", ar: "المدة الزمنية" },
+      legal: { en: "Legal", ru: "Юр.", zh: "法务", tr: "Hukuki", ar: "قانوني" },
+      support: { en: "Support", ru: "Поддержка", zh: "支持", tr: "Destek", ar: "الدعم" },
+      web3: { en: "Web3", ru: "Web3", zh: "Web3", tr: "Web3", ar: "Web3" },
+      process: { en: "Process", ru: "Процесс", zh: "流程", tr: "Süreç", ar: "آلية العمل" },
+      quality: { en: "Quality", ru: "Качество", zh: "质量", tr: "Kalite", ar: "الجودة" },
+      tech: { en: "Tech", ru: "Тех.", zh: "技术", tr: "Teknik", ar: "تقني" },
+      design: { en: "Design", ru: "Дизайн", zh: "设计", tr: "Tasarım", ar: "التصميم" },
+      general: { en: "General", ru: "Общее", zh: "综合", tr: "Genel", ar: "عام" },
     },
-    copyLink: { en: "Copy link", ru: "Скопировать ссылку" },
-    copied: { en: "Copied", ru: "Скопировано" },
+    copyLink: { en: "Copy link", ru: "Скопировать ссылку", zh: "复制链接", tr: "Bağlantıyı kopyala", ar: "نسخ الرابط" },
+    copied: { en: "Copied", ru: "Скопировано", zh: "已复制", tr: "Kopyalandı", ar: "تم النسخ" },
   },
 
   // About
   about: {
-    title: { en: "We build products that work after launch", ru: "Мы строим продукты, которые работают после запуска" },
+    title: { en: "We build products that work after launch", ru: "Мы строим продукты, которые работают после запуска", zh: "我们打造上线后依然可靠运转的产品", tr: "Yayından sonra da çalışan ürünler geliştiriyoruz", ar: "نبني منتجات تواصل العمل بعد الإطلاق" },
     subtitle: {
       en: "Engineering studio with offices in Bishkek, Dubai, Istanbul, Chicago and Shenzhen. 40+ products. From MVP to L1 blockchain.",
       ru: "Инженерная студия с офисами в Бишкеке, Дубае, Стамбуле, Чикаго и Шэньчжэне. 40+ продуктов. От MVP до L1 блокчейна.",
+      zh: "工程工作室，在比什凯克、迪拜、伊斯坦布尔、芝加哥和深圳设有办公室。40 多款产品。从 MVP 到 L1 区块链。",
+      tr: "Bişkek, Dubai, İstanbul, Chicago ve Shenzhen'de ofisleri olan mühendislik stüdyosu. 40'tan fazla ürün. MVP'den L1 blockchain'e.",
+      ar: "استوديو هندسي بمكاتب في بيشكيك ودبي وإسطنبول وشيكاغو وشنتشن. أكثر من 40 منتجًا. من MVP إلى بلوكتشين L1.",
     },
     story: {
       why: {
         en: "We started Anteyko because we were tired of agencies that ship code and disappear. No one owned the outcome \u2014 the design team blamed the developers, the developers blamed the specs, and the client got a product that looked good in a demo but broke in production. We wanted to build a studio where engineers own the result, not just the task.",
         ru: "Мы основали Anteyko, потому что устали от агентств, которые сдают код и исчезают. Никто не отвечал за результат \u2014 дизайнеры винили разработчиков, разработчики \u2014 спецификации, а клиент получал продукт, который отлично выглядел на демо, но ломался в продакшне. Мы хотели построить студию, где инженеры отвечают за результат, а не просто закрывают задачи.",
+        zh: "我们创办 Anteyko，是因为厌倦了那些交完代码就消失的机构。没有人对结果负责——设计团队怪开发，开发怪需求文档，而客户拿到的产品演示时光鲜亮丽，一上线就出问题。我们想打造一家让工程师对结果负责、而不只是完成任务的工作室。",
+        tr: "Anteyko'yu, kod teslim edip ortadan kaybolan ajanslardan bıktığımız için kurduk. Sonucun sahibi kimse değildi: tasarım ekibi geliştiricileri, geliştiriciler şartnameyi suçluyordu; müşteri ise demoda harika görünüp production'da bozulan bir ürünle kalıyordu. Mühendislerin yalnızca görevin değil, sonucun da sahibi olduğu bir stüdyo kurmak istedik.",
+        ar: "أسسنا Anteyko لأننا سئمنا من الوكالات التي تسلّم الشيفرة ثم تختفي. لم يكن أحد يتحمل مسؤولية النتيجة: فريق التصميم يلوم المطورين، والمطورون يلومون المواصفات، والعميل يحصل على منتج يبدو رائعًا في العرض التجريبي لكنه ينهار في الإنتاج. أردنا بناء استوديو يتحمل فيه المهندسون مسؤولية النتيجة، لا مجرد إنجاز المهمة.",
       },
       how: {
         en: "Every project we take gets the same treatment: architecture review before the first line of code, automated tests that run on every commit, a 7-phase release checklist before any deploy, and a handover package that lets your team take over without a single \u201Cwhat does this do?\u201D. We\u2019ve shipped a Layer-1 blockchain with a built-in DEX, a real-time P2P food delivery platform, a tokenization platform for a Dubai investment company, and a banking app with a double-entry ledger \u2014 all with zero post-launch critical failures.",
         ru: "Каждый проект получает одинаковый подход: ревью архитектуры до первой строки кода, автотесты на каждый коммит, 7\u2011фазный чеклист релиза перед каждым деплоем и пакет передачи, который позволяет вашей команде подхватить проект без единого \u00ABа что это делает?\u00BB. Мы запустили L1 блокчейн со встроенной DEX, P2P\u2011платформу доставки еды в реальном времени, платформу токенизации для инвестиционной компании из Дубая и банковское приложение с леджером двойной записи \u2014 всё с нулём критических сбоев после запуска.",
+        zh: "我们接手的每个项目都遵循同样的标准：写第一行代码前先做架构评审，每次提交都运行自动化测试，任何部署前都要通过 7 阶段发布清单，并提供交接包，让您的团队接手时不必问一句“这是干什么的？”。我们交付过内置 DEX 的 Layer-1 区块链、实时 P2P 外卖配送平台、为迪拜一家投资公司打造的代币化平台，以及采用复式记账账本的银行应用——全部实现上线后零严重故障。",
+        tr: "Üstlendiğimiz her projeye aynı yaklaşımı uyguluyoruz: ilk kod satırından önce mimari inceleme, her commit'te çalışan otomatik testler, her deploy öncesi 7 aşamalı yayın kontrol listesi ve ekibinizin tek bir “bu ne işe yarıyor?” sorusu sormadan devralmasını sağlayan bir devir paketi. Yerleşik DEX'e sahip bir Layer-1 blockchain, gerçek zamanlı bir P2P yemek teslimat platformu, Dubai'deki bir yatırım şirketi için bir tokenizasyon platformu ve çift kayıtlı defteri olan bir bankacılık uygulaması teslim ettik; hepsinde yayın sonrası sıfır kritik arıza yaşandı.",
+        ar: "يحصل كل مشروع نتولاه على المعاملة نفسها: مراجعة معمارية قبل أول سطر شيفرة، واختبارات آلية تعمل مع كل commit، وقائمة تحقق من 7 مراحل للإصدار قبل أي نشر، وحزمة تسليم تتيح لفريقكم الاستلام دون أن يسأل مرة واحدة «ما وظيفة هذا؟». أطلقنا بلوكتشين من الطبقة الأولى مع DEX مدمجة، ومنصة P2P لتوصيل الطعام في الوقت الفعلي، ومنصة ترميز لشركة استثمار في دبي، وتطبيقًا مصرفيًا بدفتر قيد مزدوج، وكل ذلك دون أي إخفاق حرج بعد الإطلاق.",
       },
       who: {
         en: "Our clients are founders who need their first product built right, CTOs who need extra firepower for a complex sprint, and enterprises digitizing operations. We work across fintech, Web3, FoodTech, SaaS, and e-commerce \u2014 in Kyrgyzstan, Dubai, Moscow, and remotely with teams worldwide.",
         ru: "Наши клиенты \u2014 основатели, которым нужен первый продукт, построенный правильно, CTO, которым нужна дополнительная огневая мощь на сложный спринт, и компании, цифровизирующие операции. Работаем в финтехе, Web3, FoodTech, SaaS и e\u2011commerce \u2014 в Кыргызстане, Дубае, Москве и удалённо с командами по всему миру.",
+        zh: "我们的客户包括：需要把第一款产品做对的创始人，需要为复杂冲刺补充火力的 CTO，以及正在推进运营数字化的企业。我们的业务覆盖金融科技、Web3、FoodTech、SaaS 和电商——服务范围包括吉尔吉斯斯坦、迪拜、莫斯科，并与全球各地的团队远程协作。",
+        tr: "Müşterilerimiz, ilk ürününü doğru kurmak isteyen kurucular, karmaşık bir sprint için ek güce ihtiyaç duyan CTO'lar ve operasyonlarını dijitalleştiren kurumlar. Fintech, Web3, FoodTech, SaaS ve e-ticaret alanlarında; Kırgızistan'da, Dubai'de, Moskova'da ve dünya genelindeki ekiplerle uzaktan çalışıyoruz.",
+        ar: "عملاؤنا هم مؤسسون يحتاجون إلى بناء منتجهم الأول بشكل صحيح، ومديرون تقنيون يحتاجون إلى قوة إضافية لسباق معقد، ومؤسسات ترقمن عملياتها. نعمل في التقنية المالية وWeb3 وتقنيات الغذاء وSaaS والتجارة الإلكترونية، في قرغيزستان ودبي وموسكو وعن بُعد مع فرق حول العالم.",
       },
     },
     values: {
-      title: { en: "How we think", ru: "Как мы думаем" },
+      title: { en: "How we think", ru: "Как мы думаем", zh: "我们的思考方式", tr: "Nasıl düşünüyoruz", ar: "كيف نفكر" },
       items: [
         {
-          title: { en: "Clarity over cleverness", ru: "Ясность важнее хитрости" },
+          title: { en: "Clarity over cleverness", ru: "Ясность важнее хитрости", zh: "清晰胜过炫技", tr: "Zekâ gösterisi değil, netlik", ar: "الوضوح قبل الذكاء المفتعل" },
           description: {
             en: "We write code that a new engineer can understand in 30 minutes, not 3 days. Every non-obvious decision is documented in an Architecture Decision Record with the reasoning, alternatives considered, and trade-offs accepted.",
             ru: "Мы пишем код, который новый инженер поймёт за 30 минут, а не за 3 дня. Каждое неочевидное решение документируется в Architecture Decision Record с обоснованием, рассмотренными альтернативами и принятыми компромиссами.",
+            zh: "我们写的代码，新工程师 30 分钟就能看懂，而不是 3 天。每一个不显而易见的决策，都会记录在架构决策记录（Architecture Decision Record）中，写明理由、考虑过的备选方案以及接受的权衡。",
+            tr: "Yeni bir mühendisin 3 günde değil 30 dakikada anlayabileceği kod yazıyoruz. Açık olmayan her karar; gerekçesiyle, değerlendirilen alternatiflerle ve kabul edilen ödünleşimlerle bir Architecture Decision Record'da belgeleniyor.",
+            ar: "نكتب شيفرة يفهمها المهندس الجديد في 30 دقيقة لا في 3 أيام. وكل قرار غير بديهي موثّق في سجل قرار معماري (ADR) يتضمن المسوّغات والبدائل التي دُرست والمفاضلات المقبولة.",
           },
           evidence: {
             en: "Result: one client\u2019s in-house team shipped their first feature 8 days after our handover \u2014 without asking us a single question.",
             ru: "Результат: in\u2011house команда клиента выпустила первую фичу через 8 дней после передачи \u2014 без единого вопроса к нам.",
+            zh: "结果：一位客户的内部团队在我们交接 8 天后就上线了第一个功能——没有向我们提过一个问题。",
+            tr: "Sonuç: bir müşterimizin kendi ekibi, devrimizden 8 gün sonra ilk özelliğini bize tek bir soru sormadan yayına aldı.",
+            ar: "النتيجة: أطلق الفريق الداخلي لأحد عملائنا أول ميزة بعد 8 أيام من التسليم، دون أن يطرح علينا سؤالًا واحدًا.",
           },
         },
         {
-          title: { en: "Predictability over promises", ru: "Предсказуемость важнее обещаний" },
+          title: { en: "Predictability over promises", ru: "Предсказуемость важнее обещаний", zh: "可预期胜过承诺", tr: "Söz değil, öngörülebilirlik", ar: "القدرة على التوقع قبل الوعود" },
           description: {
             en: "We don\u2019t say \u201C2 months, probably.\u201D We break the project into phases with explicit scope gates, deliver working increments every 1\u20132 weeks, and flag risks the moment we see them \u2014 not when the deadline is missed.",
             ru: "Мы не говорим \u00AB2 месяца, наверное\u00BB. Разбиваем проект на фазы с явными контрольными точками, поставляем рабочие инкременты каждые 1\u20112 недели и сигнализируем о рисках в момент обнаружения \u2014 а не когда дедлайн сорван.",
+            zh: "我们不会说“大概两个月吧”。我们会把项目分成若干阶段，设定明确的范围关卡，每 1–2 周交付可运行的增量，并在发现风险的第一时间提出预警——而不是等到截止日期错过之后。",
+            tr: "“2 ay, herhalde” demiyoruz. Projeyi net kapsam kapılarıyla aşamalara bölüyor, her 1–2 haftada çalışan artımlar teslim ediyor ve riskleri gördüğümüz anda bildiriyoruz; teslim tarihi kaçtıktan sonra değil.",
+            ar: "لا نقول «شهران، على الأرجح». نقسّم المشروع إلى مراحل ببوابات نطاق صريحة، ونسلّم إضافات تعمل كل 1–2 أسبوع، وننبّه إلى المخاطر لحظة رؤيتها، لا بعد فوات الموعد النهائي.",
           },
           evidence: {
             en: "Result: zero missed deadlines on fixed-scope projects in the last 18 months.",
             ru: "Результат: ноль сорванных дедлайнов на проектах с фиксированным объёмом за последние 18 месяцев.",
+            zh: "结果：过去 18 个月内，固定范围项目零延期。",
+            tr: "Sonuç: son 18 ayda sabit kapsamlı projelerde sıfır kaçırılmış teslim tarihi.",
+            ar: "النتيجة: صفر مواعيد نهائية فائتة في المشاريع ذات النطاق الثابت خلال الأشهر الـ18 الماضية.",
           },
         },
         {
-          title: { en: "Speed with quality gates", ru: "Скорость с контролем качества" },
+          title: { en: "Speed with quality gates", ru: "Скорость с контролем качества", zh: "速度与质量关卡并重", tr: "Kalite kapılarıyla hız", ar: "سرعة مع بوابات جودة" },
           description: {
             en: "Fast doesn\u2019t mean sloppy. Every release passes a 7-phase automated verification pipeline: build, unit tests, integration tests, contract checks, environment parity, smoke tests, and security checklist. If it\u2019s red, it doesn\u2019t ship.",
             ru: "Быстро \u2014 не значит небрежно. Каждый релиз проходит 7\u2011фазный автоматизированный пайплайн верификации: сборка, юнит\u2011тесты, интеграционные тесты, проверки контрактов, паритет окружений, smoke\u2011тесты, чеклист безопасности. Если красный \u2014 не деплоим.",
+            zh: "快不等于草率。每个版本都要通过 7 阶段自动化验证流水线：构建、单元测试、集成测试、契约检查、环境一致性、冒烟测试和安全清单。只要是红灯，就不发布。",
+            tr: "Hızlı, özensiz demek değildir. Her yayın 7 aşamalı otomatik bir doğrulama hattından geçer: derleme, birim testleri, entegrasyon testleri, sözleşme kontrolleri, ortam eşdeğerliği, smoke testler ve güvenlik kontrol listesi. Kırmızıysa yayınlanmaz.",
+            ar: "السرعة لا تعني الإهمال. يمرّ كل إصدار بمسار تحقق آلي من 7 مراحل: البناء، واختبارات الوحدة، واختبارات التكامل، وفحوصات العقود، وتطابق البيئات، واختبارات smoke، وقائمة الأمان. وإذا ظهر اللون الأحمر فلا إصدار.",
           },
           evidence: {
             en: "Result: zero post-launch rollbacks across all projects in the past 12 months.",
             ru: "Результат: ноль откатов после запуска по всем проектам за последние 12 месяцев.",
+            zh: "结果：过去 12 个月内，所有项目上线后零回滚。",
+            tr: "Sonuç: son 12 ayda tüm projelerde yayın sonrası sıfır geri alma.",
+            ar: "النتيجة: صفر عمليات تراجع بعد الإطلاق في جميع المشاريع خلال الأشهر الـ12 الماضية.",
           },
         },
         {
-          title: { en: "Ownership, not outsourcing", ru: "Ответственность, а не аутсорс" },
+          title: { en: "Ownership, not outsourcing", ru: "Ответственность, а не аутсорс", zh: "主人翁意识，而非外包心态", tr: "Dış kaynak değil, sahiplenme", ar: "مسؤولية لا إسناد خارجي" },
           description: {
             en: "We don\u2019t just execute tickets. We challenge requirements that don\u2019t make sense, suggest cheaper alternatives when they exist, flag architectural risks before they become production incidents, and push back on deadlines that would compromise quality.",
             ru: "Мы не просто закрываем тикеты. Мы оспариваем требования, которые не имеют смысла, предлагаем более дешёвые альтернативы когда они есть, сигнализируем об архитектурных рисках до того, как они станут инцидентами, и отстаиваем качество когда дедлайны его компрометируют.",
+            zh: "我们不只是完成工单。我们会质疑不合理的需求，在有更便宜的方案时主动提出，在架构风险演变为生产事故之前预警，并对会损害质量的截止日期据理力争。",
+            tr: "Yalnızca ticket'ları yürütmüyoruz. Mantıklı olmayan gereksinimlere itiraz ediyor, varsa daha ucuz alternatifler öneriyor, mimari riskleri production olaylarına dönüşmeden işaret ediyor ve kaliteden ödün verecek teslim tarihlerine karşı çıkıyoruz.",
+            ar: "لا ننفّذ التذاكر فحسب. نعترض على المتطلبات التي لا معنى لها، ونقترح بدائل أقل كلفة عند وجودها، وننبّه إلى المخاطر المعمارية قبل أن تتحول إلى حوادث في الإنتاج، ونرفض المواعيد النهائية التي تُضعف الجودة.",
           },
           evidence: {
             en: "Result: saved a client $40K by replacing a planned microservices architecture with a modular monolith that covered 100% of their actual requirements.",
             ru: "Результат: сэкономили клиенту $40K, заменив запланированную микросервисную архитектуру модульным монолитом, который покрыл 100% реальных требований.",
+            zh: "结果：把原计划的微服务架构换成覆盖客户 100% 实际需求的模块化单体，为客户节省了 4 万美元。",
+            tr: "Sonuç: planlanan mikroservis mimarisini, gerçek gereksinimlerin %100'ünü karşılayan modüler bir monolitle değiştirerek bir müşteriye 40 bin $ tasarruf sağladık.",
+            ar: "النتيجة: وفّرنا على أحد العملاء 40 ألف دولار باستبدال بنية خدمات مصغّرة مخططة بنظام متجانس معياري غطّى 100% من متطلباته الفعلية.",
           },
         },
       ],
     },
     metrics: [
-      { value: "40+", label: { en: "products shipped", ru: "продуктов запущено" } },
-      { value: "5+", label: { en: "years in delivery", ru: "лет в поставке" } },
-      { value: "24h", label: { en: "response time", ru: "время ответа" } },
-      { value: "0", label: { en: "failed launches", ru: "провальных запусков" } },
+      { value: "40+", label: { en: "products shipped", ru: "продуктов запущено", zh: "已交付产品", tr: "teslim edilen ürün", ar: "منتجًا أُطلق" } },
+      { value: "5+", label: { en: "years in delivery", ru: "лет в поставке", zh: "年交付经验", tr: "yıllık teslimat deneyimi", ar: "سنوات في التسليم" } },
+      { value: "24h", label: { en: "response time", ru: "время ответа", zh: "响应时间", tr: "yanıt süresi", ar: "زمن الاستجابة" } },
+      { value: "0", label: { en: "failed launches", ru: "провальных запусков", zh: "失败上线", tr: "başarısız lansman", ar: "عمليات إطلاق فاشلة" } },
     ],
     industries: {
-      title: { en: "Industries we know", ru: "Индустрии, которые мы знаем" },
+      title: { en: "Industries we know", ru: "Индустрии, которые мы знаем", zh: "我们熟悉的行业", tr: "Bildiğimiz sektörler", ar: "القطاعات التي نعرفها" },
       items: [
-        { name: { en: "FinTech / Banking", ru: "FinTech / Банкинг" }, count: "3", icon: "bank" },
-        { name: { en: "Web3 / DeFi / Tokenization", ru: "Web3 / DeFi / Токенизация" }, count: "4", icon: "chain" },
-        { name: { en: "FoodTech / Marketplace", ru: "FoodTech / Маркетплейс" }, count: "3", icon: "cart" },
-        { name: { en: "Enterprise / SaaS", ru: "Enterprise / SaaS" }, count: "3", icon: "building" },
+        { name: { en: "FinTech / Banking", ru: "FinTech / Банкинг", zh: "金融科技 / 银行", tr: "FinTech / Bankacılık", ar: "التقنية المالية / الخدمات المصرفية" }, count: "3", icon: "bank" },
+        { name: { en: "Web3 / DeFi / Tokenization", ru: "Web3 / DeFi / Токенизация", zh: "Web3 / DeFi / 代币化", tr: "Web3 / DeFi / Tokenizasyon", ar: "Web3 / DeFi / الترميز" }, count: "4", icon: "chain" },
+        { name: { en: "FoodTech / Marketplace", ru: "FoodTech / Маркетплейс", zh: "FoodTech / 电商平台", tr: "FoodTech / Pazaryeri", ar: "تقنيات الغذاء / الأسواق الإلكترونية" }, count: "3", icon: "cart" },
+        { name: { en: "Enterprise / SaaS", ru: "Enterprise / SaaS", zh: "企业级 / SaaS", tr: "Kurumsal / SaaS", ar: "المؤسسات / SaaS" }, count: "3", icon: "building" },
       ],
     },
     toolchain: {
-      title: { en: "How we guarantee quality", ru: "Как мы гарантируем качество" },
+      title: { en: "How we guarantee quality", ru: "Как мы гарантируем качество", zh: "我们如何保证质量", tr: "Kaliteyi nasıl garanti ediyoruz", ar: "كيف نضمن الجودة" },
       items: [
         {
-          title: { en: "Automated testing", ru: "Автоматизированное тестирование" },
-          description: { en: "Every commit triggers unit, integration, and contract tests. Average coverage across projects: 85%+.", ru: "Каждый коммит запускает юнит\u2011, интеграционные и контрактные тесты. Среднее покрытие: 85%+." },
+          title: { en: "Automated testing", ru: "Автоматизированное тестирование", zh: "自动化测试", tr: "Otomatik test", ar: "الاختبار الآلي" },
+          description: { en: "Every commit triggers unit, integration, and contract tests. Average coverage across projects: 85%+.", ru: "Каждый коммит запускает юнит\u2011, интеграционные и контрактные тесты. Среднее покрытие: 85%+.", zh: "每次提交都会触发单元、集成和契约测试。各项目平均覆盖率：85% 以上。", tr: "Her commit birim, entegrasyon ve sözleşme testlerini tetikler. Projeler genelinde ortalama kapsam: %85+.", ar: "يشغّل كل commit اختبارات الوحدة والتكامل والعقود. متوسط التغطية عبر المشاريع: أكثر من 85%." },
         },
         {
-          title: { en: "7-phase release gates", ru: "7\u2011фазный контроль релизов" },
-          description: { en: "No code reaches production without passing all 7 verification stages. Zero post-launch rollbacks in 12 months.", ru: "Ни один код не попадает в прод без прохождения всех 7 стадий верификации. Ноль откатов за 12 месяцев." },
+          title: { en: "7-phase release gates", ru: "7\u2011фазный контроль релизов", zh: "7 阶段发布关卡", tr: "7 aşamalı yayın kapıları", ar: "بوابات إصدار من 7 مراحل" },
+          description: { en: "No code reaches production without passing all 7 verification stages. Zero post-launch rollbacks in 12 months.", ru: "Ни один код не попадает в прод без прохождения всех 7 стадий верификации. Ноль откатов за 12 месяцев.", zh: "任何代码都必须通过全部 7 个验证阶段才能进入生产环境。12 个月内上线后零回滚。", tr: "Hiçbir kod 7 doğrulama aşamasının tamamını geçmeden production'a ulaşmaz. 12 ayda yayın sonrası sıfır geri alma.", ar: "لا تصل أي شيفرة إلى الإنتاج دون اجتياز مراحل التحقق السبع كلها. صفر عمليات تراجع خلال 12 شهرًا." },
         },
         {
-          title: { en: "Documentation-first handover", ru: "Передача через документацию" },
-          description: { en: "ADRs, runbooks, video walkthroughs, onboarding guide. Your team ships independently within days, not months.", ru: "ADR, инструкции, видео\u2011разборы, гайд онбординга. Ваша команда работает самостоятельно за дни, не месяцы." },
+          title: { en: "Documentation-first handover", ru: "Передача через документацию", zh: "文档先行的交接", tr: "Önce dokümantasyon, sonra devir", ar: "تسليم قائم على التوثيق" },
+          description: { en: "ADRs, runbooks, video walkthroughs, onboarding guide. Your team ships independently within days, not months.", ru: "ADR, инструкции, видео\u2011разборы, гайд онбординга. Ваша команда работает самостоятельно за дни, не месяцы.", zh: "ADR、运维手册、视频讲解、上手指南。您的团队数日内即可独立交付，而不是数月。", tr: "ADR'ler, runbook'lar, video anlatımlar, onboarding rehberi. Ekibiniz aylar değil, günler içinde bağımsız şekilde yayın yapar.", ar: "سجلات القرارات المعمارية (ADR) وأدلة التشغيل وشروحات الفيديو ودليل الانضمام. يعمل فريقكم باستقلالية خلال أيام لا أشهر." },
         },
         {
-          title: { en: "Production monitoring", ru: "Мониторинг продакшна" },
-          description: { en: "Prometheus metrics, error budgets, alerting pipelines, and incident response runbooks \u2014 included by default.", ru: "Метрики Prometheus, бюджет ошибок, пайплайны алертинга и runbook\u2011и реагирования \u2014 включены по умолчанию." },
+          title: { en: "Production monitoring", ru: "Мониторинг продакшна", zh: "生产环境监控", tr: "Production izleme", ar: "مراقبة الإنتاج" },
+          description: { en: "Prometheus metrics, error budgets, alerting pipelines, and incident response runbooks \u2014 included by default.", ru: "Метрики Prometheus, бюджет ошибок, пайплайны алертинга и runbook\u2011и реагирования \u2014 включены по умолчанию.", zh: "Prometheus 指标、错误预算、告警流水线和事故响应手册——默认包含。", tr: "Prometheus metrikleri, hata bütçeleri, uyarı hatları ve olay müdahale runbook'ları; varsayılan olarak dahil.", ar: "مقاييس Prometheus وميزانيات الأخطاء ومسارات التنبيه وأدلة التعامل مع الحوادث، كلها مشمولة افتراضيًا." },
         },
       ],
     },
     geography: {
-      title: { en: "Bishkek. Dubai. Istanbul. Chicago. Shenzhen.", ru: "Бишкек. Дубай. Стамбул. Чикаго. Шэньчжэнь." },
+      title: { en: "Bishkek. Dubai. Istanbul. Chicago. Shenzhen.", ru: "Бишкек. Дубай. Стамбул. Чикаго. Шэньчжэнь.", zh: "比什凯克。迪拜。伊斯坦布尔。芝加哥。深圳。", tr: "Bişkek. Dubai. İstanbul. Chicago. Shenzhen.", ar: "بيشكيك. دبي. إسطنبول. شيكاغو. شنتشن." },
       description: {
         en: "Offices in Bishkek (GMT+6), Dubai (GMT+4), Istanbul (GMT+3), Chicago (GMT\u22126) and Shenzhen (GMT+8) \u2014 someone on the team is awake almost around the clock. We operate async-first with daily standups adapted to your timezone \u2014 whether you\u2019re in New York or Singapore.",
         ru: "Офисы в Бишкеке (GMT+6), Дубае (GMT+4), Стамбуле (GMT+3), Чикаго (GMT\u22126) и Шэньчжэне (GMT+8) \u2014 кто\u2011то из команды на связи почти круглые сутки. Работаем async\u2011first с ежедневными стендапами, адаптированными под ваш часовой пояс \u2014 будь вы в Нью\u2011Йорке или Сингапуре.",
+        zh: "办公室分布在比什凯克（GMT+6）、迪拜（GMT+4）、伊斯坦布尔（GMT+3）、芝加哥（GMT−6）和深圳（GMT+8）——团队里几乎总有人在线。我们以异步协作为先，每日站会会适配您所在的时区——无论您在纽约还是新加坡。",
+        tr: "Bişkek (GMT+6), Dubai (GMT+4), İstanbul (GMT+3), Chicago (GMT−6) ve Shenzhen'de (GMT+8) ofisler; ekipten biri neredeyse 24 saat uyanık. Asenkron öncelikli çalışıyoruz ve günlük stand-up'ları, New York'ta da olsanız Singapur'da da, saat diliminize göre ayarlıyoruz.",
+        ar: "مكاتب في بيشكيك (GMT+6) ودبي (GMT+4) وإسطنبول (GMT+3) وشيكاغو (GMT−6) وشنتشن (GMT+8)، فهناك دائمًا من هو مستيقظ في الفريق على مدار الساعة تقريبًا. نعمل بمبدأ التواصل غير المتزامن أولًا مع اجتماعات يومية قصيرة تتكيف مع منطقتكم الزمنية، سواء كنتم في نيويورك أو سنغافورة.",
       },
     },
     closingCta: {
       en: "Every great product starts with a conversation. Tell us what you\u2019re building.",
       ru: "Каждый великий продукт начинается с разговора. Расскажите, что вы строите.",
+      zh: "每一款伟大的产品，都始于一次对话。告诉我们您在打造什么。",
+      tr: "Her harika ürün bir sohbetle başlar. Ne geliştirdiğinizi anlatın.",
+      ar: "كل منتج عظيم يبدأ بحوار. أخبرونا بما تبنونه.",
     },
   },
 
   // Contact
   contact: {
-    title: { en: "Let's talk", ru: "Давайте поговорим" },
+    title: { en: "Let's talk", ru: "Давайте поговорим", zh: "聊一聊", tr: "Konuşalım", ar: "لنتحدث" },
     subtitle: {
       en: "Tell us about your project. We'll get back within 24 hours.",
       ru: "Расскажите о проекте. Ответим в течение 24\u00A0часов.",
+      zh: "介绍一下您的项目。我们会在 24 小时内回复。",
+      tr: "Projenizi anlatın. 24 saat içinde size dönüş yaparız.",
+      ar: "أخبرونا عن مشروعكم. سنرد خلال 24 ساعة.",
     },
-    progressLabel: { en: "Brief completion", ru: "Заполнение брифа" },
+    progressLabel: { en: "Brief completion", ru: "Заполнение брифа", zh: "简报填写", tr: "Brief tamamlanma durumu", ar: "اكتمال الملخص" },
     nextSteps: {
-      title: { en: "What happens next", ru: "Что будет дальше" },
+      title: { en: "What happens next", ru: "Что будет дальше", zh: "接下来会发生什么", tr: "Sonra ne olacak", ar: "ماذا بعد" },
       items: [
         {
-          title: { en: "We review your brief", ru: "Мы изучаем бриф" },
-          description: { en: "Assess scope, risks, and timeline.", ru: "Оцениваем объём, риски и сроки." },
+          title: { en: "We review your brief", ru: "Мы изучаем бриф", zh: "我们审阅您的简报", tr: "Brief'inizi inceliyoruz", ar: "نراجع ملخص مشروعكم" },
+          description: { en: "Assess scope, risks, and timeline.", ru: "Оцениваем объём, риски и сроки.", zh: "评估范围、风险和时间表。", tr: "Kapsamı, riskleri ve takvimi değerlendiriyoruz.", ar: "نقيّم النطاق والمخاطر والجدول الزمني." },
         },
         {
-          title: { en: "We send an estimate", ru: "Мы отправляем оценку" },
-          description: { en: "Usually within 24 hours.", ru: "Обычно в течение 24\u00A0часов." },
+          title: { en: "We send an estimate", ru: "Мы отправляем оценку", zh: "我们发送报价", tr: "Teklif gönderiyoruz", ar: "نرسل لكم تقديرًا" },
+          description: { en: "Usually within 24 hours.", ru: "Обычно в течение 24\u00A0часов.", zh: "通常在 24 小时内。", tr: "Genellikle 24 saat içinde.", ar: "عادةً خلال 24 ساعة." },
         },
         {
-          title: { en: "Optional scoping call", ru: "Опциональный созвон" },
-          description: { en: "Align on priorities and next steps.", ru: "Синхронизируем приоритеты и шаги." },
+          title: { en: "Optional scoping call", ru: "Опциональный созвон", zh: "可选的需求沟通电话", tr: "İsteğe bağlı kapsam görüşmesi", ar: "مكالمة اختيارية لتحديد النطاق" },
+          description: { en: "Align on priorities and next steps.", ru: "Синхронизируем приоритеты и шаги.", zh: "对齐优先级和后续步骤。", tr: "Öncelikler ve sonraki adımlar üzerinde uzlaşıyoruz.", ar: "نتفق على الأولويات والخطوات التالية." },
         },
       ],
     },
     form: {
-      projectType: { en: "Project type", ru: "Тип проекта" },
+      projectType: { en: "Project type", ru: "Тип проекта", zh: "项目类型", tr: "Proje türü", ar: "نوع المشروع" },
       projectTypes: {
-        website: { en: "Website / Landing", ru: "Сайт / Лендинг" },
-        mvp: { en: "MVP", ru: "MVP" },
-        product: { en: "Full product", ru: "Полный продукт" },
-        web3: { en: "Web3 module", ru: "Web3 модуль" },
+        website: { en: "Website / Landing", ru: "Сайт / Лендинг", zh: "网站 / 落地页", tr: "Web sitesi / Açılış sayfası", ar: "موقع / صفحة هبوط" },
+        mvp: { en: "MVP", ru: "MVP", zh: "MVP", tr: "MVP", ar: "MVP" },
+        product: { en: "Full product", ru: "Полный продукт", zh: "完整产品", tr: "Eksiksiz ürün", ar: "منتج متكامل" },
+        web3: { en: "Web3 module", ru: "Web3 модуль", zh: "Web3 模块", tr: "Web3 modülü", ar: "وحدة Web3" },
       },
-      stage: { en: "Current stage", ru: "Текущий этап" },
+      stage: { en: "Current stage", ru: "Текущий этап", zh: "当前阶段", tr: "Mevcut aşama", ar: "المرحلة الحالية" },
       stages: {
-        idea: { en: "Just an idea", ru: "Только идея" },
-        design: { en: "Have design", ru: "Есть дизайн" },
-        mvp: { en: "Have MVP", ru: "Есть MVP" },
-        launch: { en: "Need launch help", ru: "Нужна помощь с запуском" },
+        idea: { en: "Just an idea", ru: "Только идея", zh: "只有一个想法", tr: "Sadece bir fikir", ar: "مجرد فكرة" },
+        design: { en: "Have design", ru: "Есть дизайн", zh: "已有设计", tr: "Tasarım hazır", ar: "لدينا تصميم" },
+        mvp: { en: "Have MVP", ru: "Есть MVP", zh: "已有 MVP", tr: "MVP hazır", ar: "لدينا MVP" },
+        launch: { en: "Need launch help", ru: "Нужна помощь с запуском", zh: "需要上线协助", tr: "Yayına alma desteği lazım", ar: "نحتاج مساعدة في الإطلاق" },
       },
-      timeline: { en: "Timeline", ru: "Сроки" },
+      timeline: { en: "Timeline", ru: "Сроки", zh: "周期", tr: "Takvim", ar: "المدة الزمنية" },
       timelines: {
-        urgent: { en: "2 weeks", ru: "2\u00A0недели" },
-        normal: { en: "1–2 months", ru: "1–2\u00A0месяца" },
-        relaxed: { en: "3+ months", ru: "3+ месяца" },
+        urgent: { en: "2 weeks", ru: "2\u00A0недели", zh: "2 周", tr: "2 hafta", ar: "أسبوعان" },
+        normal: { en: "1–2 months", ru: "1–2\u00A0месяца", zh: "1–2 个月", tr: "1–2 ay", ar: "1–2 شهر" },
+        relaxed: { en: "3+ months", ru: "3+ месяца", zh: "3 个月以上", tr: "3+ ay", ar: "3+ أشهر" },
       },
-      budget: { en: "Budget range", ru: "Бюджет" },
+      budget: { en: "Budget range", ru: "Бюджет", zh: "预算范围", tr: "Bütçe aralığı", ar: "نطاق الميزانية" },
       budgets: {
-        micro: { en: "Up to $1k", ru: "До $1k" },
-        small: { en: "$1k – $3k", ru: "$1k – $3k" },
-        medium: { en: "$3k – $5k", ru: "$3k – $5k" },
-        large: { en: "$5k – $10k", ru: "$5k – $10k" },
-        enterprise: { en: "$10k – $25k", ru: "$10k – $25k" },
-        custom: { en: "$25k+", ru: "$25k+" },
-        unsure: { en: "Let\u2019s discuss", ru: "Обсудим" },
+        micro: { en: "Up to $1k", ru: "До $1k", zh: "1k 美元以内", tr: "1 bin $'a kadar", ar: "حتى $1k" },
+        small: { en: "$1k – $3k", ru: "$1k – $3k", zh: "$1k – $3k", tr: "1 bin $ – 3 bin $", ar: "$1k – $3k" },
+        medium: { en: "$3k – $5k", ru: "$3k – $5k", zh: "$3k – $5k", tr: "3 bin $ – 5 bin $", ar: "$3k – $5k" },
+        large: { en: "$5k – $10k", ru: "$5k – $10k", zh: "$5k – $10k", tr: "5 bin $ – 10 bin $", ar: "$5k – $10k" },
+        enterprise: { en: "$10k – $25k", ru: "$10k – $25k", zh: "$10k – $25k", tr: "10 bin $ – 25 bin $", ar: "$10k – $25k" },
+        custom: { en: "$25k+", ru: "$25k+", zh: "$25k+", tr: "25 bin $+", ar: "$25k+" },
+        unsure: { en: "Let\u2019s discuss", ru: "Обсудим", zh: "我们来聊聊", tr: "Görüşelim", ar: "لنتناقش" },
       },
-      name: { en: "Name", ru: "Имя" },
-      email: { en: "Email", ru: "Email" },
-      message: { en: "Tell us about your project", ru: "Расскажите о проекте" },
-      submit: { en: "Send request", ru: "Отправить заявку" },
-      submitting: { en: "Sending...", ru: "Отправляем..." },
+      name: { en: "Name", ru: "Имя", zh: "姓名", tr: "Ad", ar: "الاسم" },
+      email: { en: "Email", ru: "Email", zh: "邮箱", tr: "E-posta", ar: "البريد الإلكتروني" },
+      message: { en: "Tell us about your project", ru: "Расскажите о проекте", zh: "介绍一下您的项目", tr: "Projenizi anlatın", ar: "أخبرونا عن مشروعكم" },
+      submit: { en: "Send request", ru: "Отправить заявку", zh: "提交需求", tr: "Talebi gönder", ar: "إرسال الطلب" },
+      submitting: { en: "Sending...", ru: "Отправляем...", zh: "发送中...", tr: "Gönderiliyor...", ar: "جارٍ الإرسال..." },
     },
     success: {
-      title: { en: "Request received", ru: "Заявка получена" },
+      title: { en: "Request received", ru: "Заявка получена", zh: "已收到您的需求", tr: "Talebiniz alındı", ar: "تم استلام الطلب" },
       description: {
         en: "We'll review your project and get back within 24 hours with next steps.",
         ru: "Мы рассмотрим ваш проект и ответим в течение 24\u00A0часов с дальнейшими шагами.",
+        zh: "我们会审阅您的项目，并在 24 小时内回复后续步骤。",
+        tr: "Projenizi inceleyip 24 saat içinde sonraki adımlarla size döneceğiz.",
+        ar: "سنراجع مشروعكم ونرد عليكم خلال 24 ساعة بالخطوات التالية.",
       },
       next: {
         en: "What you can expect next",
         ru: "Что дальше",
+        zh: "接下来您可以期待",
+        tr: "Bundan sonra neler bekleyebilirsiniz",
+        ar: "ما يمكنكم توقعه لاحقًا",
       },
     },
   },
@@ -676,24 +885,30 @@ export const translations = {
     tagline: {
       en: "End-to-end product development. Web2 + Web3.",
       ru: "Продуктовая разработка под ключ. Web2 + Web3.",
+      zh: "端到端产品开发。Web2 + Web3。",
+      tr: "Uçtan uca ürün geliştirme. Web2 + Web3.",
+      ar: "تطوير منتجات متكامل. Web2 + Web3.",
     },
     copyright: {
       en: "© 2021–2026 Anteyko. All rights reserved.",
       ru: "© 2021–2026 Anteyko. Все права защищены.",
+      zh: "© 2021–2026 Anteyko。保留所有权利。",
+      tr: "© 2021–2026 Anteyko. Tüm hakları saklıdır.",
+      ar: "© 2021–2026 Anteyko. جميع الحقوق محفوظة.",
     },
     links: {
-      privacy: { en: "Privacy", ru: "Конфиденциальность" },
-      terms: { en: "Terms", ru: "Условия" },
+      privacy: { en: "Privacy", ru: "Конфиденциальность", zh: "隐私", tr: "Gizlilik", ar: "الخصوصية" },
+      terms: { en: "Terms", ru: "Условия", zh: "条款", tr: "Koşullar", ar: "الشروط" },
     },
   },
 
   // Common
   common: {
-    loading: { en: "Loading...", ru: "Загрузка..." },
-    error: { en: "Something went wrong", ru: "Что-то пошло не так" },
-    back: { en: "Back", ru: "Назад" },
-    next: { en: "Next", ru: "Далее" },
-    close: { en: "Close", ru: "Закрыть" },
+    loading: { en: "Loading...", ru: "Загрузка...", zh: "加载中...", tr: "Yükleniyor...", ar: "جارٍ التحميل..." },
+    error: { en: "Something went wrong", ru: "Что-то пошло не так", zh: "出了点问题", tr: "Bir şeyler ters gitti", ar: "حدث خطأ ما" },
+    back: { en: "Back", ru: "Назад", zh: "返回", tr: "Geri", ar: "رجوع" },
+    next: { en: "Next", ru: "Далее", zh: "下一步", tr: "İleri", ar: "التالي" },
+    close: { en: "Close", ru: "Закрыть", zh: "关闭", tr: "Kapat", ar: "إغلاق" },
   },
 } as const;
 
@@ -714,8 +929,10 @@ export function t(
     }
   }
 
-  if (value && typeof value === "object" && lang in value) {
-    return (value as Record<string, string>)[lang];
+  if (value && typeof value === "object") {
+    const v = value as Record<string, string>;
+    if (lang in v) return v[lang];
+    if ("en" in v) return v.en;
   }
 
   return key;

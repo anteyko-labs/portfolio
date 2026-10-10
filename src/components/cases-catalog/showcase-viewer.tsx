@@ -6,6 +6,7 @@ import clsx from "clsx";
 import { useLanguage } from "@/lib/language-context";
 import type { ShowcaseItem } from "@/lib/showcase-data";
 import { Decor } from "./media";
+import { pick } from "@/lib/i18n-text";
 
 type Mode = "desktop" | "mobile";
 const DIM: Record<Mode, { w: number; h: number }> = { desktop: { w: 1440, h: 860 }, mobile: { w: 390, h: 780 } };
@@ -70,7 +71,7 @@ function LiveViewer({ item }: { item: ShowcaseItem }) {
   return (
     <div className="overflow-hidden rounded-2xl border border-border bg-bg-elevated shadow-[0_40px_80px_-40px_rgba(10,10,10,0.35)]">
       <Chrome domain={item.domain}>
-        <div className="flex rounded-full border border-border bg-bg-primary p-0.5" role="group" aria-label={language === "en" ? "Screen size" : "Размер экрана"}>
+        <div className="flex rounded-full border border-border bg-bg-primary p-0.5" role="group" aria-label={pick({ en: "Screen size", ru: "Размер экрана", zh: "屏幕尺寸", tr: "Ekran boyutu", ar: "حجم الشاشة" }, language)}>
           {(["desktop", "mobile"] as Mode[]).map((m) => (
             <button
               key={m}
@@ -82,7 +83,7 @@ function LiveViewer({ item }: { item: ShowcaseItem }) {
                 mode === m ? "bg-text-primary text-white" : "text-text-secondary hover:text-text-primary"
               )}
             >
-              {m === "desktop" ? (language === "en" ? "Desktop" : "Десктоп") : language === "en" ? "Phone" : "Телефон"}
+              {m === "desktop" ? (pick({ en: "Desktop", ru: "Десктоп", zh: "桌面端", tr: "Masaüstü", ar: "سطح المكتب" }, language)) : pick({ en: "Phone", ru: "Телефон", zh: "手机", tr: "Telefon", ar: "الهاتف" }, language)}
             </button>
           ))}
         </div>
@@ -108,12 +109,8 @@ function LiveViewer({ item }: { item: ShowcaseItem }) {
       </div>
       <p className="border-t border-border px-4 py-3 text-center text-body-sm text-text-tertiary">
         {item.embed
-          ? language === "en"
-            ? "The live site, loaded right here — scroll and click inside the window."
-            : "Живой сайт прямо здесь — листайте и кликайте внутри окна."
-          : language === "en"
-            ? "This is the real site, not a video — scroll right inside the window."
-            : "Это настоящий сайт, а не видео — листайте прямо в окне."}
+          ? pick({ en: "The live site, loaded right here — scroll and click inside the window.", ru: "Живой сайт прямо здесь — листайте и кликайте внутри окна.", zh: "真实网站就在这里加载——在窗口内滚动、点击即可体验。", tr: "Canlı site tam burada yüklendi — pencerenin içinde kaydırın ve tıklayın.", ar: "الموقع الفعلي محمّل هنا — مرّر وانقر داخل النافذة." }, language)
+          : pick({ en: "This is the real site, not a video — scroll right inside the window.", ru: "Это настоящий сайт, а не видео — листайте прямо в окне.", zh: "这是真实网站，不是视频——直接在窗口内滚动。", tr: "Bu videonun değil, gerçek sitenin kendisi — doğrudan pencerenin içinde kaydırın.", ar: "هذا هو الموقع الحقيقي وليس فيديو — مرّر مباشرة داخل النافذة." }, language)}
       </p>
     </div>
   );
@@ -125,12 +122,12 @@ function ScrollShot({ item }: { item: ShowcaseItem }) {
     <div className="grid gap-6 lg:grid-cols-[1fr_auto] lg:items-start">
       <div className="min-w-0 overflow-hidden rounded-2xl border border-border bg-bg-elevated shadow-[0_40px_80px_-40px_rgba(10,10,10,0.35)]">
         <Chrome domain={item.domain} />
-        <div className="relative h-[62vh] max-h-[760px] min-h-[360px] overflow-y-auto overscroll-contain" tabIndex={0} aria-label={language === "en" ? "Full page screenshot, scrollable" : "Скриншот всей страницы, можно листать"}>
+        <div className="relative h-[62vh] max-h-[760px] min-h-[360px] overflow-y-auto overscroll-contain" tabIndex={0} aria-label={pick({ en: "Full page screenshot, scrollable", ru: "Скриншот всей страницы, можно листать", zh: "整页截图，可滚动", tr: "Tam sayfa ekran görüntüsü, kaydırılabilir", ar: "لقطة شاشة كاملة للصفحة قابلة للتمرير" }, language)}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={item.fullPage} alt={item.title[language]} className="block w-full" loading="lazy" />
         </div>
         <p className="border-t border-border px-4 py-3 text-center text-body-sm text-text-tertiary">
-          {language === "en" ? "The whole page — scroll inside the window." : "Вся страница целиком — листайте внутри окна."}
+          {pick({ en: "The whole page — scroll inside the window.", ru: "Вся страница целиком — листайте внутри окна.", zh: "整个页面——在窗口内滚动查看。", tr: "Sayfanın tamamı — pencerenin içinde kaydırın.", ar: "الصفحة كاملة — مرّر داخل النافذة." }, language)}
         </p>
       </div>
       {item.mobile && <Phone src={item.mobile} alt={item.title[language]} />}
@@ -167,7 +164,7 @@ function Gallery({ item }: { item: ShowcaseItem }) {
           </div>
         </div>
         {frames.length > 1 && (
-          <div className="mt-4 flex gap-3 overflow-x-auto pb-1" role="tablist" aria-label={language === "en" ? "Screens" : "Экраны"}>
+          <div className="mt-4 flex gap-3 overflow-x-auto pb-1" role="tablist" aria-label={pick({ en: "Screens", ru: "Экраны", zh: "界面", tr: "Ekranlar", ar: "الشاشات" }, language)}>
             {frames.map((f, i) => (
               <button
                 key={f.src}

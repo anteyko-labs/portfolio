@@ -6,6 +6,8 @@ import { AnimatePresence, motion, useInView } from "framer-motion";
 import { useReducedMotion } from "@/lib/hooks";
 import { EASE } from "@/components/motion/kit";
 import { pad2 } from "./primitives";
+import { useLanguage } from "@/lib/language-context";
+import { pick } from "@/lib/i18n-text";
 
 type Gate = { name: string; passed: boolean };
 
@@ -17,7 +19,8 @@ const STEP_MS = 560;
  * the N/N counter climbs, ending in a success glow. With reduced motion the
  * finished run is shown straight away.
  */
-export function QualityGatesRun({ gates, en, label }: { gates: Gate[]; en: boolean; label: string }) {
+export function QualityGatesRun({ gates, label }: { gates: Gate[]; label: string }) {
+  const { language } = useLanguage();
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, amount: 0.35 });
   const reduced = useReducedMotion();
@@ -91,7 +94,7 @@ export function QualityGatesRun({ gates, en, label }: { gates: Gate[]; en: boole
               <path d="M3 12a9 9 0 1 0 3-6.7L3 8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               <path d="M3 3v5h5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
-            {en ? "Run again" : "Запустить снова"}
+            {pick({ en: "Run again", ru: "Запустить снова", zh: "重新运行", tr: "Tekrar çalıştır", ar: "تشغيل مجددًا" }, language)}
           </button>
         </div>
 
@@ -99,7 +102,7 @@ export function QualityGatesRun({ gates, en, label }: { gates: Gate[]; en: boole
         <div className="relative px-4 pt-5 sm:px-6">
           <div className="flex items-baseline justify-between gap-3 font-mono text-[11px] uppercase tracking-[0.16em]">
             <span className={finished ? "text-emerald-300" : "text-white/50"}>
-              {finished ? (en ? "Verification complete" : "Проверка завершена") : cur < 0 ? (en ? "Queued" : "В очереди") : en ? "Verifying…" : "Проверяем…"}
+              {finished ? (pick({ en: "Verification complete", ru: "Проверка завершена", zh: "验证完成", tr: "Doğrulama tamamlandı", ar: "اكتمل التحقق" }, language)) : cur < 0 ? (pick({ en: "Queued", ru: "В очереди", zh: "排队中", tr: "Sırada", ar: "في قائمة الانتظار" }, language)) : pick({ en: "Verifying…", ru: "Проверяем…", zh: "验证中…", tr: "Doğrulanıyor…", ar: "جارٍ التحقق…" }, language)}
             </span>
             <span className="tabular-nums text-white/60">{pct}%</span>
           </div>
@@ -182,12 +185,12 @@ export function QualityGatesRun({ gates, en, label }: { gates: Gate[]; en: boole
                   }`}
                 >
                   {state === "pass"
-                    ? en ? "Pass" : "Пройден"
+                    ? pick({ en: "Pass", ru: "Пройден", zh: "通过", tr: "Geçti", ar: "ناجح" }, language)
                     : state === "skip"
-                      ? en ? "Skipped" : "Пропущен"
+                      ? pick({ en: "Skipped", ru: "Пропущен", zh: "已跳过", tr: "Atlandı", ar: "تم تخطّيه" }, language)
                       : state === "run"
-                        ? en ? "Running" : "Идёт"
-                        : en ? "Queued" : "Ожидает"}
+                        ? pick({ en: "Running", ru: "Идёт", zh: "进行中", tr: "Çalışıyor", ar: "قيد التنفيذ" }, language)
+                        : pick({ en: "Queued", ru: "Ожидает", zh: "等待中", tr: "Sırada", ar: "في الانتظار" }, language)}
                 </span>
               </li>
             );
@@ -199,9 +202,9 @@ export function QualityGatesRun({ gates, en, label }: { gates: Gate[]; en: boole
           <span className="text-body-sm text-white/65">
             {finished
               ? allPassed
-                ? en ? "All gates passed" : "Все гейты пройдены"
-                : en ? `${passedTotal} of ${total} gates passed` : `${passedTotal} из ${total} гейтов пройдено`
-              : en ? "Release is blocked until every gate is green" : "Релиз заблокирован, пока все гейты не зелёные"}
+                ? pick({ en: "All gates passed", ru: "Все гейты пройдены", zh: "所有关卡均已通过", tr: "Tüm kapılar geçildi", ar: "اجتازت جميع البوابات" }, language)
+                : pick({ en: `${passedTotal} of ${total} gates passed`, ru: `${passedTotal} из ${total} гейтов пройдено`, zh: `${total} 道关卡中已通过 ${passedTotal} 道`, tr: `${total} kapıdan ${passedTotal} tanesi geçti`, ar: `اجتازت ${passedTotal} من ${total} بوابات` }, language)
+              : pick({ en: "Release is blocked until every gate is green", ru: "Релиз заблокирован, пока все гейты не зелёные", zh: "所有关卡变绿之前，发布将被拦截", tr: "Her kapı yeşil olana kadar yayın engellenir", ar: "الإصدار محظور حتى تصبح كل البوابات خضراء" }, language)}
           </span>
           <div className="flex items-center gap-2">
             <span className={`font-brand text-3xl font-semibold tabular-nums transition-colors duration-500 ${finished ? (allPassed ? "text-emerald-300" : "text-amber-300") : "text-white"}`}>

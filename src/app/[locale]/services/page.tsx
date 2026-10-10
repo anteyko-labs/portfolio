@@ -1,17 +1,24 @@
 import { PageWrapper } from "@/components/layout/page-wrapper";
 import { JsonLd } from "@/components/seo/json-ld";
 import { homeBreadcrumb, SITE_BASE } from "@/components/seo/breadcrumbs";
+import { pick, type Language } from "@/lib/i18n-text";
 import { localeAlternates } from "@/i18n/metadata";
 import { ServicesContent } from "./services-content";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   return {
-  title: locale === "ru" ? "Услуги" : "Services",
-  description:
-    locale === "ru"
-      ? "Launch Site, MVP Sprint, Startup Under Key, Web3 Add-on. Понятный объём, фиксированные сроки, предсказуемый результат. Офисы в Бишкеке, Дубае, Стамбуле, Чикаго и Шэньчжэне."
-      : "Launch Site, MVP Sprint, Startup Under Key, Web3 Add-on. Clear scope, fixed timeline, predictable outcomes. Offices in Bishkek, Dubai, Istanbul, Chicago and Shenzhen.",
+  title: pick({ en: "Services", ru: "Услуги", zh: "服务", tr: "Hizmetler", ar: "الخدمات" }, locale as Language),
+  description: pick(
+    {
+      en: "Launch Site, MVP Sprint, Startup Under Key, Web3 Add-on. Clear scope, fixed timeline, predictable outcomes. Offices in Bishkek, Dubai, Istanbul, Chicago and Shenzhen.",
+      ru: "Launch Site, MVP Sprint, Startup Under Key, Web3 Add-on. Понятный объём, фиксированные сроки, предсказуемый результат. Офисы в Бишкеке, Дубае, Стамбуле, Чикаго и Шэньчжэне.",
+      zh: "Launch Site、MVP Sprint、Startup Under Key、Web3 Add-on。范围清晰、周期固定、结果可预期。办公室遍布比什凯克、迪拜、伊斯坦布尔、芝加哥和深圳。",
+      tr: "Launch Site, MVP Sprint, Startup Under Key, Web3 Add-on. Net kapsam, sabit takvim, öngörülebilir sonuçlar. Bişkek, Dubai, İstanbul, Chicago ve Shenzhen'de ofisler.",
+      ar: "Launch Site وMVP Sprint وStartup Under Key وإضافة Web3. نطاق واضح، وجدول زمني ثابت، ونتائج يمكن توقعها. مكاتب في بيشكيك ودبي وإسطنبول وشيكاغو وشنتشن.",
+    },
+    locale as Language
+  ),
     alternates: localeAlternates(locale, "/services"),
   };
 }

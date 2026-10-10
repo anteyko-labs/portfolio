@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { PageWrapper } from "@/components/layout/page-wrapper";
 import { JsonLd } from "@/components/seo/json-ld";
 import { SITE_BASE } from "@/components/seo/breadcrumbs";
+import { pick, type Language } from "@/lib/i18n-text";
 import { localeAlternates } from "@/i18n/metadata";
 import { SERVICE_SLUGS, getPackageBySlug } from "@/lib/service-slugs";
 import { ServiceDetailContent } from "./service-detail-content";
@@ -17,12 +18,12 @@ export async function generateMetadata({ params }: Props) {
   const pkg = getPackageBySlug(slug);
 
   if (!pkg) {
-    return { title: locale === "ru" ? "Услуга" : "Service" };
+    return { title: pick({ en: "Service", ru: "Услуга", zh: "服务", tr: "Hizmet", ar: "الخدمة" }, locale as Language) };
   }
 
-  const lang = locale === "ru" ? "ru" : "en";
+  const lang = locale as Language;
   const description = `${pkg.description[lang]} ${
-    lang === "ru" ? "Срок" : "Timeline"
+    pick({ en: "Timeline", ru: "Срок", zh: "周期", tr: "Süre", ar: "المدة" }, lang)
   }: ${pkg.timeline[lang]}. ${pkg.startingPrice[lang]}.`;
 
   return {

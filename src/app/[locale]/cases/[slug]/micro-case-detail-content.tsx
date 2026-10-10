@@ -2,6 +2,7 @@
 
 import { Link as NextLink } from "@/i18n/navigation";
 import { motion } from "framer-motion";
+import { pick } from "@/lib/i18n-text";
 import { useLanguage } from "@/lib/language-context";
 import { useReducedMotion } from "@/lib/hooks";
 import { Section, AnimatedItem } from "@/components/ui/section";
@@ -39,24 +40,35 @@ export function MicroCaseDetailContent({ caseItem }: MicroCaseDetailContentProps
     web: {
       en: "Web development expertise including responsive design, performance optimization, and modern frameworks.",
       ru: "Экспертиза веб-разработки: адаптивный дизайн, оптимизация производительности, современные фреймворки.",
+      zh: "网站开发专长，涵盖响应式设计、性能优化和现代框架。",
+      tr: "Duyarlı tasarım, performans optimizasyonu ve modern framework'leri kapsayan web geliştirme uzmanlığı.",
+      ar: "خبرة في تطوير الويب تشمل التصميم المتجاوب وتحسين الأداء وأحدث الأطر البرمجية.",
     },
     product: {
       en: "Product development from concept to launch, including UX research, prototyping, and iterative delivery.",
       ru: "Разработка продукта от концепции до запуска: UX-исследования, прототипирование, итеративная поставка.",
+      zh: "从概念到上线的产品开发，包括 UX 研究、原型设计和迭代交付。",
+      tr: "Konseptten lansmana ürün geliştirme: UX araştırması, prototipleme ve yinelemeli teslimat.",
+      ar: "تطوير المنتجات من الفكرة حتى الإطلاق، بما يشمل أبحاث UX والنماذج الأولية والتسليم التكراري.",
     },
     web3: {
       en: "Blockchain and Web3 solutions including smart contracts, wallet integration, and DeFi protocols.",
       ru: "Блокчейн и Web3 решения: смарт-контракты, интеграция кошельков, DeFi протоколы.",
+      zh: "区块链与 Web3 解决方案，包括智能合约、钱包集成和 DeFi 协议。",
+      tr: "Akıllı kontratlar, cüzdan entegrasyonu ve DeFi protokollerini kapsayan blokzincir ve Web3 çözümleri.",
+      ar: "حلول البلوكتشين وWeb3 تشمل العقود الذكية وربط المحافظ وبروتوكولات DeFi.",
     },
     infrastructure: {
       en: "Backend infrastructure, DevOps, CI/CD pipelines, and scalable architecture design.",
       ru: "Бэкенд-инфраструктура, DevOps, CI/CD пайплайны, проектирование масштабируемой архитектуры.",
+      zh: "后端基础设施、DevOps、CI/CD 流水线以及可扩展架构设计。",
+      tr: "Backend altyapısı, DevOps, CI/CD hatları ve ölçeklenebilir mimari tasarımı.",
+      ar: "البنية التحتية للـ Backend وDevOps وخطوط CI/CD وتصميم بنية قابلة للتوسع.",
     },
   };
 
   const index = microCases.findIndex((c) => c.id === caseItem.id);
   const next = microCases[(index + 1) % microCases.length];
-  const en = language === "en";
   const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
   return (
@@ -66,7 +78,7 @@ export function MicroCaseDetailContent({ caseItem }: MicroCaseDetailContentProps
         <div className="container relative mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-wrap items-center justify-between gap-3 font-mono text-caption uppercase tracking-[0.16em] text-text-tertiary">
             <NextLink href="/cases" className="inline-flex items-center gap-2 transition-colors hover:text-accent-primary">
-              <span aria-hidden="true">←</span> {en ? "All work" : "Все работы"}
+              <span aria-hidden="true">←</span> {pick({ en: "All work", ru: "Все работы", zh: "全部作品", tr: "Tüm işler", ar: "جميع الأعمال" }, language)}
             </NextLink>
             <span>
               {String(index + 1).padStart(2, "0")} / {String(microCases.length).padStart(2, "0")}
@@ -109,7 +121,7 @@ export function MicroCaseDetailContent({ caseItem }: MicroCaseDetailContentProps
           <div className="mt-8 grid gap-4 md:grid-cols-2">
             <AnimatedItem>
               <div className="h-full rounded-2xl border border-border bg-bg-secondary p-6 md:p-8">
-                <p className="font-mono text-caption uppercase tracking-[0.16em] text-text-tertiary">{en ? "What we did" : "Что сделали"}</p>
+                <p className="font-mono text-caption uppercase tracking-[0.16em] text-text-tertiary">{pick({ en: "What we did", ru: "Что сделали", zh: "我们做了什么", tr: "Ne yaptık", ar: "ما أنجزناه" }, language)}</p>
                 <p className="mt-3 text-heading-md text-text-primary">{caseItem.what[language]}</p>
                 <p className="mt-3 text-body-md text-text-secondary">{categoryDescriptions[caseItem.category][language]}</p>
               </div>
@@ -117,7 +129,7 @@ export function MicroCaseDetailContent({ caseItem }: MicroCaseDetailContentProps
             <AnimatedItem delay={0.08}>
               <div className="relative h-full overflow-hidden rounded-2xl bg-text-primary p-6 text-white md:p-8">
                 <div className="pointer-events-none absolute -bottom-16 -right-16 h-48 w-48 rounded-full bg-accent-primary/40 blur-3xl" aria-hidden="true" />
-                <p className="relative font-mono text-caption uppercase tracking-[0.16em] text-white/50">{en ? "Outcome" : "Результат"}</p>
+                <p className="relative font-mono text-caption uppercase tracking-[0.16em] text-white/50">{pick({ en: "Outcome", ru: "Результат", zh: "成果", tr: "Sonuç", ar: "النتيجة" }, language)}</p>
                 <p className="relative mt-3 font-brand text-2xl font-semibold leading-snug tracking-tight md:text-3xl">{caseItem.outcome[language]}</p>
               </div>
             </AnimatedItem>
@@ -125,14 +137,14 @@ export function MicroCaseDetailContent({ caseItem }: MicroCaseDetailContentProps
 
           <div className="mt-8 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-border p-5 md:p-6">
             <p className="text-body-md text-text-secondary">
-              {en ? "Want something similar in your product?" : "Хотите такое же в вашем продукте?"}
+              {pick({ en: "Want something similar in your product?", ru: "Хотите такое же в вашем продукте?", zh: "想在您的产品中实现类似功能？", tr: "Ürününüzde de benzerini ister misiniz?", ar: "تريد شيئًا مماثلًا في منتجك؟" }, language)}
             </p>
             <div className="flex flex-wrap gap-3">
               <ButtonLink href="/contact" buttonVariant="primary">
-                {en ? "Discuss the project" : "Обсудить проект"}
+                {pick({ en: "Discuss the project", ru: "Обсудить проект", zh: "洽谈项目", tr: "Projeyi konuşalım", ar: "ناقش المشروع معنا" }, language)}
               </ButtonLink>
               <ButtonLink href={`/cases/${next.id}`} buttonVariant="secondary">
-                {en ? "Next work →" : "Следующая работа →"}
+                {pick({ en: "Next work →", ru: "Следующая работа →", zh: "下一个作品 →", tr: "Sonraki iş →", ar: "العمل التالي ←" }, language)}
               </ButtonLink>
             </div>
           </div>
@@ -143,12 +155,10 @@ export function MicroCaseDetailContent({ caseItem }: MicroCaseDetailContentProps
       {relatedFlagship.length > 0 && (
         <Section background="primary" padding="lg">
           <h2 className="text-display-sm font-display text-text-primary mb-2">
-            {language === "en" ? "Related flagship cases" : "Связанные ключевые кейсы"}
+            {pick({ en: "Related flagship cases", ru: "Связанные ключевые кейсы", zh: "相关旗舰案例", tr: "İlgili amiral gemisi vakalar", ar: "أبرز المشاريع ذات الصلة" }, language)}
           </h2>
           <p className="text-body-md text-text-secondary mb-8">
-            {language === "en" 
-              ? "Deep dives into similar projects" 
-              : "Детальные разборы похожих проектов"}
+            {pick({ en: "Deep dives into similar projects", ru: "Детальные разборы похожих проектов", zh: "深入解析类似项目", tr: "Benzer projelere derinlemesine bakış", ar: "تحليلات معمّقة لمشاريع مشابهة" }, language)}
           </p>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -231,12 +241,10 @@ export function MicroCaseDetailContent({ caseItem }: MicroCaseDetailContentProps
       {relatedMicro.length > 0 && (
         <Section background="secondary" padding="lg">
           <h2 className="text-heading-lg font-medium text-text-primary mb-2">
-            {language === "en" ? "More in this category" : "Ещё в этой категории"}
+            {pick({ en: "More in this category", ru: "Ещё в этой категории", zh: "此分类下更多案例", tr: "Bu kategoride daha fazlası", ar: "المزيد في هذه الفئة" }, language)}
           </h2>
           <p className="text-body-sm text-text-secondary mb-6">
-            {language === "en" 
-              ? "Other micro cases with similar focus" 
-              : "Другие микро-кейсы схожей тематики"}
+            {pick({ en: "Other micro cases with similar focus", ru: "Другие микро-кейсы схожей тематики", zh: "其他方向相近的小型案例", tr: "Benzer odaklı diğer mikro vakalar", ar: "حالات مصغّرة أخرى بتركيز مشابه" }, language)}
           </p>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -279,7 +287,7 @@ export function MicroCaseDetailContent({ caseItem }: MicroCaseDetailContentProps
             <svg className="w-4 h-4 transition-transform duration-300 group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
-            {language === "en" ? "Back to all cases" : "Назад ко всем кейсам"}
+            {pick({ en: "Back to all cases", ru: "Назад ко всем кейсам", zh: "返回全部案例", tr: "Tüm vakalara dön", ar: "العودة إلى جميع المشاريع" }, language)}
           </ButtonLink>
         </div>
       </Section>

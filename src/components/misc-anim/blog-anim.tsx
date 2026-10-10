@@ -5,6 +5,8 @@ import { motion, useInView, useMotionValue, useSpring, useTransform } from "fram
 import { EASE, SpotlightCard } from "@/components/motion/kit";
 import { useReducedMotion } from "@/lib/hooks";
 import "./misc-anim.css";
+import { useLanguage } from "@/lib/language-context";
+import { type L, type Language, pick } from "@/lib/i18n-text";
 
 // Motion pieces for /blog: generative covers seeded by the post slug, a tilt
 // card, the article reading progress, a table of contents and heading reveals.
@@ -246,7 +248,8 @@ export function readingMinutes(words: number) {
 }
 
 /** Sticky gradient bar under the header that fills as the article is read */
-export function ReadingProgress({ target, en }: { target: RefObject<HTMLElement | null>; en: boolean }) {
+export function ReadingProgress({ target }: { target: RefObject<HTMLElement | null> }) {
+  const { language } = useLanguage();
   // Progress through `target`: 0 when its top reaches the header, 1 when its end hits the viewport bottom.
   const scrollYProgress = useMotionValue(0);
   useEffect(() => {
@@ -273,7 +276,7 @@ export function ReadingProgress({ target, en }: { target: RefObject<HTMLElement 
         <motion.div className="absolute inset-y-0 left-0 w-full origin-left bg-gradient-to-r from-indigo-500 via-fuchsia-500 to-amber-400 shadow-[0_0_12px_rgba(217,70,239,0.6)]" style={{ scaleX }} />
       </div>
       <div className="pointer-events-none absolute right-4 top-2 hidden rounded-full border border-border bg-bg-primary/90 px-2.5 py-1 font-mono text-[11px] tabular-nums text-text-secondary shadow-sm backdrop-blur sm:block">
-        <span className="sr-only">{en ? "Read" : "Прочитано"} </span>
+        <span className="sr-only">{pick({ en: "Read", ru: "Прочитано", zh: "阅读", tr: "Oku", ar: "القراءة" }, language)} </span>
         <motion.span>{pct}</motion.span>
       </div>
     </div>
@@ -302,10 +305,11 @@ export function useActiveSection(count: number, prefix: string) {
 }
 
 /** Side table of contents with a sliding marker on the current section */
-export function ArticleToc({ headings, active, prefix, en }: { headings: string[]; active: number; prefix: string; en: boolean }) {
+export function ArticleToc({ headings, active, prefix }: { headings: string[]; active: number; prefix: string }) {
+  const { language } = useLanguage();
   return (
-    <nav aria-label={en ? "Contents" : "Содержание"} className="sticky top-28">
-      <p className="mb-4 font-mono text-[11px] uppercase tracking-[0.18em] text-text-tertiary">{en ? "Contents" : "Содержание"}</p>
+    <nav aria-label={pick({ en: "Contents", ru: "Содержание", zh: "目录", tr: "İçindekiler", ar: "المحتويات" }, language)} className="sticky top-28">
+      <p className="mb-4 font-mono text-[11px] uppercase tracking-[0.18em] text-text-tertiary">{pick({ en: "Contents", ru: "Содержание", zh: "目录", tr: "İçindekiler", ar: "المحتويات" }, language)}</p>
       <ol className="relative space-y-1 border-l border-border">
         {headings.map((h, i) => {
           const on = i === active;

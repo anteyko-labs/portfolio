@@ -3,6 +3,7 @@
 import { Link as NextLink } from "@/i18n/navigation";
 import Image from "next/image";
 import { useLanguage } from "@/lib/language-context";
+import { LANGUAGES, LANGUAGE_LABELS, pick } from "@/lib/i18n-text";
 import { ButtonLink } from "@/components/ui/link";
 import { OFFICES, localTime } from "@/lib/locations";
 import { FooterWordmark, useNow } from "@/components/layout/footer-wordmark";
@@ -64,7 +65,7 @@ export function Footer() {
             {/* Navigation Column */}
             <div className="lg:col-span-3">
               <h3 className="text-heading-sm font-medium text-text-primary mb-4">
-                {language === "en" ? "Navigation" : "Навигация"}
+                {pick({ en: "Navigation", ru: "Навигация", zh: "导航", tr: "Gezinme", ar: "التنقل" }, language)}
               </h3>
               <nav className="flex flex-col gap-3">
                 {navLinks.map((link) => (
@@ -83,7 +84,7 @@ export function Footer() {
             {/* Contact Column */}
             <div className="lg:col-span-4">
               <h3 className="text-heading-sm font-medium text-text-primary mb-4">
-                {language === "en" ? "Contact" : "Контакты"}
+                {pick({ en: "Contact", ru: "Контакты", zh: "联系我们", tr: "İletişim", ar: "تواصل معنا" }, language)}
               </h3>
               <div className="space-y-4">
                 <div>
@@ -97,7 +98,7 @@ export function Footer() {
                 </div>
                 <div>
                   <p className="text-caption text-text-secondary mb-1">
-                    {language === "en" ? "Offices" : "Офисы"}
+                    {pick({ en: "Offices", ru: "Офисы", zh: "办公室", tr: "Ofisler", ar: "المكاتب" }, language)}
                   </p>
                   <ul className="space-y-1">
                     {OFFICES.map((o, i) => (
@@ -119,33 +120,24 @@ export function Footer() {
                 {/* Language Switcher */}
                 <div className="pt-2">
                   <p className="text-caption text-text-secondary mb-2">
-                    {language === "en" ? "Language" : "Язык"}
+                    {pick({ en: "Language", ru: "Язык", zh: "语言", tr: "Dil", ar: "اللغة" }, language)}
                   </p>
-                  <div className="flex gap-2">
-                    <button
-                      type="button"
-                      onClick={() => setLanguage("en")}
-                      aria-label="English"
-                      className={`px-4 py-2.5 text-body-sm font-medium rounded-lg transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary ${
-                        language === "en"
-                          ? "bg-accent-glow text-accent-primary border border-accent-primary/30"
-                          : "text-text-secondary hover:text-text-primary border border-border hover:border-border-hover"
-                      }`}
-                    >
-                      EN
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setLanguage("ru")}
-                      aria-label="Русский"
-                      className={`px-4 py-2.5 text-body-sm font-medium rounded-lg transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary ${
-                        language === "ru"
-                          ? "bg-accent-glow text-accent-primary border border-accent-primary/30"
-                          : "text-text-secondary hover:text-text-primary border border-border hover:border-border-hover"
-                      }`}
-                    >
-                      RU
-                    </button>
+                  <div className="flex flex-wrap gap-2">
+                    {LANGUAGES.map((code) => (
+                      <button
+                        key={code}
+                        type="button"
+                        onClick={() => setLanguage(code)}
+                        aria-label={LANGUAGE_LABELS[code].name}
+                        className={`px-4 py-2.5 text-body-sm font-medium rounded-lg transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary ${
+                          language === code
+                            ? "bg-accent-glow text-accent-primary border border-accent-primary/30"
+                            : "text-text-secondary hover:text-text-primary border border-border hover:border-border-hover"
+                        }`}
+                      >
+                        {LANGUAGE_LABELS[code].short}
+                      </button>
+                    ))}
                   </div>
                 </div>
               </div>

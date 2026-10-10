@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useLanguage } from "@/lib/language-context";
+import { pick } from "@/lib/i18n-text";
 import { useReducedMotion } from "@/lib/hooks";
 import { Section, SectionHeader, AnimatedItem } from "@/components/ui/section";
 import { ButtonLink } from "@/components/ui/link";
@@ -38,7 +39,7 @@ export function ProcessPreviewSection() {
         <SectionHeader
           title={t("process.title")}
           subtitle={t("process.subtitle")}
-          eyebrow={language === "en" ? "Process" : "Процесс"}
+          eyebrow={pick({ en: "Process", ru: "Процесс", zh: "流程", tr: "Süreç", ar: "آلية العمل" }, language)}
           animate={false}
         />
         <ButtonLink href="/process" buttonVariant="outline" size="sm">

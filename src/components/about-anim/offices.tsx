@@ -7,8 +7,8 @@ import { useReducedMotion } from "@/lib/hooks";
 import { OFFICES, localTime } from "@/lib/locations";
 import { RevealTitle, RunScope } from "./shared";
 import { LAND } from "./world-data";
+import { type L, type Language, pick } from "@/lib/i18n-text";
 
-type L = { en: string; ru: string };
 
 // ── Projection: equirectangular, 5 units per degree, y = 0 at 80°N ─────────
 const K = 5;
@@ -125,13 +125,13 @@ function dayPolygon(d: Date) {
 }
 
 // ── Map ─────────────────────────────────────────────────────────────────────
-function WorldMap({ now, hovered, language, run }: { now: Date | null; hovered: number | null; language: "en" | "ru"; run: boolean }) {
+function WorldMap({ now, hovered, language, run }: { now: Date | null; hovered: number | null; language: Language; run: boolean }) {
   const minute = now ? Math.floor(now.getTime() / 60000) : null;
   const day = useMemo(() => (minute == null ? null : dayPolygon(new Date(minute * 60000))), [minute]);
   const reduced = useReducedMotion();
 
   return (
-    <svg viewBox={`${VB.x} ${VB.y} ${VB.w} ${VB.h}`} className="block h-auto w-full" role="img" aria-label={language === "en" ? "Map of Anteyko offices" : "Карта офисов Anteyko"}>
+    <svg viewBox={`${VB.x} ${VB.y} ${VB.w} ${VB.h}`} className="block h-auto w-full" role="img" aria-label={pick({ en: "Map of Anteyko offices", ru: "Карта офисов Anteyko", zh: "Anteyko 办公室地图", tr: "Anteyko ofislerinin haritası", ar: "خريطة مكاتب Anteyko" }, language)}>
       <defs>
         <radialGradient id="ab-sun" cx="50%" cy="50%" r="50%">
           <stop offset="0%" stopColor="rgba(253,230,138,0.35)" />
@@ -222,8 +222,7 @@ function WorldMap({ now, hovered, language, run }: { now: Date | null; hovered: 
 }
 
 // ── Coverage timeline ──────────────────────────────────────────────────────
-function Coverage({ offsets, nowUtc, language, working }: { offsets: number[]; nowUtc: number | null; language: "en" | "ru"; working: boolean[] }) {
-  const en = language === "en";
+function Coverage({ offsets, nowUtc, language, working }: { offsets: number[]; nowUtc: number | null; language: Language; working: boolean[] }) {
   const reduced = useReducedMotion();
   const covered = useMemo(() => {
     let n = 0;
@@ -237,12 +236,12 @@ function Coverage({ offsets, nowUtc, language, working }: { offsets: number[]; n
     <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-5 backdrop-blur-sm md:p-6">
       <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
         <div>
-          <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-white/45">{en ? "Follow the sun · UTC" : "Следуем за солнцем · UTC"}</p>
-          <p className="mt-1 text-body-sm text-white/70">{en ? "Working hours of each office across one day" : "Рабочие часы каждого офиса на протяжении суток"}</p>
+          <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-white/45">{pick({ en: "Follow the sun · UTC", ru: "Следуем за солнцем · UTC", zh: "追随太阳 · UTC", tr: "Güneşi takip et · UTC", ar: "نتبع الشمس · UTC" }, language)}</p>
+          <p className="mt-1 text-body-sm text-white/70">{pick({ en: "Working hours of each office across one day", ru: "Рабочие часы каждого офиса на протяжении суток", zh: "各办公室一天内的工作时段", tr: "Her ofisin gün içindeki çalışma saatleri", ar: "ساعات عمل كل مكتب على مدار اليوم" }, language)}</p>
         </div>
         <p className="font-brand text-2xl font-semibold">
           <span className="home-gradient-text">{covered}</span>
-          <span className="text-white/40"> / 24 {en ? "h covered" : "ч покрыто"}</span>
+          <span className="text-white/40"> / 24 {pick({ en: "h covered", ru: "ч покрыто", zh: "小时覆盖", tr: "sa kapsanıyor", ar: "ساعة مغطّاة" }, language)}</span>
         </p>
       </div>
       <div className="relative">
@@ -294,8 +293,7 @@ function Coverage({ offsets, nowUtc, language, working }: { offsets: number[]; n
 
 // ── Section ────────────────────────────────────────────────────────────────
 /** Offices: a live dotted world map with day and night, routes between the cities, and live local clocks */
-export function Offices({ title, description, language }: { title: L; description: L; language: "en" | "ru" }) {
-  const en = language === "en";
+export function Offices({ title, description, language }: { title: L; description: L; language: Language }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { margin: "100px" });
   const reduced = useReducedMotion();
@@ -326,7 +324,7 @@ export function Offices({ title, description, language }: { title: L; descriptio
       <div ref={ref} className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid gap-8 lg:grid-cols-[1.4fr_1fr] lg:items-end">
           <div>
-            <RevealTitle dark eyebrow={en ? "Offices · live" : "Офисы · в реальном времени"} title={title[language]} />
+            <RevealTitle dark eyebrow={pick({ en: "Offices · live", ru: "Офисы · в реальном времени", zh: "办公室 · 实时", tr: "Ofisler · canlı", ar: "المكاتب · مباشر" }, language)} title={title[language]} />
             <motion.p
               initial={reduced ? false : { opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -350,7 +348,7 @@ export function Offices({ title, description, language }: { title: L; descriptio
               <span className="relative font-brand text-2xl font-semibold text-emerald-300 tabular-nums">{now ? workingCount : "–"}</span>
             </div>
             <div>
-              <p className="text-body-md font-medium text-white">{en ? `of ${OFFICES.length} offices in working hours now` : `из ${OFFICES.length} офисов сейчас в рабочем времени`}</p>
+              <p className="text-body-md font-medium text-white">{pick({ en: `of ${OFFICES.length} offices in working hours now`, ru: `из ${OFFICES.length} офисов сейчас в рабочем времени`, zh: `/ ${OFFICES.length} 间办公室正处于工作时间`, tr: `/ ${OFFICES.length} ofis şu an mesaide`, ar: `من ${OFFICES.length} مكاتب في ساعات العمل الآن` }, language)}</p>
               <p className="mt-1 font-mono text-caption text-white/45">
                 UTC {now ? `${pad(now.getUTCHours())}:${pad(now.getUTCMinutes())}` : "--:--"}
               </p>
@@ -367,9 +365,9 @@ export function Offices({ title, description, language }: { title: L; descriptio
         >
           <WorldMap now={now} hovered={hovered} language={language} run={inView && !reduced} />
           <div className="pointer-events-none absolute bottom-3 left-4 hidden items-center gap-4 font-mono text-[10px] uppercase tracking-[0.16em] text-white/45 sm:flex">
-            <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-emerald-400" />{en ? "working hours" : "рабочее время"}</span>
-            <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-indigo-300" />{en ? "off hours" : "нерабочее время"}</span>
-            <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-amber-200/70" />{en ? "daylight" : "день"}</span>
+            <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-emerald-400" />{pick({ en: "working hours", ru: "рабочее время", zh: "工作时间", tr: "çalışma saatleri", ar: "ساعات العمل" }, language)}</span>
+            <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-indigo-300" />{pick({ en: "off hours", ru: "нерабочее время", zh: "非工作时间", tr: "mesai dışı", ar: "خارج ساعات العمل" }, language)}</span>
+            <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-amber-200/70" />{pick({ en: "daylight", ru: "день", zh: "白天", tr: "gündüz", ar: "النهار" }, language)}</span>
           </div>
         </motion.div>
 
@@ -390,7 +388,7 @@ export function Offices({ title, description, language }: { title: L; descriptio
                   <span className="rounded-md border border-white/10 px-1.5 py-0.5 font-mono text-[10px] tracking-wider text-white/50">{o.countryCode}</span>
                   <span className={`flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-wider ${w ? "text-emerald-300" : "text-white/40"}`}>
                     <span className={`h-1.5 w-1.5 rounded-full ${w ? "bg-emerald-400 shadow-[0_0_8px_2px_rgba(52,211,153,0.6)]" : "bg-white/30"}`} />
-                    {p ? (w ? (en ? "at work" : "работают") : en ? "off hours" : "не в офисе") : "…"}
+                    {p ? (w ? (pick({ en: "at work", ru: "работают", zh: "在岗", tr: "çalışıyor", ar: "على رأس العمل" }, language)) : pick({ en: "off hours", ru: "не в офисе", zh: "离岗", tr: "mesai dışı", ar: "خارج الدوام" }, language)) : "…"}
                   </span>
                 </div>
                 <p className="mt-4 font-brand text-lg font-semibold leading-tight">{o.city[language]}</p>

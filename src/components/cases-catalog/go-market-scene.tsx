@@ -3,6 +3,7 @@
 import Image from "next/image";
 import clsx from "clsx";
 import { useLanguage } from "@/lib/language-context";
+import { pick } from "@/lib/i18n-text";
 
 // Card scene for Go Market. The phone shows the app's real screen; everything
 // around it is decoration: groceries fly into the cart, the installment plan
@@ -21,7 +22,6 @@ const ITEMS = [
 
 export function GoMarketScene({ active }: { active: boolean }) {
   const { language } = useLanguage();
-  const en = language === "en";
   return (
     <div
       className="gm-scene @container absolute inset-0 overflow-hidden"
@@ -65,8 +65,8 @@ export function GoMarketScene({ active }: { active: boolean }) {
 
       {/* installment plan filling part by part */}
       <div className="gm-card absolute left-[5%] top-[12%] w-[30%] min-w-[130px] rounded-2xl bg-white/90 p-[2.2cqw] shadow-xl backdrop-blur">
-        <p className="font-mono text-[clamp(8px,1.6cqw,13px)] uppercase tracking-wider text-[#0062CC]">{en ? "Installments" : "Рассрочка"}</p>
-        <p className="mt-[0.6cqw] text-[clamp(11px,2.6cqw,22px)] font-bold leading-tight text-[#1C1C1E]">{en ? "4 payments" : "4 платежа"}</p>
+        <p className="font-mono text-[clamp(8px,1.6cqw,13px)] uppercase tracking-wider text-[#0062CC]">{pick({ en: "Installments", ru: "Рассрочка", zh: "分期", tr: "Taksitler", ar: "التقسيط" }, language)}</p>
+        <p className="mt-[0.6cqw] text-[clamp(11px,2.6cqw,22px)] font-bold leading-tight text-[#1C1C1E]">{pick({ en: "4 payments", ru: "4 платежа", zh: "4 期付款", tr: "4 ödeme", ar: "4 دفعات" }, language)}</p>
         <div className="mt-[1.4cqw] flex gap-[0.8cqw]">
           {[0, 1, 2, 3].map((i) => (
             <span key={i} className="h-[clamp(4px,1cqw,8px)] flex-1 overflow-hidden rounded-full bg-[#E5E7EB]">
@@ -79,7 +79,7 @@ export function GoMarketScene({ active }: { active: boolean }) {
       {/* order assembled */}
       <div className={clsx("gm-card gm-card--right absolute bottom-[10%] right-[5%] flex items-center gap-[1.4cqw] rounded-2xl bg-white/90 px-[2cqw] py-[1.6cqw] shadow-xl backdrop-blur")}>
         <span className="grid aspect-square w-[clamp(18px,4cqw,34px)] place-items-center rounded-full bg-[#00A700] text-[clamp(10px,2cqw,18px)] text-white">✓</span>
-        <span className="text-[clamp(10px,2.2cqw,18px)] font-semibold text-[#1C1C1E]">{en ? "Order packed" : "Заказ собран"}</span>
+        <span className="text-[clamp(10px,2.2cqw,18px)] font-semibold text-[#1C1C1E]">{pick({ en: "Order packed", ru: "Заказ собран", zh: "订单已打包", tr: "Sipariş paketlendi", ar: "تم تجهيز الطلب" }, language)}</span>
       </div>
     </div>
   );

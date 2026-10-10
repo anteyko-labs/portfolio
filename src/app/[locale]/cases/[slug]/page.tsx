@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { PageWrapper } from "@/components/layout/page-wrapper";
 import { JsonLd } from "@/components/seo/json-ld";
 import { localeAlternates } from "@/i18n/metadata";
+import { pick, type Language } from "@/lib/i18n-text";
 import {
   getFlagshipCaseBySlug,
   getMicroCaseById,
@@ -40,14 +41,14 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props) {
   const { locale, slug } = await params;
 
-  const isRu = locale === "ru";
+  const lang = locale as Language;
 
   // Try flagship first
   const flagshipCase = getFlagshipCaseBySlug(slug);
   if (flagshipCase) {
-    const title = isRu ? flagshipCase.title.ru : flagshipCase.title.en;
+    const title = pick(flagshipCase.title, lang);
     const description = clampDescription(
-      isRu ? flagshipCase.summary.ru : flagshipCase.summary.en
+      pick(flagshipCase.summary, lang)
     );
     return {
       title,
@@ -65,9 +66,9 @@ export async function generateMetadata({ params }: Props) {
   // Try micro case
   const microCase = getMicroCaseById(slug);
   if (microCase) {
-    const title = isRu ? microCase.title.ru : microCase.title.en;
+    const title = pick(microCase.title, lang);
     const description = clampDescription(
-      isRu ? microCase.what.ru : microCase.what.en
+      pick(microCase.what, lang)
     );
     return {
       title,
@@ -85,8 +86,8 @@ export async function generateMetadata({ params }: Props) {
   // Website / product showcase
   const showcase = getShowcaseItem(slug);
   if (showcase) {
-    const title = `${showcase.title[isRu ? "ru" : "en"]} — ${showcase.client[isRu ? "ru" : "en"]}`;
-    const description = clampDescription(showcase.summary[isRu ? "ru" : "en"]);
+    const title = `${showcase.title[lang]} — ${showcase.client[lang]}`;
+    const description = clampDescription(showcase.summary[lang]);
     return {
       title,
       description,

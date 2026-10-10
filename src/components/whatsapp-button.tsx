@@ -1,6 +1,7 @@
 "use client";
 
 import { useLanguage } from "@/lib/language-context";
+import { pick } from "@/lib/i18n-text";
 
 // Floating WhatsApp button, stacked right above the CRM chat bubble
 // (Chatwoot's launcher sits 20px from the corner and is 64px tall).
@@ -9,10 +10,9 @@ const WHATSAPP_NUMBER = "996709927895"; // 0709 927 895, Kyrgyzstan
 
 export function WhatsAppButton() {
   const { language } = useLanguage();
-  const en = language === "en";
-  const text = en ? "Hi! I'd like to discuss a project." : "Здравствуйте! Хочу обсудить проект.";
+  const text = pick({ en: "Hi! I'd like to discuss a project.", ru: "Здравствуйте! Хочу обсудить проект.", zh: "您好！我想谈一个项目。", tr: "Merhaba! Bir proje hakkında konuşmak istiyorum.", ar: "مرحبًا! أود مناقشة مشروع." }, language);
   const href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
-  const label = en ? "Message us on WhatsApp" : "Написать в WhatsApp";
+  const label = pick({ en: "Message us on WhatsApp", ru: "Написать в WhatsApp", zh: "在 WhatsApp 上联系我们", tr: "WhatsApp'tan bize yazın", ar: "راسلنا عبر WhatsApp" }, language);
 
   return (
     <a

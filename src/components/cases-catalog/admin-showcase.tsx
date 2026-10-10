@@ -7,6 +7,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { useLanguage } from "@/lib/language-context";
 import { useReducedMotion } from "@/lib/hooks";
 import type { ShowcaseItem } from "@/lib/showcase-data";
+import { pick } from "@/lib/i18n-text";
 
 const STEP = 4200;
 
@@ -16,7 +17,6 @@ const STEP = 4200;
  */
 export function AdminShowcase({ item }: { item: ShowcaseItem }) {
   const { language } = useLanguage();
-  const en = language === "en";
   const reduced = useReducedMotion();
   const screens = item.admin ?? [];
   const [index, setIndex] = useState(0);
@@ -55,15 +55,13 @@ export function AdminShowcase({ item }: { item: ShowcaseItem }) {
         <div className="mx-auto max-w-3xl text-center">
           <p className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 font-mono text-caption uppercase tracking-[0.16em] text-white/70">
             <span className="h-1.5 w-1.5 rounded-full" style={{ background: accent }} />
-            {en ? "Admin panel" : "Админ-панель"}
+            {pick({ en: "Admin panel", ru: "Админ-панель", zh: "管理后台", tr: "Yönetim paneli", ar: "لوحة الإدارة" }, language)}
           </p>
           <h2 className="mt-5 font-brand text-3xl font-semibold leading-tight tracking-[-0.02em] md:text-5xl">
-            {en ? "The back office behind the storefront" : "Админка, в которой работает команда"}
+            {pick({ en: "The back office behind the storefront", ru: "Админка, в которой работает команда", zh: "店面背后的运营后台", tr: "Vitrinin arkasındaki arka ofis", ar: "المكتب الخلفي الذي يقف وراء المتجر" }, language)}
           </h2>
           <p className="mt-4 text-body-lg text-white/60">
-            {en
-              ? "Customers see the site; the team runs the business here — orders, catalog, people and numbers in one place."
-              : "Клиенты видят сайт, а бизнес управляется здесь: заказы, каталог, люди и цифры в одном месте."}
+            {pick({ en: "Customers see the site; the team runs the business here — orders, catalog, people and numbers in one place.", ru: "Клиенты видят сайт, а бизнес управляется здесь: заказы, каталог, люди и цифры в одном месте.", zh: "顾客看到的是网站；团队在这里经营业务——订单、商品目录、人员和数据尽在一处。", tr: "Müşteriler siteyi görür; ekip işi burada yönetir — siparişler, katalog, kişiler ve rakamlar tek yerde.", ar: "يرى العملاء الموقع، بينما يدير الفريق الأعمال من هنا — الطلبات والكتالوج والأشخاص والأرقام في مكان واحد." }, language)}
           </p>
         </div>
 
@@ -114,7 +112,7 @@ export function AdminShowcase({ item }: { item: ShowcaseItem }) {
         </div>
 
         {screens.length > 1 ? (
-          <div className="mx-auto mt-6 flex max-w-5xl flex-wrap justify-center gap-3" role="tablist" aria-label={en ? "Admin screens" : "Экраны админки"}>
+          <div className="mx-auto mt-6 flex max-w-5xl flex-wrap justify-center gap-3" role="tablist" aria-label={pick({ en: "Admin screens", ru: "Экраны админки", zh: "后台界面", tr: "Yönetim ekranları", ar: "شاشات الإدارة" }, language)}>
             {screens.map((s, i) => (
               <button
                 key={s.src}

@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { animate, motion, useInView } from "framer-motion";
 import { useLanguage } from "@/lib/language-context";
+import { pick, type L } from "@/lib/i18n-text";
 import { useReducedMotion } from "@/lib/hooks";
 import type { CaseCategory } from "@/lib/cases-data";
 
@@ -18,7 +19,6 @@ const THEMES: Record<CaseCategory, Theme> = {
   infrastructure: { a: "#EA580C", b: "#F59E0B", soft: "#FFEDD5", ink: "#431407", bg: "linear-gradient(135deg,#FFF7ED 0%,#FEFCE8 100%)" },
 };
 
-type L = [string, string]; // [en, ru]
 type SceneProps = { t: Theme; on: boolean; tr: (l: L) => string };
 
 const SANS = "var(--font-manrope), system-ui, sans-serif";
@@ -152,12 +152,12 @@ function BeforeAfter({ t, on, tr, rows }: SceneProps & { rows: { label: L; befor
           <g key={i}>
             <text x={90} y={y - 24} fontSize={28} fontWeight={700} fill={t.ink} fontFamily={SANS}>{tr(r.label)}</text>
             <rect x={90} y={y} width={wB} height={56} rx={14} fill="#CBD5E1" />
-            <text x={90 + wB + 18} y={y + 38} fontSize={26} fill="#64748B" fontFamily={MONO}>{tr(["before", "до"])} · {r.before}{tr(r.unit)}</text>
+            <text x={90 + wB + 18} y={y + 38} fontSize={26} fill="#64748B" fontFamily={MONO}>{tr({ en: "before", ru: "до", zh: "之前", tr: "önce", ar: "قبل" })} · {r.before}{tr(r.unit)}</text>
             <motion.rect x={90} y={y + 72} height={56} rx={14} fill={t.a} initial={false}
               animate={{ width: on ? wA : wB }} transition={{ duration: 1.4, delay: 0.4 + i * 0.3, ease: EASE }} />
             <motion.text y={y + 110} fontSize={30} fontWeight={800} fill={t.a} fontFamily={SANS} initial={false}
               animate={{ x: on ? 90 + wA + 18 : 90 + wB + 18, opacity: on ? 1 : 0 }} transition={{ duration: 1.4, delay: 0.4 + i * 0.3, ease: EASE }}>
-              {tr(["after", "после"])} · {r.after}{tr(r.unit)}
+              {tr({ en: "after", ru: "после", zh: "之后", tr: "sonra", ar: "بعد" })} · {r.after}{tr(r.unit)}
             </motion.text>
           </g>
         );
@@ -330,7 +330,7 @@ function Languages({ t, on, tr, langs, remember }: SceneProps & { langs: { code:
         <motion.g initial={false} animate={{ opacity: on ? 1 : 0 }} transition={{ delay: 0.8 }}>
           <rect x={700} y={360} width={220} height={80} rx={20} fill={t.ink} />
           <text x={810} y={396} textAnchor="middle" fontSize={20} fill="#fff" fontFamily={MONO}>locale = {l.code}</text>
-          <text x={810} y={424} textAnchor="middle" fontSize={18} fill="#ffffffaa" fontFamily={MONO}>{tr(["saved for return", "сохранено"])}</text>
+          <text x={810} y={424} textAnchor="middle" fontSize={18} fill="#ffffffaa" fontFamily={MONO}>{tr({ en: "saved for return", ru: "сохранено", zh: "已保存以便回访", tr: "geri dönüş için kaydedildi", ar: "محفوظ للعودة" })}</text>
         </motion.g>
       )}
     </g>
@@ -463,7 +463,7 @@ function Latency({ t, on, tr, p95 }: SceneProps & { p95: number }) {
       <motion.g initial={false} animate={{ opacity: on ? 1 : 0 }} transition={{ delay: 1.3 }}>
         <rect x={p95x + 16} y={130} width={250} height={110} rx={20} fill={t.ink} />
         <text x={p95x + 40} y={174} fontSize={22} fill="#ffffffaa" fontFamily={MONO}>p95</text>
-        <Count to={p95} on={on} suffix={tr([" ms", " мс"])} x={p95x + 40} y={222} size={46} fill="#fff" anchor="start" />
+        <Count to={p95} on={on} suffix={tr({ en: " ms", ru: " мс", zh: " 毫秒", tr: " ms", ar: " مللي ثانية" })} x={p95x + 40} y={222} size={46} fill="#fff" anchor="start" />
       </motion.g>
       <g>
         <rect x={120} y={110} width={150} height={52} rx={26} fill={t.b} />
@@ -509,7 +509,7 @@ function HexZoom({ t, on, tr }: SceneProps) {
           <text x={1040} y={219 + i * 90} textAnchor="middle" fontSize={24} fontWeight={700} fill={i === 2 ? "#fff" : t.a} fontFamily={MONO}>{r}</text>
         </motion.g>
       ))}
-      <Caption x={100} y={110} fill={t.a}>{tr(["one grid, every zoom level", "одна сетка на всех масштабах"])}</Caption>
+      <Caption x={100} y={110} fill={t.a}>{tr({ en: "one grid, every zoom level", ru: "одна сетка на всех масштабах", zh: "一套网格，适配所有缩放级别", tr: "tek ızgara, her yakınlaştırma düzeyi", ar: "شبكة واحدة لكل مستويات التكبير" })}</Caption>
     </g>
   );
 }
@@ -537,7 +537,7 @@ function Slides({ t, on, tr, items }: SceneProps & { items: L[] }) {
 
 /** Roles × resources matrix filling with allow/deny, audit log ticking */
 function Access({ t, on, tr, badge }: SceneProps & { badge: L }) {
-  const roles: L[] = [["Owner", "Владелец"], ["Admin", "Админ"], ["Ops", "Ops"], ["Viewer", "Наблюдатель"]];
+  const roles: L[] = [{ en: "Owner", ru: "Владелец", zh: "所有者", tr: "Sahip", ar: "المالك" }, { en: "Admin", ru: "Админ", zh: "管理员", tr: "Yönetici", ar: "مدير" }, { en: "Ops", ru: "Ops", zh: "运维", tr: "Operasyon", ar: "العمليات" }, { en: "Viewer", ru: "Наблюдатель", zh: "查看者", tr: "Görüntüleyici", ar: "مشاهد" }];
   const res = ["users", "funds", "reports", "settings"];
   const allow = [[1, 1, 1, 1], [1, 0, 1, 1], [0, 1, 1, 0], [0, 0, 1, 0]];
   return (
@@ -596,7 +596,7 @@ function Contract({ t, on, tr }: SceneProps) {
       ))}
       <motion.g initial={false} animate={{ opacity: on ? 1 : 0 }} transition={{ delay: 1.6 }}>
         <rect x={420} y={565} width={360} height={56} rx={28} fill={t.ink} />
-        <text x={600} y={601} textAnchor="middle" fontSize={22} fontWeight={700} fill="#fff" fontFamily={SANS}>{tr(["0 breaking changes", "0 ломающих изменений"])}</text>
+        <text x={600} y={601} textAnchor="middle" fontSize={22} fontWeight={700} fill="#fff" fontFamily={SANS}>{tr({ en: "0 breaking changes", ru: "0 ломающих изменений", zh: "0 个破坏性变更", tr: "0 uyumsuzluk yaratan değişiklik", ar: "0 تغييرات جذرية" })}</text>
       </motion.g>
     </g>
   );
@@ -617,12 +617,12 @@ function Funnel({ t, on, tr, total, steps }: SceneProps & { total: number; steps
           animate={{ x: [0, 1020], opacity: [0, 1, 1, 0] }} transition={{ duration: 4, repeat: Infinity, delay: k * 0.22, ease: "linear" }} />
       ))}
       <Count to={total} on={on} suffix="+" x={600} y={150} size={84} fill={t.ink} />
-      <Caption x={600} y={190} fill={t.a} anchor="middle">{tr(["investors onboarded", "инвесторов прошли онбординг"])}</Caption>
+      <Caption x={600} y={190} fill={t.a} anchor="middle">{tr({ en: "investors onboarded", ru: "инвесторов прошли онбординг", zh: "位投资人完成入驻", tr: "yatırımcı onboard edildi", ar: "مستثمرون أنهوا الإعداد" })}</Caption>
       {[0, 1, 2, 3, 4, 5].map((m) => (
         <motion.rect key={m} x={120 + m * 165} y={520} width={150} height={40} rx={10} fill={t.a} initial={false}
           animate={{ opacity: on ? 0.25 + m * 0.13 : 0.1 }} transition={{ delay: on ? 1.2 + m * 0.15 : 0 }} />
       ))}
-      <Caption x={120} y={600} fill={t.a}>{tr(["vesting schedule", "график вестинга"])}</Caption>
+      <Caption x={120} y={600} fill={t.a}>{tr({ en: "vesting schedule", ru: "график вестинга", zh: "解锁（vesting）计划", tr: "vesting takvimi", ar: "جدول الاستحقاق (Vesting)" })}</Caption>
     </g>
   );
 }
@@ -665,36 +665,36 @@ function TokenOrbit({ t, on, tr, utilities }: SceneProps & { utilities: L[] }) {
 // ── Case → scene ───────────────────────────────────────────────
 
 const SCENES: Record<string, (p: SceneProps) => React.ReactElement> = {
-  "micro-1": (p) => <Matrix {...p} total={47} label={["scenarios", "сценариев"]} result={["0 bugs in production", "0 багов в продакшене"]} />,
-  "micro-2": (p) => <Pipeline {...p} steps={[["Build", "Сборка"], ["Tests", "Тесты"], ["Lint", "Линт"], ["Security", "Безопасность"], ["Deploy", "Деплой"]]} caught={12} caughtLabel={["issues caught before users", "проблем поймано до пользователей"]} />,
-  "micro-3": (p) => <BeforeAfter {...p} rows={[{ label: ["Developer onboarding", "Адаптация разработчика"], before: 14, after: 3, unit: [" days", " дн."], max: 14, better: "lower" }]} />,
-  "micro-4": (p) => <Hub {...p} center={["dApp", "dApp"]} nodes={["MetaMask", "Rabby", "Coinbase", "Trust", "Rainbow", "OKX", "Phantom", "WalletConnect"]} badge={["8 providers · 0 errors", "8 провайдеров · 0 ошибок"]} />,
-  "micro-5": (p) => <Hub {...p} center={["RPC", "RPC"]} nodes={["Node A", "Node B", "Node C", "Node D"]} failover badge={["99.99% uptime · auto failover", "99.99% аптайм · автопереключение"]} />,
-  "micro-6": (p) => <Tree {...p} root={["Product", "Продукт"]} branches={[{ label: ["Onboarding", "Онбординг"], leaves: 3 }, { label: ["Catalog", "Каталог"], leaves: 4 }, { label: ["Checkout", "Оформление"], leaves: 3 }, { label: ["Account", "Кабинет"], leaves: 2 }]} />,
+  "micro-1": (p) => <Matrix {...p} total={47} label={{ en: "scenarios", ru: "сценариев", zh: "种场景", tr: "senaryo", ar: "سيناريوهات" }} result={{ en: "0 bugs in production", ru: "0 багов в продакшене", zh: "生产环境 0 个 bug", tr: "production'da 0 hata", ar: "0 أخطاء في الإنتاج" }} />,
+  "micro-2": (p) => <Pipeline {...p} steps={[{ en: "Build", ru: "Сборка", zh: "构建", tr: "Derleme", ar: "البناء" }, { en: "Tests", ru: "Тесты", zh: "测试", tr: "Testler", ar: "الاختبارات" }, { en: "Lint", ru: "Линт", zh: "Lint", tr: "Lint", ar: "Lint" }, { en: "Security", ru: "Безопасность", zh: "安全", tr: "Güvenlik", ar: "الأمان" }, { en: "Deploy", ru: "Деплой", zh: "部署", tr: "Dağıtım", ar: "النشر" }]} caught={12} caughtLabel={{ en: "issues caught before users", ru: "проблем поймано до пользователей", zh: "个问题在用户发现前被拦截", tr: "kullanıcılar görmeden yakalanan sorunlar", ar: "مشكلة رُصدت قبل وصولها للمستخدمين" }} />,
+  "micro-3": (p) => <BeforeAfter {...p} rows={[{ label: { en: "Developer onboarding", ru: "Адаптация разработчика", zh: "开发者上手", tr: "Geliştirici onboarding'i", ar: "تأهيل المطوّر" }, before: 14, after: 3, unit: { en: " days", ru: " дн.", zh: " 天", tr: " gün", ar: " أيام" }, max: 14, better: "lower" }]} />,
+  "micro-4": (p) => <Hub {...p} center={{ en: "dApp", ru: "dApp", zh: "dApp", tr: "dApp", ar: "dApp" }} nodes={["MetaMask", "Rabby", "Coinbase", "Trust", "Rainbow", "OKX", "Phantom", "WalletConnect"]} badge={{ en: "8 providers · 0 errors", ru: "8 провайдеров · 0 ошибок", zh: "8 个服务商 · 0 错误", tr: "8 sağlayıcı · 0 hata", ar: "8 مزوّدين · 0 أخطاء" }} />,
+  "micro-5": (p) => <Hub {...p} center={{ en: "RPC", ru: "RPC", zh: "RPC", tr: "RPC", ar: "RPC" }} nodes={["Node A", "Node B", "Node C", "Node D"]} failover badge={{ en: "99.99% uptime · auto failover", ru: "99.99% аптайм · автопереключение", zh: "99.99% 可用性 · 自动故障转移", tr: "%99,99 uptime · otomatik failover", ar: "99.99% وقت تشغيل · تحويل تلقائي عند الأعطال" }} />,
+  "micro-6": (p) => <Tree {...p} root={{ en: "Product", ru: "Продукт", zh: "产品", tr: "Ürün", ar: "منتج" }} branches={[{ label: { en: "Onboarding", ru: "Онбординг", zh: "上手引导", tr: "Onboarding", ar: "الإعداد والتأهيل" }, leaves: 3 }, { label: { en: "Catalog", ru: "Каталог", zh: "目录", tr: "Katalog", ar: "الكتالوج" }, leaves: 4 }, { label: { en: "Checkout", ru: "Оформление", zh: "结账", tr: "Ödeme", ar: "إتمام الشراء" }, leaves: 3 }, { label: { en: "Account", ru: "Кабинет", zh: "账户", tr: "Hesap", ar: "الحساب" }, leaves: 2 }]} />,
   "micro-7": (p) => <Languages {...p} langs={[{ code: "EN", hello: "Welcome back", cta: "Continue" }, { code: "RU", hello: "С возвращением", cta: "Продолжить" }, { code: "DE", hello: "Willkommen", cta: "Weiter" }]} />,
   "micro-8": (p) => <Languages {...p} remember langs={[{ code: "RU", hello: "С возвращением", cta: "Продолжить" }, { code: "EN", hello: "Welcome back", cta: "Continue" }]} />,
-  "micro-9": (p) => <Growth {...p} values={[100, 102, 101, 106, 112, 115, 121, 123]} badge="+23%" label={["mobile conversion", "мобильная конверсия"]} />,
-  "micro-10": (p) => <Pipeline {...p} steps={[["Tag", "Тег"], ["Build", "Сборка"], ["Artifact", "Артефакт"], ["Deploy", "Деплой"]]} finish={["any version in < 5 min", "любая версия за < 5 мин"]} />,
-  "micro-11": (p) => <Matrix {...p} total={36} flaky={[4, 11, 19, 27, 33]} label={["checks", "проверок"]} result={["no false positives", "без ложных срабатываний"]} />,
-  "micro-12": (p) => <Hub {...p} center={["KYC layer", "KYC-слой"]} nodes={["Provider A", "Provider B", "Provider C", "Provider D"]} failover badge={["switch providers without code", "смена провайдера без кода"]} />,
-  "micro-13": (p) => <Funnel {...p} total={800} steps={[["Sign-up", "Регистрация"], ["KYC", "KYC"], ["Allocation", "Аллокация"], ["Vesting", "Вестинг"]]} />,
-  "micro-14": (p) => <Access {...p} badge={["SOC 2 ✓", "SOC 2 ✓"]} />,
-  "micro-15": (p) => <TokenOrbit {...p} utilities={[["Access", "Доступ"], ["Discounts", "Скидки"], ["Governance", "Голосование"], ["Rewards", "Бонусы"], ["Compliance ✓", "Compliance ✓"]]} />,
-  "micro-16": (p) => <Morph {...p} title={["legal-safe staking copy", "юридически безопасные формулировки"]} pairs={[[["earn interest", "получайте проценты"], ["lock for benefits", "блокируйте ради бенефитов"]], [["guaranteed APY", "гарантированный доход"], ["benefits while locked", "бенефиты на время блокировки"]], [["passive income", "пассивный доход"], ["member perks", "привилегии участника"]]]} />,
-  "micro-17": (p) => <Gauge {...p} value={90} label={["tasks solved without devs", "задач без разработчиков"]} side={[["Users & roles", "Пользователи и роли"], ["Content & banners", "Контент и баннеры"], ["Reports & export", "Отчёты и выгрузки"]]} />,
-  "micro-18": (p) => <Pipeline {...p} steps={[["Event", "Событие"], ["Schema", "Схема"], ["Pipeline", "Пайплайн"], ["Dashboard", "Дашборд"]]} finish={["actionable from day one", "данные с первого дня"]} />,
-  "micro-19": (p) => <BeforeAfter {...p} rows={[{ label: ["No-shows", "Неявки"], before: 32, after: 8, unit: ["%", "%"], max: 32, better: "lower" }, { label: ["Chargebacks", "Чарджбэки"], before: 100, after: 10, unit: ["%", "%"], max: 100, better: "lower" }]} />,
-  "micro-20": (p) => <Milestones {...p} items={[["Scope", "Объём"], ["Change req.", "Запрос"], ["Estimate", "Оценка"], ["Approved", "Одобрено"], ["Logged", "В журнале"]]} />,
-  "micro-21": (p) => <Weeks {...p} weeks={6} item={["Demo", "Демо"]} label={["every week — demo + recording", "каждую неделю — демо и запись"]} />,
-  "micro-22": (p) => <Slides {...p} items={[["Problem", "Проблема"], ["Solution", "Решение"], ["Market", "Рынок"], ["Traction", "Трекшн"], ["Ask", "Раунд"]]} />,
-  "micro-23": (p) => <Milestones {...p} items={[["Architecture", "Архитектура"], ["Security", "Безопасность"], ["Data", "Данные"], ["DD done · 3 days", "DD за 3 дня"]]} />,
+  "micro-9": (p) => <Growth {...p} values={[100, 102, 101, 106, 112, 115, 121, 123]} badge="+23%" label={{ en: "mobile conversion", ru: "мобильная конверсия", zh: "移动端转化率", tr: "mobil dönüşüm", ar: "التحويل عبر الجوال" }} />,
+  "micro-10": (p) => <Pipeline {...p} steps={[{ en: "Tag", ru: "Тег", zh: "标签", tr: "Etiket", ar: "وسم" }, { en: "Build", ru: "Сборка", zh: "构建", tr: "Derleme", ar: "البناء" }, { en: "Artifact", ru: "Артефакт", zh: "交付物", tr: "Çıktı", ar: "الملف" }, { en: "Deploy", ru: "Деплой", zh: "部署", tr: "Dağıtım", ar: "النشر" }]} finish={{ en: "any version in < 5 min", ru: "любая версия за < 5 мин", zh: "任意版本 5 分钟内回滚", tr: "herhangi bir sürüm < 5 dk'da", ar: "أي إصدار خلال أقل من 5 دقائق" }} />,
+  "micro-11": (p) => <Matrix {...p} total={36} flaky={[4, 11, 19, 27, 33]} label={{ en: "checks", ru: "проверок", zh: "项检查", tr: "kontrol", ar: "فحوصات" }} result={{ en: "no false positives", ru: "без ложных срабатываний", zh: "无误报", tr: "yanlış pozitif yok", ar: "دون نتائج إيجابية كاذبة" }} />,
+  "micro-12": (p) => <Hub {...p} center={{ en: "KYC layer", ru: "KYC-слой", zh: "KYC 层", tr: "KYC katmanı", ar: "طبقة KYC" }} nodes={["Provider A", "Provider B", "Provider C", "Provider D"]} failover badge={{ en: "switch providers without code", ru: "смена провайдера без кода", zh: "无需改代码即可切换服务商", tr: "kod yazmadan sağlayıcı değiştirin", ar: "تبديل المزوّدين دون تعديل الشيفرة" }} />,
+  "micro-13": (p) => <Funnel {...p} total={800} steps={[{ en: "Sign-up", ru: "Регистрация", zh: "注册", tr: "Kayıt", ar: "التسجيل" }, { en: "KYC", ru: "KYC", zh: "KYC", tr: "KYC", ar: "KYC" }, { en: "Allocation", ru: "Аллокация", zh: "分配", tr: "Tahsis", ar: "التخصيص" }, { en: "Vesting", ru: "Вестинг", zh: "解锁期", tr: "Vesting", ar: "الاستحقاق" }]} />,
+  "micro-14": (p) => <Access {...p} badge={{ en: "SOC 2 ✓", ru: "SOC 2 ✓", zh: "SOC 2 ✓", tr: "SOC 2 ✓", ar: "SOC 2 ✓" }} />,
+  "micro-15": (p) => <TokenOrbit {...p} utilities={[{ en: "Access", ru: "Доступ", zh: "访问权限", tr: "Erişim", ar: "الوصول" }, { en: "Discounts", ru: "Скидки", zh: "折扣", tr: "İndirimler", ar: "الخصومات" }, { en: "Governance", ru: "Голосование", zh: "治理投票", tr: "Yönetişim", ar: "الحوكمة" }, { en: "Rewards", ru: "Бонусы", zh: "奖励", tr: "Ödüller", ar: "المكافآت" }, { en: "Compliance ✓", ru: "Compliance ✓", zh: "合规 ✓", tr: "Uyumluluk ✓", ar: "الامتثال ✓" }]} />,
+  "micro-16": (p) => <Morph {...p} title={{ en: "legal-safe staking copy", ru: "юридически безопасные формулировки", zh: "合规安全的质押文案", tr: "hukuken güvenli staking metni", ar: "صياغة قانونية آمنة لخدمة التخزين" }} pairs={[[{ en: "earn interest", ru: "получайте проценты", zh: "赚取利息", tr: "faiz kazan", ar: "اكسب فائدة" }, { en: "lock for benefits", ru: "блокируйте ради бенефитов", zh: "锁仓换权益", tr: "avantajlar için kilitle", ar: "اقفل مقابل مزايا" }], [{ en: "guaranteed APY", ru: "гарантированный доход", zh: "保证 APY", tr: "garantili APY", ar: "عائد سنوي مضمون" }, { en: "benefits while locked", ru: "бенефиты на время блокировки", zh: "锁仓期间享权益", tr: "kilitliyken avantajlar", ar: "مزايا أثناء القفل" }], [{ en: "passive income", ru: "пассивный доход", zh: "被动收入", tr: "pasif gelir", ar: "دخل سلبي" }, { en: "member perks", ru: "привилегии участника", zh: "会员专属权益", tr: "üye ayrıcalıkları", ar: "مزايا الأعضاء" }]]} />,
+  "micro-17": (p) => <Gauge {...p} value={90} label={{ en: "tasks solved without devs", ru: "задач без разработчиков", zh: "项任务无需开发即可解决", tr: "geliştirici olmadan çözülen görevler", ar: "مهام تُنجَز دون مطوّرين" }} side={[{ en: "Users & roles", ru: "Пользователи и роли", zh: "用户与角色", tr: "Kullanıcılar ve roller", ar: "المستخدمون والأدوار" }, { en: "Content & banners", ru: "Контент и баннеры", zh: "内容与横幅", tr: "İçerik ve bannerlar", ar: "المحتوى واللافتات" }, { en: "Reports & export", ru: "Отчёты и выгрузки", zh: "报表与导出", tr: "Raporlar ve dışa aktarma", ar: "التقارير والتصدير" }]} />,
+  "micro-18": (p) => <Pipeline {...p} steps={[{ en: "Event", ru: "Событие", zh: "事件", tr: "Olay", ar: "الحدث" }, { en: "Schema", ru: "Схема", zh: "Schema", tr: "Şema", ar: "المخطط" }, { en: "Pipeline", ru: "Пайплайн", zh: "流水线", tr: "Hat", ar: "المسار" }, { en: "Dashboard", ru: "Дашборд", zh: "看板", tr: "Panel", ar: "لوحة المعلومات" }]} finish={{ en: "actionable from day one", ru: "данные с первого дня", zh: "第一天起就能指导行动", tr: "ilk günden uygulanabilir", ar: "جاهزة للتنفيذ من اليوم الأول" }} />,
+  "micro-19": (p) => <BeforeAfter {...p} rows={[{ label: { en: "No-shows", ru: "Неявки", zh: "爽约", tr: "Gelmeyenler", ar: "عدم الحضور" }, before: 32, after: 8, unit: { en: "%", ru: "%", zh: "%", tr: "%", ar: "%" }, max: 32, better: "lower" }, { label: { en: "Chargebacks", ru: "Чарджбэки", zh: "拒付", tr: "Ters ibrazlar", ar: "الاسترجاعات (Chargebacks)" }, before: 100, after: 10, unit: { en: "%", ru: "%", zh: "%", tr: "%", ar: "%" }, max: 100, better: "lower" }]} />,
+  "micro-20": (p) => <Milestones {...p} items={[{ en: "Scope", ru: "Объём", zh: "范围", tr: "Kapsam", ar: "النطاق" }, { en: "Change req.", ru: "Запрос", zh: "变更请求", tr: "Değişiklik talebi", ar: "طلب تغيير" }, { en: "Estimate", ru: "Оценка", zh: "估算", tr: "Tahmin", ar: "التقدير" }, { en: "Approved", ru: "Одобрено", zh: "已批准", tr: "Onaylandı", ar: "معتمد" }, { en: "Logged", ru: "В журнале", zh: "已记录", tr: "Kaydedildi", ar: "مسجّل" }]} />,
+  "micro-21": (p) => <Weeks {...p} weeks={6} item={{ en: "Demo", ru: "Демо", zh: "演示", tr: "Demo", ar: "عرض تجريبي" }} label={{ en: "every week — demo + recording", ru: "каждую неделю — демо и запись", zh: "每周一次——演示 + 录屏", tr: "her hafta — demo + kayıt", ar: "كل أسبوع — عرض تجريبي + تسجيل" }} />,
+  "micro-22": (p) => <Slides {...p} items={[{ en: "Problem", ru: "Проблема", zh: "问题", tr: "Sorun", ar: "المشكلة" }, { en: "Solution", ru: "Решение", zh: "解决方案", tr: "Çözüm", ar: "الحل" }, { en: "Market", ru: "Рынок", zh: "市场", tr: "Pazar", ar: "السوق" }, { en: "Traction", ru: "Трекшн", zh: "增长数据", tr: "Traction", ar: "الزخم" }, { en: "Ask", ru: "Раунд", zh: "融资需求", tr: "Talep", ar: "الطلب" }]} />,
+  "micro-23": (p) => <Milestones {...p} items={[{ en: "Architecture", ru: "Архитектура", zh: "架构", tr: "Mimari", ar: "البنية المعمارية" }, { en: "Security", ru: "Безопасность", zh: "安全", tr: "Güvenlik", ar: "الأمان" }, { en: "Data", ru: "Данные", zh: "数据", tr: "Veri", ar: "البيانات" }, { en: "DD done · 3 days", ru: "DD за 3 дня", zh: "3 天完成尽调", tr: "DD tamam · 3 gün", ar: "اكتمل الفحص النافي للجهالة · 3 أيام" }]} />,
   "micro-24": (p) => <Contract {...p} />,
   "micro-25": (p) => <Latency {...p} p95={180} />,
   "micro-26": (p) => <HexZoom {...p} />,
-  "micro-27": (p) => <Hub {...p} center={["Public API", "Публичный API"]} nodes={["GET /rates", "GET /stats", "GET /assets"]} many={50} badge={["50+ integrations · read-only", "50+ интеграций · только чтение"]} />,
-  "micro-28": (p) => <Morph {...p} title={["engineering → founder voice", "инженерный язык → голос основателя"]} pairs={[[["sharded Postgres with read replicas", "шардированный Postgres с репликами"], ["it stays fast as you grow", "работает быстро при любом росте"]], [["idempotent payment webhooks", "идемпотентные вебхуки платежей"], ["no customer is charged twice", "клиент не заплатит дважды"]]]} />,
-  "micro-29": (p) => <Redact {...p} stamp={["NDA · IP protected", "NDA · IP защищён"]} />,
-  "micro-30": (p) => <Milestones {...p} items={[["Discovery", "Discovery"], ["Design", "Дизайн"], ["MVP", "MVP"], ["Launch", "Запуск"], ["Support", "Поддержка"]]} />,
+  "micro-27": (p) => <Hub {...p} center={{ en: "Public API", ru: "Публичный API", zh: "公开 API", tr: "Public API", ar: "API عام" }} nodes={["GET /rates", "GET /stats", "GET /assets"]} many={50} badge={{ en: "50+ integrations · read-only", ru: "50+ интеграций · только чтение", zh: "50+ 集成 · 只读", tr: "50+ entegrasyon · salt okunur", ar: "50+ تكاملًا · للقراءة فقط" }} />,
+  "micro-28": (p) => <Morph {...p} title={{ en: "engineering → founder voice", ru: "инженерный язык → голос основателя", zh: "工程语言 → 创始人的表达", tr: "mühendislik → kurucu dili", ar: "من لغة الهندسة إلى لغة المؤسس" }} pairs={[[{ en: "sharded Postgres with read replicas", ru: "шардированный Postgres с репликами", zh: "带只读副本的分片 Postgres", tr: "read replica'lı shard'lanmış Postgres", ar: "Postgres موزّع (sharded) مع نسخ قراءة" }, { en: "it stays fast as you grow", ru: "работает быстро при любом росте", zh: "业务增长，速度依旧", tr: "büyürken de hızlı kalır", ar: "يبقى سريعًا مع نموّك" }], [{ en: "idempotent payment webhooks", ru: "идемпотентные вебхуки платежей", zh: "幂等的支付 webhook", tr: "idempotent ödeme webhook'ları", ar: "Webhooks دفع متكررة الأمان (idempotent)" }, { en: "no customer is charged twice", ru: "клиент не заплатит дважды", zh: "绝不会向客户重复扣款", tr: "hiçbir müşteriden iki kez çekim yapılmaz", ar: "لا يُخصم من أي عميل مرتين" }]]} />,
+  "micro-29": (p) => <Redact {...p} stamp={{ en: "NDA · IP protected", ru: "NDA · IP защищён", zh: "NDA · IP 受保护", tr: "NDA · IP korumalı", ar: "NDA · حماية الملكية الفكرية" }} />,
+  "micro-30": (p) => <Milestones {...p} items={[{ en: "Discovery", ru: "Discovery", zh: "需求调研", tr: "Keşif", ar: "الاستكشاف" }, { en: "Design", ru: "Дизайн", zh: "设计", tr: "Tasarım", ar: "التصميم" }, { en: "MVP", ru: "MVP", zh: "MVP", tr: "MVP", ar: "MVP" }, { en: "Launch", ru: "Запуск", zh: "上线", tr: "Lansman", ar: "الإطلاق" }, { en: "Support", ru: "Поддержка", zh: "支持", tr: "Destek", ar: "الدعم" }]} />,
 };
 
 export function hasMicroVisual(id: string) {
@@ -709,7 +709,7 @@ export function MicroVisual({ id, category }: { id: string; category: CaseCatego
   const Scene = SCENES[id];
   if (!Scene) return null;
   const t = THEMES[category];
-  const tr = (l: L) => (language === "en" ? l[0] : l[1]);
+  const tr = (l: L) => pick(l, language);
   return (
     <div ref={ref} className="relative overflow-hidden rounded-3xl border border-border shadow-[0_40px_80px_-50px_rgba(10,10,10,0.35)]" style={{ background: t.bg }}>
       <div
@@ -717,7 +717,7 @@ export function MicroVisual({ id, category }: { id: string; category: CaseCatego
         className="pointer-events-none absolute inset-0 opacity-60"
         style={{ backgroundImage: `radial-gradient(${t.a}22 1.5px, transparent 1.5px)`, backgroundSize: "28px 28px" }}
       />
-      <svg viewBox="0 0 1200 640" className="relative block h-auto w-full" role="img" aria-label={language === "en" ? "Animated illustration of the result" : "Анимированная иллюстрация результата"}>
+      <svg viewBox="0 0 1200 640" className="relative block h-auto w-full" role="img" aria-label={pick({ en: "Animated illustration of the result", ru: "Анимированная иллюстрация результата", zh: "成果的动画示意图", tr: "Sonucun animasyonlu illüstrasyonu", ar: "رسم متحرك يوضح النتيجة" }, language)}>
         <Scene t={t} on={reduced ? true : inView} tr={tr} />
       </svg>
     </div>

@@ -17,9 +17,15 @@ const securityHeaders = [
   // Allow cross-origin Resource Timing so real-user-monitoring (RUM) can read
   // timing details for our assets. Audit flagged this as missing on the CDN.
   { key: "Timing-Allow-Origin", value: "*" },
+  // Pages and demos can be framed only by the site itself.
+  { key: "Content-Security-Policy", value: "frame-ancestors 'self'" },
+  { key: "X-Robots-Tag", value: "noarchive" },
 ];
 
 const nextConfig: NextConfig = {
+  poweredByHeader: false,
+  // Only minified bundles reach the browser — no source maps with the original code.
+  productionBrowserSourceMaps: false,
   async headers() {
     return [
       {

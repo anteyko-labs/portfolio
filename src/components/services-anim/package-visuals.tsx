@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { EASE, useLoop } from "@/components/motion/kit";
 import { useLanguage } from "@/lib/language-context";
+import { pick } from "@/lib/i18n-text";
 import "./services-anim.css";
 
 // One small looping scene per package, drawn in code: a site assembling itself,
@@ -45,7 +46,7 @@ function SiteBuild({ className }: { className?: string }) {
   const c = CURSOR[Math.min(s, 6)];
   const blk = (i: number) => ({ initial: false as const, animate: { opacity: on(i) ? 1 : 0, y: on(i) ? 0 : 7 }, transition: T });
   return (
-    <Frame id="launch-site" svgRef={ref} className={className} label={language === "en" ? "A website assembling itself block by block" : "Сайт собирается по блокам"}>
+    <Frame id="launch-site" svgRef={ref} className={className} label={pick({ en: "A website assembling itself block by block", ru: "Сайт собирается по блокам", zh: "网站一块一块自行搭建", tr: "Blok blok kendini kuran bir web sitesi", ar: "موقع يبني نفسه كتلةً بعد كتلة" }, language)}>
       <defs>
         <linearGradient id="sv-sb-g" x1="0" x2="1" y1="0" y2="1">
           <stop offset="0" stopColor="#22D3EE" />
@@ -67,7 +68,7 @@ function SiteBuild({ className }: { className?: string }) {
       <motion.g initial={false} animate={{ opacity: live ? 1 : 0 }} transition={T}>
         <rect x="252" y="10" width="52" height="10" rx="5" fill="rgba(34,197,94,0.18)" stroke="rgba(74,222,128,0.5)" />
         <circle cx="260" cy="15" r="2" fill="#4ADE80" />
-        <text x="266" y="17.5" fontSize="6.5" fill="#86EFAC">{language === "en" ? "live" : "в сети"}</text>
+        <text x="266" y="17.5" fontSize="6.5" fill="#86EFAC">{pick({ en: "live", ru: "в сети", zh: "实时", tr: "canlı", ar: "مباشر" }, language)}</text>
       </motion.g>
       <motion.g initial={false} animate={{ opacity: live ? 0 : 1 }} transition={T}>
         <circle cx="260" cy="15" r="3" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="1.2" strokeDasharray="10 9" className="sv-spin" />
@@ -131,18 +132,17 @@ const RING_C = r2(2 * Math.PI * 24);
 
 function SprintBoard({ className }: { className?: string }) {
   const { language } = useLanguage();
-  const en = language === "en";
   const { ref, tick, reduced } = useLoop<HTMLDivElement>(700);
   const s = reduced ? 10 : tick % 11;
   const col = [0, 0, 0, 0];
   MOVES.slice(0, Math.min(s, 8)).forEach(([t, c]) => (col[t] = c));
   const pos = col.map((c, i) => ({ x: COLS[c] + 4, y: 32 + col.slice(0, i).filter((k) => k === c).length * 27 }));
   const done = col.filter((c) => c === 2).length;
-  const heads = en ? ["To do", "In progress", "Done"] : ["Сделать", "В работе", "Готово"];
-  const tasks = en ? ["Auth", "Payments", "Dashboard", "Analytics"] : ["Вход", "Оплата", "Дашборд", "Аналитика"];
+  const heads = pick({ en: ["To do", "In progress", "Done"], ru: ["Сделать", "В работе", "Готово"], zh: ["待办", "进行中", "已完成"], tr: ["Yapılacak", "Devam ediyor", "Tamamlandı"], ar: ["قيد الانتظار", "قيد التنفيذ", "مكتمل"] }, language);
+  const tasks = pick({ en: ["Auth", "Payments", "Dashboard", "Analytics"], ru: ["Вход", "Оплата", "Дашборд", "Аналитика"], zh: ["认证", "支付", "看板", "数据分析"], tr: ["Kimlik doğrulama", "Ödemeler", "Panel", "Analitik"], ar: ["المصادقة", "المدفوعات", "لوحة المعلومات", "التحليلات"] }, language);
   const shipped = s >= 9;
   return (
-    <Frame id="mvp-sprint" svgRef={ref} className={className} label={en ? "Sprint board with tasks moving to done" : "Доска спринта: задачи переходят в «Готово»"}>
+    <Frame id="mvp-sprint" svgRef={ref} className={className} label={pick({ en: "Sprint board with tasks moving to done", ru: "Доска спринта: задачи переходят в «Готово»", zh: "任务不断移至“已完成”的冲刺看板", tr: "Görevlerin tamamlandıya geçtiği sprint panosu", ar: "لوحة Sprint تنتقل فيها المهام إلى «مكتمل»" }, language)}>
       {COLS.map((x, i) => (
         <g key={x}>
           <rect x={x} y="10" width="76" height="16" rx="4" fill="rgba(255,255,255,0.06)" />
@@ -191,11 +191,11 @@ function SprintBoard({ className }: { className?: string }) {
           <stop offset="1" stopColor="#4ADE80" />
         </linearGradient>
       </defs>
-      <text x="284" y="106" fontSize="6.5" textAnchor="middle" fill="rgba(255,255,255,0.55)">{en ? "SPRINT 1" : "СПРИНТ 1"}</text>
-      <text x="284" y="117" fontSize="6.5" textAnchor="middle" fill="rgba(255,255,255,0.35)">{en ? `day ${Math.min(s + 1, 10)}/10` : `день ${Math.min(s + 1, 10)}/10`}</text>
+      <text x="284" y="106" fontSize="6.5" textAnchor="middle" fill="rgba(255,255,255,0.55)">{pick({ en: "SPRINT 1", ru: "СПРИНТ 1", zh: "冲刺 1", tr: "SPRINT 1", ar: "SPRINT 1" }, language)}</text>
+      <text x="284" y="117" fontSize="6.5" textAnchor="middle" fill="rgba(255,255,255,0.35)">{pick({ en: `day ${Math.min(s + 1, 10)}/10`, ru: `день ${Math.min(s + 1, 10)}/10`, zh: `第 ${Math.min(s + 1, 10)}/10 天`, tr: `gün ${Math.min(s + 1, 10)}/10`, ar: `اليوم ${Math.min(s + 1, 10)}/10` }, language)}</text>
       <motion.g initial={false} animate={{ opacity: shipped ? 1 : 0, y: shipped ? 0 : 6 }} transition={T}>
         <rect x="258" y="124" width="52" height="13" rx="6.5" fill="rgba(34,197,94,0.18)" stroke="rgba(74,222,128,0.55)" />
-        <text x="284" y="133" fontSize="6.5" textAnchor="middle" fill="#86EFAC">{en ? "demo ✓" : "демо ✓"}</text>
+        <text x="284" y="133" fontSize="6.5" textAnchor="middle" fill="#86EFAC">{pick({ en: "demo ✓", ru: "демо ✓", zh: "演示 ✓", tr: "demo ✓", ar: "عرض ✓" }, language)}</text>
       </motion.g>
     </Frame>
   );
@@ -214,13 +214,12 @@ const STARS = [[40, 20], [96, 36], [150, 18], [200, 30], [250, 14], [300, 60], [
 
 function LaunchCurve({ className }: { className?: string }) {
   const { language } = useLanguage();
-  const en = language === "en";
   const { ref, tick, reduced } = useLoop<HTMLDivElement>(750);
   const s = reduced ? 8 : tick % 9;
   const k = Math.min(s, 5);
-  const labels = en ? ["MVP", "Beta", "Launch", "Growth", "Scale"] : ["MVP", "Бета", "Запуск", "Рост", "Масштаб"];
+  const labels = pick({ en: ["MVP", "Beta", "Launch", "Growth", "Scale"], ru: ["MVP", "Бета", "Запуск", "Рост", "Масштаб"], zh: ["MVP", "Beta", "上线", "增长", "规模化"], tr: ["MVP", "Beta", "Lansman", "Büyüme", "Ölçek"], ar: ["MVP", "Beta", "الإطلاق", "النمو", "التوسّع"] }, language);
   return (
-    <Frame id="startup-key" svgRef={ref} className={className} label={en ? "A rocket climbing a growth curve past milestones" : "Ракета поднимается по кривой роста через этапы"}>
+    <Frame id="startup-key" svgRef={ref} className={className} label={pick({ en: "A rocket climbing a growth curve past milestones", ru: "Ракета поднимается по кривой роста через этапы", zh: "火箭沿增长曲线攀升，越过各个里程碑", tr: "Büyüme eğrisinde kilometre taşlarını geçerek yükselen bir roket", ar: "صاروخ يصعد على منحنى النمو متجاوزًا المحطات" }, language)}>
       <defs>
         <linearGradient id="sv-lc-l" x1="0" x2="1">
           <stop offset="0" stopColor="#818CF8" />
@@ -242,7 +241,7 @@ function LaunchCurve({ className }: { className?: string }) {
         <line key={y} x1="12" x2="308" y1={y} y2={y} stroke="rgba(255,255,255,0.06)" strokeDasharray="2 4" />
       ))}
       <text x="14" y="22" fontSize="14" fontWeight="700" fill="#fff">{USERS[k]}</text>
-      <text x="14" y="32" fontSize="6.5" fill="rgba(255,255,255,0.45)">{en ? "active users" : "активных пользователей"}</text>
+      <text x="14" y="32" fontSize="6.5" fill="rgba(255,255,255,0.45)">{pick({ en: "active users", ru: "активных пользователей", zh: "活跃用户", tr: "aktif kullanıcı", ar: "مستخدمون نشطون" }, language)}</text>
 
       <path d={AREA} fill="url(#sv-lc-a)" clipPath="url(#sv-lc-clip)" />
       <path d={LINE} fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="2" strokeDasharray="3 4" />
@@ -277,7 +276,6 @@ function LaunchCurve({ className }: { className?: string }) {
 
 function WalletTx({ className }: { className?: string }) {
   const { language } = useLanguage();
-  const en = language === "en";
   const { ref, tick, reduced } = useLoop<HTMLDivElement>(750);
   const s = reduced ? 7 : tick % 9;
   const signed = s >= 2;
@@ -285,7 +283,7 @@ function WalletTx({ className }: { className?: string }) {
   const conf = [0, 0, 0, 0, 1, 4, 8, 12, 12][s];
   const coin = s < 3 ? { x: 46, y: 64, o: 0 } : s === 3 ? { x: 46, y: 64, o: 1 } : { x: 160, y: 66, o: 0 };
   return (
-    <Frame id="web3-addon" svgRef={ref} className={className} label={en ? "Wallet signing a transaction that gets confirmed on chain" : "Кошелёк подписывает транзакцию, сеть её подтверждает"}>
+    <Frame id="web3-addon" svgRef={ref} className={className} label={pick({ en: "Wallet signing a transaction that gets confirmed on chain", ru: "Кошелёк подписывает транзакцию, сеть её подтверждает", zh: "钱包签署一笔交易并在链上完成确认", tr: "Bir işlemi imzalayan ve zincirde onaylanan cüzdan", ar: "محفظة توقّع معاملة ثم تُؤكَّد على السلسلة" }, language)}>
       <defs>
         <linearGradient id="sv-w-card" x1="0" x2="1" y1="0" y2="1">
           <stop offset="0" stopColor="#7C3AED" />
@@ -295,14 +293,14 @@ function WalletTx({ className }: { className?: string }) {
       {/* tx request */}
       <motion.g initial={false} animate={{ opacity: s >= 1 ? 1 : 0.35 }} transition={T}>
         <rect x="8" y="30" width="78" height="62" rx="7" fill="rgba(255,255,255,0.05)" stroke={signed ? "rgba(74,222,128,0.55)" : "rgba(255,255,255,0.12)"} style={{ transition: "stroke .4s" }} />
-        <text x="15" y="43" fontSize="6.5" fill="rgba(255,255,255,0.5)">{en ? "SIGN REQUEST" : "ПОДПИСЬ"}</text>
+        <text x="15" y="43" fontSize="6.5" fill="rgba(255,255,255,0.5)">{pick({ en: "SIGN REQUEST", ru: "ПОДПИСЬ", zh: "签名请求", tr: "İMZA TALEBİ", ar: "طلب توقيع" }, language)}</text>
         <text x="15" y="57" fontSize="10" fontWeight="700" fill="#fff">+1.00 ETH</text>
         <text x="15" y="67" fontSize="6" fill="rgba(255,255,255,0.4)">to 0x7f3a…c9e1</text>
         <rect x="15" y="74" width="64" height="12" rx="6" fill={signed ? "rgba(34,197,94,0.2)" : "rgba(255,255,255,0.08)"} style={{ transition: "fill .4s" }} />
         {signed ? (
-          <text x="47" y="82.5" fontSize="6.5" textAnchor="middle" fill="#86EFAC">{en ? "signed ✓" : "подписано ✓"}</text>
+          <text x="47" y="82.5" fontSize="6.5" textAnchor="middle" fill="#86EFAC">{pick({ en: "signed ✓", ru: "подписано ✓", zh: "已签名 ✓", tr: "imzalandı ✓", ar: "تم التوقيع ✓" }, language)}</text>
         ) : (
-          <text x="47" y="82.5" fontSize="6.5" textAnchor="middle" fill="rgba(255,255,255,0.6)">{en ? "awaiting…" : "ожидает…"}</text>
+          <text x="47" y="82.5" fontSize="6.5" textAnchor="middle" fill="rgba(255,255,255,0.6)">{pick({ en: "awaiting…", ru: "ожидает…", zh: "等待中…", tr: "bekleniyor…", ar: "بانتظار…" }, language)}</text>
         )}
       </motion.g>
       {s === 2 && <circle cx="47" cy="61" r="20" fill="none" stroke="#A78BFA" strokeWidth="1.5" className="sv-ping" />}
@@ -313,7 +311,7 @@ function WalletTx({ className }: { className?: string }) {
         <rect x="102" y="26" width="116" height="76" rx="10" fill="none" stroke="rgba(255,255,255,0.25)" />
         <rect x="112" y="36" width="14" height="10" rx="2" fill="#FDE68A" opacity="0.85" />
         <text x="208" y="44" fontSize="6.5" textAnchor="end" fill="rgba(255,255,255,0.7)">WALLET</text>
-        <text x="112" y="62" fontSize="6.5" fill="rgba(255,255,255,0.6)">{en ? "Balance" : "Баланс"}</text>
+        <text x="112" y="62" fontSize="6.5" fill="rgba(255,255,255,0.6)">{pick({ en: "Balance", ru: "Баланс", zh: "余额", tr: "Bakiye", ar: "الرصيد" }, language)}</text>
         <text x="112" y="77" fontSize="13" fontWeight="700" fill="#fff">{landed ? "3.40" : "2.40"} ETH</text>
         <text x="112" y="93" fontSize="6" fill="rgba(255,255,255,0.5)">0x7f3a…c9e1</text>
         {landed && !reduced && <circle cx="160" cy="64" r="22" fill="none" stroke="#F0ABFC" strokeWidth="1.5" className="sv-ping" />}
@@ -334,12 +332,12 @@ function WalletTx({ className }: { className?: string }) {
 
       {/* confirmations */}
       <rect x="234" y="30" width="78" height="62" rx="7" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.12)" />
-      <text x="241" y="43" fontSize="6.5" fill="rgba(255,255,255,0.5)">{en ? "CONFIRMATIONS" : "ПОДТВЕРЖДЕНИЯ"}</text>
+      <text x="241" y="43" fontSize="6.5" fill="rgba(255,255,255,0.5)">{pick({ en: "CONFIRMATIONS", ru: "ПОДТВЕРЖДЕНИЯ", zh: "确认数", tr: "ONAYLAR", ar: "التأكيدات" }, language)}</text>
       <text x="241" y="60" fontSize="12" fontWeight="700" fill="#fff">{conf}/12</text>
       <rect x="241" y="68" width="64" height="4" rx="2" fill="rgba(255,255,255,0.1)" />
       <motion.rect x="241" y="68" height="4" rx="2" fill="#A78BFA" initial={false} animate={{ width: r2((64 * conf) / 12) }} transition={{ duration: 0.6, ease: EASE }} />
       <motion.g initial={false} animate={{ opacity: conf === 12 ? 1 : 0 }} transition={T}>
-        <text x="241" y="84" fontSize="6.5" fill="#86EFAC">{en ? "finalized ✓" : "финализировано ✓"}</text>
+        <text x="241" y="84" fontSize="6.5" fill="#86EFAC">{pick({ en: "finalized ✓", ru: "финализировано ✓", zh: "已最终确认 ✓", tr: "kesinleşti ✓", ar: "تم الحسم نهائيًا ✓" }, language)}</text>
       </motion.g>
 
       {/* chain */}

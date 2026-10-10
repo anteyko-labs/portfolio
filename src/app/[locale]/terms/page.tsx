@@ -1,14 +1,14 @@
 import { PageWrapper } from "@/components/layout/page-wrapper";
 import { Section, SectionHeader } from "@/components/ui/section";
 import { localeAlternates } from "@/i18n/metadata";
-import type { Language } from "@/lib/translations";
+import { pick, type Language } from "@/lib/i18n-text";
 
 const EMAIL = "labs@anteyko.com";
 
 // Same shape in both locales, for the same reason as the privacy policy: legal
 // pages drift apart the moment they are maintained as two separate documents.
 // `{email}` becomes a link at render time.
-const COPY: Record<Language, { title: string; subtitle: string; paragraphs: string[] }> = {
+const COPY: Record<"en" | "ru", { title: string; subtitle: string; paragraphs: string[] }> = {
   en: {
     title: "Terms of use",
     subtitle: "Using this website and our services",
@@ -38,11 +38,9 @@ export async function generateMetadata({
 }) {
   const { locale } = await params;
   return {
-    title: locale === "ru" ? "Условия использования" : "Terms",
+    title: pick({ en: "Terms", ru: "Условия использования" }, locale as Language),
     description:
-      locale === "ru"
-        ? "Условия использования сайта и услуг Anteyko: заявки, автоматические ответы, договоры."
-        : "Terms of use for the Anteyko website and services: inquiries, automatic replies, agreements.",
+      pick({ en: "Terms of use for the Anteyko website and services: inquiries, automatic replies, agreements.", ru: "Условия использования сайта и услуг Anteyko: заявки, автоматические ответы, договоры." }, locale as Language),
     alternates: localeAlternates(locale, "/terms"),
   };
 }
@@ -69,7 +67,7 @@ export default async function TermsPage({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  const copy = COPY[(locale === "ru" ? "ru" : "en") as Language];
+  const copy = pick(COPY, locale as Language);
 
   return (
     <PageWrapper>

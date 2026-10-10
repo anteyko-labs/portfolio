@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useLanguage } from "@/lib/language-context";
+import { pick, type L, type Language } from "@/lib/i18n-text";
 import { useReducedMotion } from "@/lib/hooks";
 import { PageHero } from "@/components/sections/page-hero";
 import { ButtonLink } from "@/components/ui/link";
@@ -15,7 +16,6 @@ import { Quality } from "@/components/about-anim/quality";
 import { Offices } from "@/components/about-anim/offices";
 import { Team } from "@/components/about-anim/team";
 
-type L = { en: string; ru: string };
 
 export function AboutContent() {
   const { translations, language } = useLanguage();
@@ -31,7 +31,7 @@ export function AboutContent() {
       <PageHero
         title={about.title[language]}
         subtitle={about.subtitle[language]}
-        eyebrow={language === "en" ? "About" : "О нас"}
+        eyebrow={pick({ en: "About", ru: "О нас", zh: "关于", tr: "Hakkımızda", ar: "من نحن" }, language)}
         rightSlot={<StatsCard metrics={about.metrics} language={language} />}
       />
 
@@ -71,11 +71,11 @@ export function AboutContent() {
             <div className="mt-10 flex flex-col justify-center gap-4 sm:flex-row">
               <span className="home-cta-glow inline-flex rounded-xl">
                 <ButtonLink href="/contact" buttonVariant="primary" size="lg" className="w-full">
-                  {language === "en" ? "Get an estimate in 24 hours" : "Получить оценку за 24 часа"}
+                  {pick({ en: "Get an estimate in 24 hours", ru: "Получить оценку за 24 часа", zh: "24 小时内获取报价", tr: "24 saatte teklif alın", ar: "احصل على تقدير خلال 24 ساعة" }, language)}
                 </ButtonLink>
               </span>
               <ButtonLink href="/cases" buttonVariant="secondary" size="lg">
-                {language === "en" ? "See our work" : "Смотреть кейсы"}
+                {pick({ en: "See our work", ru: "Смотреть кейсы", zh: "查看我们的作品", tr: "Çalışmalarımızı görün", ar: "اطّلع على أعمالنا" }, language)}
               </ButtonLink>
             </div>
           </motion.div>

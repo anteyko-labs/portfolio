@@ -7,6 +7,7 @@ import { EASE, SpotlightCard } from "@/components/motion/kit";
 import { useReducedMotion } from "@/lib/hooks";
 import { OFFICES } from "@/lib/locations";
 import { RevealTitle, ScrollWords } from "./shared";
+import { type Language, pick } from "@/lib/i18n-text";
 
 function SocialLink({ href, label, icon }: { href: string; label: string; icon: ReactNode }) {
   return (
@@ -36,17 +37,14 @@ const LI = (
 );
 
 /** Founder card with a living gradient ring, the team card, and the founder's note revealed as you read */
-export function Team({ language }: { language: "en" | "ru" }) {
-  const en = language === "en";
+export function Team({ language }: { language: Language }) {
   const reduced = useReducedMotion();
-  const quote = en
-    ? "“Five years ago I started Anteyko Labs as a full-cycle product studio. Too many founders I met had the same story: a contractor who blew the deadline, or code they were afraid to open. We built Anteyko to be the opposite of that — staged payments, code in your repo from day one, a demo every two weeks, and the keys handed over at the end. Production-grade products founders can actually be proud of.”"
-    : "«Пять лет назад я основал Anteyko Labs — продуктовую студию полного цикла. У слишком многих founder'ов, которых я встречал, была одна и та же история: подрядчик, сорвавший сроки, или код, который страшно открыть. Мы построили Anteyko как противоположность этому — этапная оплата, код в твоём репо с первого дня, демо каждые две недели и передача ключей в конце. Production-grade продукты, которыми хочется гордиться.»";
-  const quoteHl = en ? ["the opposite of that", "Production-grade products founders can actually be proud of."] : ["противоположность этому", "Production-grade продукты, которыми хочется гордиться."];
+  const quote = pick({ en: "“Five years ago I started Anteyko Labs as a full-cycle product studio. Too many founders I met had the same story: a contractor who blew the deadline, or code they were afraid to open. We built Anteyko to be the opposite of that — staged payments, code in your repo from day one, a demo every two weeks, and the keys handed over at the end. Production-grade products founders can actually be proud of.”", ru: "«Пять лет назад я основал Anteyko Labs — продуктовую студию полного цикла. У слишком многих founder'ов, которых я встречал, была одна и та же история: подрядчик, сорвавший сроки, или код, который страшно открыть. Мы построили Anteyko как противоположность этому — этапная оплата, код в твоём репо с первого дня, демо каждые две недели и передача ключей в конце. Production-grade продукты, которыми хочется гордиться.»", zh: "“五年前，我创办了 Anteyko Labs，做全周期产品工作室。我遇到的太多创始人都有相同的遭遇：外包方延误交期，或者交付的代码让人不敢打开。我们打造 Anteyko，就是要做到截然相反——分阶段付款、第一天起代码就在您的仓库里、每两周一次演示、最后交出全部钥匙。做出创始人真正引以为傲的生产级产品。”", tr: "“Beş yıl önce Anteyko Labs'i tam döngülü bir ürün stüdyosu olarak kurdum. Tanıştığım pek çok girişimcinin hikâyesi aynıydı: teslim tarihini kaçıran bir yüklenici ya da açmaya korktukları bir kod. Anteyko'yu bunun tam tersi olacak şekilde kurduk — aşamalı ödemeler, ilk günden deponuzda olan kod, iki haftada bir demo ve sonunda teslim edilen anahtarlar. Girişimcilerin gerçekten gurur duyabileceği, production seviyesinde ürünler.”", ar: "«قبل خمس سنوات أسّستُ Anteyko Labs كاستوديو منتجات متكامل. كثير من المؤسسين الذين قابلتهم يحملون القصة نفسها: مقاول أخلّ بالموعد النهائي، أو شيفرة يخشون فتحها. بنينا Anteyko لتكون النقيض تمامًا — دفعات على مراحل، وشيفرة في مستودعك منذ اليوم الأول، وعرض تجريبي كل أسبوعين، وتسليم المفاتيح في النهاية. منتجات بمعايير الإنتاج يفخر بها المؤسسون حقًا.»" }, language);
+  const quoteHl = pick({ en: ["the opposite of that", "Production-grade products founders can actually be proud of."], ru: ["противоположность этому", "Production-grade продукты, которыми хочется гордиться."], zh: ["截然相反", "做出创始人真正引以为傲的生产级产品。"], tr: ["bunun tam tersi", "Girişimcilerin gerçekten gurur duyabileceği, production seviyesinde ürünler."], ar: ["النقيض تمامًا", "منتجات بمعايير الإنتاج يفخر بها المؤسسون حقًا."] }, language);
 
   return (
     <div>
-      <RevealTitle eyebrow={en ? "Team" : "Команда"} title={en ? "Who's behind Anteyko" : "Кто стоит за Anteyko"} className="max-w-3xl" />
+      <RevealTitle eyebrow={pick({ en: "Team", ru: "Команда", zh: "团队", tr: "Ekip", ar: "الفريق" }, language)} title={pick({ en: "Who's behind Anteyko", ru: "Кто стоит за Anteyko", zh: "Anteyko 背后的人", tr: "Anteyko'nun arkasındaki isim", ar: "من يقف وراء Anteyko" }, language)} className="max-w-3xl" />
 
       <div className="mt-10 grid gap-4 lg:grid-cols-[1.6fr_1fr]">
         <motion.div initial={reduced ? false : { opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-60px" }} transition={{ duration: 0.7, ease: EASE }}>
@@ -56,7 +54,7 @@ export function Team({ language }: { language: "en" | "ru" }) {
                 <div className="ab-ring relative isolate overflow-hidden rounded-[1.6rem] p-[3px]">
                   <Image
                     src="/images/team/bekzhan.jpg"
-                    alt={en ? "Bekjan Ergeshov, Founder & CEO of Anteyko Labs" : "Бекжан Эргешов, основатель и CEO Anteyko Labs"}
+                    alt={pick({ en: "Bekjan Ergeshov, Founder & CEO of Anteyko Labs", ru: "Бекжан Эргешов, основатель и CEO Anteyko Labs", zh: "Bekjan Ergeshov，Anteyko Labs 创始人兼 CEO", tr: "Bekjan Ergeshov, Anteyko Labs Kurucusu ve CEO'su", ar: "بيكجان إرغيشوف، المؤسس والرئيس التنفيذي لشركة Anteyko Labs" }, language)}
                     width={112}
                     height={112}
                     className="relative rounded-[1.4rem] border-2 border-bg-primary object-cover transition-transform duration-700 group-hover:scale-[1.04]"
@@ -68,12 +66,10 @@ export function Team({ language }: { language: "en" | "ru" }) {
                 </span>
               </div>
               <div className="min-w-0 flex-1 text-center sm:text-left">
-                <p className="font-brand text-2xl font-semibold tracking-tight text-text-primary">{en ? "Bekjan Ergeshov" : "Бекжан Эргешов"}</p>
-                <p className="mt-1 font-mono text-caption font-medium uppercase tracking-[0.16em] text-accent-primary">{en ? "Founder & CEO" : "Основатель и CEO"}</p>
+                <p className="font-brand text-2xl font-semibold tracking-tight text-text-primary">{pick({ en: "Bekjan Ergeshov", ru: "Бекжан Эргешов", zh: "Bekjan Ergeshov", tr: "Bekjan Ergeshov", ar: "بيكجان إرغيشوف" }, language)}</p>
+                <p className="mt-1 font-mono text-caption font-medium uppercase tracking-[0.16em] text-accent-primary">{pick({ en: "Founder & CEO", ru: "Основатель и CEO", zh: "创始人兼 CEO", tr: "Kurucu ve CEO", ar: "المؤسس والرئيس التنفيذي" }, language)}</p>
                 <p className="mt-4 text-body-md leading-relaxed text-text-secondary">
-                  {en
-                    ? "Helps founders turn an idea into a production-grade product — no blown deadlines, no rewrites from scratch, no surprises on the invoice. Five years building Anteyko: 40+ products shipped, from startup MVPs to enterprise platforms, with offices in Bishkek, Dubai, Istanbul, Chicago and Shenzhen."
-                    : "Помогает founder'ам превращать идею в production-grade продукт — без срывов сроков, переписывания с нуля и сюрпризов в счёте. Пять лет строит Anteyko: 40+ запущенных продуктов, от MVP стартапов до enterprise-платформ, с офисами в Бишкеке, Дубае, Стамбуле, Чикаго и Шэньчжэне."}
+                  {pick({ en: "Helps founders turn an idea into a production-grade product — no blown deadlines, no rewrites from scratch, no surprises on the invoice. Five years building Anteyko: 40+ products shipped, from startup MVPs to enterprise platforms, with offices in Bishkek, Dubai, Istanbul, Chicago and Shenzhen.", ru: "Помогает founder'ам превращать идею в production-grade продукт — без срывов сроков, переписывания с нуля и сюрпризов в счёте. Пять лет строит Anteyko: 40+ запущенных продуктов, от MVP стартапов до enterprise-платформ, с офисами в Бишкеке, Дубае, Стамбуле, Чикаго и Шэньчжэне.", zh: "帮助创始人把想法变成生产级产品——不延期、不推倒重来、账单上没有意外。五年打造 Anteyko：已交付 40+ 款产品，从初创公司 MVP 到企业级平台，办公室遍布比什凯克、迪拜、伊斯坦布尔、芝加哥和深圳。", tr: "Girişimcilerin fikri production seviyesinde bir ürüne dönüştürmesine yardım eder — kaçırılan teslim tarihleri, sıfırdan yeniden yazımlar, faturada sürprizler olmadan. Anteyko'yu beş yıldır kuruyor: girişim MVP'lerinden kurumsal platformlara 40'tan fazla ürün teslim edildi; ofisler Bişkek, Dubai, İstanbul, Chicago ve Shenzhen'de.", ar: "يساعد المؤسسين على تحويل الفكرة إلى منتج بمعايير الإنتاج — دون تأخير في المواعيد، ودون إعادة كتابة من الصفر، ودون مفاجآت في الفاتورة. خمس سنوات من بناء Anteyko: أكثر من 40 منتجًا تم تسليمه، من MVP للشركات الناشئة إلى منصات المؤسسات، مع مكاتب في بيشكيك ودبي وإسطنبول وشيكاغو وشنتشن." }, language)}
                 </p>
                 <div className="mt-5 flex flex-wrap justify-center gap-2 sm:justify-start">
                   <SocialLink href="https://github.com/anteyko-labs" label="GitHub" icon={GH} />
@@ -102,9 +98,9 @@ export function Team({ language }: { language: "en" | "ru" }) {
               </span>
             </div>
             <div className="mt-6 text-center">
-              <p className="font-brand text-lg font-semibold text-text-primary">{en ? "A team across 5 cities" : "Команда в 5 городах"}</p>
+              <p className="font-brand text-lg font-semibold text-text-primary">{pick({ en: "A team across 5 cities", ru: "Команда в 5 городах", zh: "跨 5 座城市的团队", tr: "5 şehirde bir ekip", ar: "فريق موزّع على 5 مدن" }, language)}</p>
               <p className="mt-2 text-body-sm text-text-secondary">
-                {en ? "Multi-discipline team — design, frontend, backend, infrastructure. Full-stack by default." : "Мультидисциплинарная команда — дизайн, фронт, бэк, инфраструктура. Full-stack по умолчанию."}
+                {pick({ en: "Multi-discipline team — design, frontend, backend, infrastructure. Full-stack by default.", ru: "Мультидисциплинарная команда — дизайн, фронт, бэк, инфраструктура. Full-stack по умолчанию.", zh: "多学科团队——设计、前端、后端、基础设施。默认全栈。", tr: "Çok disiplinli ekip — tasarım, frontend, backend, altyapı. Varsayılan olarak full-stack.", ar: "فريق متعدد التخصصات — تصميم وواجهات أمامية وخلفية وبنية تحتية. Full-stack بشكل افتراضي." }, language)}
               </p>
             </div>
           </SpotlightCard>
@@ -122,7 +118,7 @@ export function Team({ language }: { language: "en" | "ru" }) {
         <span aria-hidden="true" className="ab-quote-mark pointer-events-none absolute -top-6 right-6 select-none font-brand text-[10rem] leading-none opacity-30 md:right-12 md:text-[14rem]">
           ”
         </span>
-        <p className="relative font-mono text-caption font-medium uppercase tracking-[0.18em] text-accent-primary">{en ? "Why we started Anteyko" : "Почему мы основали Anteyko"}</p>
+        <p className="relative font-mono text-caption font-medium uppercase tracking-[0.18em] text-accent-primary">{pick({ en: "Why we started Anteyko", ru: "Почему мы основали Anteyko", zh: "我们为何创办 Anteyko", tr: "Anteyko'yu neden kurduk", ar: "لماذا أسّسنا Anteyko" }, language)}</p>
         <blockquote className="relative mt-5">
           <ScrollWords text={quote} highlights={quoteHl} className="text-body-lg leading-relaxed text-text-primary md:text-[1.35rem] md:leading-[1.6]" dim={0.2} />
         </blockquote>
@@ -135,7 +131,7 @@ export function Team({ language }: { language: "en" | "ru" }) {
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.3, ease: EASE }}
           />
-          {en ? "Bekjan Ergeshov, Founder & CEO" : "Бекжан Эргешов, основатель и CEO"}
+          {pick({ en: "Bekjan Ergeshov, Founder & CEO", ru: "Бекжан Эргешов, основатель и CEO", zh: "Bekjan Ergeshov，创始人兼 CEO", tr: "Bekjan Ergeshov, Kurucu ve CEO", ar: "بيكجان إرغيشوف، المؤسس والرئيس التنفيذي" }, language)}
         </figcaption>
       </motion.figure>
     </div>

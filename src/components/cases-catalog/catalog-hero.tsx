@@ -9,6 +9,7 @@ import { useReducedMotion } from "@/lib/hooks";
 import { catalogEntries, sortEntries } from "@/lib/catalog";
 import { microCases } from "@/lib/cases-data";
 import { plural } from "./labels";
+import { pick } from "@/lib/i18n-text";
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
@@ -52,16 +53,23 @@ export function CatalogHero() {
   const span = Math.max(...years) - Math.min(...years) + 1;
 
   const lines =
-    language === "en"
-      ? [["Work you can"], ["open", " and scroll"], ["right here"]]
-      : [["Работы, которые"], ["можно ", "открыть"], ["и пролистать"]];
-  const accentWord = language === "en" ? "open" : "открыть";
+    pick(
+      {
+        en: [["Work you can"], ["open", " and scroll"], ["right here"]],
+        ru: [["Работы, которые"], ["можно ", "открыть"], ["и пролистать"]],
+        zh: [["可以直接"], ["打开", "并滚动"], ["浏览的作品"]],
+        tr: [["Burada"], ["açıp", " kaydırabileceğiniz"], ["işler"]],
+        ar: [["أعمال يمكنك"], ["فتحها", " وتصفّحها"], ["هنا مباشرة"]],
+      },
+      language
+    );
+  const accentWord = pick({ en: "open", ru: "открыть", zh: "打开", tr: "açıp", ar: "فتحها" }, language);
 
   const stats = [
-    { value: total, label: language === "en" ? "projects and modules" : plural(total, ["проект и модуль", "проекта и модуля", "проектов и модулей"]) },
-    { value: industries, label: language === "en" ? "industries" : plural(industries, ["отрасль", "отрасли", "отраслей"]) },
-    { value: span, label: language === "en" ? "years in production" : plural(span, ["год в разработке", "года в разработке", "лет в разработке"]) },
-    { value: directions, label: language === "en" ? "web, product, Web3, infra" : "сайты, продукты, Web3, инфра" },
+    { value: total, label: language === "ru" ? plural(total, ["проект и модуль", "проекта и модуля", "проектов и модулей"]) : pick({ en: "projects and modules", ru: "проекты и модули", zh: "个项目与模块", tr: "proje ve modül", ar: "مشاريع ووحدات" }, language) },
+    { value: industries, label: language === "ru" ? plural(industries, ["отрасль", "отрасли", "отраслей"]) : pick({ en: "industries", ru: "отрасли", zh: "个行业", tr: "sektör", ar: "قطاعات" }, language) },
+    { value: span, label: language === "ru" ? plural(span, ["год в разработке", "года в разработке", "лет в разработке"]) : pick({ en: "years in production", ru: "лет в разработке", zh: "年生产经验", tr: "yıllık production deneyimi", ar: "سنوات في الإنتاج" }, language) },
+    { value: directions, label: pick({ en: "web, product, Web3, infra", ru: "сайты, продукты, Web3, инфра", zh: "网站、产品、Web3、基础设施", tr: "web, ürün, Web3, altyapı", ar: "مواقع ومنتجات وWeb3 وبنية تحتية" }, language) },
   ];
 
   return (
@@ -94,7 +102,7 @@ export function CatalogHero() {
           transition={{ duration: 0.5, ease: EASE }}
         >
           <span className="h-px w-8 bg-text-muted" />
-          {language === "en" ? "Cases · catalog" : "Кейсы · каталог"}
+          {pick({ en: "Cases · catalog", ru: "Кейсы · каталог", zh: "案例 · 目录", tr: "Projeler · katalog", ar: "المشاريع · الكتالوج" }, language)}
         </motion.p>
 
         <h1 className="mt-6 max-w-5xl font-brand text-[2.6rem] font-semibold leading-[0.98] tracking-[-0.035em] text-text-primary sm:text-6xl md:text-7xl lg:text-[5.5rem]">
@@ -127,23 +135,21 @@ export function CatalogHero() {
             transition={{ duration: 0.6, delay: 0.4, ease: EASE }}
           >
             <p className="max-w-xl text-body-lg text-text-secondary">
-              {language === "en"
-                ? "Websites, products and Web3 platforms by Anteyko — from landing pages and online stores to ERP, banking and tokenization platforms. The previews in the cards are real pages — they scroll by themselves."
-                : "Сайты, продукты и Web3-платформы студии Anteyko — от лендингов и интернет-магазинов до ERP, банкинга и платформ токенизации. Превью в карточках — настоящие страницы, и они листаются сами."}
+              {pick({ en: "Websites, products and Web3 platforms by Anteyko — from landing pages and online stores to ERP, banking and tokenization platforms. The previews in the cards are real pages — they scroll by themselves.", ru: "Сайты, продукты и Web3-платформы студии Anteyko — от лендингов и интернет-магазинов до ERP, банкинга и платформ токенизации. Превью в карточках — настоящие страницы, и они листаются сами.", zh: "Anteyko 打造的网站、产品和 Web3 平台——从落地页、网店到 ERP、银行和代币化平台。卡片中的预览是真实页面，会自动滚动。", tr: "Anteyko'dan web siteleri, ürünler ve Web3 platformları — açılış sayfalarından ve online mağazalardan ERP, bankacılık ve tokenizasyon platformlarına. Kartlardaki önizlemeler gerçek sayfalardır — kendiliğinden kayar.", ar: "مواقع ومنتجات ومنصات Web3 من Anteyko — من صفحات الهبوط والمتاجر الإلكترونية إلى أنظمة ERP والخدمات المصرفية ومنصات التوكنة. المعاينات في البطاقات صفحات حقيقية — وتتصفّح نفسها بنفسها." }, language)}
             </p>
             <div className="mt-7 flex flex-wrap gap-3">
               <a
                 href="#catalog"
                 className="inline-flex items-center gap-2 rounded-xl bg-text-primary px-5 py-3 text-body-md font-medium text-white transition-transform hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary focus-visible:ring-offset-2"
               >
-                {language === "en" ? "Browse the catalog" : "Смотреть каталог"}
+                {pick({ en: "Browse the catalog", ru: "Смотреть каталог", zh: "浏览目录", tr: "Kataloğa göz atın", ar: "تصفّح الكتالوج" }, language)}
                 <span aria-hidden="true">↓</span>
               </a>
               <NextLink
                 href="/contact"
                 className="inline-flex items-center gap-2 rounded-xl border border-border bg-bg-primary/80 px-5 py-3 text-body-md font-medium text-text-primary backdrop-blur transition-colors hover:border-accent-primary/40 hover:text-accent-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary"
               >
-                {language === "en" ? "Discuss your project" : "Обсудить проект"}
+                {pick({ en: "Discuss your project", ru: "Обсудить проект", zh: "洽谈您的项目", tr: "Projenizi konuşalım", ar: "ناقش مشروعك" }, language)}
               </NextLink>
             </div>
           </motion.div>

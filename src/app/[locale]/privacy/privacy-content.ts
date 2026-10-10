@@ -1,4 +1,4 @@
-import type { Language } from "@/lib/translations";
+import type { Language } from "@/lib/i18n-text";
 
 // Legal text, kept as data rather than JSX so that the Russian and the English
 // version cannot drift apart structurally: both locales render the same list of
@@ -292,4 +292,4 @@ const en: PolicyCopy = {
   ],
 };
 
-export const privacyCopy: Record<Language, PolicyCopy> = { en, ru };
+export const privacyCopy: Record<Language, PolicyCopy> = { en, ru, zh: en, tr: en, ar: en };

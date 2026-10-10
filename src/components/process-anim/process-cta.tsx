@@ -5,15 +5,14 @@ import { Link as NextLink } from "@/i18n/navigation";
 import { MagneticButton } from "@/components/ui/magnetic-button";
 import { EASE, useLoop } from "@/components/motion/kit";
 import "./process-anim.css";
+import { type Language, pick } from "@/lib/i18n-text";
 
 // Closing CTA on a dark aurora: a rotating halo, the four phases lighting up in
 // turn with the links between them filling, and magnetic buttons.
 
-type L = "en" | "ru";
 const HEX = ["#818CF8", "#E879F9", "#22D3EE", "#34D399"];
 
-export function ProcessCta({ lang, phases }: { lang: L; phases: { number: string; title: string }[] }) {
-  const en = lang === "en";
+export function ProcessCta({ lang, phases }: { lang: Language; phases: { number: string; title: string }[] }) {
   const { ref, tick, run, reduced } = useLoop<HTMLDivElement>(800);
   const c = reduced ? 5 : tick % 7; // 0..3 light phases one by one, 4..6 all lit
   const lit = Math.min(phases.length, c + 1);
@@ -57,14 +56,35 @@ export function ProcessCta({ lang, phases }: { lang: L; phases: { number: string
           transition={{ duration: 0.8, ease: EASE }}
           className="mx-auto max-w-3xl font-brand text-5xl font-semibold leading-[0.98] tracking-[-0.035em] md:text-7xl"
         >
-          {en ? (
-            <>
-              Ready to <span className="home-gradient-text">start?</span>
-            </>
-          ) : (
-            <>
-              Готовы <span className="home-gradient-text">начать?</span>
-            </>
+          {pick(
+            {
+              en: (
+                <>
+                  Ready to <span className="home-gradient-text">start?</span>
+                </>
+              ),
+              ru: (
+                <>
+                  Готовы <span className="home-gradient-text">начать?</span>
+                </>
+              ),
+              zh: (
+                <>
+                  准备好<span className="home-gradient-text">开始了吗？</span>
+                </>
+              ),
+              tr: (
+                <>
+                  <span className="home-gradient-text">Başlamaya</span> hazır mısınız?
+                </>
+              ),
+              ar: (
+                <>
+                  هل أنت مستعد <span className="home-gradient-text">للبدء؟</span>
+                </>
+              ),
+            },
+            lang,
           )}
         </motion.h2>
         <motion.p
@@ -74,7 +94,7 @@ export function ProcessCta({ lang, phases }: { lang: L; phases: { number: string
           transition={{ duration: 0.8, delay: 0.1, ease: EASE }}
           className="mx-auto mt-6 max-w-xl text-body-lg text-white/60"
         >
-          {en ? "Let's discuss your project and find the best approach for your needs." : "Обсудим ваш проект и найдём оптимальный подход для ваших задач."}
+          {pick({ en: "Let's discuss your project and find the best approach for your needs.", ru: "Обсудим ваш проект и найдём оптимальный подход для ваших задач.", zh: "让我们聊聊您的项目，找到最适合您需求的方案。", tr: "Projenizi konuşalım ve ihtiyaçlarınız için en iyi yaklaşımı bulalım.", ar: "لنناقش مشروعك ونجد النهج الأنسب لاحتياجاتك." }, lang)}
         </motion.p>
         <motion.div
           initial={reduced ? false : { opacity: 0, y: 20 }}
@@ -85,12 +105,12 @@ export function ProcessCta({ lang, phases }: { lang: L; phases: { number: string
         >
           <MagneticButton>
             <NextLink href="/contact" className="home-cta-glow inline-flex items-center gap-2.5 rounded-xl bg-white px-8 py-4 text-body-lg font-semibold text-[#0A0A0F]">
-              {en ? "Get an estimate" : "Получить оценку"} <span aria-hidden="true">→</span>
+              {pick({ en: "Get an estimate", ru: "Получить оценку", zh: "获取报价", tr: "Teklif alın", ar: "احصل على تقدير" }, lang)} <span aria-hidden="true">→</span>
             </NextLink>
           </MagneticButton>
           <MagneticButton>
             <NextLink href="/cases" className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-white/5 px-8 py-4 text-body-lg font-medium text-white backdrop-blur transition-colors hover:bg-white/10">
-              {en ? "View case studies" : "Смотреть кейсы"} <span aria-hidden="true">↗</span>
+              {pick({ en: "View case studies", ru: "Смотреть кейсы", zh: "查看案例研究", tr: "Proje analizlerini gör", ar: "عرض دراسات الحالة" }, lang)} <span aria-hidden="true">↗</span>
             </NextLink>
           </MagneticButton>
         </motion.div>

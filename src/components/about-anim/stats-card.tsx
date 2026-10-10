@@ -5,8 +5,9 @@ import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { CountUp, EASE } from "@/components/motion/kit";
 import { useReducedMotion } from "@/lib/hooks";
+import { type L, type Language, pick } from "@/lib/i18n-text";
 
-type Metric = { value: string; label: { en: string; ru: string } };
+type Metric = { value: string; label: L };
 
 const BARS = [0.35, 0.5, 0.42, 0.62, 0.55, 0.74, 0.68, 0.88, 1];
 
@@ -78,8 +79,7 @@ function Flatline() {
 }
 
 /** Hero side card: the track record on a dark glass panel with a scanning grid */
-export function StatsCard({ metrics, language }: { metrics: readonly Metric[]; language: "en" | "ru" }) {
-  const en = language === "en";
+export function StatsCard({ metrics, language }: { metrics: readonly Metric[]; language: Language }) {
   const ref = useRef<HTMLDivElement>(null);
   const run = useInView(ref, { once: true, amount: 0.4 });
   const reduced = useReducedMotion();
@@ -102,13 +102,13 @@ export function StatsCard({ metrics, language }: { metrics: readonly Metric[]; l
       <div aria-hidden="true" className="absolute -bottom-20 -left-10 -z-10 h-48 w-48 rounded-full bg-indigo-500/25 blur-3xl" />
 
       <div className="mb-5 flex items-center justify-between gap-3">
-        <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-white/60">{en ? "Track record" : "Послужной список"}</p>
+        <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-white/60">{pick({ en: "Track record", ru: "Послужной список", zh: "过往业绩", tr: "Referanslar", ar: "سجل الإنجازات" }, language)}</p>
         <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-2.5 py-1 font-mono text-[10px] uppercase tracking-wider text-emerald-300">
           <span className="relative flex h-1.5 w-1.5">
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-70 motion-reduce:animate-none" />
             <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
           </span>
-          {en ? "Live" : "Сейчас"}
+          {pick({ en: "Live", ru: "Сейчас", zh: "实时", tr: "Canlı", ar: "الآن" }, language)}
         </span>
       </div>
 

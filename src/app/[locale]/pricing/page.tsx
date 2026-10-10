@@ -1,6 +1,7 @@
 import { PageWrapper } from "@/components/layout/page-wrapper";
 import { JsonLd } from "@/components/seo/json-ld";
 import { homeBreadcrumb, SITE_BASE } from "@/components/seo/breadcrumbs";
+import { pick, type Language } from "@/lib/i18n-text";
 import { localeAlternates } from "@/i18n/metadata";
 import { translations } from "@/lib/translations";
 import { PricingContent } from "./pricing-content";
@@ -8,11 +9,17 @@ import { PricingContent } from "./pricing-content";
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   return {
-    title: locale === "ru" ? "Цены" : "Pricing",
-    description:
-      locale === "ru"
-        ? "Прозрачные цены: Быстрый старт от $800, MVP-спринт от $3k, Стартап под ключ от $5k, Web3-модуль от $3k. Чёткий объём, фиксированные сроки."
-        : "Transparent pricing: Launch Site from $800, MVP Sprint from $3k, Startup Under Key from $5k, Web3 Add-on from $3k. Clear scope, fixed timeline.",
+    title: pick({ en: "Pricing", ru: "Цены", zh: "价格", tr: "Fiyatlar", ar: "الأسعار" }, locale as Language),
+    description: pick(
+      {
+        en: "Transparent pricing: Launch Site from $800, MVP Sprint from $3k, Startup Under Key from $5k, Web3 Add-on from $3k. Clear scope, fixed timeline.",
+        ru: "Прозрачные цены: Быстрый старт от $800, MVP-спринт от $3k, Стартап под ключ от $5k, Web3-модуль от $3k. Чёткий объём, фиксированные сроки.",
+        zh: "透明定价：Launch Site 起价 $800，MVP Sprint 起价 $3k，Startup Under Key 起价 $5k，Web3 Add-on 起价 $3k。范围清晰，周期固定。",
+        tr: "Şeffaf fiyatlar: Launch Site $800'dan, MVP Sprint $3k'dan, Startup Under Key $5k'dan, Web3 Add-on $3k'dan. Net kapsam, sabit takvim.",
+        ar: "أسعار شفافة: Launch Site من 800 دولار، وMVP Sprint من 3 آلاف دولار، وStartup Under Key من 5 آلاف دولار، وإضافة Web3 من 3 آلاف دولار. نطاق واضح وجدول زمني ثابت.",
+      },
+      locale as Language
+    ),
     alternates: localeAlternates(locale, "/pricing"),
   };
 }

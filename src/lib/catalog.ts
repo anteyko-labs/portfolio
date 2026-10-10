@@ -1,10 +1,11 @@
 import { flagshipCases, type CaseCategory } from "./cases-data";
 import { visibleShowcaseItems, type ShowcaseStatus } from "./showcase-data";
+import { INTL_LOCALE, LANGUAGES, type L, type Language } from "./i18n-text";
 
 // One list for the /cases catalog: engineering case studies (cases-data.ts)
 // and the website/product showcase (showcase-data.ts) as uniform entries.
 
-type L = { en: string; ru: string };
+const byLang = <T,>(fn: (l: Language) => T) => Object.fromEntries(LANGUAGES.map((l) => [l, fn(l)])) as Record<Language, T>;
 
 export type CatalogStatus = ShowcaseStatus | "case";
 export type CatalogFilter = "all" | CaseCategory | "motion" | "mobile";
@@ -34,7 +35,7 @@ export interface CatalogEntry {
   signature?: L;
   summary: L;
   industry: L;
-  tags: { en: string[]; ru: string[] };
+  tags: Record<Language, string[]>;
   palette: [string, string, string, string];
   /** Lower comes first in the curated ("featured") order */
   rank: number;
@@ -108,7 +109,7 @@ const fromShowcase: CatalogEntry[] = visibleShowcaseItems.map((s) => ({
   signature: s.signature,
   summary: s.summary,
   industry: s.sphere,
-  tags: s.stack?.length ? { en: s.stack.slice(0, 3), ru: s.stack.slice(0, 3) } : s.tags,
+  tags: s.stack?.length ? byLang(() => s.stack!.slice(0, 3)) : s.tags,
   palette: s.palette,
   rank: rankOf(s.slug),
 }));
@@ -125,17 +126,14 @@ function capitalize(s: string) {
 }
 
 const fromCases: CatalogEntry[] = flagshipCases.filter((c) => !EXCLUDED_CASES.includes(c.slug)).map((c) => {
-  const [enName, enRest] = splitTitle(c.title.en);
-  const [ruName, ruRest] = splitTitle(c.title.ru);
+  const parts = byLang((l) => splitTitle(c.title[l]));
+  const enName = parts.en[0];
   const shots = (c.screenshots ?? []).map((s) => s.src).filter((src) => !SKIP_FRAMES.test(src));
   const cover = c.imageUrl ?? shots[0];
   return {
     slug: c.slug,
-    title: { en: enName, ru: ruName },
-    client: {
-      en: enRest ? capitalize(enRest) : c.industry.en,
-      ru: ruRest ? capitalize(ruRest) : c.industry.ru,
-    },
+    title: byLang((l) => parts[l][0]),
+    client: byLang((l) => (parts[l][1] ? capitalize(parts[l][1]!) : c.industry[l])),
     category: c.category,
     status: "case" as const,
     year: c.year,
@@ -146,7 +144,7 @@ const fromCases: CatalogEntry[] = flagshipCases.filter((c) => !EXCLUDED_CASES.in
     phones: c.screenshotLayout === "mobile" ? shots.slice(0, 3) : undefined,
     summary: c.summary,
     industry: c.industry,
-    tags: { en: c.techStack.slice(0, 3), ru: c.techStack.slice(0, 3) },
+    tags: byLang(() => c.techStack.slice(0, 3)),
     palette: CATEGORY_PALETTE[c.category],
     rank: rankOf(c.slug),
   };
@@ -161,7 +159,7 @@ export function matchesFilter(e: CatalogEntry, f: CatalogFilter): boolean {
   return e.category === f;
 }
 
-export function sortEntries(list: CatalogEntry[], sort: CatalogSort, language: "en" | "ru"): CatalogEntry[] {
+export function sortEntries(list: CatalogEntry[], sort: CatalogSort, language: Language): CatalogEntry[] {
   const out = [...list];
   switch (sort) {
     case "featured":
@@ -171,15 +169,15 @@ export function sortEntries(list: CatalogEntry[], sort: CatalogSort, language: "
     case "oldest":
       return out.sort((a, b) => a.year - b.year || a.rank - b.rank);
     case "az":
-      return out.sort((a, b) => a.title[language].localeCompare(b.title[language], language));
+      return out.sort((a, b) => a.title[language].localeCompare(b.title[language], INTL_LOCALE[language]));
   }
 }
 
-export function searchEntries(list: CatalogEntry[], query: string, language: "en" | "ru"): CatalogEntry[] {
+export function searchEntries(list: CatalogEntry[], query: string, language: Language): CatalogEntry[] {
   const q = query.trim().toLowerCase();
   if (!q) return list;
   return list.filter((e) =>
-    [e.title.en, e.title.ru, e.client[language], e.summary[language], e.domain, ...e.tags.en, ...e.tags.ru]
+    [...LANGUAGES.map((l) => e.title[l]), e.client[language], e.summary[language], e.domain, ...LANGUAGES.flatMap((l) => e.tags[l])]
       .join(" ")
       .toLowerCase()
       .includes(q)

@@ -58,10 +58,10 @@ const categoryColors = {
 };
 
 const categoryLabels = {
-  web: { en: "Web", ru: "Веб" },
-  product: { en: "Product", ru: "Продукт" },
-  web3: { en: "Web3", ru: "Web3" },
-  infrastructure: { en: "Infrastructure", ru: "Инфраструктура" },
+  web: { en: "Web", ru: "Веб", zh: "Web", tr: "Web", ar: "ويب" },
+  product: { en: "Product", ru: "Продукт", zh: "产品", tr: "Ürün", ar: "منتج" },
+  web3: { en: "Web3", ru: "Web3", zh: "Web3", tr: "Web3", ar: "Web3" },
+  infrastructure: { en: "Infrastructure", ru: "Инфраструктура", zh: "基础设施", tr: "Altyapı", ar: "بنية تحتية" },
 };
 
 export function CategoryBadge({ category, size = "sm" }: CategoryBadgeProps) {
