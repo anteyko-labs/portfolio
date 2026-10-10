@@ -1,5 +1,5 @@
-import type { Metadata } from "next";
-import { Manrope, Unbounded } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Manrope, Noto_Sans_Arabic, Noto_Sans_SC, Unbounded } from "next/font/google";
 import { GeistMono } from "geist/font/mono";
 import Script from "next/script";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
@@ -14,6 +14,8 @@ import { AnalyticsBootstrap } from "@/components/analytics-bootstrap";
 import { CrmWidget } from "@/components/crm-widget";
 import { WhatsAppButton } from "@/components/whatsapp-button";
 import { OFFICES } from "@/lib/locations";
+import { PortalTransition } from "@/components/effects/portal-transition";
+import { isRtl, pick, type Language } from "@/lib/i18n-text";
 
 // Refined-light type system: Manrope (geometric grotesque, RU+EN, premium)
 // for both UI and display weights; Geist Mono for technical labels.
@@ -23,6 +25,30 @@ const manrope = Manrope({
   weight: ["400", "500", "600", "700", "800"],
   display: "swap",
 });
+
+// Arabic and Chinese glyphs: Manrope/Unbounded have no such scripts, so these
+// sit right after them in the font stacks (see --font-sans in globals.css).
+const notoArabic = Noto_Sans_Arabic({
+  variable: "--font-noto-arabic",
+  subsets: ["arabic"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+});
+
+const notoSc = Noto_Sans_SC({
+  variable: "--font-noto-sc",
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+  preload: false,
+});
+
+// The page scale is locked: no pinch or double-tap zoom.
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+};
 
 // Display/brand personality — Unbounded (wide geometric display, RU+EN).
 // Exposed as --font-display-brand; mapped to the `font-family-brand` token and
@@ -41,17 +67,39 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const isRu = locale === "ru";
+  const lang = locale as Language;
 
-  const title = isRu
-    ? "Anteyko — студия полного цикла продуктовой разработки"
-    : "Anteyko — End-to-end Product Development Studio";
-  const description = isRu
-    ? "Дизайн, фронтенд, бэкенд, админ-панели, интеграции, инфраструктура и запуск. Web2 + Web3 — в одном цикле поставки. Офисы в Бишкеке, Дубае, Стамбуле, Чикаго и Шэньчжэне."
-    : "Design, frontend, backend, admin panels, integrations, infrastructure, and launch. Web2 + Web3 — in one delivery loop. Offices in Bishkek, Dubai, Istanbul, Chicago and Shenzhen.";
-  const ogDescription = isRu
-    ? "Дизайн, фронтенд, бэкенд, админ-панели, интеграции, инфраструктура и запуск. Web2 + Web3 — в одном цикле поставки."
-    : "Design, frontend, backend, admin panels, integrations, infrastructure, and launch. Web2 + Web3 — in one delivery loop.";
+  const title = pick(
+    {
+      en: "Anteyko — End-to-end Product Development Studio",
+      ru: "Anteyko — студия полного цикла продуктовой разработки",
+      zh: "Anteyko——端到端产品开发工作室",
+      tr: "Anteyko — Uçtan Uca Ürün Geliştirme Stüdyosu",
+      ar: "Anteyko — استوديو تطوير منتجات متكامل",
+    },
+    lang
+  );
+  const description = pick(
+    {
+      en: "Design, frontend, backend, admin panels, integrations, infrastructure, and launch. Web2 + Web3 — in one delivery loop. Offices in Bishkek, Dubai, Istanbul, Chicago and Shenzhen.",
+      ru: "Дизайн, фронтенд, бэкенд, админ-панели, интеграции, инфраструктура и запуск. Web2 + Web3 — в одном цикле поставки. Офисы в Бишкеке, Дубае, Стамбуле, Чикаго и Шэньчжэне.",
+      zh: "设计、前端、后端、管理后台、系统集成、基础设施到上线。Web2 + Web3——同一交付闭环。办公室遍布比什凯克、迪拜、伊斯坦布尔、芝加哥和深圳。",
+      tr: "Tasarım, frontend, backend, yönetim panelleri, entegrasyonlar, altyapı ve lansman. Web2 + Web3 — tek bir teslimat döngüsünde. Bişkek, Dubai, İstanbul, Chicago ve Shenzhen'de ofisler.",
+      ar: "التصميم، الواجهة الأمامية، الواجهة الخلفية، لوحات الإدارة، التكاملات، البنية التحتية، والإطلاق. Web2 + Web3 — في دورة تسليم واحدة. مكاتب في بيشكيك ودبي وإسطنبول وشيكاغو وشنتشن.",
+    },
+    lang
+  );
+  const ogDescription = pick(
+    {
+      en: "Design, frontend, backend, admin panels, integrations, infrastructure, and launch. Web2 + Web3 — in one delivery loop.",
+      ru: "Дизайн, фронтенд, бэкенд, админ-панели, интеграции, инфраструктура и запуск. Web2 + Web3 — в одном цикле поставки.",
+      zh: "设计、前端、后端、管理后台、系统集成、基础设施到上线。Web2 + Web3——同一交付闭环。",
+      tr: "Tasarım, frontend, backend, yönetim panelleri, entegrasyonlar, altyapı ve lansman. Web2 + Web3 — tek bir teslimat döngüsünde.",
+      ar: "التصميم، الواجهة الأمامية، الواجهة الخلفية، لوحات الإدارة، التكاملات، البنية التحتية، والإطلاق. Web2 + Web3 — في دورة تسليم واحدة.",
+    },
+    lang
+  );
+  const ogLocale = { en: "en_US", ru: "ru_RU", zh: "zh_CN", tr: "tr_TR", ar: "ar_AE" };
 
   return {
   metadataBase: new URL("https://www.anteyko.com"),
@@ -92,8 +140,8 @@ export async function generateMetadata({
   },
   openGraph: {
     type: "website",
-    locale: isRu ? "ru_RU" : "en_US",
-    alternateLocale: isRu ? "en_US" : "ru_RU",
+    locale: ogLocale[lang],
+    alternateLocale: Object.values(ogLocale).filter((l) => l !== ogLocale[lang]),
     url: "https://anteyko.com",
     siteName: "Anteyko",
     title,
@@ -167,10 +215,13 @@ export default async function LocaleLayout({
   const YM_ID = safeYmId();
 
   return (
-    <html lang={locale} suppressHydrationWarning>
+    <html lang={locale} dir={isRtl(locale) ? "rtl" : "ltr"} suppressHydrationWarning>
       <head>
         {/* favicon.ico / icon.png / apple-icon.png live in src/app/ and are wired by Next App Router. */}
         <link rel="manifest" href="/manifest.json" />
+        {/* Blocks zoom, context menu, copying and dev-tools shortcuts (also loaded by every /demos page) */}
+        {/* eslint-disable-next-line @next/next/no-sync-scripts */}
+        <script src="/guard.js" />
 
         {/* Google Tag Manager — only if validated NEXT_PUBLIC_GTM_ID is set */}
         {GTM_ID ? (
@@ -228,7 +279,7 @@ export default async function LocaleLayout({
         />
       </head>
       <body
-        className={`${manrope.variable} ${unbounded.variable} ${GeistMono.variable} font-sans antialiased`}
+        className={`${manrope.variable} ${unbounded.variable} ${notoArabic.variable} ${notoSc.variable} ${GeistMono.variable} font-sans antialiased`}
       >
         {/* GTM noscript fallback */}
         {GTM_ID ? (
@@ -249,7 +300,7 @@ export default async function LocaleLayout({
             href="#main-content"
             className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[9999] focus:inline-flex focus:items-center focus:px-5 focus:py-3 focus:min-h-[44px] focus:bg-accent-primary focus:text-white focus:rounded-lg focus:text-body-sm focus:font-medium"
           >
-            Skip to main content
+            {pick({ en: "Skip to main content", ru: "Перейти к содержимому", zh: "跳至主要内容", tr: "Ana içeriğe geç", ar: "تخطَّ إلى المحتوى الرئيسي" }, locale)}
           </a>
           {/* Noise overlay for texture */}
           <div className="noise-overlay" aria-hidden="true" />
@@ -261,6 +312,7 @@ export default async function LocaleLayout({
           <AnalyticsBootstrap />
           <WhatsAppButton />
           <CrmWidget />
+          <PortalTransition />
           </LanguageProvider>
         </NextIntlClientProvider>
       </body>

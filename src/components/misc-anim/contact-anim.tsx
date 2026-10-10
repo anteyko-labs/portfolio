@@ -5,6 +5,8 @@ import { motion, useSpring, useTransform, useInView } from "framer-motion";
 import { EASE, useLoop } from "@/components/motion/kit";
 import { useReducedMotion } from "@/lib/hooks";
 import "./misc-anim.css";
+import { useLanguage } from "@/lib/language-context";
+import { type Language, pick } from "@/lib/i18n-text";
 
 // Motion pieces for /contact: the hero inbox scene, the mode tabs, the form
 // progress meter, the animated "what happens next" flow and the success burst.
@@ -14,13 +16,14 @@ const useIsoLayoutEffect = typeof window === "undefined" ? useEffect : useLayout
 /* ───────────────────────── Hero: brief → estimate ───────────────────────── */
 
 /** A looping inbox: a brief lands, an engineer reads it, an estimate is built and sent */
-export function ContactHeroScene({ en }: { en: boolean }) {
+export function ContactHeroScene() {
+  const { language } = useLanguage();
   const { ref, tick, run } = useLoop<HTMLDivElement>(1100);
   const c = run ? tick % 7 : 5;
   const bars = [
-    { l: en ? "Design" : "Дизайн", w: 0.32, v: en ? "2 wk" : "2 нед" },
-    { l: en ? "Build" : "Разработка", w: 0.86, v: en ? "6 wk" : "6 нед" },
-    { l: en ? "Launch" : "Запуск", w: 0.2, v: en ? "1 wk" : "1 нед" },
+    { l: pick({ en: "Design", ru: "Дизайн", zh: "设计", tr: "Tasarım", ar: "التصميم" }, language), w: 0.32, v: pick({ en: "2 wk", ru: "2 нед", zh: "2 周", tr: "2 hf", ar: "أسبوعان" }, language) },
+    { l: pick({ en: "Build", ru: "Разработка", zh: "开发", tr: "Geliştirme", ar: "البناء" }, language), w: 0.86, v: pick({ en: "6 wk", ru: "6 нед", zh: "6 周", tr: "6 hf", ar: "6 أسابيع" }, language) },
+    { l: pick({ en: "Launch", ru: "Запуск", zh: "上线", tr: "Lansman", ar: "الإطلاق" }, language), w: 0.2, v: pick({ en: "1 wk", ru: "1 нед", zh: "1 周", tr: "1 hf", ar: "أسبوع" }, language) },
   ];
   const shown = (from: number) => c >= from;
 
@@ -49,12 +52,12 @@ export function ContactHeroScene({ en }: { en: boolean }) {
           transition={{ duration: 0.6, ease: EASE }}
           className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/[0.04] p-3"
         >
-          <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-white/10 font-mono text-[11px] text-white/80">{en ? "You" : "Вы"}</span>
+          <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-white/10 font-mono text-[11px] text-white/80">{pick({ en: "You", ru: "Вы", zh: "您", tr: "Siz", ar: "أنت" }, language)}</span>
           <div className="min-w-0 flex-1">
-            <p className="text-body-sm font-semibold">{en ? "New brief" : "Новый бриф"}</p>
-            <p className="truncate font-mono text-[11px] text-white/45">{en ? "MVP · web app · Web3 module" : "MVP · веб-приложение · Web3"}</p>
+            <p className="text-body-sm font-semibold">{pick({ en: "New brief", ru: "Новый бриф", zh: "新需求", tr: "Yeni brief", ar: "طلب جديد" }, language)}</p>
+            <p className="truncate font-mono text-[11px] text-white/45">{pick({ en: "MVP · web app · Web3 module", ru: "MVP · веб-приложение · Web3", zh: "MVP · Web 应用 · Web3 模块", tr: "MVP · web uygulaması · Web3 modülü", ar: "MVP · تطبيق ويب · وحدة Web3" }, language)}</p>
           </div>
-          <span className="rounded-full bg-indigo-400/15 px-2 py-0.5 font-mono text-[10px] text-indigo-200">{en ? "new" : "новый"}</span>
+          <span className="rounded-full bg-indigo-400/15 px-2 py-0.5 font-mono text-[10px] text-indigo-200">{pick({ en: "new", ru: "новый", zh: "新", tr: "yeni", ar: "جديد" }, language)}</span>
         </motion.div>
 
         {/* 2 — an engineer reads it */}
@@ -65,8 +68,8 @@ export function ContactHeroScene({ en }: { en: boolean }) {
         >
           <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-gradient-to-br from-indigo-500 to-fuchsia-500 font-brand text-sm font-semibold">A</span>
           <div className="min-w-0 flex-1">
-            <p className="text-body-sm font-semibold">{en ? "Engineer on it" : "Инженер изучает"}</p>
-            <p className="font-mono text-[11px] text-white/45">{shown(2) ? (en ? "scope · risks · stages ✓" : "объём · риски · этапы ✓") : en ? "reading the brief" : "читает бриф"}</p>
+            <p className="text-body-sm font-semibold">{pick({ en: "Engineer on it", ru: "Инженер изучает", zh: "工程师已接手", tr: "Mühendis ilgileniyor", ar: "مهندس يتولى الأمر" }, language)}</p>
+            <p className="font-mono text-[11px] text-white/45">{shown(2) ? (pick({ en: "scope · risks · stages ✓", ru: "объём · риски · этапы ✓", zh: "范围 · 风险 · 阶段 ✓", tr: "kapsam · riskler · aşamalar ✓", ar: "النطاق · المخاطر · المراحل ✓" }, language)) : pick({ en: "reading the brief", ru: "читает бриф", zh: "正在阅读需求", tr: "brief okunuyor", ar: "قراءة الطلب" }, language)}</p>
           </div>
           {shown(1) && !shown(2) ? (
             <span className="ms-typing inline-flex gap-1 text-indigo-200">
@@ -82,8 +85,8 @@ export function ContactHeroScene({ en }: { en: boolean }) {
         {/* 3 — estimate by stage */}
         <div className="rounded-xl border border-white/10 bg-white/[0.04] p-3">
           <div className="mb-2.5 flex items-center justify-between">
-            <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/45">{en ? "estimate" : "оценка"}</p>
-            <p className="font-mono text-[10px] text-white/45">{en ? "by stage" : "по этапам"}</p>
+            <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/45">{pick({ en: "estimate", ru: "оценка", zh: "报价", tr: "teklif", ar: "تقدير" }, language)}</p>
+            <p className="font-mono text-[10px] text-white/45">{pick({ en: "by stage", ru: "по этапам", zh: "分阶段", tr: "aşamalara göre", ar: "حسب المرحلة" }, language)}</p>
           </div>
           <div className="space-y-2">
             {bars.map((b, i) => (
@@ -122,14 +125,14 @@ export function ContactHeroScene({ en }: { en: boolean }) {
                 transition={{ duration: 0.9, ease: "linear" }}
               />
             </svg>
-            {en ? "reply < 24h" : "ответ < 24 ч"}
+            {pick({ en: "reply < 24h", ru: "ответ < 24 ч", zh: "24 小时内回复", tr: "yanıt < 24 sa", ar: "الرد خلال أقل من 24 ساعة" }, language)}
           </div>
           <motion.span
             animate={{ opacity: shown(4) ? 1 : 0, scale: shown(4) ? 1 : 0.85, y: shown(4) ? 0 : 6 }}
             transition={{ duration: 0.45, ease: EASE }}
             className="inline-flex items-center gap-1.5 rounded-full bg-emerald-400/15 px-3 py-1 text-[12px] font-medium text-emerald-300"
           >
-            ✓ {en ? "Estimate sent" : "Оценка отправлена"}
+            ✓ {pick({ en: "Estimate sent", ru: "Оценка отправлена", zh: "报价已发送", tr: "Teklif gönderildi", ar: "تم إرسال التقدير" }, language)}
           </motion.span>
         </div>
       </div>
@@ -191,7 +194,8 @@ export function ModeTabs<T extends string>({ value, onChange, options, label }: 
 /* ───────────────────────────── Progress ───────────────────────────── */
 
 /** Step indicator + gradient bar that springs to the completion value */
-export function FormProgress({ step, completion, en }: { step: number; completion: number; en: boolean }) {
+export function FormProgress({ step, completion }: { step: number; completion: number }) {
+  const { language } = useLanguage();
   const reduced = useReducedMotion();
   const spring = useSpring(completion, { stiffness: 120, damping: 22 });
   const pct = useTransform(spring, (v) => `${Math.round(v)}%`);
@@ -199,7 +203,7 @@ export function FormProgress({ step, completion, en }: { step: number; completio
     spring.set(completion);
   }, [completion, spring]);
   const done = completion >= 100;
-  const labels = en ? ["Contacts", "Project"] : ["Контакты", "Проект"];
+  const labels = pick({ en: ["Contacts", "Project"], ru: ["Контакты", "Проект"], zh: ["联系方式", "项目"], tr: ["İletişim", "Proje"], ar: ["جهات الاتصال", "المشروع"] }, language);
 
   return (
     <div className="mb-7">
@@ -228,7 +232,7 @@ export function FormProgress({ step, completion, en }: { step: number; completio
           })}
         </div>
         <div className="flex items-center gap-2 text-caption text-text-tertiary">
-          <span>{en ? `Step ${step} of 2` : `Шаг ${step} из 2`}</span>
+          <span>{pick({ en: `Step ${step} of 2`, ru: `Шаг ${step} из 2`, zh: `第 ${step} 步，共 2 步`, tr: `Adım ${step} / 2`, ar: `الخطوة ${step} من 2` }, language)}</span>
           <span aria-hidden="true">·</span>
           <motion.span className={`tabular-nums font-semibold ${done ? "text-emerald-600" : "text-text-primary"}`}>{reduced ? `${completion}%` : pct}</motion.span>
         </div>
@@ -340,7 +344,8 @@ export function NextStepsFlow({ items }: { items: { title: string; description?:
 /* ───────────────────────────── Live desk ───────────────────────────── */
 
 /** "Engineers online" chip with stacked avatars and typing dots */
-export function LiveDesk({ en }: { en: boolean }) {
+export function LiveDesk() {
+  const { language } = useLanguage();
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { amount: 0.2 });
   const reduced = useReducedMotion();
@@ -366,9 +371,9 @@ export function LiveDesk({ en }: { en: boolean }) {
               <span className="ms-ping absolute inset-0 rounded-full bg-emerald-400" />
               <span className="relative h-2 w-2 rounded-full bg-emerald-400" />
             </span>
-            {en ? "Engineers online" : "Инженеры на связи"}
+            {pick({ en: "Engineers online", ru: "Инженеры на связи", zh: "工程师在线", tr: "Çevrimiçi mühendisler", ar: "المهندسون متصلون" }, language)}
           </p>
-          <p className="truncate text-[11px] text-white/50">{en ? "replying to briefs now" : "сейчас отвечают на брифы"}</p>
+          <p className="truncate text-[11px] text-white/50">{pick({ en: "replying to briefs now", ru: "сейчас отвечают на брифы", zh: "正在回复需求", tr: "şu an brief'leri yanıtlıyor", ar: "يردّون على الطلبات الآن" }, language)}</p>
         </div>
       </div>
       <span className="ms-typing inline-flex shrink-0 items-center gap-1 rounded-full bg-white/10 px-2.5 py-1.5 text-indigo-200" aria-hidden="true">

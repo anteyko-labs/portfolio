@@ -4,6 +4,8 @@ import { ReactNode } from "react";
 import { motion } from "framer-motion";
 import { EASE, useLoop } from "@/components/motion/kit";
 import "./process-anim.css";
+import { useLanguage } from "@/lib/language-context";
+import { type L, type Language, pick } from "@/lib/i18n-text";
 
 // One small looping scene per process phase, drawn in code. Each scene ticks via
 // useLoop (only while on screen, ≤ ~2.5 renders/sec) and shows its last, most
@@ -82,7 +84,8 @@ const BLIPS = [
 ];
 const WEDGE = `M${RX} ${RY} L${RX + 66} ${RY} A66 66 0 0 0 ${r1(RX + 66 * Math.cos(0.7))} ${r1(RY - 66 * Math.sin(0.7))} Z`;
 
-export function DiscoveryScene({ en }: { en: boolean }) {
+export function DiscoveryScene() {
+  const { language } = useLanguage();
   const { ref, tick, run, reduced } = useLoop<HTMLDivElement>(450);
   const c = reduced ? 15 : tick % 16;
   const found = BLIPS.filter((b) => c >= b.at).length;
@@ -90,7 +93,7 @@ export function DiscoveryScene({ en }: { en: boolean }) {
   const done = closed === BLIPS.length;
 
   return (
-    <Frame frameRef={ref} run={run} label="discovery / brief.md" tone={done ? "green" : "amber"} status={done ? (en ? "scope fixed ✓" : "объём зафиксирован ✓") : en ? "mapping…" : "картируем…"}>
+    <Frame frameRef={ref} run={run} label="discovery / brief.md" tone={done ? "green" : "amber"} status={done ? (pick({ en: "scope fixed ✓", ru: "объём зафиксирован ✓", zh: "范围已锁定 ✓", tr: "kapsam sabitlendi ✓", ar: "تم تثبيت النطاق ✓" }, language)) : pick({ en: "mapping…", ru: "картируем…", zh: "梳理中…", tr: "haritalanıyor…", ar: "جارٍ التخطيط…" }, language)}>
       <svg viewBox="0 0 360 210" className="block w-full" aria-hidden="true">
         <defs>
           <linearGradient id="pr-radar-g" x1="1" y1="0" x2="0" y2="0">
@@ -106,7 +109,7 @@ export function DiscoveryScene({ en }: { en: boolean }) {
         {/* brief */}
         <rect x="12" y="14" width="138" height="182" rx="10" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.12)" />
         <text x="24" y="33" fontFamily={MONO} fontSize="9" fill="rgba(255,255,255,0.55)">
-          {en ? "# Project brief" : "# Бриф проекта"}
+          {pick({ en: "# Project brief", ru: "# Бриф проекта", zh: "# 项目简报", tr: "# Proje brief'i", ar: "# ملخص المشروع" }, language)}
         </text>
         {BRIEF_LINES.map((l, i) => (
           <motion.line key={`bl${i}`} x1="24" y1={l.y} x2={24 + l.w} y2={l.y} stroke="rgba(255,255,255,0.28)" strokeWidth="3" strokeLinecap="round" initial={false} animate={{ pathLength: c >= i ? 1 : 0, opacity: c >= i ? 1 : 0 }} transition={{ duration: 0.4, ease: EASE }} />
@@ -156,7 +159,7 @@ export function DiscoveryScene({ en }: { en: boolean }) {
           );
         })}
         <text x={RX} y="190" textAnchor="middle" fontFamily={MONO} fontSize="9" fill="rgba(255,255,255,0.6)">
-          {en ? `risks: ${found} · closed: ${closed}` : `риски: ${found} · закрыто: ${closed}`}
+          {pick({ en: `risks: ${found} · closed: ${closed}`, ru: `риски: ${found} · закрыто: ${closed}`, zh: `风险：${found} · 已关闭：${closed}`, tr: `riskler: ${found} · kapatılan: ${closed}`, ar: `المخاطر: ${found} · المُغلقة: ${closed}` }, language)}
         </text>
 
         {/* sticky notes */}
@@ -217,14 +220,15 @@ const EDGES = [
   { d: "M296 117 L316 155", at: 8 },
 ];
 
-export function DesignScene({ en }: { en: boolean }) {
+export function DesignScene() {
+  const { language } = useLanguage();
   const { ref, tick, run, reduced } = useLoop<HTMLDivElement>(520);
   const c = reduced ? 13 : tick % 14;
   const [cx, cy] = CURSOR[c];
   const ok = c >= 11;
 
   return (
-    <Frame frameRef={ref} run={run} label="design / app.fig" tone={ok ? "green" : "violet"} status={ok ? (en ? "approved ✓" : "согласовано ✓") : c >= 5 ? (en ? "UI…" : "UI…") : en ? "wireframes…" : "вайрфреймы…"}>
+    <Frame frameRef={ref} run={run} label="design / app.fig" tone={ok ? "green" : "violet"} status={ok ? (pick({ en: "approved ✓", ru: "согласовано ✓", zh: "已批准 ✓", tr: "onaylandı ✓", ar: "معتمد ✓" }, language)) : c >= 5 ? (pick({ en: "UI…", ru: "UI…", zh: "UI…", tr: "UI…", ar: "الواجهة…" }, language)) : pick({ en: "wireframes…", ru: "вайрфреймы…", zh: "线框图…", tr: "wireframe'ler…", ar: "الهياكل التخطيطية…" }, language)}>
       <svg viewBox="0 0 360 210" className="block w-full" aria-hidden="true">
         <defs>
           <linearGradient id="pr-ui-a" x1="0" y1="0" x2="1" y2="0">
@@ -264,7 +268,7 @@ export function DesignScene({ en }: { en: boolean }) {
 
         {/* architecture */}
         <text x="232" y="24" fontFamily={MONO} fontSize="8" fill="rgba(255,255,255,0.4)">
-          {en ? "architecture" : "архитектура"}
+          {pick({ en: "architecture", ru: "архитектура", zh: "架构", tr: "mimari", ar: "البنية المعمارية" }, language)}
         </text>
         {EDGES.map((e) => (
           <g key={e.d}>
@@ -288,9 +292,9 @@ export function DesignScene({ en }: { en: boolean }) {
         {!reduced && (
           <motion.g initial={false} animate={{ x: cx, y: cy }} transition={{ duration: 0.45, ease: [0.45, 0, 0.2, 1] }}>
             <path d="M0 0 L0 13 L3.6 9.6 L6.6 15.6 L8.8 14.6 L5.8 8.6 L10.6 8.6 Z" fill="#F0ABFC" stroke="#fff" strokeWidth="0.8" strokeLinejoin="round" />
-            <rect x="9" y="14" width={en ? 46 : 50} height="13" rx="4" fill="#C026D3" />
+            <rect x="9" y="14" width={pick({ en: 46, ru: 50, zh: 46, tr: 46, ar: 46 }, language)} height="13" rx="4" fill="#C026D3" />
             <text x="13" y="23.5" fontFamily={MONO} fontSize="7.5" fill="#fff">
-              {en ? "designer" : "дизайнер"}
+              {pick({ en: "designer", ru: "дизайнер", zh: "设计师", tr: "tasarımcı", ar: "المصمم" }, language)}
             </text>
           </motion.g>
         )}
@@ -312,11 +316,12 @@ const COMMITS = ["feat: checkout flow", "fix: auth edge case", "test: api contra
 const hash = (i: number) => (((i + 7) * 2654435761) % 0xfffffff).toString(16).padStart(7, "0").slice(0, 7);
 const TESTS = 148;
 
-export function BuildScene({ en }: { en: boolean }) {
+export function BuildScene() {
+  const { language } = useLanguage();
   const { ref, tick, run, reduced } = useLoop<HTMLDivElement>(450);
   const c = reduced ? 15 : tick % 16;
   const cycle = reduced ? 0 : Math.floor(tick / 16);
-  const stageNames = en ? ["build", "test", "review", "staging"] : ["сборка", "тесты", "ревью", "стейдж"];
+  const stageNames = pick({ en: ["build", "test", "review", "staging"], ru: ["сборка", "тесты", "ревью", "стейдж"], zh: ["构建", "测试", "评审", "预发布"], tr: ["derleme", "test", "inceleme", "staging"], ar: ["بناء", "اختبار", "مراجعة", "بيئة التجهيز"] }, language);
   const state = (s: number) => (c < STAGE_T[s][0] ? 0 : c < STAGE_T[s][1] ? 1 : 2);
   const cur = c < 1 ? -1 : Math.min(3, STAGE_T.findIndex(([, e]) => c < e) === -1 ? 3 : STAGE_T.findIndex(([, e]) => c < e));
   const dotX = cur < 0 ? 10 : STAGES_X[cur];
@@ -327,7 +332,7 @@ export function BuildScene({ en }: { en: boolean }) {
   const rows = [0, 1, 2].map((j) => cycle * 1 + 2 - j);
 
   return (
-    <Frame frameRef={ref} run={run} label="ci / pipeline.yml" tone={green ? "green" : "amber"} status={green ? (en ? "staging ✓" : "стейдж ✓") : en ? "running…" : "идёт сборка…"}>
+    <Frame frameRef={ref} run={run} label="ci / pipeline.yml" tone={green ? "green" : "amber"} status={green ? (pick({ en: "staging ✓", ru: "стейдж ✓", zh: "预发布 ✓", tr: "staging ✓", ar: "بيئة التجهيز ✓" }, language)) : pick({ en: "running…", ru: "идёт сборка…", zh: "运行中…", tr: "çalışıyor…", ar: "جارٍ التشغيل…" }, language)}>
       <svg viewBox="0 0 360 210" className="block w-full" aria-hidden="true">
         {/* pipeline */}
         <line x1={STAGES_X[0]} y1="34" x2={STAGES_X[3]} y2="34" stroke="rgba(255,255,255,0.1)" strokeWidth="2" />
@@ -383,21 +388,21 @@ export function BuildScene({ en }: { en: boolean }) {
         {/* tests */}
         <rect x="212" y="76" width="136" height="100" rx="8" fill="rgba(255,255,255,0.025)" stroke="rgba(255,255,255,0.1)" />
         <text x="222" y="92" fontFamily={MONO} fontSize="8" fill="rgba(255,255,255,0.4)">
-          {en ? "tests" : "тесты"}
+          {pick({ en: "tests", ru: "тесты", zh: "测试", tr: "testler", ar: "الاختبارات" }, language)}
         </text>
         <text x="222" y="122" fontFamily={MONO} fontSize="22" fontWeight="600" fill={passed === TESTS ? "#6EE7B7" : "#fff"} style={{ transition: "fill .3s" }}>
           {passed}
           <tspan fontSize="11" fill="rgba(255,255,255,0.4)">/{TESTS}</tspan>
         </text>
         <text x="222" y="146" fontFamily={MONO} fontSize="8" fill="rgba(255,255,255,0.4)">
-          {en ? "coverage" : "покрытие"} {Math.round(cov * 100)}%
+          {pick({ en: "coverage", ru: "покрытие", zh: "覆盖率", tr: "kapsam", ar: "التغطية" }, language)} {Math.round(cov * 100)}%
         </text>
         <line x1="222" y1="158" x2="338" y2="158" stroke="rgba(255,255,255,0.08)" strokeWidth="5" strokeLinecap="round" />
         <motion.line x1="222" y1="158" x2="338" y2="158" stroke="url(#pr-cov-g)" strokeWidth="5" strokeLinecap="round" initial={false} animate={{ pathLength: cov, opacity: cov ? 1 : 0 }} transition={{ duration: 0.8, ease: EASE }} />
 
         {/* weekly demos */}
         <text x="12" y="200" fontFamily={MONO} fontSize="8" fill="rgba(255,255,255,0.45)">
-          {en ? "weekly demo" : "демо / нед."}
+          {pick({ en: "weekly demo", ru: "демо / нед.", zh: "每周演示", tr: "haftalık demo", ar: "العرض الأسبوعي" }, language)}
         </text>
         {Array.from({ length: 8 }, (_, i) => {
           const x = 104 + i * 32;
@@ -432,21 +437,22 @@ function linePath(off: number) {
   return Array.from({ length: PTS + 1 }, (_, i) => `${i ? "L" : "M"}${r1(GX0 + i * STEP)} ${gy(lat(off + i))}`).join(" ");
 }
 
-export function LaunchScene({ en }: { en: boolean }) {
+export function LaunchScene() {
+  const { language } = useLanguage();
   const { ref, tick, run, reduced } = useLoop<HTMLDivElement>(420);
   const c = reduced ? 23 : tick % 24;
   const cycle = reduced ? 0 : Math.floor(tick / 24);
   const live = c >= LIVE_AT;
   const p = Math.min(1, c / LIVE_AT);
   const off = live ? cycle * 17 + c - LIVE_AT : 0;
-  const steps = en ? ["build image", "migrate db", "switch traffic", "live"] : ["сборка образа", "миграции БД", "переключение трафика", "в эфире"];
+  const steps = pick({ en: ["build image", "migrate db", "switch traffic", "live"], ru: ["сборка образа", "миграции БД", "переключение трафика", "в эфире"], zh: ["构建镜像", "迁移数据库", "切换流量", "上线"], tr: ["imaj derle", "db taşı", "trafiği geçir", "canlı"], ar: ["بناء الصورة", "ترحيل قاعدة البيانات", "تحويل الحركة", "مباشر"] }, language);
   const stepText = c < 3 ? steps[0] : c < 5 ? steps[1] : c < LIVE_AT ? steps[2] : steps[3];
   const d = linePath(off);
   const p95 = Math.round(lat(off + PTS));
   const endY = gy(lat(off + PTS));
 
   return (
-    <Frame frameRef={ref} run={run} label="prod / monitoring" tone={live ? "green" : "amber"} live={live && !reduced} status={live ? "LIVE" : en ? "deploying…" : "деплой…"}>
+    <Frame frameRef={ref} run={run} label="prod / monitoring" tone={live ? "green" : "amber"} live={live && !reduced} status={live ? "LIVE" : pick({ en: "deploying…", ru: "деплой…", zh: "部署中…", tr: "dağıtılıyor…", ar: "جارٍ النشر…" }, language)}>
       <svg viewBox="0 0 360 210" className="block w-full" aria-hidden="true">
         <defs>
           <linearGradient id="pr-mon-l" x1="0" y1="0" x2="1" y2="0">
@@ -484,7 +490,7 @@ export function LaunchScene({ en }: { en: boolean }) {
           <line key={y} x1={GX0} y1={y} x2={GX1} y2={y} stroke="rgba(255,255,255,0.05)" />
         ))}
         <text x={GX0} y="64" fontFamily={MONO} fontSize="8" fill="rgba(255,255,255,0.4)">
-          {en ? "latency, ms" : "задержка, мс"}
+          {pick({ en: "latency, ms", ru: "задержка, мс", zh: "延迟，毫秒", tr: "gecikme, ms", ar: "زمن الاستجابة، مللي ثانية" }, language)}
         </text>
         {live ? (
           <g clipPath="url(#pr-mon-clip)">
@@ -497,7 +503,7 @@ export function LaunchScene({ en }: { en: boolean }) {
           <g>
             <line x1={GX0} y1="150" x2={GX1} y2="150" stroke="rgba(255,255,255,0.18)" strokeDasharray="3 5" />
             <text x={(GX0 + GX1) / 2} y="128" textAnchor="middle" fontFamily={MONO} fontSize="9" fill="rgba(255,255,255,0.4)">
-              {en ? "waiting for traffic" : "ждём трафик"}
+              {pick({ en: "waiting for traffic", ru: "ждём трафик", zh: "等待流量", tr: "trafik bekleniyor", ar: "بانتظار الحركة" }, language)}
               <tspan className="pr-blink">_</tspan>
             </text>
           </g>
@@ -511,9 +517,9 @@ export function LaunchScene({ en }: { en: boolean }) {
 
         {/* stats */}
         {[
-          { k: en ? "uptime" : "аптайм", v: live ? "99.98%" : "—" },
-          { k: "p95", v: live ? `${p95} ${en ? "ms" : "мс"}` : "—" },
-          { k: en ? "errors" : "ошибки", v: live ? "0" : "—" },
+          { k: pick({ en: "uptime", ru: "аптайм", zh: "可用性", tr: "uptime", ar: "وقت التشغيل" }, language), v: live ? "99.98%" : "—" },
+          { k: "p95", v: live ? `${p95} ${pick({ en: "ms", ru: "мс", zh: "毫秒", tr: "ms", ar: "مللي ثانية" }, language)}` : "—" },
+          { k: pick({ en: "errors", ru: "ошибки", zh: "错误", tr: "hatalar", ar: "الأخطاء" }, language), v: live ? "0" : "—" },
         ].map((s, i) => (
           <g key={s.k}>
             <text x={16 + i * 116} y="194" fontFamily={MONO} fontSize="8" fill="rgba(255,255,255,0.4)">

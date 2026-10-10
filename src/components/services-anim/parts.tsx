@@ -7,6 +7,7 @@ import { Link as NextLink } from "@/i18n/navigation";
 import { CountUp, DrawCheck, EASE, SpotlightCard, Stagger, useLoop } from "@/components/motion/kit";
 import { MagneticButton } from "@/components/ui/magnetic-button";
 import { useLanguage } from "@/lib/language-context";
+import { pick } from "@/lib/i18n-text";
 import { useReducedMotion } from "@/lib/hooks";
 import { PKG_COLOR, PackageVisual } from "./package-visuals";
 import "./services-anim.css";
@@ -67,7 +68,6 @@ export function CheckList({ items, className = "space-y-2", itemClassName = "tex
 /** Hero checklist: the delivery gates get checked off one by one, then "ready to ship", on a loop */
 export function DeliveryGates({ title, items }: { title: string; items: string[] }) {
   const { language } = useLanguage();
-  const en = language === "en";
   const { ref, tick, reduced } = useLoop<HTMLDivElement>(1100);
   const n = items.length;
   const s = reduced ? n + 1 : tick % (n + 3);
@@ -113,7 +113,7 @@ export function DeliveryGates({ title, items }: { title: string; items: string[]
         className="mt-5 inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 font-mono text-caption text-emerald-600"
       >
         <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-        {en ? "Ready to ship" : "Готово к релизу"}
+        {pick({ en: "Ready to ship", ru: "Готово к релизу", zh: "随时可发布", tr: "Yayına hazır", ar: "جاهز للتسليم" }, language)}
       </motion.div>
     </div>
   );
@@ -122,10 +122,9 @@ export function DeliveryGates({ title, items }: { title: string; items: string[]
 /** Milestone billing track for the pricing hero: stages fill in turn and get paid */
 export function MilestoneTrack() {
   const { language } = useLanguage();
-  const en = language === "en";
   const { ref, tick, reduced } = useLoop<HTMLDivElement>(1000);
   const s = reduced ? 4 : tick % 6;
-  const stages = en ? ["Stage 1", "Stage 2", "Stage 3"] : ["Этап 1", "Этап 2", "Этап 3"];
+  const stages = pick({ en: ["Stage 1", "Stage 2", "Stage 3"], ru: ["Этап 1", "Этап 2", "Этап 3"], zh: ["阶段 1", "阶段 2", "阶段 3"], tr: ["Aşama 1", "Aşama 2", "Aşama 3"], ar: ["المرحلة 1", "المرحلة 2", "المرحلة 3"] }, language);
   return (
     <div ref={ref} className="mt-5 border-t border-border pt-5">
       <div className="grid grid-cols-3 gap-2">

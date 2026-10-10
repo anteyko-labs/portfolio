@@ -5,8 +5,8 @@ import { motion } from "framer-motion";
 import { CountUp, EASE, SpotlightCard, Stagger } from "@/components/motion/kit";
 import { useReducedMotion } from "@/lib/hooks";
 import { RevealTitle } from "./shared";
+import { type L, type Language, pick } from "@/lib/i18n-text";
 
-type L = { en: string; ru: string };
 type Industry = { name: L; count: string; icon: string };
 
 const S = { fill: "none", stroke: "currentColor", strokeWidth: 1.6, strokeLinecap: "round" as const, strokeLinejoin: "round" as const };
@@ -53,12 +53,11 @@ const COLORS = ["99 102 241", "217 70 239", "245 158 11", "6 182 212"];
 const DOT = ["bg-indigo-500", "bg-fuchsia-500", "bg-amber-500", "bg-cyan-500"];
 
 /** Industry tiles: icon in an orbiting ring, project count counting up, one lit dot per project */
-export function Industries({ title, items, language }: { title: L; items: readonly Industry[]; language: "en" | "ru" }) {
-  const en = language === "en";
+export function Industries({ title, items, language }: { title: L; items: readonly Industry[]; language: Language }) {
   const reduced = useReducedMotion();
   return (
     <div>
-      <RevealTitle eyebrow={en ? "Domains" : "Домены"} title={title[language]} className="max-w-4xl" />
+      <RevealTitle eyebrow={pick({ en: "Domains", ru: "Домены", zh: "领域", tr: "Alanlar", ar: "النطاقات" }, language)} title={title[language]} className="max-w-4xl" />
       <Stagger className="mt-10 grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4" gap={0.08}>
         {items.map((ind, i) => (
           <SpotlightCard key={ind.icon} color={COLORS[i % 4]} className="h-full rounded-3xl border border-border bg-bg-primary p-4 text-center transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_30px_60px_-30px_rgba(79,70,229,0.45)] sm:p-6">
@@ -80,7 +79,7 @@ export function Industries({ title, items, language }: { title: L; items: readon
             <p className="mt-4 font-brand text-4xl font-semibold tabular-nums text-text-primary">
               <CountUp value={ind.count} duration={1.2} />
             </p>
-            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-text-tertiary">{en ? "projects" : "проектов"}</p>
+            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-text-tertiary">{pick({ en: "projects", ru: "проектов", zh: "个项目", tr: "proje", ar: "مشروع" }, language)}</p>
             <div className="mt-3 flex justify-center gap-1.5" aria-hidden="true">
               {Array.from({ length: Number(ind.count) || 0 }, (_, k) => (
                 <motion.span

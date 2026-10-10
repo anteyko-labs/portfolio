@@ -11,11 +11,13 @@ import { EASE } from "@/components/motion/kit";
 import { AnimatedTags, BlogCover, TiltCard } from "@/components/misc-anim/blog-anim";
 import { blogPosts, type BlogPost } from "@/lib/blog-data";
 import type { Language } from "@/lib/translations";
+import { INTL_LOCALE } from "@/lib/i18n-text";
+import { pick } from "@/lib/i18n-text";
 
 // Locale-aware, human-readable date. ISO in → "28 April 2026" / "28 апреля 2026".
 export function formatPostDate(iso: string, language: Language): string {
   const date = new Date(iso);
-  return new Intl.DateTimeFormat(language === "ru" ? "ru-RU" : "en-GB", {
+  return new Intl.DateTimeFormat(language === "en" ? "en-GB" : INTL_LOCALE[language], {
     day: "numeric",
     month: "long",
     year: "numeric",
@@ -78,7 +80,7 @@ function PostCard({ post, featured, index }: { post: BlogPost; featured: boolean
               {/* Read more */}
               <span className="mt-6 inline-flex items-center gap-2 text-body-sm text-accent-primary font-medium">
                 <span className="relative">
-                  {language === "en" ? "Read article" : "Читать статью"}
+                  {pick({ en: "Read article", ru: "Читать статью", zh: "阅读文章", tr: "Makaleyi oku", ar: "اقرأ المقال" }, language)}
                   <span className="absolute -bottom-0.5 left-0 h-px w-full origin-left scale-x-0 bg-accent-primary transition-transform duration-500 group-hover:scale-x-100" />
                 </span>
                 <span className="grid h-7 w-7 place-items-center rounded-full bg-accent-primary/10 transition-all duration-300 group-hover:translate-x-1 group-hover:bg-accent-primary group-hover:text-white">
@@ -99,31 +101,29 @@ export function BlogIndexContent() {
   const { language } = useLanguage();
   const reduced = useReducedMotion();
   const findItems = [
-    language === "en" ? "How we scope and ship" : "Как мы планируем и поставляем",
-    language === "en" ? "Engineering, not opinions" : "Инженерия, а не мнения",
-    language === "en" ? "Grounded in real delivery" : "На основе реальной поставки",
+    pick({ en: "How we scope and ship", ru: "Как мы планируем и поставляем", zh: "我们如何规划与交付", tr: "Nasıl kapsam belirler ve teslim ederiz", ar: "كيف نحدّد النطاق ونُسلّم" }, language),
+    pick({ en: "Engineering, not opinions", ru: "Инженерия, а не мнения", zh: "靠工程，不靠观点", tr: "Görüş değil, mühendislik", ar: "هندسة لا آراء" }, language),
+    pick({ en: "Grounded in real delivery", ru: "На основе реальной поставки", zh: "源自真实的交付实践", tr: "Gerçek teslimata dayalı", ar: "مبنية على تسليم فعلي" }, language),
   ];
 
   return (
     <>
       <PageHero
-        title={language === "en" ? "Blog / Insights" : "Блог / Инсайты"}
+        title={pick({ en: "Blog / Insights", ru: "Блог / Инсайты", zh: "博客 / 洞见", tr: "Blog / İçgörüler", ar: "المدونة / رؤى" }, language)}
         subtitle={
-          language === "en"
-            ? "Field notes on how we ship: fast MVPs, Web2 and Web3 in one loop, and delivery you can see and own at every step."
-            : "Заметки о том, как мы поставляем: быстрые MVP, Web2 и Web3 в одном цикле и поставка, которую вы видите и которой владеете на каждом шаге."
+          pick({ en: "Field notes on how we ship: fast MVPs, Web2 and Web3 in one loop, and delivery you can see and own at every step.", ru: "Заметки о том, как мы поставляем: быстрые MVP, Web2 и Web3 в одном цикле и поставка, которую вы видите и которой владеете на каждом шаге.", zh: "交付一线笔记：快速 MVP、Web2 与 Web3 一体化迭代，以及每一步都看得见、握得住的交付。", tr: "Nasıl teslim ettiğimize dair saha notları: hızlı MVP'ler, tek döngüde Web2 ve Web3 ve her adımda görebileceğiniz, sahip olabileceğiniz teslimat.", ar: "ملاحظات ميدانية حول طريقة عملنا: منتجات MVP سريعة، وWeb2 وWeb3 في دورة واحدة، وتسليم ترونه وتملكونه في كل خطوة." }, language)
         }
-        eyebrow={language === "en" ? "Insights" : "Инсайты"}
+        eyebrow={pick({ en: "Insights", ru: "Инсайты", zh: "洞见", tr: "İçgörüler", ar: "رؤى" }, language)}
         metric={{
           value: String(blogPosts.length),
-          label: language === "en" ? "articles" : "статьи",
+          label: pick({ en: "articles", ru: "статьи", zh: "篇文章", tr: "makale", ar: "مقالات" }, language),
         }}
         rightSlot={
           <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-[#0B0B14] p-6 text-white">
             <div aria-hidden="true" className="ms-orb pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-fuchsia-500/20 blur-3xl" />
             <div aria-hidden="true" className="ms-orb pointer-events-none absolute -bottom-20 -left-10 h-48 w-48 rounded-full bg-indigo-500/25 blur-3xl" style={{ animationDelay: "-6s" }} />
             <p className="relative text-caption uppercase tracking-wider text-white/45 mb-5 font-mono">
-              {language === "en" ? "What you'll find" : "Что вы найдёте"}
+              {pick({ en: "What you'll find", ru: "Что вы найдёте", zh: "您将看到", tr: "Neler bulacaksınız", ar: "ما ستجده هنا" }, language)}
             </p>
             <ul className="relative space-y-3 text-body-sm">
               {findItems.map((item, i) => (
@@ -145,7 +145,7 @@ export function BlogIndexContent() {
             </ul>
             <div className="relative mt-5 flex items-center gap-2 font-mono text-[11px] text-white/40" aria-hidden="true">
               <span className="ms-caret inline-block h-3 w-[2px] bg-fuchsia-300" />
-              {language === "en" ? "new notes in progress" : "новые заметки в работе"}
+              {pick({ en: "new notes in progress", ru: "новые заметки в работе", zh: "篇新笔记撰写中", tr: "yeni not hazırlanıyor", ar: "ملاحظات جديدة قيد الإعداد" }, language)}
             </div>
           </div>
         }

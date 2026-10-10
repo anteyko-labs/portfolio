@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { Link as NextLink } from "@/i18n/navigation";
+import { pick } from "@/lib/i18n-text";
 import { useLanguage } from "@/lib/language-context";
 import { useReducedMotion } from "@/lib/hooks";
 import { Section, AnimatedItem } from "@/components/ui/section";
@@ -57,16 +58,14 @@ export function CasesContent() {
           {filteredMicro.length === 0 && (
             <div className="col-span-full text-center py-12">
               <p className="text-body-lg text-text-secondary">
-                {language === "en"
-                  ? "No micro cases match this filter."
-                  : "Нет микро-кейсов по выбранному фильтру."}
+                {pick({ en: "No micro cases match this filter.", ru: "Нет микро-кейсов по выбранному фильтру.", zh: "没有符合此筛选条件的小型案例。", tr: "Bu filtreyle eşleşen mikro vaka yok.", ar: "لا توجد حالات مصغّرة تطابق هذا الفلتر." }, language)}
               </p>
               <button
                 type="button"
                 onClick={() => setFilter("all")}
                 className="mt-4 text-body-sm text-accent-primary hover:text-accent-secondary transition-colors"
               >
-                {language === "en" ? "Show all" : "Показать все"}
+                {pick({ en: "Show all", ru: "Показать все", zh: "显示全部", tr: "Tümünü göster", ar: "عرض الكل" }, language)}
               </button>
             </div>
           )}

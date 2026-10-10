@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useLanguage } from "@/lib/language-context";
+import { pick } from "@/lib/i18n-text";
 import { TESTIMONIALS, type Testimonial } from "@/lib/kp-data";
 
 // Reusing the verified TESTIMONIALS from kp-data.ts so the home page and KP
@@ -37,13 +38,11 @@ export function TestimonialsSection() {
   const { language } = useLanguage();
   if (TESTIMONIALS.length === 0) return null;
 
-  const lang: "en" | "ru" = language === "en" ? "en" : "ru";
-  const heading =
-    lang === "en"
-      ? "What founders say about working with us"
-      : "Что говорят основатели о работе с нами";
-  const eyebrow =
-    lang === "en" ? "Verified clients" : "Подтверждённые клиенты";
+  const heading = pick(
+    { en: "What founders say about working with us", ru: "Что говорят основатели о работе с нами", zh: "创始人眼中的与我们合作", tr: "Girişimciler bizimle çalışmak hakkında ne diyor", ar: "ماذا يقول المؤسسون عن العمل معنا" },
+    language,
+  );
+  const eyebrow = pick({ en: "Verified clients", ru: "Подтверждённые клиенты", zh: "已验证客户", tr: "Doğrulanmış müşteriler", ar: "عملاء موثّقون" }, language);
 
   return (
     <section className="py-20 md:py-28 bg-bg-secondary">
@@ -92,18 +91,18 @@ export function TestimonialsSection() {
                 ) : null}
               </div>
               <blockquote className="text-body-md text-text-secondary leading-relaxed flex-1">
-                {t.quote[lang]}
+                {t.quote[language]}
               </blockquote>
               <figcaption className="flex items-center gap-3 pt-2 border-t border-border/50">
                 <div className="w-10 h-10 rounded-full bg-accent-primary/10 text-accent-primary flex items-center justify-center text-body-sm font-semibold shrink-0">
-                  {t.initials?.[lang] ?? t.author[lang].slice(0, 2).toUpperCase()}
+                  {t.initials?.[language] ?? t.author[language].slice(0, 2).toUpperCase()}
                 </div>
                 <div className="min-w-0">
                   <div className="text-body-sm font-semibold text-text-primary truncate">
-                    {t.author[lang]}
+                    {t.author[language]}
                   </div>
                   <div className="text-caption text-text-tertiary truncate">
-                    {t.role[lang]}
+                    {t.role[language]}
                   </div>
                 </div>
               </figcaption>

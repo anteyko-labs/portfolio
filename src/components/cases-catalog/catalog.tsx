@@ -16,6 +16,7 @@ import {
 import { CatalogCard, type CardSize } from "./catalog-card";
 import { CatalogList } from "./catalog-list";
 import { FILTER_LABEL, SORT_LABEL, plural } from "./labels";
+import { pick } from "@/lib/i18n-text";
 
 const FILTERS: CatalogFilter[] = ["all", "motion", "web", "mobile", "product", "web3", "infrastructure"];
 const SORTS: CatalogSort[] = ["featured", "newest", "oldest", "az"];
@@ -125,13 +126,13 @@ export function Catalog() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col gap-3 py-3 lg:flex-row lg:items-center lg:gap-6">
             <h2 id="catalog-title" className="sr-only">
-              {language === "en" ? "Catalog of work" : "Каталог работ"}
+              {pick({ en: "Catalog of work", ru: "Каталог работ", zh: "作品目录", tr: "İş kataloğu", ar: "كتالوج الأعمال" }, language)}
             </h2>
 
             <div
               className="-mx-4 flex gap-1.5 overflow-x-auto px-4 pb-0.5 [scrollbar-width:none] sm:mx-0 sm:px-0 lg:flex-1"
               role="group"
-              aria-label={language === "en" ? "Filter by type" : "Фильтр по типу"}
+              aria-label={pick({ en: "Filter by type", ru: "Фильтр по типу", zh: "按类型筛选", tr: "Türe göre filtrele", ar: "تصفية حسب النوع" }, language)}
             >
               {FILTERS.map((f) => {
                 const on = filter === f;
@@ -168,7 +169,7 @@ export function Catalog() {
 
             <div className="flex items-center gap-2">
               <label className="relative min-w-0 flex-1 lg:w-40 lg:flex-none 2xl:w-56">
-                <span className="sr-only">{language === "en" ? "Search work" : "Поиск по работам"}</span>
+                <span className="sr-only">{pick({ en: "Search work", ru: "Поиск по работам", zh: "搜索作品", tr: "İşlerde ara", ar: "البحث في الأعمال" }, language)}</span>
                 <svg className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} aria-hidden="true">
                   <circle cx="11" cy="11" r="7" />
                   <path d="m20 20-3.5-3.5" />
@@ -177,13 +178,13 @@ export function Catalog() {
                   type="search"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  placeholder={language === "en" ? "Search…" : "Поиск…"}
+                  placeholder={pick({ en: "Search…", ru: "Поиск…", zh: "搜索…", tr: "Ara…", ar: "بحث…" }, language)}
                   className="h-9 w-full rounded-full border border-border bg-bg-secondary pl-9 pr-3 text-body-sm text-text-primary placeholder:text-text-muted focus:border-accent-primary focus:outline-none focus:ring-2 focus:ring-accent-glow"
                 />
               </label>
 
               <label className="relative">
-                <span className="sr-only">{language === "en" ? "Sort" : "Сортировка"}</span>
+                <span className="sr-only">{pick({ en: "Sort", ru: "Сортировка", zh: "排序", tr: "Sırala", ar: "ترتيب" }, language)}</span>
                 <select
                   value={sort}
                   onChange={(e) => setSort(e.target.value as CatalogSort)}
@@ -200,13 +201,13 @@ export function Catalog() {
                 </svg>
               </label>
 
-              <div className="flex h-9 shrink-0 rounded-full border border-border bg-bg-secondary p-0.5" role="group" aria-label={language === "en" ? "View" : "Вид"}>
+              <div className="flex h-9 shrink-0 rounded-full border border-border bg-bg-secondary p-0.5" role="group" aria-label={pick({ en: "View", ru: "Вид", zh: "视图", tr: "Görünüm", ar: "العرض" }, language)}>
                 {(["grid", "list"] as View[]).map((v) => (
                   <button
                     key={v}
                     type="button"
                     aria-pressed={view === v}
-                    aria-label={v === "grid" ? (language === "en" ? "Grid" : "Плитка") : language === "en" ? "List" : "Список"}
+                    aria-label={v === "grid" ? (pick({ en: "Grid", ru: "Плитка", zh: "网格", tr: "Izgara", ar: "شبكة" }, language)) : pick({ en: "List", ru: "Список", zh: "列表", tr: "Liste", ar: "قائمة" }, language)}
                     onClick={() => setView(v)}
                     className={clsx(
                       "grid w-9 place-items-center rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary",
@@ -235,19 +236,21 @@ export function Catalog() {
 
       <div className="container mx-auto px-4 pt-8 sm:px-6 md:pt-10 lg:px-8">
         <p className="mb-6 font-mono text-caption uppercase tracking-[0.16em] text-text-tertiary" aria-live="polite">
-          {language === "en"
-            ? `${list.length} ${list.length === 1 ? "project" : "projects"}`
-            : `${list.length} ${plural(list.length, ["проект", "проекта", "проектов"])}`}
-          {debounced.trim() && (language === "en" ? ` for “${debounced.trim()}”` : ` по запросу «${debounced.trim()}»`)}
+          {`${list.length} ${
+            language === "ru"
+              ? plural(list.length, ["проект", "проекта", "проектов"])
+              : pick(list.length === 1 ? { en: "project", ru: "проект", zh: "个项目", tr: "proje", ar: "مشروع" } : { en: "projects", ru: "проекты", zh: "个项目", tr: "proje", ar: "مشاريع" }, language)
+          }`}
+          {debounced.trim() && pick({ en: ` for “${debounced.trim()}”`, ru: ` по запросу «${debounced.trim()}»`, zh: `，搜索“${debounced.trim()}”`, tr: ` “${debounced.trim()}” için`, ar: ` عن «${debounced.trim()}»` }, language)}
         </p>
 
         {list.length === 0 ? (
           <div className="rounded-2xl border border-dashed border-border py-20 text-center">
             <p className="text-body-lg text-text-secondary">
-              {language === "en" ? "Nothing matches — try another word or filter." : "Ничего не нашлось — попробуйте другое слово или фильтр."}
+              {pick({ en: "Nothing matches — try another word or filter.", ru: "Ничего не нашлось — попробуйте другое слово или фильтр.", zh: "没有匹配结果——换个关键词或筛选条件试试。", tr: "Eşleşen bir şey yok — başka bir kelime veya filtre deneyin.", ar: "لا توجد نتائج مطابقة — جرّب كلمة أو فلترًا آخر." }, language)}
             </p>
             <button type="button" onClick={reset} className="mt-4 text-body-sm font-medium text-accent-primary hover:text-accent-secondary">
-              {language === "en" ? "Show all work" : "Показать все работы"}
+              {pick({ en: "Show all work", ru: "Показать все работы", zh: "显示全部作品", tr: "Tüm işleri göster", ar: "عرض جميع الأعمال" }, language)}
             </button>
           </div>
         ) : view === "grid" ? (

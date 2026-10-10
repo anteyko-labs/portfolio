@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/lib/language-context";
+import { pick, type L } from "@/lib/i18n-text";
 import { useReducedMotion } from "@/lib/hooks";
 
 // Clients whose names we show publicly. Logos come from the projects themselves
@@ -11,7 +12,7 @@ import { useReducedMotion } from "@/lib/hooks";
 // Each tile lifts and glows in the brand colour on hover, with a one-line caption.
 type Client = {
   name: string;
-  what: { en: string; ru: string };
+  what: L;
   color: string;
   logo: React.ReactNode;
 };
@@ -19,7 +20,7 @@ type Client = {
 const CLIENTS: Client[] = [
   {
     name: "Asaki Sushi",
-    what: { en: "Ordering PWA", ru: "PWA заказов" },
+    what: { en: "Ordering PWA", ru: "PWA заказов", zh: "点餐 PWA", tr: "Sipariş PWA'sı", ar: "PWA للطلبات" },
     color: "#E11D2E",
     logo: (
       <span className="flex items-center gap-2">
@@ -30,19 +31,19 @@ const CLIENTS: Client[] = [
   },
   {
     name: "TRM",
-    what: { en: "Offer acceptance", ru: "Акцепт оферты" },
+    what: { en: "Offer acceptance", ru: "Акцепт оферты", zh: "要约接受", tr: "Teklif onayı", ar: "قبول العرض" },
     color: "#F97316",
     logo: <Image src="/logos/trm.png" alt="TRM" width={160} height={80} className="h-12 w-auto object-contain" />,
   },
   {
     name: "Djal",
-    what: { en: "Guest survey & promos", ru: "Опрос гостей и акции" },
+    what: { en: "Guest survey & promos", ru: "Опрос гостей и акции", zh: "顾客调研与促销", tr: "Misafir anketi ve promosyonlar", ar: "استطلاع الضيوف والعروض" },
     color: "#EA580C",
     logo: <Image src="/logos/djal.png" alt="Шашлычная Джал" width={704} height={240} className="h-12 w-auto" />,
   },
   {
     name: "ShoeStreet",
-    what: { en: "Sneaker store", ru: "Магазин кроссовок" },
+    what: { en: "Sneaker store", ru: "Магазин кроссовок", zh: "球鞋商店", tr: "Spor ayakkabı mağazası", ar: "متجر أحذية رياضية" },
     color: "#B08968",
     logo: (
       <span className="inline-block origin-center scale-x-[0.86] font-sans text-[26px] font-extrabold uppercase leading-none tracking-[0.08em]">
@@ -52,7 +53,7 @@ const CLIENTS: Client[] = [
   },
   {
     name: "Avtodom",
-    what: { en: "Auto service accounting", ru: "Учёт для автосервиса" },
+    what: { en: "Auto service accounting", ru: "Учёт для автосервиса", zh: "汽修服务会计", tr: "Oto servis muhasebesi", ar: "محاسبة مركز خدمة السيارات" },
     color: "#2563EB",
     logo: (
       <span className="flex items-center gap-2 font-sans text-[24px] font-bold leading-none tracking-tight">
@@ -68,15 +69,14 @@ const CLIENTS: Client[] = [
 export function TrustedBySection() {
   const { language } = useLanguage();
   const reduced = useReducedMotion();
-  const en = language === "en";
 
   return (
     <section className="border-b border-border bg-bg-primary py-16 md:py-20">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-10 flex flex-col items-center gap-3 text-center">
-          <p className="font-mono text-caption uppercase tracking-[0.2em] text-text-tertiary">{en ? "Trusted by" : "Нам доверяют"}</p>
+          <p className="font-mono text-caption uppercase tracking-[0.2em] text-text-tertiary">{pick({ en: "Trusted by", ru: "Нам доверяют", zh: "受信赖于", tr: "Güvenenler", ar: "يثق بنا" }, language)}</p>
           <p className="text-body-md text-text-secondary">
-            {en ? "And 40+ more products in production — many of them under NDA." : "И ещё 40+ продуктов в продакшене — многие из них под NDA."}
+            {pick({ en: "And 40+ more products in production — many of them under NDA.", ru: "И ещё 40+ продуктов в продакшене — многие из них под NDA.", zh: "另有 40+ 款产品已投入生产——其中许多受 NDA 保护。", tr: "Ayrıca production'da 40'tan fazla ürün daha — çoğu NDA kapsamında.", ar: "وأكثر من 40 منتجًا آخر قيد الإنتاج — كثير منها بموجب NDA." }, language)}
           </p>
         </div>
 

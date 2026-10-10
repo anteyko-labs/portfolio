@@ -5,6 +5,7 @@ import { motion, useInView, useMotionValue, useSpring, useTransform } from "fram
 import { Link as NextLink } from "@/i18n/navigation";
 import { usePathname } from "@/i18n/navigation";
 import { useLanguage } from "@/lib/language-context";
+import { pick, type Language } from "@/lib/i18n-text";
 import { useReducedMotion } from "@/lib/hooks";
 import { EASE } from "@/components/motion/kit";
 
@@ -84,7 +85,6 @@ function Portal({ run }: { run: boolean }) {
 
 export function NotFoundScene() {
   const { language } = useLanguage();
-  const en = language === "en";
   const reduced = useReducedMotion();
   const pathname = usePathname();
   const ref = useRef<HTMLElement>(null);
@@ -132,9 +132,9 @@ export function NotFoundScene() {
   };
 
   const links = [
-    { href: "/", label: en ? "Back to home" : "На главную", primary: true },
-    { href: "/cases", label: en ? "See our cases" : "Смотреть кейсы" },
-    { href: "/contact", label: en ? "Contact us" : "Связаться" },
+    { href: "/", label: pick({ en: "Back to home", ru: "На главную", zh: "返回首页", tr: "Ana sayfaya dön", ar: "العودة إلى الرئيسية" }, language), primary: true },
+    { href: "/cases", label: pick({ en: "See our cases", ru: "Смотреть кейсы", zh: "查看我们的案例", tr: "Projelerimizi görün", ar: "اطّلع على حالاتنا" }, language) },
+    { href: "/contact", label: pick({ en: "Contact us", ru: "Связаться", zh: "联系我们", tr: "Bize ulaşın", ar: "تواصل معنا" }, language) },
   ];
 
   return (
@@ -171,11 +171,11 @@ export function NotFoundScene() {
           className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-white/70 backdrop-blur"
         >
           <span className="h-1.5 w-1.5 rounded-full bg-rose-400" />
-          {en ? "Error 404" : "Ошибка 404"}
+          {pick({ en: "Error 404", ru: "Ошибка 404", zh: "错误 404", tr: "Hata 404", ar: "خطأ 404" }, language)}
         </motion.p>
 
         {/* 4 · portal · 4 */}
-        <h1 className="sr-only">{en ? "404 — page not found" : "404 — страница не найдена"}</h1>
+        <h1 className="sr-only">{pick({ en: "404 — page not found", ru: "404 — страница не найдена", zh: "404——页面未找到", tr: "404 — sayfa bulunamadı", ar: "404 — الصفحة غير موجودة" }, language)}</h1>
         <div aria-hidden="true" className="mx-auto mt-6 flex items-center justify-center gap-1 sm:gap-4">
           {[0, 1, 2].map((i) =>
             i === 1 ? (
@@ -204,7 +204,7 @@ export function NotFoundScene() {
           transition={{ duration: 0.7, delay: 0.35, ease: EASE }}
           className="mx-auto mt-6 max-w-2xl font-brand text-3xl font-semibold leading-[1.08] tracking-[-0.03em] md:text-5xl"
         >
-          {en ? "This page drifted out of orbit" : "Эта страница сошла с орбиты"}
+          {pick({ en: "This page drifted out of orbit", ru: "Эта страница сошла с орбиты", zh: "这个页面飘出了轨道", tr: "Bu sayfa yörüngeden çıktı", ar: "هذه الصفحة خرجت عن مدارها" }, language)}
         </motion.h2>
         <motion.p
           initial={reduced ? false : { opacity: 0, y: 16 }}
@@ -212,9 +212,7 @@ export function NotFoundScene() {
           transition={{ duration: 0.7, delay: 0.45, ease: EASE }}
           className="mx-auto mt-4 max-w-xl text-body-lg text-white/60"
         >
-          {en
-            ? "The link may be old or mistyped. Everything else is where it should be — pick a direction below."
-            : "Ссылка устарела или в ней опечатка. Всё остальное на месте — выберите, куда двигаться дальше."}
+          {pick({ en: "The link may be old or mistyped. Everything else is where it should be — pick a direction below.", ru: "Ссылка устарела или в ней опечатка. Всё остальное на месте — выберите, куда двигаться дальше.", zh: "链接可能已过期或输入有误。其余内容都在原处——请从下方选择方向。", tr: "Bağlantı eski ya da yanlış yazılmış olabilir. Geri kalan her şey yerinde — aşağıdan bir yön seçin.", ar: "قد يكون الرابط قديمًا أو مكتوبًا بشكل خاطئ. كل ما عداه في مكانه — اختر وجهتك من الأسفل." }, language)}
         </motion.p>
 
         {/* terminal line */}

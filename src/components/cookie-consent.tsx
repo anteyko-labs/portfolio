@@ -31,6 +31,27 @@ const COPY = {
     all: "Принять все",
     necessary: "Только необходимые",
   },
+  zh: {
+    title: "Cookie 与数据分析",
+    body: "我们使用 cookie 进行数据分析并改善体验。您可以全部接受，或仅接受必要的 cookie。详情请参阅我们的",
+    policy: "隐私政策",
+    all: "全部接受",
+    necessary: "仅必要",
+  },
+  tr: {
+    title: "Çerezler ve analiz",
+    body: "Çerezleri analiz ve deneyimi iyileştirmek için kullanıyoruz. Tümünü ya da yalnızca gerekli olanları kabul edebilirsiniz. Ayrıntılar ",
+    policy: "gizlilik politikamızda",
+    all: "Tümünü kabul et",
+    necessary: "Yalnızca gerekli",
+  },
+  ar: {
+    title: "ملفات تعريف الارتباط والتحليلات",
+    body: "نستخدم ملفات تعريف الارتباط للتحليلات ولتحسين التجربة. يمكنك قبولها كلها أو الضرورية فقط. التفاصيل في ",
+    policy: "سياسة الخصوصية",
+    all: "قبول الكل",
+    necessary: "الضرورية فقط",
+  },
 } as const;
 
 export function CookieConsent() {

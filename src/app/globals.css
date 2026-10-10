@@ -26,12 +26,12 @@
   --color-warning: #D97706;
   --color-error: #DC2626;
 
-  --font-sans: var(--font-manrope);
-  --font-display: var(--font-manrope);
+  --font-sans: var(--font-manrope), var(--font-noto-arabic), var(--font-noto-sc), system-ui, sans-serif;
+  --font-display: var(--font-manrope), var(--font-noto-arabic), var(--font-noto-sc), system-ui, sans-serif;
   --font-mono: var(--font-geist-mono);
   /* Brand display personality — Unbounded (wide). Emits the `font-brand`
      utility; also consumed by the `.heading-brand` recipe below. */
-  --font-brand: var(--font-display-brand), system-ui, sans-serif;
+  --font-brand: var(--font-display-brand), var(--font-noto-arabic), var(--font-noto-sc), system-ui, sans-serif;
 
   /* Typography scale — must live in @theme for Tailwind v4 to emit text-* utilities */
   --text-display-xl: 5rem;
@@ -242,7 +242,7 @@ body {
   /* Reference the next/font variable directly: --font-brand lives in
      @theme inline, which does not emit CSS variables at runtime, so
      var(--font-brand) would silently fail and fall back to Manrope. */
-  font-family: var(--font-display-brand), system-ui, sans-serif;
+  font-family: var(--font-display-brand), var(--font-noto-arabic), var(--font-noto-sc), system-ui, sans-serif;
   font-weight: 600;
   letter-spacing: -0.02em;
   line-height: 1.08;
@@ -1191,4 +1191,363 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .ms-glitch::before, .ms-glitch::after { animation: none; display: none; }
   .ms-twinkle, .ms-caret { animation: none; }
+}
+
+
+/* ───────── Home: entry to the cases catalog ───────── */
+.cases-gate {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  border-radius: 28px;
+  background: #0a0a0b;
+  color: #fafafa;
+  --mx: 50%;
+  --my: 50%;
+  --tx: 0;
+  --ty: 0;
+}
+.cases-gate::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(520px circle at var(--mx) var(--my), rgba(79, 70, 229, 0.55), transparent 62%);
+  opacity: 0;
+  transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.cases-gate:hover::before {
+  opacity: 1;
+}
+.cases-gate__marquee {
+  position: absolute;
+  inset: auto 0 22px;
+  z-index: -1;
+  overflow: hidden;
+  white-space: pre;
+  direction: ltr;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(250, 250, 250, 0.2);
+}
+.cases-gate__marquee > span {
+  display: inline-flex;
+  animation: cases-gate-marquee 60s linear infinite;
+}
+@keyframes cases-gate-marquee {
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+.cases-gate__in {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 24px;
+  align-items: center;
+  min-height: clamp(520px, 72vh, 760px);
+  padding: clamp(24px, 3.5vw, 48px) clamp(20px, 3.5vw, 56px) clamp(64px, 7vw, 104px);
+}
+.cases-gate__label {
+  grid-column: 1 / -1;
+  align-self: start;
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(250, 250, 250, 0.2);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(250, 250, 250, 0.55);
+}
+.cases-gate__title {
+  grid-column: 1 / span 7;
+  font-family: var(--font-brand);
+  font-size: clamp(48px, 8.4vw, 150px);
+  font-weight: 600;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+}
+.cases-gate__line {
+  display: block;
+  transition: transform 1.1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.cases-gate__line--accent {
+  color: #a5b4fc;
+  transition: transform 1.1s cubic-bezier(0.22, 1, 0.36, 1) 60ms, color 0.6s;
+}
+.cases-gate:hover .cases-gate__line:first-child {
+  transform: translate3d(-0.06em, 0, 0);
+}
+.cases-gate:hover .cases-gate__line--accent {
+  transform: translate3d(0.1em, 0, 0);
+  color: #fff;
+}
+.cases-gate__text {
+  grid-column: 1 / span 5;
+  max-width: 26em;
+  font-size: clamp(16px, 1.3vw, 20px);
+  line-height: 1.5;
+  color: rgba(250, 250, 250, 0.7);
+}
+.cases-gate__cta {
+  grid-column: 1 / span 5;
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  height: 56px;
+  padding: 0 28px;
+  border-radius: 999px;
+  background: #fafafa;
+  color: #0a0a0b;
+  font-weight: 600;
+  transition: opacity 0.4s;
+}
+.cases-gate__arrow {
+  display: inline-block;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.cases-gate:hover .cases-gate__cta .cases-gate__arrow {
+  transform: translate3d(6px, 0, 0);
+}
+
+/* fan of covers */
+.cases-gate__stack {
+  grid-column: 8 / -1;
+  grid-row: 2 / span 3;
+  position: relative;
+  height: clamp(280px, 30vw, 440px);
+  perspective: 1400px;
+  transform: rotateX(calc(var(--ty) * -8deg)) rotateY(calc(var(--tx) * 10deg));
+  transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.cases-gate__card {
+  --w: clamp(160px, 16vw, 270px);
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--w);
+  aspect-ratio: 3 / 4;
+  margin: calc(var(--w) * -0.667) 0 0 calc(var(--w) * -0.5);
+  overflow: hidden;
+  border-radius: 16px;
+  background: #18181b;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08), 0 30px 60px -20px rgba(0, 0, 0, 0.7);
+  transform: translate3d(calc(var(--i) * 5%), calc(var(--i) * -3%), 0) rotate(calc(var(--i) * 3deg));
+  transition: transform 1s cubic-bezier(0.22, 1, 0.36, 1);
+  animation: cases-gate-float 6s ease-in-out infinite;
+  animation-delay: calc(var(--i) * -1.2s);
+}
+.cases-gate__card:nth-child(1) { z-index: 1; }
+.cases-gate__card:nth-child(2) { z-index: 2; }
+.cases-gate__card:nth-child(3) { z-index: 5; }
+.cases-gate__card:nth-child(4) { z-index: 4; }
+.cases-gate__card:nth-child(5) { z-index: 3; }
+.cases-gate:hover .cases-gate__card {
+  transform: translate3d(calc(var(--i) * 40%), calc(var(--i) * var(--i) * 4%), 0) rotate(calc(var(--i) * 10deg));
+}
+.cases-gate__card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.75), transparent 45%);
+}
+.cases-gate__card-name {
+  position: absolute;
+  inset: auto 14px 12px;
+  z-index: 1;
+  font-weight: 600;
+  font-size: clamp(14px, 1.2vw, 18px);
+  line-height: 1.1;
+}
+@keyframes cases-gate-float {
+  50% {
+    translate: 0 -10px;
+  }
+}
+
+/* round button following the cursor */
+.cases-gate__orb {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 6;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 4px;
+  width: 128px;
+  height: 128px;
+  margin: -64px 0 0 -64px;
+  border-radius: 50%;
+  background: #fafafa;
+  color: #0a0a0b;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+  pointer-events: none;
+  transform: translate3d(var(--mx), var(--my), 0) scale(0);
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+@media (hover: hover) {
+  .cases-gate:hover .cases-gate__orb {
+    transform: translate3d(var(--mx), var(--my), 0) scale(1);
+    transition: transform 0.18s linear;
+  }
+  .cases-gate:hover .cases-gate__cta {
+    opacity: 0.35;
+  }
+}
+@media (max-width: 1023px) {
+  .cases-gate__title,
+  .cases-gate__text,
+  .cases-gate__cta,
+  .cases-gate__stack {
+    grid-column: 1 / -1;
+  }
+  .cases-gate__stack {
+    grid-row: auto;
+    order: 2;
+    margin-block: 16px 8px;
+  }
+  .cases-gate__cta {
+    order: 3;
+  }
+  .cases-gate__card,
+  .cases-gate:hover .cases-gate__card {
+    transform: translate3d(calc(var(--i) * 36%), calc(var(--i) * var(--i) * 4%), 0) rotate(calc(var(--i) * 9deg));
+  }
+}
+@media (max-width: 640px) {
+  .cases-gate__in {
+    min-height: 0;
+  }
+  .cases-gate__stack {
+    height: 280px;
+  }
+  .cases-gate__card {
+    --w: 140px;
+  }
+}
+
+/* ───────── Portal page transition ───────── */
+.portal-curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: grid;
+  place-items: center;
+  background: #0a0a0b;
+  color: #fafafa;
+  clip-path: circle(0% at var(--x) var(--y));
+}
+.portal-curtain--in {
+  animation: portal-curtain-in 0.75s cubic-bezier(0.7, 0, 0.2, 1) forwards;
+}
+.portal-curtain--out {
+  animation: portal-curtain-out 0.9s cubic-bezier(0.7, 0, 0.2, 1) forwards;
+}
+@keyframes portal-curtain-in {
+  to {
+    clip-path: circle(150% at var(--x) var(--y));
+  }
+}
+@keyframes portal-curtain-out {
+  from {
+    clip-path: inset(0 0 0 0);
+  }
+  to {
+    clip-path: inset(0 0 100% 0);
+  }
+}
+.portal-curtain__word {
+  position: relative;
+  overflow: hidden;
+  font-family: var(--font-brand);
+  font-size: clamp(52px, 11vw, 200px);
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 1.15;
+  padding-bottom: 0.18em;
+}
+.portal-curtain__word > span {
+  display: block;
+  animation: portal-curtain-rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both;
+}
+.portal-curtain--out .portal-curtain__word > span {
+  transform: translate3d(0, -110%, 0);
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+@keyframes portal-curtain-rise {
+  from {
+    transform: translate3d(0, 110%, 0);
+  }
+}
+.portal-curtain__ring {
+  position: absolute;
+  width: 60vmin;
+  aspect-ratio: 1;
+  border: 1px solid rgba(250, 250, 250, 0.22);
+  border-radius: 50%;
+  animation: portal-curtain-ring 1.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.portal-curtain__ring--2 {
+  width: 40vmin;
+  border-color: #4f46e5;
+  animation-delay: 0.1s;
+}
+@keyframes portal-curtain-ring {
+  from {
+    transform: scale(0.2);
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cases-gate__card,
+  .cases-gate__marquee > span {
+    animation: none;
+  }
+}
+
+/* ───────── Arabic / Chinese ───────── */
+:lang(ar) h1,
+:lang(ar) h2,
+:lang(ar) h3,
+:lang(ar) .cases-gate__title,
+:lang(ar) .portal-curtain__word,
+:lang(ar) [class*="tracking-"] {
+  letter-spacing: 0 !important;
+}
+:lang(ar) h1,
+:lang(ar) h2,
+:lang(zh) h1,
+:lang(zh) h2,
+:lang(ar) .cases-gate__title {
+  line-height: 1.25;
+}
+[dir="rtl"] .cases-gate__arrow,
+[dir="rtl"] .portal-curtain__word {
+  transform: scaleX(-1);
+}
+[dir="rtl"] .cases-gate:hover .cases-gate__cta .cases-gate__arrow {
+  transform: scaleX(-1) translate3d(6px, 0, 0);
+}
+[dir="rtl"] .portal-curtain__word {
+  transform: none;
+}
+/* Arabic and Chinese have no italic: the synthesized slant spills out of masked lines */
+:lang(ar) em,
+:lang(zh) em,
+:lang(ar) .italic,
+:lang(zh) .italic,
+:lang(ar) .catalog-hero__accent,
+:lang(zh) .catalog-hero__accent {
+  font-style: normal;
+}
+/* Arabic letters join: any letter-spacing breaks the script */
+:lang(ar) * {
+  letter-spacing: 0 !important;
 }

@@ -6,19 +6,19 @@ import { EASE, SpotlightCard } from "@/components/motion/kit";
 import { useReducedMotion } from "@/lib/hooks";
 import { PHASE_SCENES } from "./phase-scenes";
 import "./process-anim.css";
+import { type Language, pick } from "@/lib/i18n-text";
 
 // The four phases on a dark stage: a sticky nav with a sliding active pill, a
 // timeline that fills with a gradient as you scroll (a glowing dot rides its
 // tip), and per phase a glass card with its own live scene and deliverables
 // that unfold one by one.
 
-type L = "en" | "ru";
 type Step = {
   number: string;
-  title: Record<L, string>;
-  duration: Record<L, string>;
-  description: Record<L, string>;
-  deliverables: Record<L, readonly string[]>;
+  title: Record<Language, string>;
+  duration: Record<Language, string>;
+  description: Record<Language, string>;
+  deliverables: Record<Language, readonly string[]>;
 };
 
 const PH = [
@@ -84,9 +84,8 @@ function DocIcon({ color }: { color: string }) {
   );
 }
 
-function PhaseCard({ step, i, lang, reduced }: { step: Step; i: number; lang: L; reduced: boolean }) {
+function PhaseCard({ step, i, lang, reduced }: { step: Step; i: number; lang: Language; reduced: boolean }) {
   const ph = PH[i];
-  const en = lang === "en";
   const Scene = PHASE_SCENES[i];
   return (
     <motion.div
@@ -117,12 +116,12 @@ function PhaseCard({ step, i, lang, reduced }: { step: Step; i: number; lang: L;
             <p className="mt-4 text-body-lg text-white/60">{step.description[lang]}</p>
           </div>
           <div className="min-w-0">
-            <Scene en={en} />
+            <Scene />
           </div>
         </div>
 
         <div className="mt-8 border-t border-white/[0.07] pt-6">
-          <h3 className="mb-4 font-mono text-caption uppercase tracking-wider text-white/40">{en ? "What you receive after this step" : "Что вы получаете после этого этапа"}</h3>
+          <h3 className="mb-4 font-mono text-caption uppercase tracking-wider text-white/40">{pick({ en: "What you receive after this step", ru: "Что вы получаете после этого этапа", zh: "这一步之后您将收到", tr: "Bu adımdan sonra neler alırsınız", ar: "ما ستتسلّمه بعد هذه الخطوة" }, lang)}</h3>
           <motion.div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3" initial={reduced ? false : "hidden"} whileInView="show" viewport={{ once: true, margin: "-40px" }} transition={{ staggerChildren: 0.09 }}>
             {step.deliverables[lang].map((item) => (
               <motion.div key={`${step.number}-${item}`} variants={{ hidden: { opacity: 0, y: 18, scale: 0.96 }, show: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.55, ease: EASE } } }}>
@@ -132,7 +131,7 @@ function PhaseCard({ step, i, lang, reduced }: { step: Step; i: number; lang: L;
                     <div className="min-w-0">
                       <p className="hyphens-auto break-words text-body-sm font-medium text-white/90">{item}</p>
                       <p className="mt-0.5 truncate font-mono text-caption text-white/35">
-                        {en ? "Phase" : "Фаза"} {step.number}
+                        {pick({ en: "Phase", ru: "Фаза", zh: "阶段", tr: "Aşama", ar: "المرحلة" }, lang)} {step.number}
                       </p>
                     </div>
                   </article>
@@ -146,7 +145,7 @@ function PhaseCard({ step, i, lang, reduced }: { step: Step; i: number; lang: L;
   );
 }
 
-export function PhaseTimeline({ steps, lang }: { steps: readonly Step[]; lang: L }) {
+export function PhaseTimeline({ steps, lang }: { steps: readonly Step[]; lang: Language }) {
   const reduced = useReducedMotion();
   const listRef = useRef<HTMLDivElement>(null);
   const key = steps.map((s) => s.number).join(",");
@@ -182,7 +181,6 @@ export function PhaseTimeline({ steps, lang }: { steps: readonly Step[]; lang: L
   const dotColor = useTransform(p, [0, 0.33, 0.66, 1], PH.map((x) => x.hex));
   const pct = useTransform(p, (v) => `${Math.round(v * 100)}%`);
   const clip = useTransform(p, (v) => `inset(0 0 ${Math.round((1 - v) * 1000) / 10}% 0)`);
-  const en = lang === "en";
 
   return (
     <section className="section-dark relative overflow-clip bg-[#07070C] py-16 md:py-28">
@@ -192,10 +190,10 @@ export function PhaseTimeline({ steps, lang }: { steps: readonly Step[]; lang: L
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid gap-10 lg:grid-cols-[250px_1fr] xl:grid-cols-[280px_1fr] xl:gap-14">
           {/* sticky phase nav */}
-          <aside className="sticky top-28 hidden self-start lg:block" aria-label={en ? "Process navigation" : "Навигация по процессу"}>
+          <aside className="sticky top-28 hidden self-start lg:block" aria-label={pick({ en: "Process navigation", ru: "Навигация по процессу", zh: "流程导航", tr: "Süreç gezinmesi", ar: "التنقل بين مراحل العملية" }, lang)}>
             <div className="relative rounded-2xl border border-white/10 bg-white/[0.03] p-3 backdrop-blur">
               <div className="flex items-center justify-between px-3 pb-3 pt-1">
-                <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-white/40">{en ? "Phases" : "Фазы"}</span>
+                <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-white/40">{pick({ en: "Phases", ru: "Фазы", zh: "阶段", tr: "Aşamalar", ar: "المراحل" }, lang)}</span>
                 <motion.span className="font-mono text-[11px] tabular-nums text-white/60">{reduced ? "100%" : pct}</motion.span>
               </div>
               <div className="relative">

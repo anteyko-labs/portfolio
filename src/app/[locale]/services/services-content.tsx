@@ -2,6 +2,7 @@
 
 import { useMemo } from "react";
 import { useLanguage } from "@/lib/language-context";
+import { pick } from "@/lib/i18n-text";
 import { PageHero } from "@/components/sections/page-hero";
 import { Section, SectionHeader, AnimatedItem } from "@/components/ui/section";
 import { ButtonLink, Link } from "@/components/ui/link";
@@ -13,26 +14,22 @@ import { PACKAGE_SLUGS } from "@/lib/service-slugs";
 const COMPARISON_AXES_CONFIG = [
   {
     id: "speed",
-    labelEn: "Speed to launch",
-    labelRu: "Скорость запуска",
+    label: { en: "Speed to launch", ru: "Скорость запуска", zh: "上线速度", tr: "Lansman hızı", ar: "سرعة الإطلاق" },
     values: { "launch-site": 3, "mvp-sprint": 2, "startup-key": 1 },
   },
   {
     id: "depth",
-    labelEn: "Depth of delivery",
-    labelRu: "Глубина поставки",
+    label: { en: "Depth of delivery", ru: "Глубина поставки", zh: "交付深度", tr: "Teslimat derinliği", ar: "عمق التسليم" },
     values: { "launch-site": 1, "mvp-sprint": 2, "startup-key": 3 },
   },
   {
     id: "risk",
-    labelEn: "Risk control",
-    labelRu: "Контроль рисков",
+    label: { en: "Risk control", ru: "Контроль рисков", zh: "风险控制", tr: "Risk kontrolü", ar: "التحكم في المخاطر" },
     values: { "launch-site": 1, "mvp-sprint": 2, "startup-key": 3 },
   },
   {
     id: "support",
-    labelEn: "Post-launch support",
-    labelRu: "Поддержка после запуска",
+    label: { en: "Post-launch support", ru: "Поддержка после запуска", zh: "上线后支持", tr: "Lansman sonrası destek", ar: "الدعم بعد الإطلاق" },
     values: { "launch-site": 1, "mvp-sprint": 2, "startup-key": 3 },
   },
 ];
@@ -46,7 +43,7 @@ export function ServicesContent() {
   const comparisonAxes = useMemo(() => 
     COMPARISON_AXES_CONFIG.map((axis) => ({
       id: axis.id,
-      label: language === "en" ? axis.labelEn : axis.labelRu,
+      label: pick(axis.label, language),
       values: axis.values,
     })),
     [language]
@@ -57,18 +54,25 @@ export function ServicesContent() {
       <PageHero
         title={t("packages.title")}
         subtitle={t("packages.subtitle")}
-        eyebrow={language === "en" ? "Services" : "Услуги"}
+        eyebrow={pick({ en: "Services", ru: "Услуги", zh: "服务", tr: "Hizmetler", ar: "الخدمات" }, language)}
         metric={{
-          value: language === "en" ? "24h" : "24ч",
-          label: language === "en" ? "estimate response" : "ответ по оценке",
+          value: pick({ en: "24h", ru: "24ч", zh: "24 小时", tr: "24 sa", ar: "24 ساعة" }, language),
+          label: pick({ en: "estimate response", ru: "ответ по оценке", zh: "报价响应", tr: "teklif yanıtı", ar: "للرد بالتقدير" }, language),
         }}
         rightSlot={
           <DeliveryGates
-            title={language === "en" ? "Delivery gates" : "Гейты поставки"}
+            title={pick({ en: "Delivery gates", ru: "Гейты поставки", zh: "交付关卡", tr: "Teslimat kapıları", ar: "بوابات التسليم" }, language)}
             items={
-              language === "en"
-                ? ["Scope lock + risk review", "Architecture approval", "Release verification report"]
-                : ["Фиксация скоупа + риск‑ревью", "Утверждение архитектуры", "Отчёт верификации релиза"]
+              pick(
+                {
+                  en: ["Scope lock + risk review", "Architecture approval", "Release verification report"],
+                  ru: ["Фиксация скоупа + риск‑ревью", "Утверждение архитектуры", "Отчёт верификации релиза"],
+                  zh: ["范围锁定 + 风险评审", "架构审批", "发布验证报告"],
+                  tr: ["Kapsam kilidi + risk incelemesi", "Mimari onayı", "Yayın doğrulama raporu"],
+                  ar: ["تثبيت النطاق + مراجعة المخاطر", "اعتماد البنية المعمارية", "تقرير التحقق من الإصدار"],
+                },
+                language
+              )
             }
           />
         }
@@ -115,7 +119,7 @@ export function ServicesContent() {
                   {/* Best for section */}
                   <div className="mb-6">
                     <h3 className="text-caption text-text-muted uppercase tracking-wider mb-2">
-                      {language === "en" ? "Best for" : "Подходит для"}
+                      {pick({ en: "Best for", ru: "Подходит для", zh: "适用于", tr: "En uygun olduğu durum", ar: "الأنسب لـ" }, language)}
                     </h3>
                     <p className="text-body-sm text-text-secondary">
                       {pkg.forWhom[language]}
@@ -125,7 +129,7 @@ export function ServicesContent() {
                   {/* Deliverables */}
                   <div className="mb-6">
                     <h3 className="text-caption text-text-muted uppercase tracking-wider mb-3">
-                      {language === "en" ? "What you get" : "Что получите"}
+                      {pick({ en: "What you get", ru: "Что получите", zh: "您将获得", tr: "Neler alırsınız", ar: "ما ستحصل عليه" }, language)}
                     </h3>
                     <CheckList items={pkg.deliverables[language].slice(0, 6)} />
                   </div>
@@ -134,7 +138,7 @@ export function ServicesContent() {
                   <div className="relative overflow-hidden rounded-xl border border-border bg-gradient-to-br from-bg-tertiary/70 to-bg-secondary p-4">
                     <span aria-hidden="true" className="absolute inset-y-3 left-0 w-1 rounded-r-full" style={{ background: `rgb(${PKG_COLOR[pkg.id]})` }} />
                     <h3 className="text-caption text-text-muted uppercase tracking-wider mb-2">
-                      {language === "en" ? "End result" : "Итоговый результат"}
+                      {pick({ en: "End result", ru: "Итоговый результат", zh: "最终成果", tr: "Nihai sonuç", ar: "النتيجة النهائية" }, language)}
                     </h3>
                     <p className="text-body-sm text-text-primary">
                       {pkg.result[language]}
@@ -157,7 +161,7 @@ export function ServicesContent() {
                     variant="underline"
                     className="block text-center text-body-sm no-underline hover:underline"
                   >
-                    {language === "en" ? "Learn more" : "Подробнее"}
+                    {pick({ en: "Learn more", ru: "Подробнее", zh: "了解更多", tr: "Daha fazla bilgi", ar: "اعرف المزيد" }, language)}
                   </Link>
                 </div>
               </PackageShell>
@@ -178,14 +182,12 @@ export function ServicesContent() {
         <div className="mt-16">
           <AuroraCta
             as="h3"
-            title={language === "en" ? "Not sure which package fits?" : "Не уверены, какой пакет подходит?"}
+            title={pick({ en: "Not sure which package fits?", ru: "Не уверены, какой пакет подходит?", zh: "不确定哪个方案适合？", tr: "Hangi paketin uygun olduğundan emin değil misiniz?", ar: "لست متأكدًا أي باقة تناسبك؟" }, language)}
             text={
-              language === "en"
-                ? "Book a 30-minute call to discuss your project. We'll recommend the right approach based on your goals and constraints."
-                : "Запишитесь на 30-минутный звонок для обсуждения проекта. Мы порекомендуем подходящий подход на основе ваших целей и ограничений."
+              pick({ en: "Book a 30-minute call to discuss your project. We'll recommend the right approach based on your goals and constraints.", ru: "Запишитесь на 30-минутный звонок для обсуждения проекта. Мы порекомендуем подходящий подход на основе ваших целей и ограничений.", zh: "预约 30 分钟通话，聊聊您的项目。我们会根据您的目标和约束条件推荐合适的方案。", tr: "Projenizi konuşmak için 30 dakikalık bir görüşme planlayın. Hedeflerinize ve kısıtlarınıza göre doğru yaklaşımı önerelim.", ar: "احجز مكالمة مدتها 30 دقيقة لمناقشة مشروعك. سنوصي بالنهج الأنسب بناءً على أهدافك وقيودك." }, language)
             }
             primary={{ href: "/contact", label: t("cta.primary") }}
-            secondary={{ href: "/cases", label: language === "en" ? "See our work" : "Наши работы" }}
+            secondary={{ href: "/cases", label: pick({ en: "See our work", ru: "Наши работы", zh: "查看我们的作品", tr: "Çalışmalarımızı görün", ar: "اطّلع على أعمالنا" }, language) }}
           />
         </div>
       </Section>

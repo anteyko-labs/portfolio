@@ -5,6 +5,7 @@ import Image from "next/image";
 import { AnimatePresence, motion, useMotionValue, useSpring, useTransform, animate, type MotionValue } from "framer-motion";
 import { Link as NextLink } from "@/i18n/navigation";
 import { useLanguage } from "@/lib/language-context";
+import { pick, type Language } from "@/lib/i18n-text";
 import { useReducedMotion } from "@/lib/hooks";
 import { MagneticButton } from "@/components/ui/magnetic-button";
 import { OFFICES, localTime } from "@/lib/locations";
@@ -14,6 +15,9 @@ const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 const WORDS = {
   en: ["websites", "MVPs", "Web3", "ERP & CRM", "mobile apps"],
   ru: ["сайты", "MVP", "Web3", "ERP и CRM", "мобильные PWA"],
+  zh: ["网站", "MVP", "Web3", "ERP 与 CRM", "移动应用"],
+  tr: ["web siteleri", "MVP'ler", "Web3", "ERP ve CRM", "mobil uygulamalar"],
+  ar: ["مواقع ويب", "منتجات MVP", "Web3", "ERP وCRM", "تطبيقات جوال"],
 };
 
 /** A real page in a scaled iframe that scrolls itself in a loop */
@@ -83,7 +87,7 @@ function LiveSite({ src, title, width = 1440, height = 900, poster }: { src: str
 }
 
 /** Office cities cycling with their local time: "Istanbul 10:42" */
-function OfficeClock({ en }: { en: boolean }) {
+function OfficeClock({ language }: { language: Language }) {
   const reduced = useReducedMotion();
   const [i, setI] = useState(0);
   const [now, setNow] = useState<Date | null>(null);
@@ -110,7 +114,7 @@ function OfficeClock({ en }: { en: boolean }) {
           transition={{ duration: 0.4, ease: EASE }}
           className="inline-flex items-center gap-1.5 whitespace-nowrap"
         >
-          {o.city[en ? "en" : "ru"]}
+          {o.city[language]}
           {now && <span className="tabular-nums text-white/45">{localTime(o.tz, now)}</span>}
         </motion.span>
       </AnimatePresence>
@@ -156,10 +160,10 @@ function PhoneScreens() {
 }
 
 /** Rotating ring of text around an arrow — a quiet "scroll" cue */
-function RingBadge({ en }: { en: boolean }) {
-  const text = en ? "ANTEYKO · PRODUCT STUDIO · SINCE 2021 · " : "ANTEYKO · СТУДИЯ ПРОДУКТОВ · С 2021 · ";
+function RingBadge({ language }: { language: Language }) {
+  const text = pick({ en: "ANTEYKO · PRODUCT STUDIO · SINCE 2021 · ", ru: "ANTEYKO · СТУДИЯ ПРОДУКТОВ · С 2021 · ", zh: "ANTEYKO · 产品工作室 · 始于 2021 · ", tr: "ANTEYKO · ÜRÜN STÜDYOSU · 2021'DEN BERİ · ", ar: "ANTEYKO · استوديو منتجات · منذ 2021 · " }, language);
   return (
-    <a href="#home-services" aria-label={en ? "Scroll to services" : "К услугам"} className="group relative grid h-28 w-28 place-items-center">
+    <a href="#home-services" aria-label={pick({ en: "Scroll to services", ru: "К услугам", zh: "滚动查看服务", tr: "Hizmetlere kaydır", ar: "مرّر إلى الخدمات" }, language)} className="group relative grid h-28 w-28 place-items-center">
       <svg viewBox="0 0 100 100" className="home-ring absolute inset-0 h-full w-full" aria-hidden="true">
         <defs>
           <path id="ring-path" d="M50 50 m-38 0 a38 38 0 1 1 76 0 a38 38 0 1 1 -76 0" />
@@ -174,13 +178,13 @@ function RingBadge({ en }: { en: boolean }) {
 }
 
 /** Decorative card for the L1 work: modules lighting up in turn (no live data) */
-function L1Card({ en }: { en: boolean }) {
+function L1Card({ language }: { language: Language }) {
   const mods = ["Consensus", "EVM", "DEX", "Privacy", "Governance", "SDK"];
   return (
     <div className="w-[220px] rounded-2xl border border-white/10 bg-[#0E0E18]/90 p-4 shadow-2xl backdrop-blur-xl">
       <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-wider text-white/50">
         <span className="h-2 w-2 rounded-full bg-fuchsia-400" />
-        {en ? "L1 blockchain" : "L1-блокчейн"}
+        {pick({ en: "L1 blockchain", ru: "L1-блокчейн", zh: "L1 区块链", tr: "L1 blokzincir", ar: "بلوكتشين L1" }, language)}
       </div>
       <p className="mt-2 font-brand text-lg font-semibold text-white">Rust · EVM · DEX</p>
       <svg viewBox="0 0 120 30" className="mt-2 h-8 w-full" aria-hidden="true">
@@ -218,10 +222,9 @@ function Counter({ to, suffix = "", delay = 0 }: { to: number; suffix?: string; 
 
 export function HomeHero() {
   const { t, language } = useLanguage();
-  const en = language === "en";
   const reduced = useReducedMotion();
   const [word, setWord] = useState(0);
-  const words = WORDS[en ? "en" : "ru"];
+  const words = WORDS[language];
 
   useEffect(() => {
     if (reduced) return;
@@ -250,10 +253,10 @@ export function HomeHero() {
   };
 
   const stats = [
-    { to: 40, suffix: "+", label: en ? "products shipped" : "запущенных продуктов" },
-    { to: 15, suffix: "", label: en ? "industries" : "отраслей" },
-    { to: 5, suffix: "", label: en ? "years in production" : "лет в разработке" },
-    { to: 24, suffix: en ? "h" : " ч", label: en ? "to an estimate" : "до оценки проекта" },
+    { to: 40, suffix: "+", label: pick({ en: "products shipped", ru: "запущенных продуктов", zh: "款已交付产品", tr: "teslim edilen ürün", ar: "منتجًا تم تسليمه" }, language) },
+    { to: 15, suffix: "", label: pick({ en: "industries", ru: "отраслей", zh: "个行业", tr: "sektör", ar: "قطاعات" }, language) },
+    { to: 5, suffix: "", label: pick({ en: "years in production", ru: "лет в разработке", zh: "年生产经验", tr: "yıllık production deneyimi", ar: "سنوات في الإنتاج" }, language) },
+    { to: 24, suffix: pick({ en: "h", ru: " ч", zh: "小时", tr: "sa", ar: "س" }, language), label: pick({ en: "to an estimate", ru: "до оценки проекта", zh: "出具报价", tr: "teklife kadar", ar: "حتى التقدير" }, language) },
   ];
 
   return (
@@ -277,9 +280,9 @@ export function HomeHero() {
             className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-white/70 backdrop-blur"
           >
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-            {en ? "Product studio" : "Студия продуктов"}
+            {pick({ en: "Product studio", ru: "Студия продуктов", zh: "产品工作室", tr: "Ürün stüdyosu", ar: "استوديو منتجات" }, language)}
             <span className="text-white/30">·</span>
-            <OfficeClock en={en} />
+            <OfficeClock language={language} />
           </motion.p>
 
           <h1 className="mt-7 font-brand text-[2.7rem] font-semibold leading-[0.98] tracking-[-0.035em] sm:text-6xl xl:text-[5.4rem]">
@@ -303,7 +306,7 @@ export function HomeHero() {
             transition={{ duration: 0.6, delay: 0.4, ease: EASE }}
             className="mt-6 flex flex-wrap items-center gap-3 text-lg text-white/70 md:text-xl"
           >
-            <span>{en ? "We build" : "Делаем"}</span>
+            <span>{pick({ en: "We build", ru: "Делаем", zh: "我们打造", tr: "Uçtan uca", ar: "نبني" }, language)}</span>
             <span className="relative inline-flex h-11 min-w-[11rem] items-center overflow-hidden rounded-xl border border-white/15 bg-white/5 px-4 font-semibold text-white">
               <AnimatePresence mode="popLayout" initial={false}>
                 <motion.span
@@ -318,7 +321,7 @@ export function HomeHero() {
                 </motion.span>
               </AnimatePresence>
             </span>
-            <span>{en ? "end to end" : "под ключ"}</span>
+            <span>{pick({ en: "end to end", ru: "под ключ", zh: "端到端", tr: "inşa ediyoruz", ar: "من الفكرة إلى الإطلاق" }, language)}</span>
           </motion.div>
 
           <motion.p
@@ -350,7 +353,7 @@ export function HomeHero() {
                 href="/cases"
                 className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-white/5 px-7 py-4 text-body-lg font-medium text-white backdrop-blur transition-colors hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
               >
-                {en ? "See the work" : "Смотреть работы"}
+                {pick({ en: "See the work", ru: "Смотреть работы", zh: "查看作品", tr: "İşleri gör", ar: "شاهد الأعمال" }, language)}
               </NextLink>
             </MagneticButton>
           </motion.div>
@@ -391,7 +394,7 @@ export function HomeHero() {
                   <span className="mx-auto rounded-md bg-white/5 px-3 py-0.5 font-mono text-[10px] text-white/50">gran</span>
                 </div>
                 <div className="relative aspect-[16/10]">
-                  <LiveSite src="/demos/gran/index.html" poster="/images/showcase/gran/cover.jpg" title={en ? "Live concept site" : "Живой концепт-сайт"} />
+                  <LiveSite src="/demos/gran/index.html" poster="/images/showcase/gran/cover.jpg" title={pick({ en: "Live concept site", ru: "Живой концепт-сайт", zh: "在线概念网站", tr: "Canlı konsept site", ar: "موقع مفهومي مباشر" }, language)} />
                 </div>
               </div>
 
@@ -406,16 +409,16 @@ export function HomeHero() {
 
               {/* L1 card */}
               <motion.div style={reduced ? undefined : layerTicker} className="absolute right-0 top-[-4%] hidden sm:block 2xl:-right-[3%]">
-                <L1Card en={en} />
+                <L1Card language={language} />
               </motion.div>
 
               {/* result chips */}
               <motion.div style={reduced ? undefined : layerChips} className="absolute bottom-[6%] right-[4%] flex flex-col items-end gap-2 2xl:right-0">
                 <span className="home-float inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/90 px-4 py-2 text-sm font-semibold text-[#0A0A0F] shadow-xl">
-                  <span className="text-emerald-600">▲</span> {en ? "mobile conversion +23%" : "мобильная конверсия +23%"}
+                  <span className="text-emerald-600">▲</span> {pick({ en: "mobile conversion +23%", ru: "мобильная конверсия +23%", zh: "移动端转化率 +23%", tr: "mobil dönüşüm +%23", ar: "التحويل عبر الجوال +23%" }, language)}
                 </span>
                 <span className="home-float inline-flex items-center gap-2 rounded-full border border-white/10 bg-[#111118]/90 px-4 py-2 text-sm font-medium text-white shadow-xl backdrop-blur [animation-delay:-2s]">
-                  <span className="h-2 w-2 rounded-full bg-emerald-400" /> {en ? "no-shows 32% → 8%" : "неявки 32% → 8%"}
+                  <span className="h-2 w-2 rounded-full bg-emerald-400" /> {pick({ en: "no-shows 32% → 8%", ru: "неявки 32% → 8%", zh: "爽约率 32% → 8%", tr: "gelmeyenler %32 → %8", ar: "عدم الحضور من 32% ← 8%" }, language)}
                 </span>
               </motion.div>
             </motion.div>
@@ -424,7 +427,7 @@ export function HomeHero() {
       </div>
 
       <div className="absolute bottom-8 right-8 hidden lg:block xl:right-14">
-        <RingBadge en={en} />
+        <RingBadge language={language} />
       </div>
     </section>
   );

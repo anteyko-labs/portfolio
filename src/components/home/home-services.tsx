@@ -6,6 +6,7 @@ import clsx from "clsx";
 import { motion } from "framer-motion";
 import { Link as NextLink } from "@/i18n/navigation";
 import { useLanguage } from "@/lib/language-context";
+import { pick } from "@/lib/i18n-text";
 import { useReducedMotion } from "@/lib/hooks";
 import { GENERATIVE_COVERS } from "@/components/cases-catalog/generative-covers";
 
@@ -116,7 +117,6 @@ function CryptoWallet({ active }: { active: boolean }) {
 
 export function HomeServices() {
   const { language } = useLanguage();
-  const en = language === "en";
   const reduced = useReducedMotion();
   const [hover, setHover] = useState<number | null>(null);
   const Bi = GENERATIVE_COVERS["analytics-pro-enterprise-bi"];
@@ -125,9 +125,9 @@ export function HomeServices() {
     {
       span: "lg:col-span-7",
       href: "/cases?type=web",
-      tag: en ? "Websites" : "Сайты",
-      title: en ? "Websites that sell — and that people scroll to the end" : "Сайты, которые продают и которые хочется долистать",
-      text: en ? "Corporate sites, catalogs with booking, landing pages with scroll scenes. SEO, speed and analytics from day one." : "Корпоративные сайты, каталоги с бронированием, лендинги со скролл-сценами. SEO, скорость и аналитика с первого дня.",
+      tag: pick({ en: "Websites", ru: "Сайты", zh: "网站", tr: "Web siteleri", ar: "مواقع" }, language),
+      title: pick({ en: "Websites that sell — and that people scroll to the end", ru: "Сайты, которые продают и которые хочется долистать", zh: "能带来转化、让人一路读到底的网站", tr: "Satış yapan — ve sonuna kadar kaydırılan web siteleri", ar: "مواقع تبيع — ويتصفحها الناس حتى النهاية" }, language),
+      text: pick({ en: "Corporate sites, catalogs with booking, landing pages with scroll scenes. SEO, speed and analytics from day one.", ru: "Корпоративные сайты, каталоги с бронированием, лендинги со скролл-сценами. SEO, скорость и аналитика с первого дня.", zh: "企业官网、带预约的商品目录、带滚动场景的落地页。第一天起就具备 SEO、速度和数据分析。", tr: "Kurumsal siteler, rezervasyonlu kataloglar, kaydırma sahneli açılış sayfaları. İlk günden SEO, hız ve analitik.", ar: "مواقع مؤسسية، وكتالوجات مع الحجز، وصفحات هبوط بمشاهد تمرير. SEO وسرعة وتحليلات من اليوم الأول." }, language),
       chips: ["Next.js", "CSS 3D", "SEO"],
       visual: (a: boolean) => <SitePan active={a} />,
       dark: false,
@@ -135,10 +135,10 @@ export function HomeServices() {
     {
       span: "lg:col-span-5",
       href: "/cases?type=mobile",
-      tag: en ? "Products & MVP" : "Продукты и MVP",
-      title: en ? "Apps your customers install" : "Приложения, которые ставят на телефон",
-      text: en ? "Ordering, booking and loyalty PWAs with an owner's cabinet." : "PWA для заказов, записи и лояльности — с кабинетом владельца.",
-      chips: ["PWA", "Push", en ? "Admin" : "Админка"],
+      tag: pick({ en: "Products & MVP", ru: "Продукты и MVP", zh: "产品与 MVP", tr: "Ürünler ve MVP", ar: "المنتجات وMVP" }, language),
+      title: pick({ en: "Apps your customers install", ru: "Приложения, которые ставят на телефон", zh: "让客户愿意安装的应用", tr: "Müşterilerinizin yüklediği uygulamalar", ar: "تطبيقات يثبّتها عملاؤك" }, language),
+      text: pick({ en: "Ordering, booking and loyalty PWAs with an owner's cabinet.", ru: "PWA для заказов, записи и лояльности — с кабинетом владельца.", zh: "点餐、预约和会员忠诚度 PWA，附带店主后台。", tr: "Sipariş, rezervasyon ve sadakat PWA'ları; sahip paneliyle birlikte.", ar: "تطبيقات PWA للطلب والحجز والولاء مع لوحة خاصة بالمالك." }, language),
+      chips: ["PWA", "Push", pick({ en: "Admin", ru: "Админка", zh: "后台", tr: "Yönetim", ar: "الإدارة" }, language)],
       visual: (a: boolean) => <Phones active={a} />,
       dark: true,
     },
@@ -146,18 +146,18 @@ export function HomeServices() {
       span: "lg:col-span-5",
       href: "/cases?type=web3",
       tag: "Web3",
-      title: en ? "Crypto wallets, tokens and blockchains" : "Криптокошельки, токены и блокчейн",
-      text: en ? "Non-custodial wallets with a built-in exchange, smart contracts, tokenization platforms and a full blockchain with a DEX." : "Некастодиальные кошельки со встроенной биржей, смарт-контракты, платформы токенизации и целый блокчейн с DEX.",
-      chips: [en ? "Wallets" : "Кошельки", "Solidity", "Rust"],
+      title: pick({ en: "Crypto wallets, tokens and blockchains", ru: "Криптокошельки, токены и блокчейн", zh: "加密钱包、代币和区块链", tr: "Kripto cüzdanlar, tokenlar ve blokzincirler", ar: "محافظ العملات الرقمية والرموز والبلوكتشين" }, language),
+      text: pick({ en: "Non-custodial wallets with a built-in exchange, smart contracts, tokenization platforms and a full blockchain with a DEX.", ru: "Некастодиальные кошельки со встроенной биржей, смарт-контракты, платформы токенизации и целый блокчейн с DEX.", zh: "内置交易所的非托管钱包、智能合约、代币化平台，以及带 DEX 的完整区块链。", tr: "Yerleşik borsalı non-custodial cüzdanlar, akıllı kontratlar, tokenizasyon platformları ve DEX'li eksiksiz bir blokzincir.", ar: "محافظ غير حاضنة مع منصة تداول مدمجة، وعقود ذكية، ومنصات توكنة، وبلوكتشين كاملة مع DEX." }, language),
+      chips: [pick({ en: "Wallets", ru: "Кошельки", zh: "钱包", tr: "Cüzdanlar", ar: "المحافظ" }, language), "Solidity", "Rust"],
       visual: (a: boolean) => <CryptoWallet active={a} />,
       dark: true,
     },
     {
       span: "lg:col-span-7",
       href: "/cases?type=product",
-      tag: en ? "ERP, CRM, analytics" : "ERP, CRM, аналитика",
-      title: en ? "Systems the business runs on" : "Системы, на которых держится бизнес",
-      text: en ? "Accounting, marking and logistics, BI dashboards — built around how your team actually works." : "Учёт, маркировка и логистика, BI-дашборды — под то, как реально работает ваша команда.",
+      tag: pick({ en: "ERP, CRM, analytics", ru: "ERP, CRM, аналитика", zh: "ERP、CRM、数据分析", tr: "ERP, CRM, analitik", ar: "ERP وCRM والتحليلات" }, language),
+      title: pick({ en: "Systems the business runs on", ru: "Системы, на которых держится бизнес", zh: "支撑业务运转的系统", tr: "İşin üzerinde döndüğü sistemler", ar: "أنظمة تقوم عليها أعمالك" }, language),
+      text: pick({ en: "Accounting, marking and logistics, BI dashboards — built around how your team actually works.", ru: "Учёт, маркировка и логистика, BI-дашборды — под то, как реально работает ваша команда.", zh: "会计、标签管理与物流、BI 看板——围绕您团队的真实工作方式打造。", tr: "Muhasebe, işaretleme ve lojistik, BI panelleri — ekibinizin gerçekte çalışma biçimine göre kurulur.", ar: "محاسبة وتوسيم ولوجستيات ولوحات BI — مبنية على طريقة عمل فريقك الفعلية." }, language),
       chips: ["NestJS", "PostgreSQL", "BI"],
       visual: (a: boolean) => <Bi active={a} />,
       dark: false,
@@ -169,15 +169,13 @@ export function HomeServices() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-12 flex flex-col justify-between gap-6 md:flex-row md:items-end">
           <div>
-            <p className="font-mono text-caption uppercase tracking-[0.2em] text-text-tertiary">{en ? "What we build" : "Что мы делаем"}</p>
+            <p className="font-mono text-caption uppercase tracking-[0.2em] text-text-tertiary">{pick({ en: "What we build", ru: "Что мы делаем", zh: "我们打造什么", tr: "Ne inşa ediyoruz", ar: "ما نبنيه" }, language)}</p>
             <h2 className="mt-4 max-w-2xl font-brand text-4xl font-semibold leading-[1.02] tracking-[-0.03em] text-text-primary md:text-6xl">
-              {en ? "One studio, the whole product" : "Одна студия — весь продукт"}
+              {pick({ en: "One studio, the whole product", ru: "Одна студия — весь продукт", zh: "一个工作室，搞定整个产品", tr: "Tek stüdyo, bütün ürün", ar: "استوديو واحد، ومنتج كامل" }, language)}
             </h2>
           </div>
           <p className="max-w-md text-body-lg text-text-secondary">
-            {en
-              ? "Design, frontend, backend, admin panels, integrations and launch — Web2 and Web3 in one delivery loop."
-              : "Дизайн, фронтенд, бэкенд, админки, интеграции и запуск — Web2 и Web3 в одном цикле поставки."}
+            {pick({ en: "Design, frontend, backend, admin panels, integrations and launch — Web2 and Web3 in one delivery loop.", ru: "Дизайн, фронтенд, бэкенд, админки, интеграции и запуск — Web2 и Web3 в одном цикле поставки.", zh: "设计、前端、后端、管理后台、系统集成到上线——Web2 与 Web3 同一交付闭环。", tr: "Tasarım, frontend, backend, yönetim panelleri, entegrasyonlar ve lansman — Web2 ve Web3 tek bir teslimat döngüsünde.", ar: "التصميم والواجهة الأمامية والخلفية ولوحات الإدارة والتكاملات والإطلاق — Web2 وWeb3 في دورة تسليم واحدة." }, language)}
           </p>
         </div>
 

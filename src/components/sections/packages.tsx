@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/lib/language-context";
+import { pick } from "@/lib/i18n-text";
 import { useReducedMotion } from "@/lib/hooks";
 import { Section, SectionHeader, AnimatedItem } from "@/components/ui/section";
 import { Card } from "@/components/ui/card";
@@ -21,7 +22,7 @@ export function PackagesSection() {
       <SectionHeader
         title={t("packages.title")}
         subtitle={t("packages.subtitle")}
-        eyebrow={language === "en" ? "Pricing" : "Тарифы"}
+        eyebrow={pick({ en: "Pricing", ru: "Тарифы", zh: "价格", tr: "Fiyatlar", ar: "الأسعار" }, language)}
       />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 relative items-stretch">
@@ -62,7 +63,7 @@ export function PackagesSection() {
                       </div>
                       {isRecommended && (
                         <Badge variant="primary">
-                          {language === "en" ? "Popular" : "Популярный"}
+                          {pick({ en: "Popular", ru: "Популярный", zh: "热门", tr: "Popüler", ar: "الأكثر طلبًا" }, language)}
                         </Badge>
                       )}
                       {pkg.id === "web3-addon" && (
@@ -78,7 +79,7 @@ export function PackagesSection() {
                     {/* For whom */}
                     <div className="mb-6">
                       <p className="text-caption font-mono text-text-tertiary uppercase tracking-wide mb-2">
-                        {language === "en" ? "Best for" : "Подходит для"}
+                        {pick({ en: "Best for", ru: "Подходит для", zh: "适用于", tr: "En uygun olduğu durum", ar: "الأنسب لـ" }, language)}
                       </p>
                       <p className="text-body-sm text-text-secondary">
                         {pkg.forWhom[language]}
@@ -88,7 +89,7 @@ export function PackagesSection() {
                     {/* Deliverables */}
                     <div className="mb-6">
                       <p className="text-caption font-mono text-text-tertiary uppercase tracking-wide mb-3">
-                        {language === "en" ? "What you get" : "Что получите"}
+                        {pick({ en: "What you get", ru: "Что получите", zh: "您将获得", tr: "Neler alırsınız", ar: "ما ستحصل عليه" }, language)}
                       </p>
                       <ul className="space-y-2">
                         {pkg.deliverables[language].map((item, i) => (
@@ -121,7 +122,7 @@ export function PackagesSection() {
                         : "bg-bg-secondary border-border"
                     )}>
                       <p className="text-caption font-mono text-text-tertiary uppercase tracking-wide mb-1">
-                        {language === "en" ? "End result" : "Итоговый результат"}
+                        {pick({ en: "End result", ru: "Итоговый результат", zh: "最终成果", tr: "Nihai sonuç", ar: "النتيجة النهائية" }, language)}
                       </p>
                       <p className="text-body-sm text-text-primary">
                         {pkg.result[language]}

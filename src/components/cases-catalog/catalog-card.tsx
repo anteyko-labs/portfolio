@@ -7,6 +7,7 @@ import { useLanguage } from "@/lib/language-context";
 import type { CatalogEntry } from "@/lib/catalog";
 import { CatalogMedia } from "./media";
 import { CATEGORY_LABEL, pad } from "./labels";
+import { pick } from "@/lib/i18n-text";
 
 export type CardSize = "wide" | "half" | "third";
 
@@ -61,7 +62,7 @@ export function CatalogCard({
         href={href}
         className="relative block focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary focus-visible:ring-offset-2 rounded-t-2xl"
         aria-label={title}
-        data-cursor={language === "en" ? "Open" : "Открыть"}
+        data-cursor={pick({ en: "Open", ru: "Открыть", zh: "打开", tr: "Aç", ar: "فتح" }, language)}
       >
         {/* Browser chrome */}
         <div className="flex h-9 items-center gap-3 border-b border-border bg-bg-secondary px-3.5">
@@ -131,7 +132,7 @@ export function CatalogCard({
               rel={external ? "noopener noreferrer" : undefined}
               className="relative z-10 inline-flex items-center gap-1 text-body-sm font-medium text-text-secondary transition-colors hover:text-accent-primary"
             >
-              {language === "en" ? "Open site" : "Открыть сайт"}
+              {pick({ en: "Open site", ru: "Открыть сайт", zh: "打开网站", tr: "Siteyi aç", ar: "افتح الموقع" }, language)}
               <span aria-hidden="true">↗</span>
             </a>
           )}

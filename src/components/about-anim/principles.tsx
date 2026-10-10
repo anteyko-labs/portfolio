@@ -4,8 +4,8 @@ import { motion } from "framer-motion";
 import { EASE, SpotlightCard, Stagger } from "@/components/motion/kit";
 import { useReducedMotion } from "@/lib/hooks";
 import { RevealTitle, RunScope } from "./shared";
+import { type L, type Language, pick } from "@/lib/i18n-text";
 
-type L = { en: string; ru: string };
 type Item = { title: L; description: L; evidence: L };
 
 const S = { fill: "none", stroke: "currentColor", strokeWidth: 1.8, strokeLinecap: "round" as const, strokeLinejoin: "round" as const };
@@ -95,8 +95,7 @@ function Evidence({ text, delay }: { text: string; delay: number }) {
 }
 
 /** "How we think": four principles on glass cards in a dark aurora section */
-export function Principles({ title, items, language }: { title: L; items: readonly Item[]; language: "en" | "ru" }) {
-  const en = language === "en";
+export function Principles({ title, items, language }: { title: L; items: readonly Item[]; language: Language }) {
   return (
     <RunScope className="relative isolate overflow-hidden bg-[#06060B] py-20 text-white md:py-28">
       <div aria-hidden="true" className="home-aurora home-aurora--violet pointer-events-none absolute inset-0 -z-10 opacity-70" />
@@ -106,7 +105,7 @@ export function Principles({ title, items, language }: { title: L; items: readon
         style={{ backgroundImage: "radial-gradient(circle at 1px 1px, #fff 1px, transparent 0)", backgroundSize: "28px 28px" }}
       />
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <RevealTitle dark eyebrow={en ? "Principles" : "Принципы"} title={title[language]} className="max-w-3xl" />
+        <RevealTitle dark eyebrow={pick({ en: "Principles", ru: "Принципы", zh: "原则", tr: "İlkeler", ar: "المبادئ" }, language)} title={title[language]} className="max-w-3xl" />
         <Stagger className="mt-12 grid gap-5 md:grid-cols-2" gap={0.1}>
           {items.map((item, i) => {
             const Icon = ICONS[i % ICONS.length];

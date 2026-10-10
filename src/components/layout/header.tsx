@@ -10,6 +10,7 @@ import { useLanguage } from "@/lib/language-context";
 import { useReducedMotion, useKeyboardNavigation, useFocusTrap } from "@/lib/hooks";
 import { Button } from "@/components/ui/button";
 import { MagneticButton } from "@/components/ui/magnetic-button";
+import { LanguageSwitcher, LanguageSwitcherInline } from "./language-switcher";
 
 const navItems = [
   { href: "/", key: "home" },
@@ -24,7 +25,7 @@ const navItems = [
 
 export function Header() {
   const router = useRouter();
-  const { t, language, setLanguage } = useLanguage();
+  const { t } = useLanguage();
   const prefersReducedMotion = useReducedMotion();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -57,10 +58,6 @@ export function Header() {
       document.body.style.overflow = "";
     };
   }, [isMobileMenuOpen]);
-
-  const toggleLanguage = () => {
-    setLanguage(language === "en" ? "ru" : "en");
-  };
 
   // Scroll progress
   const { scrollYProgress } = useScroll();
@@ -110,6 +107,7 @@ export function Header() {
                 <NextLink
                   key={item.key}
                   href={item.href}
+                  data-portal={item.href === "/cases" ? "" : undefined}
                   className={clsx(
                     "relative px-4 py-2 text-body-sm font-medium rounded-lg group",
                     "text-text-secondary hover:text-text-primary",
@@ -125,20 +123,7 @@ export function Header() {
 
             {/* Desktop Actions */}
             <div className="hidden lg:flex items-center gap-4">
-              {/* Language Toggle */}
-              <button
-                onClick={toggleLanguage}
-                className={clsx(
-                  "px-3 py-2 text-body-sm font-medium rounded-lg",
-                  "text-text-secondary hover:text-text-primary",
-                  "border border-border hover:border-border-hover",
-                  "transition-all duration-200",
-                  "focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary"
-                )}
-                aria-label={`Switch to ${language === "en" ? "Russian" : "English"}`}
-              >
-                {language === "en" ? "RU" : "EN"}
-              </button>
+              <LanguageSwitcher />
 
               {/* CTA — магнитный эффект как в hero */}
               <MagneticButton className="inline-flex">
@@ -265,20 +250,7 @@ export function Header() {
 
                 {/* Actions */}
                 <div className="mt-auto space-y-4">
-                  {/* Language Toggle */}
-                  <button
-                    onClick={toggleLanguage}
-                    className={clsx(
-                      "w-full px-4 py-3 text-body-md font-medium rounded-xl",
-                      "text-text-secondary hover:text-text-primary",
-                      "border border-border hover:border-border-hover",
-                      "transition-all duration-200",
-                      "focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-secondary"
-                    )}
-                    aria-label={language === "en" ? "Switch to Russian" : "Переключить на английский"}
-                  >
-                    {language === "en" ? "Русский" : "English"}
-                  </button>
+                  <LanguageSwitcherInline />
 
                   {/* CTAs */}
                   <Button

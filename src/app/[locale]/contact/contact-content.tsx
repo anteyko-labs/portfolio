@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/lib/language-context";
+import { pick, type Language } from "@/lib/i18n-text";
 import { PageHero } from "@/components/sections/page-hero";
 import { Section } from "@/components/ui/section";
 import { Input, Textarea, Select, RadioGroup } from "@/components/ui/input";
@@ -90,9 +91,8 @@ export function ContactContent() {
   // estimate + Telegram hot-lead pipeline) vs. booking a call right now.
   const [contactMode, setContactMode] = useState<"form" | "call">("form");
   const reduced = useReducedMotion();
-  const en = language === "en";
 
-  const requiredMessage = language === "en" ? "Required" : "Обязательное поле";
+  const requiredMessage = pick({ en: "Required", ru: "Обязательное поле", zh: "必填", tr: "Zorunlu alan", ar: "حقل مطلوب" }, language);
 
   const completion = useMemo(() => {
     const filled = ALL_REQUIRED.filter((field) => formData[field]).length;
@@ -129,7 +129,7 @@ export function ContactContent() {
     if (!formData.name) nextErrors.name = requiredMessage;
     if (!formData.email) nextErrors.email = requiredMessage;
     if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      nextErrors.email = language === "en" ? "Invalid email format" : "Неверный формат email";
+      nextErrors.email = pick({ en: "Invalid email format", ru: "Неверный формат email", zh: "邮箱格式无效", tr: "Geçersiz e-posta biçimi", ar: "صيغة البريد الإلكتروني غير صحيحة" }, language);
     }
     if (Object.keys(nextErrors).length > 0) {
       setErrors(nextErrors);
@@ -152,10 +152,10 @@ export function ContactContent() {
       if (!formData[field]) nextErrors[field] = requiredMessage;
     });
     if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      nextErrors.email = language === "en" ? "Invalid email format" : "Неверный формат email";
+      nextErrors.email = pick({ en: "Invalid email format", ru: "Неверный формат email", zh: "邮箱格式无效", tr: "Geçersiz e-posta biçimi", ar: "صيغة البريد الإلكتروني غير صحيحة" }, language);
     }
     if (!formData.consent) {
-      nextErrors.consent = language === "en" ? "Please accept to continue" : "Необходимо принять для продолжения";
+      nextErrors.consent = pick({ en: "Please accept to continue", ru: "Необходимо принять для продолжения", zh: "请勾选同意后继续", tr: "Devam etmek için lütfen onaylayın", ar: "يرجى الموافقة للمتابعة" }, language);
     }
     if (Object.keys(nextErrors).length > 0) {
       setErrors(nextErrors);
@@ -217,15 +217,11 @@ export function ContactContent() {
             {t("contact.success.description")}
           </motion.p>
           <motion.p {...reveal(2)} className="text-body-md text-accent-primary font-medium">
-            {language === "en"
-              ? "Check your email (including spam) — we\u2019ll confirm receipt within minutes."
-              : "Проверьте почту (включая спам) — мы подтвердим получение в течение нескольких минут."}
+            {pick({ en: "Check your email (including spam) — we\u2019ll confirm receipt within minutes.", ru: "Проверьте почту (включая спам) — мы подтвердим получение в течение нескольких минут.", zh: "请查收邮件（包括垃圾邮件箱）——我们会在几分钟内确认收到。", tr: "E-postanızı (spam klasörü dahil) kontrol edin — alındığını birkaç dakika içinde onaylayacağız.", ar: "تحقّق من بريدك الإلكتروني (بما في ذلك البريد غير الهام) — سنؤكد الاستلام خلال دقائق." }, language)}
           </motion.p>
           <motion.div {...reveal(3)} className="mt-8 p-5 rounded-xl border border-accent-primary/20 bg-accent-primary/5">
             <p className="text-body-sm text-text-secondary">
-              {language === "en"
-                ? "Estimated response: within 24 hours. A real engineer will review your project — no bots, no templates."
-                : "Ожидаемый ответ: в течение 24 часов. Живой инженер рассмотрит ваш проект — без ботов, без шаблонов."}
+              {pick({ en: "Estimated response: within 24 hours. A real engineer will review your project — no bots, no templates.", ru: "Ожидаемый ответ: в течение 24 часов. Живой инженер рассмотрит ваш проект — без ботов, без шаблонов.", zh: "预计回复时间：24 小时内。真人工程师将审阅您的项目——没有机器人，没有模板。", tr: "Tahmini yanıt süresi: 24 saat içinde. Projenizi gerçek bir mühendis inceleyecek — bot yok, şablon yok.", ar: "الرد المتوقع: خلال 24 ساعة. سيراجع مشروعك مهندس حقيقي — دون روبوتات ودون قوالب جاهزة." }, language)}
             </p>
           </motion.div>
           <motion.div {...reveal(4)} className="mt-10 text-left rounded-2xl border border-border bg-bg-secondary/80 p-6">
@@ -242,7 +238,7 @@ export function ContactContent() {
               href="/cases"
               className="group inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-accent-primary text-white text-body-sm font-medium hover:bg-accent-secondary transition-colors"
             >
-              {language === "en" ? "View our cases" : "Смотреть кейсы"}
+              {pick({ en: "View our cases", ru: "Смотреть кейсы", zh: "查看我们的案例", tr: "Projelerimizi görün", ar: "اطّلع على حالاتنا" }, language)}
               <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
               </svg>
@@ -252,7 +248,7 @@ export function ContactContent() {
               className="inline-flex items-center justify-center px-5 py-2.5 rounded-xl border border-border text-body-sm text-text-secondary hover:text-text-primary transition-colors"
               onClick={() => setStatus("idle")}
             >
-              {language === "en" ? "Submit another request" : "Отправить ещё заявку"}
+              {pick({ en: "Submit another request", ru: "Отправить ещё заявку", zh: "再提交一份需求", tr: "Yeni bir talep gönder", ar: "إرسال طلب آخر" }, language)}
             </button>
           </motion.div>
         </div>
@@ -275,9 +271,9 @@ export function ContactContent() {
       <PageHero
         title={t("contact.title")}
         subtitle={t("contact.subtitle")}
-        eyebrow={language === "en" ? "Contact" : "Контакты"}
+        eyebrow={pick({ en: "Contact", ru: "Контакты", zh: "联系我们", tr: "İletişim", ar: "تواصل معنا" }, language)}
         align="left"
-        rightSlot={<ContactHeroScene en={en} />}
+        rightSlot={<ContactHeroScene />}
       />
 
       <Section background="secondary" padding="lg" className="relative overflow-hidden">
@@ -287,12 +283,12 @@ export function ContactContent() {
           <div className="min-w-0">
             {/* Mode toggle: async brief (default) vs. book a call now */}
             <ModeTabs
-              label={en ? "How to reach us" : "Как связаться"}
+              label={pick({ en: "How to reach us", ru: "Как связаться", zh: "联系方式", tr: "Bize nasıl ulaşırsınız", ar: "كيف تصل إلينا" }, language)}
               value={contactMode}
               onChange={setContactMode}
               options={[
-                { value: "form", label: language === "en" ? "Send a brief" : "Оставить заявку", icon: "brief" },
-                { value: "call", label: language === "en" ? "Book a call" : "Забронировать звонок", icon: "call" },
+                { value: "form", label: pick({ en: "Send a brief", ru: "Оставить заявку", zh: "提交需求简述", tr: "Brief gönderin", ar: "أرسل ملخص المشروع" }, language), icon: "brief" },
+                { value: "call", label: pick({ en: "Book a call", ru: "Забронировать звонок", zh: "预约通话", tr: "Görüşme planlayın", ar: "احجز مكالمة" }, language), icon: "call" },
               ]}
             />
 
@@ -307,7 +303,7 @@ export function ContactContent() {
               className="ms-rim rounded-3xl border border-border bg-bg-primary p-5 shadow-[0_30px_80px_-40px_rgba(79,70,229,0.35)] sm:p-8"
             >
             {/* Progress bar */}
-            <FormProgress step={step} completion={completion} en={en} />
+            <FormProgress step={step} completion={completion} />
 
             <form id="form" onSubmit={handleSubmit} className="space-y-6">
               {/* Honeypot */}
@@ -322,12 +318,10 @@ export function ContactContent() {
                     {/* Step 1 header */}
                     <div className="pb-2">
                       <h3 className="text-heading-md font-medium text-text-primary">
-                        {language === "en" ? "Let\u2019s start with you" : "Начнём с вас"}
+                        {pick({ en: "Let\u2019s start with you", ru: "Начнём с вас", zh: "先从您开始", tr: "Önce sizinle başlayalım", ar: "لنبدأ بك" }, language)}
                       </h3>
                       <p className="text-body-sm text-text-tertiary mt-1">
-                        {language === "en"
-                          ? "So we know who to get back to."
-                          : "Чтобы мы знали, кому ответить."}
+                        {pick({ en: "So we know who to get back to.", ru: "Чтобы мы знали, кому ответить.", zh: "方便我们知道该联系谁。", tr: "Size kime dönmemiz gerektiğini bilelim.", ar: "لنعرف من نردّ عليه." }, language)}
                       </p>
                     </div>
 
@@ -357,7 +351,7 @@ export function ContactContent() {
 
                     <div className="ms-field">
                       <Input
-                        label={language === "en" ? "Phone (optional)" : "Телефон (необязательно)"}
+                        label={pick({ en: "Phone (optional)", ru: "Телефон (необязательно)", zh: "电话（选填）", tr: "Telefon (isteğe bağlı)", ar: "الهاتف (اختياري)" }, language)}
                         name="phone"
                         type="tel"
                         value={formData.phone}
@@ -366,7 +360,7 @@ export function ContactContent() {
                     </div>
 
                     <Button type="button" variant="primary" size="lg" fullWidth onClick={handleContinue}>
-                      {language === "en" ? "Continue" : "Продолжить"}
+                      {pick({ en: "Continue", ru: "Продолжить", zh: "继续", tr: "Devam", ar: "متابعة" }, language)}
                       <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                       </svg>
@@ -378,12 +372,10 @@ export function ContactContent() {
                     <div className="flex items-center justify-between pb-2">
                       <div>
                         <h3 className="text-heading-md font-medium text-text-primary">
-                          {language === "en" ? "About the project" : "О проекте"}
+                          {pick({ en: "About the project", ru: "О проекте", zh: "项目信息", tr: "Proje hakkında", ar: "عن المشروع" }, language)}
                         </h3>
                         <p className="text-body-sm text-text-tertiary mt-1">
-                          {language === "en"
-                            ? "Help us understand the scope."
-                            : "Помогите нам понять масштаб."}
+                          {pick({ en: "Help us understand the scope.", ru: "Помогите нам понять масштаб.", zh: "帮助我们了解项目规模。", tr: "Kapsamı anlamamıza yardımcı olun.", ar: "ساعدنا في فهم نطاق المشروع." }, language)}
                         </p>
                       </div>
                       <button
@@ -391,7 +383,7 @@ export function ContactContent() {
                         onClick={() => setStep(1)}
                         className="text-body-sm text-accent-primary hover:text-accent-secondary transition-colors"
                       >
-                        {language === "en" ? "Back" : "Назад"}
+                        {pick({ en: "Back", ru: "Назад", zh: "返回", tr: "Geri", ar: "رجوع" }, language)}
                       </button>
                     </div>
 
@@ -400,7 +392,7 @@ export function ContactContent() {
                         label={t("contact.form.projectType")}
                         name="projectType"
                         options={projectTypeOptions(t).map((o) => ({ value: o.value, label: o.label }))}
-                        placeholder={language === "en" ? "Select..." : "Выберите..."}
+                        placeholder={pick({ en: "Select...", ru: "Выберите...", zh: "请选择...", tr: "Seçin...", ar: "اختر..." }, language)}
                         value={formData.projectType}
                         onChange={(e) => updateField("projectType", e.target.value)}
                         error={errors.projectType}
@@ -430,14 +422,12 @@ export function ContactContent() {
 
                     <div className="ms-field">
                       <Textarea
-                        label={`${t("contact.form.message")} (${language === "en" ? "optional" : "необязательно"})`}
+                        label={`${t("contact.form.message")} (${pick({ en: "optional", ru: "необязательно", zh: "选填", tr: "isteğe bağlı", ar: "اختياري" }, language)})`}
                         name="message"
                         value={formData.message}
                         onChange={(e) => updateField("message", e.target.value)}
                         placeholder={
-                          language === "en"
-                            ? "e.g., E-commerce platform for fashion brand with payment integration..."
-                            : "Напр., E-commerce платформа для бренда одежды с интеграцией оплаты..."
+                          pick({ en: "e.g., E-commerce platform for fashion brand with payment integration...", ru: "Напр., E-commerce платформа для бренда одежды с интеграцией оплаты...", zh: "例如：为时尚品牌打造的电商平台，含支付集成...", tr: "Örn., ödeme entegrasyonlu moda markası için e-ticaret platformu...", ar: "مثال: منصة تجارة إلكترونية لعلامة أزياء مع تكامل الدفع..." }, language)
                         }
                         error={errors.message}
                       />
@@ -452,18 +442,14 @@ export function ContactContent() {
                         className="mt-1 w-4 h-4 rounded border-border accent-accent-primary"
                       />
                       <span className={`text-body-sm ${errors.consent ? "text-error" : "text-text-tertiary"} group-hover:text-text-secondary transition-colors`}>
-                        {language === "en"
-                          ? "I agree to be contacted about my project. No spam, ever."
-                          : "Я согласен на связь по моему проекту. Без спама, никогда."}
+                        {pick({ en: "I agree to be contacted about my project. No spam, ever.", ru: "Я согласен на связь по моему проекту. Без спама, никогда.", zh: "我同意就我的项目与我联系。绝无垃圾信息。", tr: "Projemle ilgili benimle iletişime geçilmesini kabul ediyorum. Asla spam yok.", ar: "أوافق على التواصل معي بشأن مشروعي. دون رسائل مزعجة، أبدًا." }, language)}
                       </span>
                     </label>
 
                     {status === "error" && (
                       <div className="p-4 rounded-xl border border-error/30 bg-error/5">
                         <p className="text-body-sm text-error">
-                          {language === "en"
-                            ? "Something went wrong. Please try again or email us at labs@anteyko.com"
-                            : "Что-то пошло не так. Попробуйте снова или напишите нам на labs@anteyko.com"}
+                          {pick({ en: "Something went wrong. Please try again or email us at labs@anteyko.com", ru: "Что-то пошло не так. Попробуйте снова или напишите нам на labs@anteyko.com", zh: "出了点问题。请重试，或发送邮件至 labs@anteyko.com", tr: "Bir şeyler ters gitti. Lütfen tekrar deneyin veya bize labs@anteyko.com adresinden yazın", ar: "حدث خطأ ما. يرجى المحاولة مجددًا أو مراسلتنا على labs@anteyko.com" }, language)}
                         </p>
                       </div>
                     )}
@@ -474,9 +460,7 @@ export function ContactContent() {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                       </svg>
                       <span>
-                        {language === "en"
-                          ? "You\u2019ll receive: detailed estimate, timeline, and next steps within 24h."
-                          : "Вы получите: детальную оценку, сроки и следующие шаги в течение 24ч."}
+                        {pick({ en: "You\u2019ll receive: detailed estimate, timeline, and next steps within 24h.", ru: "Вы получите: детальную оценку, сроки и следующие шаги в течение 24ч.", zh: "您将收到：详细报价、时间表和后续步骤，24 小时内送达。", tr: "Alacaklarınız: ayrıntılı teklif, takvim ve sonraki adımlar — 24 saat içinde.", ar: "ستتلقى: تقديرًا مفصّلًا، والجدول الزمني، والخطوات التالية خلال 24 ساعة." }, language)}
                       </span>
                     </div>
 
@@ -490,9 +474,7 @@ export function ContactContent() {
                     >
                       {status === "sending"
                         ? t("contact.form.submitting")
-                        : language === "en"
-                          ? "Get my 24h estimate"
-                          : "Получить оценку за 24 часа"}
+                        : pick({ en: "Get my 24h estimate", ru: "Получить оценку за 24 часа", zh: "获取我的 24 小时报价", tr: "24 saatlik teklifimi al", ar: "احصل على تقديري خلال 24 ساعة" }, language)}
                     </Button>
                   </motion.div>
                 )}
@@ -511,14 +493,10 @@ export function ContactContent() {
               >
                 <div className="pb-4">
                   <h3 className="text-heading-md font-medium text-text-primary">
-                    {language === "en"
-                      ? "Book a 45-min scoping call"
-                      : "Забронируйте scoping-звонок на 45 мин"}
+                    {pick({ en: "Book a 45-min scoping call", ru: "Забронируйте scoping-звонок на 45 мин", zh: "预约 45 分钟需求沟通会", tr: "45 dakikalık kapsam görüşmesi planlayın", ar: "احجز مكالمة لتحديد النطاق مدتها 45 دقيقة" }, language)}
                   </h3>
                   <p className="text-body-sm text-text-tertiary mt-1">
-                    {language === "en"
-                      ? "Pick a slot that works for you — we’ll talk through your project and next steps."
-                      : "Выберите удобный слот — обсудим ваш проект и следующие шаги."}
+                    {pick({ en: "Pick a slot that works for you — we’ll talk through your project and next steps.", ru: "Выберите удобный слот — обсудим ваш проект и следующие шаги.", zh: "选择适合您的时间段——我们将聊聊您的项目和后续步骤。", tr: "Size uygun bir saat seçin — projenizi ve sonraki adımları birlikte konuşalım.", ar: "اختر الموعد المناسب لك — سنناقش مشروعك والخطوات التالية." }, language)}
                   </p>
                 </div>
                 <CalEmbed />
@@ -543,12 +521,12 @@ export function ContactContent() {
                 className="pointer-events-none absolute inset-0 -z-10 opacity-[0.06] [mask-image:radial-gradient(ellipse_at_top,black_20%,transparent_70%)]"
                 style={{ backgroundImage: "linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)", backgroundSize: "28px 28px" }}
               />
-              <LiveDesk en={en} />
+              <LiveDesk />
               <div className="grid grid-cols-3 gap-4 text-center mb-6">
                 {[
-                  { v: "40+", l: language === "en" ? "projects" : "проектов" },
-                  { v: "5+", l: language === "en" ? "years" : "лет" },
-                  { v: "24h", l: language === "en" ? "response" : "ответ" },
+                  { v: "40+", l: pick({ en: "projects", ru: "проектов", zh: "个项目", tr: "proje", ar: "مشروع" }, language) },
+                  { v: "5+", l: pick({ en: "years", ru: "лет", zh: "年", tr: "yıl", ar: "سنوات" }, language) },
+                  { v: "24h", l: pick({ en: "response", ru: "ответ", zh: "响应", tr: "yanıt", ar: "الرد" }, language) },
                 ].map((stat, i) => (
                   <div key={stat.v} className={i > 0 ? "border-l border-white/10" : ""}>
                     <p className="font-brand text-3xl font-semibold tabular-nums home-gradient-text">
@@ -560,9 +538,9 @@ export function ContactContent() {
               </div>
               <div className="space-y-2.5">
                 {[
-                  language === "en" ? "Real engineers respond — no bots, no templates" : "Отвечают живые инженеры — без ботов, без шаблонов",
-                  language === "en" ? "Clients in Dubai, Moscow, Bishkek" : "Клиенты в Дубае, Москве, Бишкеке",
-                  language === "en" ? "NDA available on request" : "NDA по запросу",
+                  pick({ en: "Real engineers respond — no bots, no templates", ru: "Отвечают живые инженеры — без ботов, без шаблонов", zh: "由真人工程师回复——没有机器人，没有模板", tr: "Gerçek mühendisler yanıtlar — bot yok, şablon yok", ar: "يردّ عليك مهندسون حقيقيون — دون روبوتات ودون قوالب جاهزة" }, language),
+                  pick({ en: "Clients in Dubai, Moscow, Bishkek", ru: "Клиенты в Дубае, Москве, Бишкеке", zh: "客户遍布迪拜、莫斯科、比什凯克", tr: "Dubai, Moskova, Bişkek'te müşteriler", ar: "عملاء في دبي وموسكو وبيشكيك" }, language),
+                  pick({ en: "NDA available on request", ru: "NDA по запросу", zh: "可按需签署 NDA", tr: "İstek üzerine NDA", ar: "اتفاقية NDA متاحة عند الطلب" }, language),
                 ].map((item, i) => (
                   <motion.div
                     key={i}
@@ -609,12 +587,10 @@ export function ContactContent() {
               className="rounded-3xl border border-border bg-bg-primary p-6 shadow-[0_20px_60px_-40px_rgba(79,70,229,0.4)]"
             >
               <p className="text-caption uppercase tracking-wider text-text-tertiary mb-1">
-                {language === "en" ? "Prefer to message us now?" : "Хотите написать прямо сейчас?"}
+                {pick({ en: "Prefer to message us now?", ru: "Хотите написать прямо сейчас?", zh: "想现在就给我们留言？", tr: "Şimdi mesaj atmak ister misiniz?", ar: "تفضّل مراسلتنا الآن؟" }, language)}
               </p>
               <p className="text-body-sm text-text-tertiary mb-4">
-                {language === "en"
-                  ? "A real engineer replies — usually within hours."
-                  : "Отвечает живой инженер — обычно в течение нескольких часов."}
+                {pick({ en: "A real engineer replies — usually within hours.", ru: "Отвечает живой инженер — обычно в течение нескольких часов.", zh: "真人工程师回复——通常几小时内。", tr: "Gerçek bir mühendis yanıtlar — genellikle birkaç saat içinde.", ar: "يردّ عليك مهندس حقيقي — عادةً خلال ساعات." }, language)}
               </p>
               <div className="grid grid-cols-1 gap-2.5">
                 {/* Telegram */}

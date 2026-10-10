@@ -1,30 +1,29 @@
 import type { CaseCategory } from "@/lib/cases-data";
 import type { CatalogFilter, CatalogSort } from "@/lib/catalog";
-
-type L = { en: string; ru: string };
+import type { L } from "@/lib/i18n-text";
 
 export const CATEGORY_LABEL: Record<CaseCategory, L> = {
-  web: { en: "Website", ru: "Сайт" },
-  product: { en: "Product", ru: "Продукт" },
-  web3: { en: "Web3", ru: "Web3" },
-  infrastructure: { en: "Infrastructure", ru: "Инфраструктура" },
+  web: { en: "Website", ru: "Сайт", zh: "网站", tr: "Web sitesi", ar: "موقع" },
+  product: { en: "Product", ru: "Продукт", zh: "产品", tr: "Ürün", ar: "منتج" },
+  web3: { en: "Web3", ru: "Web3", zh: "Web3", tr: "Web3", ar: "Web3" },
+  infrastructure: { en: "Infrastructure", ru: "Инфраструктура", zh: "基础设施", tr: "Altyapı", ar: "بنية تحتية" },
 };
 
 export const FILTER_LABEL: Record<CatalogFilter, L> = {
-  all: { en: "All work", ru: "Все работы" },
-  motion: { en: "✦ Animation", ru: "✦ Анимации" },
-  web: { en: "Websites", ru: "Сайты" },
-  mobile: { en: "Mobile", ru: "Мобильные" },
-  product: { en: "Products", ru: "Продукты" },
-  web3: { en: "Web3", ru: "Web3" },
-  infrastructure: { en: "Infrastructure", ru: "Инфраструктура" },
+  all: { en: "All work", ru: "Все работы", zh: "全部作品", tr: "Tüm işler", ar: "جميع الأعمال" },
+  motion: { en: "✦ Animation", ru: "✦ Анимации", zh: "✦ 动画", tr: "✦ Animasyon", ar: "✦ حركة" },
+  web: { en: "Websites", ru: "Сайты", zh: "网站", tr: "Web siteleri", ar: "مواقع" },
+  mobile: { en: "Mobile", ru: "Мобильные", zh: "移动端", tr: "Mobil", ar: "تطبيقات الجوال" },
+  product: { en: "Products", ru: "Продукты", zh: "产品", tr: "Ürünler", ar: "منتجات" },
+  web3: { en: "Web3", ru: "Web3", zh: "Web3", tr: "Web3", ar: "Web3" },
+  infrastructure: { en: "Infrastructure", ru: "Инфраструктура", zh: "基础设施", tr: "Altyapı", ar: "بنية تحتية" },
 };
 
 export const SORT_LABEL: Record<CatalogSort, L> = {
-  featured: { en: "Featured", ru: "Избранное" },
-  newest: { en: "Newest first", ru: "Сначала новые" },
-  oldest: { en: "Oldest first", ru: "Сначала старые" },
-  az: { en: "A → Z", ru: "А → Я" },
+  featured: { en: "Featured", ru: "Избранное", zh: "精选", tr: "Öne çıkan", ar: "المميّز" },
+  newest: { en: "Newest first", ru: "Сначала новые", zh: "最新优先", tr: "Önce en yeni", ar: "الأحدث أولًا" },
+  oldest: { en: "Oldest first", ru: "Сначала старые", zh: "最早优先", tr: "Önce en eski", ar: "الأقدم أولًا" },
+  az: { en: "A → Z", ru: "А → Я", zh: "A → Z", tr: "A → Z", ar: "أ ← ي" },
 };
 
 export const pad = (n: number) => String(n).padStart(2, "0");

@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Link as NextLink } from "@/i18n/navigation";
+import { pick } from "@/lib/i18n-text";
 import { useLanguage } from "@/lib/language-context";
 import { useReducedMotion } from "@/lib/hooks";
 import { AnimatedItem, Section } from "@/components/ui/section";
@@ -17,7 +18,6 @@ const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 export function ShowcaseDetailContent({ item }: { item: ShowcaseItem }) {
   const { language } = useLanguage();
   const reduced = useReducedMotion();
-  const en = language === "en";
 
   const ordered = sortEntries(catalogEntries, "featured", language);
   const index = ordered.findIndex((e) => e.slug === item.slug);
@@ -25,13 +25,13 @@ export function ShowcaseDetailContent({ item }: { item: ShowcaseItem }) {
   const external = item.url && /^https?:/.test(item.url);
 
   const meta: [string, string][] = [
-    [en ? "Industry" : "Сфера", item.sphere[language]],
-    [en ? "Format" : "Формат", item.format[language]],
-    [en ? "Year" : "Год", String(item.year)],
+    [pick({ en: "Industry", ru: "Сфера", zh: "行业", tr: "Sektör", ar: "القطاع" }, language), item.sphere[language]],
+    [pick({ en: "Format", ru: "Формат", zh: "形式", tr: "Format", ar: "الصيغة" }, language), item.format[language]],
+    [pick({ en: "Year", ru: "Год", zh: "年份", tr: "Yıl", ar: "السنة" }, language), String(item.year)],
     ...(item.stack?.length
-      ? ([[en ? "Stack" : "Стек", item.stack.slice(0, 4).join(" · ")]] as [string, string][])
+      ? ([[pick({ en: "Stack", ru: "Стек", zh: "技术栈", tr: "Yığın", ar: "التقنيات" }, language), item.stack.slice(0, 4).join(" · ")]] as [string, string][])
       : item.fonts
-        ? ([[en ? "Typefaces" : "Шрифты", item.fonts]] as [string, string][])
+        ? ([[pick({ en: "Typefaces", ru: "Шрифты", zh: "字体", tr: "Yazı tipleri", ar: "الخطوط" }, language), item.fonts]] as [string, string][])
         : []),
   ];
 
@@ -47,7 +47,7 @@ export function ShowcaseDetailContent({ item }: { item: ShowcaseItem }) {
         <div className="container relative mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-wrap items-center justify-between gap-3 font-mono text-caption uppercase tracking-[0.16em] text-text-tertiary">
             <NextLink href="/cases" className="inline-flex items-center gap-2 transition-colors hover:text-accent-primary">
-              <span aria-hidden="true">←</span> {en ? "All work" : "Все работы"}
+              <span aria-hidden="true">←</span> {pick({ en: "All work", ru: "Все работы", zh: "全部作品", tr: "Tüm işler", ar: "جميع الأعمال" }, language)}
             </NextLink>
             <span>
               {pad(index + 1)} / {pad(ordered.length)}
@@ -95,7 +95,7 @@ export function ShowcaseDetailContent({ item }: { item: ShowcaseItem }) {
                 rel={external ? "noopener noreferrer" : undefined}
                 className="inline-flex items-center justify-center gap-2 rounded-xl bg-text-primary px-5 py-3 text-body-md font-medium text-white transition-transform hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary focus-visible:ring-offset-2"
               >
-                {en ? "Open site" : "Открыть сайт"}
+                {pick({ en: "Open site", ru: "Открыть сайт", zh: "打开网站", tr: "Siteyi aç", ar: "افتح الموقع" }, language)}
                 <span aria-hidden="true">↗</span>
               </a>
             )}
@@ -120,7 +120,7 @@ export function ShowcaseDetailContent({ item }: { item: ShowcaseItem }) {
       <Section background="secondary" padding="lg" className="border-t border-border">
         <div className="grid gap-10 lg:grid-cols-[14rem_1fr]">
           <AnimatedItem>
-            <p className="font-mono text-caption uppercase tracking-[0.16em] text-text-tertiary">{en ? "Review" : "Разбор"}</p>
+            <p className="font-mono text-caption uppercase tracking-[0.16em] text-text-tertiary">{pick({ en: "Review", ru: "Разбор", zh: "解析", tr: "İnceleme", ar: "مراجعة" }, language)}</p>
           </AnimatedItem>
           <div className="max-w-3xl">
             <AnimatedItem>
@@ -154,7 +154,7 @@ export function ShowcaseDetailContent({ item }: { item: ShowcaseItem }) {
       <Section background="primary" padding="lg">
         <div className="grid gap-10 lg:grid-cols-[14rem_1fr]">
           <AnimatedItem>
-            <p className="font-mono text-caption uppercase tracking-[0.16em] text-text-tertiary">{en ? "Techniques" : "Приёмы"}</p>
+            <p className="font-mono text-caption uppercase tracking-[0.16em] text-text-tertiary">{pick({ en: "Techniques", ru: "Приёмы", zh: "技法", tr: "Teknikler", ar: "التقنيات والأساليب" }, language)}</p>
           </AnimatedItem>
           <ol className="grid gap-px overflow-hidden rounded-2xl border border-border bg-border md:grid-cols-3">
             {item.features.map((f, i) => (
@@ -172,7 +172,7 @@ export function ShowcaseDetailContent({ item }: { item: ShowcaseItem }) {
 
         <div className="mt-16 grid gap-10 lg:grid-cols-[14rem_1fr]">
           <AnimatedItem>
-            <p className="font-mono text-caption uppercase tracking-[0.16em] text-text-tertiary">{en ? "Palette" : "Палитра"}</p>
+            <p className="font-mono text-caption uppercase tracking-[0.16em] text-text-tertiary">{pick({ en: "Palette", ru: "Палитра", zh: "配色", tr: "Palet", ar: "لوحة الألوان" }, language)}</p>
           </AnimatedItem>
           <AnimatedItem>
             <ul className="grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -200,10 +200,10 @@ export function ShowcaseDetailContent({ item }: { item: ShowcaseItem }) {
         <NextLink
           href={`/cases/${next.slug}`}
           className="group block overflow-hidden border-t border-border bg-text-primary text-white"
-          data-cursor={en ? "Next" : "Дальше"}
+          data-cursor={pick({ en: "Next", ru: "Дальше", zh: "下一步", tr: "İleri", ar: "التالي" }, language)}
         >
           <div className="container mx-auto flex flex-col gap-3 px-4 py-14 sm:px-6 md:py-20 lg:px-8">
-            <span className="font-mono text-caption uppercase tracking-[0.16em] text-white/50">{en ? "Next work" : "Следующая работа"}</span>
+            <span className="font-mono text-caption uppercase tracking-[0.16em] text-white/50">{pick({ en: "Next work", ru: "Следующая работа", zh: "下一个作品", tr: "Sonraki iş", ar: "العمل التالي" }, language)}</span>
             <span className="flex flex-wrap items-center gap-x-4 font-brand text-4xl font-semibold tracking-[-0.03em] [overflow-wrap:anywhere] md:text-7xl">
               {next.title[language]}
               <span className="transition-transform duration-500 group-hover:translate-x-3 motion-reduce:group-hover:translate-x-0" aria-hidden="true">

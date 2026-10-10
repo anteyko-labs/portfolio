@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useLanguage } from "@/lib/language-context";
+import { pick } from "@/lib/i18n-text";
 import { useReducedMotion } from "@/lib/hooks";
 import { PageHero } from "@/components/sections/page-hero";
 import { Section, AnimatedItem } from "@/components/ui/section";
@@ -25,11 +26,11 @@ export function ServiceDetailContent({ packageId }: { packageId: string }) {
       <PageHero
         title={pkg.title[language]}
         subtitle={pkg.description[language]}
-        eyebrow={language === "en" ? "Service" : "Услуга"}
+        eyebrow={pick({ en: "Service", ru: "Услуга", zh: "服务", tr: "Hizmet", ar: "الخدمة" }, language)}
         align="left"
         backLink={{
           href: "/services",
-          label: language === "en" ? "All services" : "Все услуги",
+          label: pick({ en: "All services", ru: "Все услуги", zh: "全部服务", tr: "Tüm hizmetler", ar: "جميع الخدمات" }, language),
         }}
         rightSlot={
           <div className="rounded-2xl border border-border bg-bg-secondary/80 p-4 sm:p-5 space-y-4">
@@ -37,7 +38,7 @@ export function ServiceDetailContent({ packageId }: { packageId: string }) {
             <div className="grid grid-cols-2 gap-4 px-1">
               <div>
                 <p className="text-caption uppercase tracking-wider text-text-tertiary mb-1">
-                  {language === "en" ? "Starting price" : "Цена от"}
+                  {pick({ en: "Starting price", ru: "Цена от", zh: "起价", tr: "Başlangıç fiyatı", ar: "السعر يبدأ من" }, language)}
                 </p>
                 <p className="text-heading-md font-display font-bold text-accent-primary">
                   <Price value={pkg.startingPrice[language]} />
@@ -45,7 +46,7 @@ export function ServiceDetailContent({ packageId }: { packageId: string }) {
               </div>
               <div className="border-l border-border pl-4">
                 <p className="text-caption uppercase tracking-wider text-text-tertiary mb-1">
-                  {language === "en" ? "Timeline" : "Сроки"}
+                  {pick({ en: "Timeline", ru: "Сроки", zh: "周期", tr: "Takvim", ar: "المدة الزمنية" }, language)}
                 </p>
                 <p className="text-body-md text-text-primary">
                   {pkg.timeline[language]}
@@ -79,7 +80,7 @@ export function ServiceDetailContent({ packageId }: { packageId: string }) {
                 </svg>
               </span>
               <h2 className="text-caption text-text-muted uppercase tracking-wider mb-3">
-                {language === "en" ? "Best for" : "Подходит для"}
+                {pick({ en: "Best for", ru: "Подходит для", zh: "适用于", tr: "En uygun olduğu durum", ar: "الأنسب لـ" }, language)}
               </h2>
               <p className="text-body-md text-text-secondary">
                 {pkg.forWhom[language]}
@@ -92,7 +93,7 @@ export function ServiceDetailContent({ packageId }: { packageId: string }) {
             <SpotlightCard color={color} className="h-full rounded-2xl border border-border bg-bg-primary p-5 sm:p-8">
               <div className="flex items-center gap-3 mb-5">
                 <h2 className="text-caption text-text-muted uppercase tracking-wider">
-                  {language === "en" ? "What's included" : "Что входит"}
+                  {pick({ en: "What's included", ru: "Что входит", zh: "包含内容", tr: "Neler dahil", ar: "ما تشمله الباقة" }, language)}
                 </h2>
                 {pkg.id === "web3-addon" && <ShineBadge tone="soft">Add-on</ShineBadge>}
               </div>
@@ -131,7 +132,7 @@ export function ServiceDetailContent({ packageId }: { packageId: string }) {
               </span>
               <div>
                 <h2 className="text-caption text-white/50 uppercase tracking-wider mb-2">
-                  {language === "en" ? "End result" : "Итоговый результат"}
+                  {pick({ en: "End result", ru: "Итоговый результат", zh: "最终成果", tr: "Nihai sonuç", ar: "النتيجة النهائية" }, language)}
                 </h2>
                 <p className="text-body-lg text-white">
                   {pkg.result[language]}
@@ -145,14 +146,12 @@ export function ServiceDetailContent({ packageId }: { packageId: string }) {
       {/* CTA */}
       <Section background="primary" padding="lg">
         <AuroraCta
-          title={language === "en" ? "Ready to start?" : "Готовы начать?"}
+          title={pick({ en: "Ready to start?", ru: "Готовы начать?", zh: "准备好开始了吗？", tr: "Başlamaya hazır mısınız?", ar: "جاهز للبدء؟" }, language)}
           text={
-            language === "en"
-              ? "Tell us about your project and get a fixed-scope estimate within 24 hours."
-              : "Расскажите о проекте и получите оценку по фиксированному объёму в течение 24 часов."
+            pick({ en: "Tell us about your project and get a fixed-scope estimate within 24 hours.", ru: "Расскажите о проекте и получите оценку по фиксированному объёму в течение 24 часов.", zh: "告诉我们您的项目，24 小时内获得固定范围的报价。", tr: "Projenizden bahsedin, 24 saat içinde sabit kapsamlı bir teklif alın.", ar: "حدّثنا عن مشروعك واحصل على تقدير بنطاق ثابت خلال 24 ساعة." }, language)
           }
           primary={{ href: `/contact?package=${pkg.id}`, label: t("cta.primary") }}
-          secondary={{ href: "/pricing", label: language === "en" ? "See all pricing" : "Все цены" }}
+          secondary={{ href: "/pricing", label: pick({ en: "See all pricing", ru: "Все цены", zh: "查看全部价格", tr: "Tüm fiyatları gör", ar: "عرض جميع الأسعار" }, language) }}
         />
       </Section>
     </>

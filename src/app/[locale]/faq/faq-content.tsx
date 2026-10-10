@@ -10,6 +10,7 @@ import { Section } from "@/components/ui/section";
 import { EASE } from "@/components/motion/kit";
 import { CategoryChips, FaqEmpty, FaqGlyphs, FaqHeroScene, FaqRow, FaqSearch } from "@/components/misc-anim/faq-anim";
 import { getFAQItems, type FAQCategory } from "@/lib/faq-data";
+import { pick } from "@/lib/i18n-text";
 
 // Which data categories each filter chip covers.
 const categoryGroups: Record<FAQCategory, FAQCategory[]> = {
@@ -33,7 +34,6 @@ export function FAQContent() {
   const [openId, setOpenId] = useState<string | null>(null);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const reduced = useReducedMotion();
-  const en = language === "en";
 
   const categories: { value: FAQCategory | "all"; label: string; icon: string }[] = [
     { value: "all", label: t("faq.categories.all"), icon: "✦" },
@@ -124,9 +124,9 @@ export function FAQContent() {
         align="left"
         metric={{
           value: String(faqItems.length),
-          label: language === "en" ? "answers ready" : "ответов готово",
+          label: pick({ en: "answers ready", ru: "ответов готово", zh: "个答案已就绪", tr: "yanıt hazır", ar: "إجابات جاهزة" }, language),
         }}
-        rightSlot={<FaqHeroScene en={en} questions={heroQuestions} />}
+        rightSlot={<FaqHeroScene questions={heroQuestions} />}
       />
 
       <Section background="secondary" padding="lg" className="relative overflow-hidden">
@@ -144,7 +144,7 @@ export function FAQContent() {
               value={query}
               onChange={setQuery}
               placeholder={t("faq.searchPlaceholder")}
-              en={en}
+             
             />
             <CategoryChips
               items={categories.map((cat) => ({ ...cat, count: countFor(cat.value) }))}
@@ -176,13 +176,13 @@ export function FAQContent() {
                     {filteredItems.length}
                   </motion.span>
                 </AnimatePresence>{" "}
-                {language === "en"
-                  ? `result${filteredItems.length !== 1 ? "s" : ""} found`
-                  : filteredItems.length % 10 === 1 && filteredItems.length % 100 !== 11
+                {language === "ru"
+                  ? filteredItems.length % 10 === 1 && filteredItems.length % 100 !== 11
                     ? "результат"
                     : [2, 3, 4].includes(filteredItems.length % 10) && ![12, 13, 14].includes(filteredItems.length % 100)
                       ? "результата"
-                      : "результатов"}
+                      : "результатов"
+                  : pick(filteredItems.length !== 1 ? { en: "results found", ru: "результатов найдено", zh: "条结果", tr: "sonuç bulundu", ar: "نتائج" } : { en: "result found", ru: "результат найден", zh: "条结果", tr: "sonuç bulundu", ar: "نتيجة" }, language)}
               </motion.p>
             )}
           </AnimatePresence>
@@ -190,7 +190,7 @@ export function FAQContent() {
           {/* FAQ Items — Card-based */}
           <div className="space-y-3">
             <AnimatePresence initial={false} mode="popLayout">
-              {filteredItems.length === 0 && <FaqEmpty key="empty" en={en} />}
+              {filteredItems.length === 0 && <FaqEmpty key="empty" />}
               {filteredItems.map((item, index) => (
                 <motion.div
                   key={item.id}
@@ -259,15 +259,11 @@ export function FAQContent() {
             </div>
             <p className="font-brand text-2xl font-semibold tracking-tight sm:text-3xl mb-3">
               <span className="home-gradient-text">
-                {language === "en"
-                  ? "Still have questions?"
-                  : "Остались вопросы?"}
+                {pick({ en: "Still have questions?", ru: "Остались вопросы?", zh: "还有疑问？", tr: "Hâlâ sorunuz mu var?", ar: "لا تزال لديك أسئلة؟" }, language)}
               </span>
             </p>
             <p className="text-body-md text-white/60 mb-7">
-              {language === "en"
-                ? "We respond within 24 hours. No bots, real engineers."
-                : "Отвечаем в течение 24 часов. Без ботов, живые инженеры."}
+              {pick({ en: "We respond within 24 hours. No bots, real engineers.", ru: "Отвечаем в течение 24 часов. Без ботов, живые инженеры.", zh: "我们会在 24 小时内回复。没有机器人，都是真人工程师。", tr: "24 saat içinde yanıtlıyoruz. Bot yok, gerçek mühendisler.", ar: "نردّ خلال 24 ساعة. دون روبوتات، بل مهندسون حقيقيون." }, language)}
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <NextLink

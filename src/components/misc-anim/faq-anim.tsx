@@ -5,6 +5,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import { EASE, useLoop } from "@/components/motion/kit";
 import { useReducedMotion } from "@/lib/hooks";
 import "./misc-anim.css";
+import { useLanguage } from "@/lib/language-context";
+import { type Language, pick } from "@/lib/i18n-text";
 
 // Motion pieces for /faq: a chat scene in the hero, search with a live result
 // counter, category chips with a sliding pill and an accordion row.
@@ -12,7 +14,8 @@ import "./misc-anim.css";
 /* ───────────────────────── Hero: question → answer ───────────────────────── */
 
 /** A looping chat: a real question from the list is typed, then answered */
-export function FaqHeroScene({ en, questions }: { en: boolean; questions: string[] }) {
+export function FaqHeroScene({ questions }: { questions: string[] }) {
+  const { language } = useLanguage();
   const { ref, tick, run } = useLoop<HTMLDivElement>(90);
   const CYCLE = 70; // ticks per question
   const qi = run ? Math.floor(tick / CYCLE) % questions.length : 0;
@@ -28,7 +31,7 @@ export function FaqHeroScene({ en, questions }: { en: boolean; questions: string
       <div className="ms-orb pointer-events-none absolute -right-20 -top-16 h-56 w-56 rounded-full bg-fuchsia-500/20 blur-3xl" />
       <div className="ms-orb pointer-events-none absolute -bottom-20 -left-16 h-56 w-56 rounded-full bg-indigo-500/25 blur-3xl" style={{ animationDelay: "-5s" }} />
       <div className="relative flex items-center justify-between">
-        <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/45">{en ? "ask anteyko" : "спросите anteyko"}</p>
+        <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/45">{pick({ en: "ask anteyko", ru: "спросите anteyko", zh: "问问 anteyko", tr: "anteyko'ya sorun", ar: "اسأل Anteyko" }, language)}</p>
         <p className="font-mono text-[10px] tabular-nums text-white/45">
           {String(qi + 1).padStart(2, "0")} / {String(questions.length).padStart(2, "0")}
         </p>
@@ -64,7 +67,7 @@ export function FaqHeroScene({ en, questions }: { en: boolean; questions: string
                     />
                   ))}
                   <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.45 }} className="pt-1 font-mono text-[11px] text-emerald-300">
-                    ✓ {en ? "answered, no fluff" : "ответ, без воды"}
+                    ✓ {pick({ en: "answered, no fluff", ru: "ответ, без воды", zh: "直接作答，不绕弯", tr: "gevezelik yok, net yanıt", ar: "إجابات مباشرة دون حشو" }, language)}
                   </motion.p>
                 </motion.div>
               ) : (
@@ -91,7 +94,8 @@ export function FaqHeroScene({ en, questions }: { en: boolean; questions: string
 
 /* ───────────────────────────── Search ───────────────────────────── */
 
-export function FaqSearch({ value, onChange, placeholder, en }: { value: string; onChange: (v: string) => void; placeholder: string; en: boolean }) {
+export function FaqSearch({ value, onChange, placeholder }: { value: string; onChange: (v: string) => void; placeholder: string }) {
+  const { language } = useLanguage();
   const reduced = useReducedMotion();
   const inputRef = useRef<HTMLInputElement>(null);
   const active = value.trim().length > 0;
@@ -133,7 +137,7 @@ export function FaqSearch({ value, onChange, placeholder, en }: { value: string;
               exit={{ opacity: 0, rotate: 90, scale: 0.6 }}
               transition={{ duration: 0.25 }}
               className="grid h-8 w-8 place-items-center rounded-full text-text-tertiary hover:bg-bg-tertiary hover:text-text-primary"
-              aria-label={en ? "Clear search" : "Очистить поиск"}
+              aria-label={pick({ en: "Clear search", ru: "Очистить поиск", zh: "清除搜索", tr: "Aramayı temizle", ar: "مسح البحث" }, language)}
             >
               <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path strokeLinecap="round" strokeWidth={2} d="M6 6l12 12M18 6L6 18" />
@@ -251,7 +255,8 @@ export function FaqRow({ number, title, open, onToggle, children }: { number: st
 
 /* ───────────────────────────── Empty / CTA ───────────────────────────── */
 
-export function FaqEmpty({ en }: { en: boolean }) {
+export function FaqEmpty() {
+  const { language } = useLanguage();
   const reduced = useReducedMotion();
   return (
     <motion.div initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }} className="py-16 text-center">
@@ -269,8 +274,8 @@ export function FaqEmpty({ en }: { en: boolean }) {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
         </motion.svg>
       </div>
-      <p className="mb-1 text-body-md text-text-secondary">{en ? "No results found" : "Ничего не найдено"}</p>
-      <p className="text-caption text-text-tertiary">{en ? "Try another keyword or category" : "Попробуйте другой запрос или категорию"}</p>
+      <p className="mb-1 text-body-md text-text-secondary">{pick({ en: "No results found", ru: "Ничего не найдено", zh: "未找到结果", tr: "Sonuç bulunamadı", ar: "لا توجد نتائج" }, language)}</p>
+      <p className="text-caption text-text-tertiary">{pick({ en: "Try another keyword or category", ru: "Попробуйте другой запрос или категорию", zh: "试试其他关键词或分类", tr: "Başka bir anahtar kelime veya kategori deneyin", ar: "جرّب كلمة مفتاحية أو فئة أخرى" }, language)}</p>
     </motion.div>
   );
 }

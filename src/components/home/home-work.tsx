@@ -1,73 +1,103 @@
 "use client";
 
-import { useRef } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useRef } from "react";
+import Image from "next/image";
 import { Link as NextLink } from "@/i18n/navigation";
 import { useLanguage } from "@/lib/language-context";
-import { useReducedMotion } from "@/lib/hooks";
+import { pick } from "@/lib/i18n-text";
 import { catalogEntries, sortEntries } from "@/lib/catalog";
-import { CatalogCard } from "@/components/cases-catalog/catalog-card";
 
-/** Horizontal strip of the strongest catalog work, scrollable by drag, wheel or arrows. */
+const COPY = {
+  label: { en: "Selected work", ru: "Избранные работы", zh: "精选作品", tr: "Seçilmiş işler", ar: "أعمال مختارة" },
+  line1: { en: "See", ru: "Смотреть", zh: "查看", tr: "Tüm", ar: "شاهد" },
+  line2: { en: "all cases", ru: "все кейсы", zh: "全部案例", tr: "projeler", ar: "كل المشاريع" },
+  text: {
+    en: "Live previews, case studies and the techniques behind every product we shipped.",
+    ru: "Живые превью, разборы и приёмы каждого продукта, который мы запустили.",
+    zh: "实时预览、案例解析，以及我们交付的每个产品背后的设计手法。",
+    tr: "Yayına aldığımız her ürünün canlı önizlemesi, analizi ve teknikleri.",
+    ar: "معاينات حيّة وتحليلات وتقنيات كل منتج أطلقناه.",
+  },
+  cta: { en: "Open cases", ru: "Открыть кейсы", zh: "打开案例", tr: "Projeleri aç", ar: "افتح المشاريع" },
+};
+
+/**
+ * Entry to the /cases catalog instead of the cards themselves: a fan of real
+ * covers opens on hover, a round button follows the cursor, and the click
+ * plays the "portal" transition (see components/effects/portal-transition.tsx).
+ */
 export function HomeWork() {
   const { language } = useLanguage();
-  const en = language === "en";
-  const reduced = useReducedMotion();
-  const track = useRef<HTMLDivElement>(null);
-  const entries = sortEntries(catalogEntries, "featured", language).slice(0, 9);
+  const ref = useRef<HTMLAnchorElement>(null);
+  const covers = sortEntries(catalogEntries, "featured", language)
+    .filter((e) => e.cover)
+    .slice(0, 5);
 
-  const scroll = (dir: 1 | -1) => {
-    const el = track.current;
-    if (!el) return;
-    el.scrollBy({ left: dir * Math.min(el.clientWidth * 0.8, 640), behavior: reduced ? "auto" : "smooth" });
-  };
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || window.matchMedia("(hover: none)").matches) return;
+    let raf = 0;
+    const move = (e: PointerEvent) => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        const r = el.getBoundingClientRect();
+        el.style.setProperty("--mx", `${e.clientX - r.left}px`);
+        el.style.setProperty("--my", `${e.clientY - r.top}px`);
+        el.style.setProperty("--tx", ((e.clientX - r.left) / r.width - 0.5).toFixed(3));
+        el.style.setProperty("--ty", ((e.clientY - r.top) / r.height - 0.5).toFixed(3));
+      });
+    };
+    el.addEventListener("pointermove", move);
+    return () => {
+      cancelAnimationFrame(raf);
+      el.removeEventListener("pointermove", move);
+    };
+  }, []);
 
   return (
-    <section className="overflow-hidden border-t border-border bg-bg-secondary py-20 md:py-28">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mb-10 flex flex-col justify-between gap-6 md:flex-row md:items-end">
-          <div>
-            <p className="font-mono text-caption uppercase tracking-[0.2em] text-text-tertiary">{en ? "Selected work" : "Избранные работы"}</p>
-            <h2 className="mt-4 max-w-3xl font-brand text-4xl font-semibold leading-[1.02] tracking-[-0.03em] text-text-primary md:text-6xl">
-              {en ? "Hover — they come alive" : "Наведите — они оживут"}
-            </h2>
-          </div>
-          <div className="flex items-center gap-3">
-            {([-1, 1] as const).map((d) => (
-              <button
-                key={d}
-                type="button"
-                onClick={() => scroll(d)}
-                aria-label={d < 0 ? (en ? "Previous" : "Назад") : en ? "Next" : "Вперёд"}
-                className="grid h-12 w-12 place-items-center rounded-full border border-border bg-bg-primary text-text-primary transition-colors hover:border-text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary"
-              >
-                {d < 0 ? "←" : "→"}
-              </button>
+    <section className="border-t border-border bg-bg-secondary px-4 py-16 sm:px-6 md:py-24 lg:px-8">
+      <NextLink href="/cases" data-portal="" ref={ref} className="cases-gate container mx-auto block">
+        <span className="cases-gate__marquee" aria-hidden="true">
+          <span>
+            {[0, 1].map((k) => (
+              <span key={k}>{catalogEntries.map((e) => e.domain).join("  ·  ")}  ·  </span>
             ))}
-            <NextLink href="/cases" className="ml-2 inline-flex items-center gap-2 rounded-full bg-text-primary px-5 py-3 text-body-sm font-medium text-white transition-transform hover:-translate-y-0.5">
-              {en ? `All ${catalogEntries.length} works` : `Все ${catalogEntries.length} работы`} <span aria-hidden="true">→</span>
-            </NextLink>
-          </div>
-        </div>
-      </div>
+          </span>
+        </span>
 
-      <div
-        ref={track}
-        className="flex snap-x snap-mandatory gap-5 overflow-x-auto px-4 pb-4 [scrollbar-width:none] sm:px-6 lg:px-[max(2rem,calc((100vw-80rem)/2+2rem))]"
-      >
-        {entries.map((e, i) => (
-          <motion.div
-            key={e.slug}
-            className="w-[86vw] shrink-0 snap-start sm:w-[520px]"
-            initial={reduced ? false : { opacity: 0, x: 60 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: "-40px" }}
-            transition={{ duration: 0.7, delay: Math.min(i, 4) * 0.07, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <CatalogCard entry={e} index={i} size="half" />
-          </motion.div>
-        ))}
-      </div>
+        <span className="cases-gate__in">
+          <span className="cases-gate__label">
+            <span>{pick(COPY.label, language)}</span>
+            <span>{String(catalogEntries.length).padStart(2, "0")}</span>
+          </span>
+
+          <span className="cases-gate__title">
+            <span className="cases-gate__line">{pick(COPY.line1, language)}</span>
+            <span className="cases-gate__line cases-gate__line--accent">{pick(COPY.line2, language)}</span>
+          </span>
+
+          <span className="cases-gate__text">{pick(COPY.text, language)}</span>
+
+          <span className="cases-gate__stack" aria-hidden="true">
+            {covers.map((e, i) => (
+              <span key={e.slug} className="cases-gate__card" style={{ ["--i" as string]: i - 2 }}>
+                <Image src={e.cover!} alt="" fill sizes="(max-width: 768px) 45vw, 22vw" className="object-cover object-top" />
+                <span className="cases-gate__card-name">{pick(e.title, language)}</span>
+              </span>
+            ))}
+          </span>
+
+          <span className="cases-gate__cta">
+            {pick(COPY.cta, language)}
+            <span className="cases-gate__arrow" aria-hidden="true">→</span>
+          </span>
+        </span>
+
+        <span className="cases-gate__orb" aria-hidden="true">
+          <span>{pick(COPY.cta, language)}</span>
+          <span className="cases-gate__arrow">→</span>
+        </span>
+      </NextLink>
     </section>
   );
 }

@@ -5,30 +5,29 @@ import { motion, useScroll, useSpring } from "framer-motion";
 import { EASE } from "@/components/motion/kit";
 import { useReducedMotion } from "@/lib/hooks";
 import { RunScope, ScrollWords } from "./shared";
+import { type L, type Language, pick } from "@/lib/i18n-text";
 
-type L = { en: string; ru: string };
 
 const HIGHLIGHTS: Record<"why" | "how" | "who", L[]> = {
-  why: [{ en: "engineers own the result", ru: "инженеры отвечают за результат" }],
+  why: [{ en: "engineers own the result", ru: "инженеры отвечают за результат", zh: "工程师对结果负责", tr: "sonucun sahibi mühendisler", ar: "مهندسون مسؤولون عن النتيجة" }],
   how: [
-    { en: "7-phase release checklist", ru: "7‑фазный чеклист релиза" },
-    { en: "zero post-launch critical failures", ru: "нулём критических сбоев после запуска" },
+    { en: "7-phase release checklist", ru: "7‑фазный чеклист релиза", zh: "7 阶段发布检查清单", tr: "7 aşamalı yayın kontrol listesi", ar: "قائمة مراجعة الإصدار من 7 مراحل" },
+    { en: "zero post-launch critical failures", ru: "нулём критических сбоев после запуска", zh: "上线后零严重故障", tr: "yayın sonrası sıfır kritik hata", ar: "صفر أعطال حرجة بعد الإطلاق" },
   ],
-  who: [{ en: "first product built right", ru: "первый продукт, построенный правильно" }],
+  who: [{ en: "first product built right", ru: "первый продукт, построенный правильно", zh: "第一款产品，一次做对", tr: "ilk ürün doğru yapıldı", ar: "أول منتج مبني بالشكل الصحيح" }],
 };
 
 /** The three story blocks on a spine that fills as you read; words brighten as they scroll past */
-export function Story({ story, language }: { story: Record<"why" | "how" | "who", L>; language: "en" | "ru" }) {
-  const en = language === "en";
+export function Story({ story, language }: { story: Record<"why" | "how" | "who", L>; language: Language }) {
   const reduced = useReducedMotion();
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start 70%", "end 60%"] });
   const fill = useSpring(scrollYProgress, { stiffness: 120, damping: 30 });
 
   const blocks = [
-    { key: "why" as const, label: en ? "Why we exist" : "Зачем мы существуем" },
-    { key: "how" as const, label: en ? "How we work" : "Как мы работаем" },
-    { key: "who" as const, label: en ? "Who we work with" : "С кем мы работаем" },
+    { key: "why" as const, label: pick({ en: "Why we exist", ru: "Зачем мы существуем", zh: "我们为何存在", tr: "Neden varız", ar: "لماذا وُجدنا" }, language) },
+    { key: "how" as const, label: pick({ en: "How we work", ru: "Как мы работаем", zh: "我们如何工作", tr: "Nasıl çalışırız", ar: "كيف نعمل" }, language) },
+    { key: "who" as const, label: pick({ en: "Who we work with", ru: "С кем мы работаем", zh: "我们与谁合作", tr: "Kimlerle çalışırız", ar: "مع من نعمل" }, language) },
   ];
 
   return (

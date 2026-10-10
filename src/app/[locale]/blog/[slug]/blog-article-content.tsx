@@ -20,12 +20,12 @@ import {
 } from "@/components/misc-anim/blog-anim";
 import { blogPosts, type BlogPost } from "@/lib/blog-data";
 import { formatPostDate } from "../blog-index-content";
+import { pick } from "@/lib/i18n-text";
 
 const SECTION_PREFIX = "section-";
 
 export function BlogArticleContent({ post }: { post: BlogPost }) {
   const { language } = useLanguage();
-  const en = language === "en";
   const reduced = useReducedMotion();
   const bodyRef = useRef<HTMLElement>(null);
   const activeSection = useActiveSection(post.body.length, SECTION_PREFIX);
@@ -43,11 +43,11 @@ export function BlogArticleContent({ post }: { post: BlogPost }) {
       <PageHero
         title={post.title[language]}
         subtitle={post.excerpt[language]}
-        eyebrow={language === "en" ? "Article" : "Статья"}
+        eyebrow={pick({ en: "Article", ru: "Статья", zh: "文章", tr: "Makale", ar: "مقال" }, language)}
         align="left"
         backLink={{
           href: "/blog",
-          label: language === "en" ? "All articles" : "Все статьи",
+          label: pick({ en: "All articles", ru: "Все статьи", zh: "全部文章", tr: "Tüm makaleler", ar: "جميع المقالات" }, language),
         }}
         rightSlot={
           <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#0B0B14] text-white">
@@ -56,7 +56,7 @@ export function BlogArticleContent({ post }: { post: BlogPost }) {
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <p className="text-caption uppercase tracking-wider text-white/45 mb-2 font-mono">
-                    {language === "en" ? "Published" : "Опубликовано"}
+                    {pick({ en: "Published", ru: "Опубликовано", zh: "发布于", tr: "Yayınlandı", ar: "تاريخ النشر" }, language)}
                   </p>
                   <time dateTime={post.date} className="text-body-md text-white font-medium">
                     {formatPostDate(post.date, language)}
@@ -64,9 +64,9 @@ export function BlogArticleContent({ post }: { post: BlogPost }) {
                 </div>
                 <div className="flex items-center gap-2.5 text-right">
                   <div>
-                    <p className="text-caption uppercase tracking-wider text-white/45 mb-2 font-mono">{en ? "Read" : "Чтение"}</p>
+                    <p className="text-caption uppercase tracking-wider text-white/45 mb-2 font-mono">{pick({ en: "Read", ru: "Чтение", zh: "阅读", tr: "Okuma", ar: "القراءة" }, language)}</p>
                     <p className="text-body-md font-medium text-white">
-                      {minutes} {en ? "min" : "мин"}
+                      {minutes} {pick({ en: "min", ru: "мин", zh: "分钟", tr: "dk", ar: "دقيقة" }, language)}
                     </p>
                   </div>
                   <svg viewBox="0 0 36 36" className="h-10 w-10 -rotate-90" aria-hidden="true">
@@ -93,11 +93,11 @@ export function BlogArticleContent({ post }: { post: BlogPost }) {
 
       {/* Article body */}
       <Section ref={bodyRef} background="secondary" padding="lg" container={false} className="relative !pt-0">
-        <ReadingProgress target={bodyRef} en={en} />
+        <ReadingProgress target={bodyRef} />
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mx-auto mt-12 grid max-w-6xl gap-12 md:mt-16 xl:grid-cols-[220px_minmax(0,48rem)] xl:justify-center">
           <aside className="hidden xl:block">
-            <ArticleToc headings={post.body.map((sec) => sec.heading[language])} active={activeSection} prefix={SECTION_PREFIX} en={en} />
+            <ArticleToc headings={post.body.map((sec) => sec.heading[language])} active={activeSection} prefix={SECTION_PREFIX} />
           </aside>
           <div className="mx-auto w-full max-w-3xl space-y-14">
             {post.body.map((section, i) => (
@@ -163,7 +163,7 @@ export function BlogArticleContent({ post }: { post: BlogPost }) {
                     <div className="min-w-0 flex-1">
                       <p className="mb-1 inline-flex items-center gap-1.5 text-caption text-text-tertiary">
                         {dir === "prev" && <span aria-hidden="true" className="transition-transform duration-300 group-hover:-translate-x-1">←</span>}
-                        {dir === "prev" ? (language === "en" ? "Previous" : "Предыдущая") : language === "en" ? "Next" : "Следующая"}
+                        {dir === "prev" ? (pick({ en: "Previous", ru: "Предыдущая", zh: "上一篇", tr: "Önceki", ar: "السابق" }, language)) : pick({ en: "Next", ru: "Следующая", zh: "下一篇", tr: "Sonraki", ar: "التالي" }, language)}
                         {dir === "next" && <span aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1">→</span>}
                       </p>
                       <p className="line-clamp-2 text-body-sm font-medium text-text-primary transition-colors group-hover:text-accent-primary">
@@ -193,27 +193,21 @@ export function BlogArticleContent({ post }: { post: BlogPost }) {
             <AnimatedItem>
               <h2 className="font-brand text-4xl font-semibold leading-[1.05] tracking-[-0.03em] md:text-5xl mb-5">
                 <span className="home-gradient-text">
-                  {language === "en"
-                    ? "Have a project in mind?"
-                    : "Есть проект на примете?"}
+                  {pick({ en: "Have a project in mind?", ru: "Есть проект на примете?", zh: "有项目想法？", tr: "Aklınızda bir proje mi var?", ar: "لديك مشروع في بالك؟" }, language)}
                 </span>
               </h2>
               <p className="text-body-lg text-white/60 mb-9">
-                {language === "en"
-                  ? "20 minutes — we'll discuss your task and give an honest estimate. No strings attached."
-                  : "45 минут — обсудим вашу задачу и дадим честную оценку. Без обязательств."}
+                {pick({ en: "20 minutes — we'll discuss your task and give an honest estimate. No strings attached.", ru: "45 минут — обсудим вашу задачу и дадим честную оценку. Без обязательств.", zh: "20 分钟——聊聊您的需求，给出诚实的评估。无任何附加条件。", tr: "20 dakika — görevinizi konuşur, dürüst bir teklif veririz. Hiçbir bağlayıcılık yok.", ar: "20 دقيقة — نناقش مهمتك ونقدّم لك تقديرًا صريحًا. دون أي التزام." }, language)}
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <ButtonLink href="/contact" buttonVariant="primary" size="lg" className="home-cta-glow">
-                  {language === "en"
-                    ? "Get an estimate in 24 hours"
-                    : "Получить оценку за 24 часа"}
+                  {pick({ en: "Get an estimate in 24 hours", ru: "Получить оценку за 24 часа", zh: "24 小时内获取报价", tr: "24 saatte teklif alın", ar: "احصل على تقدير خلال 24 ساعة" }, language)}
                 </ButtonLink>
                 <NextLink
                   href="/blog"
                   className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/5 px-7 py-3.5 text-body-md font-medium text-white backdrop-blur transition-colors hover:bg-white/10"
                 >
-                  {language === "en" ? "Read more articles" : "Читать другие статьи"}
+                  {pick({ en: "Read more articles", ru: "Читать другие статьи", zh: "阅读更多文章", tr: "Daha fazla makale okuyun", ar: "اقرأ المزيد من المقالات" }, language)}
                 </NextLink>
               </div>
             </AnimatedItem>
