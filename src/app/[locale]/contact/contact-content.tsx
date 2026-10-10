@@ -7,9 +7,18 @@ import { PageHero } from "@/components/sections/page-hero";
 import { Section } from "@/components/ui/section";
 import { Input, Textarea, Select, RadioGroup } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Stepper } from "@/components/ui/stepper";
+import { Link as NextLink } from "@/i18n/navigation";
 import { CalEmbed } from "@/components/ui/cal-embed";
-import { SegmentedControl } from "@/components/ui/segmented-control";
+import { CountUp, DrawCheck, EASE } from "@/components/motion/kit";
+import { useReducedMotion } from "@/lib/hooks";
+import {
+  ContactHeroScene,
+  FormProgress,
+  LiveDesk,
+  ModeTabs,
+  NextStepsFlow,
+  SuccessBurst,
+} from "@/components/misc-anim/contact-anim";
 
 // ── Instant-contact channels ──────────────────────────────────────────────
 // Single source of truth for the direct-contact buttons. The Cal.com booking
@@ -80,6 +89,8 @@ export function ContactContent() {
   // Contact mode toggle: the async brief (primary funnel — feeds the 24h
   // estimate + Telegram hot-lead pipeline) vs. booking a call right now.
   const [contactMode, setContactMode] = useState<"form" | "call">("form");
+  const reduced = useReducedMotion();
+  const en = language === "en";
 
   const requiredMessage = language === "en" ? "Required" : "Обязательное поле";
 
@@ -189,51 +200,53 @@ export function ContactContent() {
 
   // ── Success state ──
   if (status === "success") {
+    const reveal = (i: number) => ({
+      initial: reduced ? false : { opacity: 0, y: 16 },
+      animate: { opacity: 1, y: 0 },
+      transition: { duration: 0.6, delay: 0.45 + i * 0.1, ease: EASE },
+    });
     return (
-      <Section background="primary" padding="xl">
-        <div className="max-w-2xl mx-auto text-center" role="status" aria-live="polite" aria-atomic="true">
-          <div className="w-16 h-16 rounded-full bg-success/20 flex items-center justify-center mx-auto mb-6">
-            <svg className="w-8 h-8 text-success" fill="currentColor" viewBox="0 0 20 20" aria-hidden>
-              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-            </svg>
-          </div>
-          <h2 className="text-display-sm font-display text-text-primary mb-4">
+      <Section background="primary" padding="xl" className="relative overflow-hidden">
+        <div aria-hidden="true" className="ms-orb pointer-events-none absolute left-1/2 top-0 -z-0 h-[420px] w-[620px] max-w-full -translate-x-1/2 rounded-full bg-gradient-to-br from-emerald-300/25 via-indigo-300/20 to-fuchsia-300/20 blur-3xl" />
+        <div className="relative max-w-2xl mx-auto text-center" role="status" aria-live="polite" aria-atomic="true">
+          <SuccessBurst />
+          <motion.h2 {...reveal(0)} className="text-display-sm font-display text-text-primary mb-4">
             {t("contact.success.title")}
-          </h2>
-          <p className="text-body-lg text-text-secondary mb-2">
+          </motion.h2>
+          <motion.p {...reveal(1)} className="text-body-lg text-text-secondary mb-2">
             {t("contact.success.description")}
-          </p>
-          <p className="text-body-md text-accent-primary font-medium">
+          </motion.p>
+          <motion.p {...reveal(2)} className="text-body-md text-accent-primary font-medium">
             {language === "en"
               ? "Check your email (including spam) — we\u2019ll confirm receipt within minutes."
               : "Проверьте почту (включая спам) — мы подтвердим получение в течение нескольких минут."}
-          </p>
-          <div className="mt-8 p-5 rounded-xl border border-accent-primary/20 bg-accent-primary/5">
+          </motion.p>
+          <motion.div {...reveal(3)} className="mt-8 p-5 rounded-xl border border-accent-primary/20 bg-accent-primary/5">
             <p className="text-body-sm text-text-secondary">
               {language === "en"
                 ? "Estimated response: within 24 hours. A real engineer will review your project — no bots, no templates."
                 : "Ожидаемый ответ: в течение 24 часов. Живой инженер рассмотрит ваш проект — без ботов, без шаблонов."}
             </p>
-          </div>
-          <div className="mt-10 text-left rounded-2xl border border-border bg-bg-secondary/80 p-6">
+          </motion.div>
+          <motion.div {...reveal(4)} className="mt-10 text-left rounded-2xl border border-border bg-bg-secondary/80 p-6">
             <p className="text-caption uppercase tracking-wider text-text-tertiary mb-4">
               {t("contact.success.next")}
             </p>
-            <Stepper items={translations.contact.nextSteps.items.map((item) => ({
+            <NextStepsFlow items={translations.contact.nextSteps.items.map((item) => ({
               title: item.title[language],
               description: item.description[language],
             }))} />
-          </div>
-          <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
-            <a
+          </motion.div>
+          <motion.div {...reveal(5)} className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
+            <NextLink
               href="/cases"
-              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-accent-primary text-white text-body-sm font-medium hover:bg-accent-secondary transition-colors"
+              className="group inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-accent-primary text-white text-body-sm font-medium hover:bg-accent-secondary transition-colors"
             >
               {language === "en" ? "View our cases" : "Смотреть кейсы"}
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
               </svg>
-            </a>
+            </NextLink>
             <button
               type="button"
               className="inline-flex items-center justify-center px-5 py-2.5 rounded-xl border border-border text-body-sm text-text-secondary hover:text-text-primary transition-colors"
@@ -241,18 +254,21 @@ export function ContactContent() {
             >
               {language === "en" ? "Submit another request" : "Отправить ещё заявку"}
             </button>
-          </div>
+          </motion.div>
         </div>
       </Section>
     );
   }
 
   // ── Step transition animation ──
+  // Forward (1 → 2) slides in from the right, going back slides in from the left.
   const stepVariants = {
-    enter: { opacity: 0, x: 20 },
-    center: { opacity: 1, x: 0 },
-    exit: { opacity: 0, x: -20 },
+    enter: (dir: number) => (reduced ? { opacity: 0 } : { opacity: 0, x: 48 * dir, filter: "blur(6px)" }),
+    center: { opacity: 1, x: 0, filter: "blur(0px)" },
+    exit: (dir: number) => (reduced ? { opacity: 0 } : { opacity: 0, x: -48 * dir, filter: "blur(6px)" }),
   };
+  const stepDir = step === 2 ? 1 : -1;
+  const stepTransition = { duration: reduced ? 0.15 : 0.38, ease: EASE };
 
   return (
     <>
@@ -260,46 +276,38 @@ export function ContactContent() {
         title={t("contact.title")}
         subtitle={t("contact.subtitle")}
         eyebrow={language === "en" ? "Contact" : "Контакты"}
+        align="left"
+        rightSlot={<ContactHeroScene en={en} />}
       />
 
-      <Section background="secondary" padding="lg">
-        <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-10">
-          <div>
+      <Section background="secondary" padding="lg" className="relative overflow-hidden">
+        <div aria-hidden="true" className="ms-orb pointer-events-none absolute -left-40 top-20 h-96 w-96 rounded-full bg-indigo-300/20 blur-3xl" />
+        <div aria-hidden="true" className="ms-orb pointer-events-none absolute -right-40 bottom-10 h-96 w-96 rounded-full bg-fuchsia-300/15 blur-3xl" style={{ animationDelay: "-7s" }} />
+        <div className="relative grid lg:grid-cols-[1.1fr_0.9fr] gap-10">
+          <div className="min-w-0">
             {/* Mode toggle: async brief (default) vs. book a call now */}
-            <SegmentedControl
-              id="contact-mode"
-              className="mb-6"
+            <ModeTabs
+              label={en ? "How to reach us" : "Как связаться"}
               value={contactMode}
-              onChange={(v) => setContactMode(v as "form" | "call")}
+              onChange={setContactMode}
               options={[
-                { value: "form", label: language === "en" ? "Send a brief" : "Оставить заявку" },
-                { value: "call", label: language === "en" ? "Book a call" : "Забронировать звонок" },
+                { value: "form", label: language === "en" ? "Send a brief" : "Оставить заявку", icon: "brief" },
+                { value: "call", label: language === "en" ? "Book a call" : "Забронировать звонок", icon: "call" },
               ]}
             />
 
+            <AnimatePresence mode="wait" initial={false}>
             {contactMode === "form" ? (
-            <>
+            <motion.div
+              key="mode-form"
+              initial={reduced ? { opacity: 0 } : { opacity: 0, y: 16, scale: 0.99 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={reduced ? { opacity: 0 } : { opacity: 0, y: -10, scale: 0.99 }}
+              transition={{ duration: 0.35, ease: EASE }}
+              className="ms-rim rounded-3xl border border-border bg-bg-primary p-5 shadow-[0_30px_80px_-40px_rgba(79,70,229,0.35)] sm:p-8"
+            >
             {/* Progress bar */}
-            <div className="mb-6">
-              <div className="flex items-center justify-between text-caption text-text-tertiary mb-2">
-                <span>
-                  {language === "en"
-                    ? `Step ${step} of 2`
-                    : `Шаг ${step} из 2`}
-                </span>
-                <span className="tabular-nums">{completion}%</span>
-              </div>
-              <div className="h-2 rounded-full bg-bg-tertiary overflow-hidden">
-                <div
-                  role="progressbar"
-                  aria-valuenow={completion}
-                  aria-valuemin={0}
-                  aria-valuemax={100}
-                  className="h-full bg-accent-primary transition-all duration-300 ease-out progress-shimmer"
-                  style={{ width: `${completion}%` }}
-                />
-              </div>
-            </div>
+            <FormProgress step={step} completion={completion} en={en} />
 
             <form id="form" onSubmit={handleSubmit} className="space-y-6">
               {/* Honeypot */}
@@ -308,9 +316,9 @@ export function ContactContent() {
                 <input id="website" name="website" type="text" tabIndex={-1} autoComplete="off" aria-hidden="true" value={formData.website} onChange={(e) => updateField("website", e.target.value)} />
               </div>
 
-              <AnimatePresence mode="wait">
+              <AnimatePresence mode="wait" custom={stepDir} initial={false}>
                 {step === 1 ? (
-                  <motion.div key="step1" variants={stepVariants} initial="enter" animate="center" exit="exit" transition={{ duration: 0.2 }} className="space-y-6">
+                  <motion.div key="step1" custom={stepDir} variants={stepVariants} initial="enter" animate="center" exit="exit" transition={stepTransition} className="ms-rise space-y-6">
                     {/* Step 1 header */}
                     <div className="pb-2">
                       <h3 className="text-heading-md font-medium text-text-primary">
@@ -323,33 +331,39 @@ export function ContactContent() {
                       </p>
                     </div>
 
-                    <Input
-                      label={t("contact.form.name")}
-                      name="name"
-                      type="text"
-                      required
-                      value={formData.name}
-                      onChange={(e) => updateField("name", e.target.value)}
-                      error={errors.name}
-                    />
+                    <div className="ms-field">
+                      <Input
+                        label={t("contact.form.name")}
+                        name="name"
+                        type="text"
+                        required
+                        value={formData.name}
+                        onChange={(e) => updateField("name", e.target.value)}
+                        error={errors.name}
+                      />
+                    </div>
 
-                    <Input
-                      label={t("contact.form.email")}
-                      name="email"
-                      type="email"
-                      required
-                      value={formData.email}
-                      onChange={(e) => updateField("email", e.target.value)}
-                      error={errors.email}
-                    />
+                    <div className="ms-field">
+                      <Input
+                        label={t("contact.form.email")}
+                        name="email"
+                        type="email"
+                        required
+                        value={formData.email}
+                        onChange={(e) => updateField("email", e.target.value)}
+                        error={errors.email}
+                      />
+                    </div>
 
-                    <Input
-                      label={language === "en" ? "Phone (optional)" : "Телефон (необязательно)"}
-                      name="phone"
-                      type="tel"
-                      value={formData.phone}
-                      onChange={(e) => updateField("phone", e.target.value)}
-                    />
+                    <div className="ms-field">
+                      <Input
+                        label={language === "en" ? "Phone (optional)" : "Телефон (необязательно)"}
+                        name="phone"
+                        type="tel"
+                        value={formData.phone}
+                        onChange={(e) => updateField("phone", e.target.value)}
+                      />
+                    </div>
 
                     <Button type="button" variant="primary" size="lg" fullWidth onClick={handleContinue}>
                       {language === "en" ? "Continue" : "Продолжить"}
@@ -359,7 +373,7 @@ export function ContactContent() {
                     </Button>
                   </motion.div>
                 ) : (
-                  <motion.div key="step2" variants={stepVariants} initial="enter" animate="center" exit="exit" transition={{ duration: 0.2 }} className="space-y-6">
+                  <motion.div key="step2" custom={stepDir} variants={stepVariants} initial="enter" animate="center" exit="exit" transition={stepTransition} className="ms-rise space-y-6">
                     {/* Step 2 header */}
                     <div className="flex items-center justify-between pb-2">
                       <div>
@@ -381,49 +395,53 @@ export function ContactContent() {
                       </button>
                     </div>
 
-                    <Select
-                      label={t("contact.form.projectType")}
-                      name="projectType"
-                      options={projectTypeOptions(t).map((o) => ({ value: o.value, label: o.label }))}
-                      placeholder={language === "en" ? "Select..." : "Выберите..."}
-                      value={formData.projectType}
-                      onChange={(e) => updateField("projectType", e.target.value)}
-                      error={errors.projectType}
-                    />
+                    <div className="ms-field">
+                      <Select
+                        label={t("contact.form.projectType")}
+                        name="projectType"
+                        options={projectTypeOptions(t).map((o) => ({ value: o.value, label: o.label }))}
+                        placeholder={language === "en" ? "Select..." : "Выберите..."}
+                        value={formData.projectType}
+                        onChange={(e) => updateField("projectType", e.target.value)}
+                        error={errors.projectType}
+                      />
+                    </div>
 
-                    <fieldset>
+                    <fieldset className="ms-field">
                       <legend className="block text-body-sm font-medium text-text-secondary mb-3">
                         {t("contact.form.stage")}
                       </legend>
                       <RadioGroup name="stage" options={stageOptions(t)} value={formData.stage} onChange={(value) => updateField("stage", value)} columns={2} error={errors.stage} />
                     </fieldset>
 
-                    <fieldset>
+                    <fieldset className="ms-field">
                       <legend className="block text-body-sm font-medium text-text-secondary mb-3">
                         {t("contact.form.timeline")}
                       </legend>
                       <RadioGroup name="timeline" options={timelineOptions(t)} value={formData.timeline} onChange={(value) => updateField("timeline", value)} columns={3} error={errors.timeline} />
                     </fieldset>
 
-                    <fieldset>
+                    <fieldset className="ms-field">
                       <legend className="block text-body-sm font-medium text-text-secondary mb-3">
                         {t("contact.form.budget")}
                       </legend>
                       <RadioGroup name="budget" options={budgetOptions(t)} value={formData.budget} onChange={(value) => updateField("budget", value)} columns={2} error={errors.budget} />
                     </fieldset>
 
-                    <Textarea
-                      label={`${t("contact.form.message")} (${language === "en" ? "optional" : "необязательно"})`}
-                      name="message"
-                      value={formData.message}
-                      onChange={(e) => updateField("message", e.target.value)}
-                      placeholder={
-                        language === "en"
-                          ? "e.g., E-commerce platform for fashion brand with payment integration..."
-                          : "Напр., E-commerce платформа для бренда одежды с интеграцией оплаты..."
-                      }
-                      error={errors.message}
-                    />
+                    <div className="ms-field">
+                      <Textarea
+                        label={`${t("contact.form.message")} (${language === "en" ? "optional" : "необязательно"})`}
+                        name="message"
+                        value={formData.message}
+                        onChange={(e) => updateField("message", e.target.value)}
+                        placeholder={
+                          language === "en"
+                            ? "e.g., E-commerce platform for fashion brand with payment integration..."
+                            : "Напр., E-commerce платформа для бренда одежды с интеграцией оплаты..."
+                        }
+                        error={errors.message}
+                      />
+                    </div>
 
                     {/* Consent checkbox */}
                     <label className="flex items-start gap-3 cursor-pointer group">
@@ -480,10 +498,17 @@ export function ContactContent() {
                 )}
               </AnimatePresence>
             </form>
-            </>
+            </motion.div>
             ) : (
               /* Book-a-call panel — the Cal.com inline embed */
-              <div className="rounded-2xl border border-border bg-bg-secondary/80 p-6">
+              <motion.div
+                key="mode-call"
+                initial={reduced ? { opacity: 0 } : { opacity: 0, y: 16, scale: 0.99 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={reduced ? { opacity: 0 } : { opacity: 0, y: -10, scale: 0.99 }}
+                transition={{ duration: 0.35, ease: EASE }}
+                className="ms-rim rounded-3xl border border-border bg-bg-primary p-5 shadow-[0_30px_80px_-40px_rgba(79,70,229,0.35)] sm:p-8"
+              >
                 <div className="pb-4">
                   <h3 className="text-heading-md font-medium text-text-primary">
                     {language === "en"
@@ -497,27 +522,41 @@ export function ContactContent() {
                   </p>
                 </div>
                 <CalEmbed />
-              </div>
+              </motion.div>
             )}
+            </AnimatePresence>
           </div>
 
           {/* ── Sidebar ── */}
-          <div className="space-y-6">
+          <div className="space-y-6 min-w-0">
             {/* Social proof */}
-            <div className="rounded-2xl border border-accent-primary/20 bg-accent-primary/5 p-6">
-              <div className="grid grid-cols-3 gap-4 text-center mb-5">
-                <div>
-                  <p className="text-heading-lg font-bold text-accent-primary">40+</p>
-                  <p className="text-caption text-text-tertiary">{language === "en" ? "projects" : "проектов"}</p>
-                </div>
-                <div>
-                  <p className="text-heading-lg font-bold text-accent-primary">5+</p>
-                  <p className="text-caption text-text-tertiary">{language === "en" ? "years" : "лет"}</p>
-                </div>
-                <div>
-                  <p className="text-heading-lg font-bold text-accent-primary">24h</p>
-                  <p className="text-caption text-text-tertiary">{language === "en" ? "response" : "ответ"}</p>
-                </div>
+            <motion.div
+              initial={reduced ? false : { opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ duration: 0.7, ease: EASE }}
+              className="relative isolate overflow-hidden rounded-3xl border border-white/10 bg-[#0B0B14] p-6 text-white shadow-[0_30px_70px_-35px_rgba(15,15,40,0.8)]"
+            >
+              <div aria-hidden="true" className="home-aurora pointer-events-none absolute inset-0 -z-10 opacity-70" />
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 -z-10 opacity-[0.06] [mask-image:radial-gradient(ellipse_at_top,black_20%,transparent_70%)]"
+                style={{ backgroundImage: "linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)", backgroundSize: "28px 28px" }}
+              />
+              <LiveDesk en={en} />
+              <div className="grid grid-cols-3 gap-4 text-center mb-6">
+                {[
+                  { v: "40+", l: language === "en" ? "projects" : "проектов" },
+                  { v: "5+", l: language === "en" ? "years" : "лет" },
+                  { v: "24h", l: language === "en" ? "response" : "ответ" },
+                ].map((stat, i) => (
+                  <div key={stat.v} className={i > 0 ? "border-l border-white/10" : ""}>
+                    <p className="font-brand text-3xl font-semibold tabular-nums home-gradient-text">
+                      <CountUp value={stat.v} />
+                    </p>
+                    <p className="mt-1 text-caption text-white/55">{stat.l}</p>
+                  </div>
+                ))}
               </div>
               <div className="space-y-2.5">
                 {[
@@ -525,31 +564,50 @@ export function ContactContent() {
                   language === "en" ? "Clients in Dubai, Moscow, Bishkek" : "Клиенты в Дубае, Москве, Бишкеке",
                   language === "en" ? "NDA available on request" : "NDA по запросу",
                 ].map((item, i) => (
-                  <div key={i} className="flex items-start gap-2">
-                    <svg className="w-4 h-4 text-accent-primary shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    <span className="text-body-sm text-text-secondary">{item}</span>
-                  </div>
+                  <motion.div
+                    key={i}
+                    className="flex items-start gap-2.5"
+                    initial={reduced ? false : { opacity: 0, x: -10 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: 0.3 + i * 0.12, ease: EASE }}
+                  >
+                    <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-emerald-400/15 text-emerald-300">
+                      <DrawCheck delay={0.4 + i * 0.12} className="h-3.5 w-3.5" />
+                    </span>
+                    <span className="text-body-sm text-white/75">{item}</span>
+                  </motion.div>
                 ))}
               </div>
-            </div>
+            </motion.div>
 
             {/* What happens next */}
-            <div className="rounded-2xl border border-border bg-bg-tertiary/60 p-6">
-              <p className="text-caption uppercase tracking-wider text-text-tertiary mb-4">
+            <motion.div
+              initial={reduced ? false : { opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ duration: 0.7, ease: EASE }}
+              className="rounded-3xl border border-border bg-bg-primary p-6 shadow-[0_20px_60px_-40px_rgba(79,70,229,0.4)]"
+            >
+              <p className="text-caption uppercase tracking-wider text-text-tertiary mb-5">
                 {translations.contact.nextSteps.title[language]}
               </p>
-              <Stepper
+              <NextStepsFlow
                 items={translations.contact.nextSteps.items.map((item) => ({
                   title: item.title[language],
                   description: item.description[language],
                 }))}
               />
-            </div>
+            </motion.div>
 
             {/* Instant contact — reach a real engineer right now */}
-            <div className="rounded-2xl border border-border bg-bg-secondary/80 p-6">
+            <motion.div
+              initial={reduced ? false : { opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ duration: 0.7, ease: EASE }}
+              className="rounded-3xl border border-border bg-bg-primary p-6 shadow-[0_20px_60px_-40px_rgba(79,70,229,0.4)]"
+            >
               <p className="text-caption uppercase tracking-wider text-text-tertiary mb-1">
                 {language === "en" ? "Prefer to message us now?" : "Хотите написать прямо сейчас?"}
               </p>
@@ -564,12 +622,13 @@ export function ContactContent() {
                   href={TELEGRAM_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-accent-primary text-white text-body-sm font-medium border border-accent-primary/50 shadow-glow-sm hover:bg-accent-secondary hover:shadow-glow-md transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary"
+                  className="ms-msg group inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-gradient-to-r from-indigo-600 via-accent-primary to-violet-600 text-white text-body-sm font-medium border border-accent-primary/50 shadow-glow-sm hover:bg-accent-secondary hover:shadow-glow-md transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary"
                 >
-                  <svg className="w-4 h-4 shrink-0" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <svg className="ms-ico-fly w-4 h-4 shrink-0" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M11.944 0A12 12 0 000 12a12 12 0 0012 12 12 12 0 0012-12A12 12 0 0012 0a12 12 0 00-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 01.171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z" />
                   </svg>
                   Telegram
+                  <span aria-hidden="true" className="ms-arrow">↗</span>
                 </a>
 
                 {/* WhatsApp — rendered only when a real number is configured */}
@@ -578,27 +637,29 @@ export function ContactContent() {
                     href={WHATSAPP_URL}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-bg-elevated text-text-primary text-body-sm font-medium border border-border hover:border-border-hover hover:bg-bg-tertiary transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary"
+                    className="ms-msg group inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-bg-elevated text-text-primary text-body-sm font-medium border border-border hover:border-border-hover hover:bg-bg-tertiary transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary"
                   >
-                    <svg className="w-4 h-4 shrink-0 text-success" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <svg className="ms-ico-ring w-4 h-4 shrink-0 text-success" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                       <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.71.306 1.263.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
                     </svg>
                     WhatsApp
+                    <span aria-hidden="true" className="ms-arrow">↗</span>
                   </a>
                 )}
 
                 {/* Email */}
                 <a
                   href={`mailto:${CONTACT_EMAIL}`}
-                  className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-bg-elevated text-text-primary text-body-sm font-medium border border-border hover:border-border-hover hover:bg-bg-tertiary transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary"
+                  className="ms-msg group inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-bg-elevated text-text-primary text-body-sm font-medium border border-border hover:border-border-hover hover:bg-bg-tertiary transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary"
                 >
-                  <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <svg className="ms-ico-mail w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                   </svg>
-                  {CONTACT_EMAIL}
+                    <span className="truncate">{CONTACT_EMAIL}</span>
+                  <span aria-hidden="true" className="ms-arrow">→</span>
                 </a>
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </Section>

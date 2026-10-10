@@ -1116,3 +1116,79 @@ body {
   .l1s-flow, .l1s-core, .l1s-chip, .l1s-scan { animation: none; }
   .l1s-run .l1s-cell { animation: none; background: rgb(52 211 153 / 0.65); }
 }
+
+/* ── Motion kit: pointer spotlight card ── */
+.spot-card__glow {
+  background:
+    radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), rgb(var(--spot) / 0.14), transparent 45%),
+    radial-gradient(240px circle at var(--mx, 50%) var(--my, 50%), rgb(var(--spot) / 0.10), transparent 60%);
+}
+.spot-card::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1px; pointer-events: none;
+  background: radial-gradient(300px circle at var(--mx, 50%) var(--my, 50%), rgb(var(--spot) / 0.7), transparent 50%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude;
+  opacity: 0; transition: opacity .4s;
+}
+.spot-card:hover::after { opacity: 1; }
+
+/* ── Footer: live office dots and the closing wordmark ── */
+.footer-ping { animation: footer-ping 2.4s cubic-bezier(0, 0, 0.2, 1) infinite; }
+@keyframes footer-ping { 75%, 100% { transform: scale(2.6); opacity: 0; } }
+.footer-wordmark__text {
+  color: transparent;
+  background-image:
+    radial-gradient(16% 90% at var(--fx, 50%) var(--fy, 60%), rgb(139 92 246 / 0.7), transparent 75%),
+    linear-gradient(100deg, transparent 30%, rgb(236 72 153 / 0.3) 45%, rgb(99 102 241 / 0.4) 55%, transparent 70%);
+  background-size: 100% 100%, 250% 100%;
+  background-repeat: no-repeat;
+  -webkit-background-clip: text; background-clip: text;
+  animation: footer-sweep 7s ease-in-out infinite;
+}
+.footer-wordmark__letter { -webkit-text-stroke: 1px rgb(99 102 241 / 0.3); }
+@keyframes footer-sweep { 0%, 100% { background-position: 0 0, 120% 0; } 50% { background-position: 0 0, -20% 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .footer-ping, .footer-wordmark__text { animation: none; }
+}
+
+/* ── 404 page (kept global: the not-found boundary's CSS would otherwise be preloaded on every route) ── */
+.ms-glitch {
+  position: relative;
+}
+.ms-glitch::before,
+.ms-glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.ms-glitch::before {
+  color: #22d3ee;
+  mix-blend-mode: screen;
+  animation: ms-glitch-a 3.2s steps(1) infinite;
+}
+.ms-glitch::after {
+  color: #f0abfc;
+  mix-blend-mode: screen;
+  animation: ms-glitch-b 3.2s steps(1) infinite;
+}
+@keyframes ms-glitch-a {
+  0%, 86%, 100% { transform: none; clip-path: inset(0 0 100% 0); }
+  87% { transform: translate(-6px, 2px); clip-path: inset(12% 0 60% 0); }
+  90% { transform: translate(5px, -2px); clip-path: inset(58% 0 18% 0); }
+  93% { transform: translate(-3px, 0); clip-path: inset(30% 0 44% 0); }
+}
+@keyframes ms-glitch-b {
+  0%, 87%, 100% { transform: none; clip-path: inset(0 0 100% 0); }
+  88% { transform: translate(6px, -1px); clip-path: inset(66% 0 8% 0); }
+  91% { transform: translate(-5px, 2px); clip-path: inset(8% 0 72% 0); }
+  94% { transform: translate(3px, 1px); clip-path: inset(40% 0 36% 0); }
+}
+.ms-twinkle { animation: ms-twinkle 3s ease-in-out infinite; }
+@keyframes ms-twinkle { 50% { opacity: 0.15; } }
+.ms-caret { animation: ms-caret 1s steps(1) infinite; }
+@keyframes ms-caret { 50% { opacity: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .ms-glitch::before, .ms-glitch::after { animation: none; display: none; }
+  .ms-twinkle, .ms-caret { animation: none; }
+}

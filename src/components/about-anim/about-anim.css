@@ -1,0 +1,84 @@
+/* About page motion. Every loop lives inside an .ab-scope that flips
+   data-run to "false" when the section leaves the screen, which pauses all
+   CSS animations in it; reduced motion switches them off entirely. */
+
+.ab-scope[data-run="false"] *,
+.ab-scope[data-run="false"] *::before,
+.ab-scope[data-run="false"] *::after { animation-play-state: paused !important; }
+
+/* SVG parts that scale or rotate around their own centre */
+.ab-box { transform-box: fill-box; transform-origin: center; }
+
+/* ── Hero stats card ───────────────────────────────────────── */
+.ab-stats-grid {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+  background-size: 22px 22px;
+  mask-image: radial-gradient(ellipse at 50% 40%, black 20%, transparent 80%);
+}
+.ab-scan {
+  background: linear-gradient(180deg, transparent, rgba(165, 180, 252, 0.16) 50%, transparent);
+  animation: ab-scan 5.5s cubic-bezier(.45, 0, .55, 1) infinite;
+}
+@keyframes ab-scan { from { transform: translateY(-100%); } to { transform: translateY(400%); } }
+.ab-bar { transform-origin: bottom; animation: ab-bar 2.6s cubic-bezier(.22, 1, .36, 1) infinite; }
+@keyframes ab-bar { 0% { transform: scaleY(0.15); } 45%, 80% { transform: scaleY(1); } 100% { transform: scaleY(0.15); } }
+.ab-hand { transform-origin: 12px 12px; animation: ab-spin 4s linear infinite; }
+.ab-hand--slow { animation-duration: 48s; }
+@keyframes ab-spin { to { transform: rotate(360deg); } }
+.ab-runner { animation: ab-runner 3.2s linear infinite; }
+@keyframes ab-runner { from { transform: translateX(0); } to { transform: translateX(96px); } }
+
+/* ── Principle icons ───────────────────────────────────────── */
+.ab-blink { transform-box: fill-box; transform-origin: center; animation: ab-blink 4.2s ease-in-out infinite; }
+@keyframes ab-blink { 0%, 44%, 52%, 100% { transform: scaleY(1); } 48% { transform: scaleY(0.08); } }
+.ab-look { animation: ab-look 4.2s ease-in-out infinite; }
+@keyframes ab-look { 0%, 20% { transform: translateX(0); } 30%, 40% { transform: translateX(-1.6px); } 60%, 75% { transform: translateX(1.6px); } 85%, 100% { transform: translateX(0); } }
+.ab-flip { transform-box: fill-box; transform-origin: top; animation: ab-flip 3s cubic-bezier(.65, 0, .35, 1) infinite; }
+@keyframes ab-flip { 0%, 55% { transform: scaleY(1); opacity: 1; } 75% { transform: scaleY(0); opacity: 0.3; } 76% { transform: scaleY(0); opacity: 0; } 100% { transform: scaleY(1); opacity: 1; } }
+.ab-dayfill { animation: ab-dayfill 3s steps(1) infinite; }
+@keyframes ab-dayfill { 0%, 24% { transform: translate(0, 0); } 25%, 49% { transform: translate(4px, 0); } 50%, 74% { transform: translate(8px, 0); } 75%, 100% { transform: translate(0, 4px); } }
+.ab-flicker { animation: ab-flicker 2.4s linear infinite; }
+@keyframes ab-flicker { 0%, 18%, 22%, 62%, 66%, 100% { opacity: 1; } 20%, 64% { opacity: 0.35; } }
+.ab-spark { stroke-dasharray: 4; stroke-dashoffset: 4; animation: ab-spark 2.4s ease-out infinite; }
+@keyframes ab-spark { 0%, 20% { stroke-dashoffset: 4; opacity: 0; } 30% { opacity: 1; } 50%, 100% { stroke-dashoffset: -4; opacity: 0; } }
+.ab-ripple { transform-box: fill-box; transform-origin: center; animation: ab-ripple 2.6s ease-out infinite; }
+@keyframes ab-ripple { from { transform: scale(0.6); opacity: 0.7; } to { transform: scale(1.5); opacity: 0; } }
+.ab-tick { stroke-dasharray: 12; animation: ab-tick 2.6s cubic-bezier(.22, 1, .36, 1) infinite; }
+@keyframes ab-tick { 0% { stroke-dashoffset: 12; } 35%, 85% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: 0; opacity: 0; } }
+
+/* ── Industries ────────────────────────────────────────────── */
+.ab-orbit { animation: ab-spin 14s linear infinite; }
+.ab-orbit--rev { animation-direction: reverse; animation-duration: 22s; }
+
+/* ── Quality widgets ───────────────────────────────────────── */
+.ab-spark-scroll { animation: ab-spark-scroll 7s linear infinite; }
+@keyframes ab-spark-scroll { to { transform: translateX(-50%); } }
+.ab-caret { animation: ab-caret 1s steps(1) infinite; }
+@keyframes ab-caret { 50% { opacity: 0.2; } }
+
+/* ── Offices ───────────────────────────────────────────────── */
+.ab-pulse { transform-box: fill-box; transform-origin: center; animation: ab-pulse 2.4s ease-out infinite; }
+@keyframes ab-pulse { from { transform: scale(0.4); opacity: 0.9; } to { transform: scale(2.6); opacity: 0; } }
+.ab-flow { stroke-dasharray: 3 14; animation: ab-flow 1.6s linear infinite; }
+@keyframes ab-flow { to { stroke-dashoffset: -17; } }
+.ab-mk { transition: transform .3s; }
+@media (max-width: 639px) { .ab-mk { transform: scale(2.4); } }
+.ab-colon { animation: ab-caret 1s steps(1) infinite; }
+
+/* ── Founder ───────────────────────────────────────────────── */
+.ab-ring::before {
+  content: ""; position: absolute; inset: -40%; z-index: -1;
+  background: conic-gradient(from 0deg, #6366F1, #D946EF, #F59E0B, #22D3EE, #6366F1);
+  animation: ab-spin 6s linear infinite;
+}
+.ab-quote-mark { background: linear-gradient(135deg, #6366F1, #D946EF 55%, #F59E0B); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ab-scan, .ab-bar, .ab-hand, .ab-runner, .ab-blink, .ab-look, .ab-flip, .ab-dayfill, .ab-flicker,
+  .ab-spark, .ab-ripple, .ab-tick, .ab-orbit, .ab-spark-scroll, .ab-caret, .ab-pulse, .ab-flow,
+  .ab-colon, .ab-ring::before { animation: none !important; }
+  .ab-spark, .ab-ripple { opacity: 0; }
+  .ab-tick { stroke-dashoffset: 0; }
+}

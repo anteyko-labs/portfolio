@@ -2,22 +2,36 @@
 
 import { useState } from "react";
 import { useLanguage } from "@/lib/language-context";
-import { Section, SectionHeader, AnimatedItem } from "@/components/ui/section";
-import { Card } from "@/components/ui/card";
+import { Section, AnimatedItem } from "@/components/ui/section";
 import { CategoryBadge } from "@/components/ui/badge";
 import { ButtonLink } from "@/components/ui/link";
-import { ArtifactCard } from "@/components/ui/artifact-card";
-import { MetricPill } from "@/components/ui/metric-pill";
 import { PageHero } from "@/components/sections/page-hero";
 import { ScrollSpyRail } from "@/components/ui/scrollspy-rail";
 import { Lightbox } from "@/components/ui/lightbox";
 import Image from "next/image";
 import type { FlagshipCase } from "@/lib/cases-data";
 import { flagshipCases } from "@/lib/cases-data";
-import { Link as NextLink } from "@/i18n/navigation";
 import { CaseBottomCTA } from "@/components/case-bottom-cta";
 import { L1CaseScenes } from "@/components/cases-catalog/l1-case-scenes";
 import { L1Terminal } from "@/components/cases-catalog/l1-terminal";
+import { CaseHeroMetrics } from "@/components/case-anim/hero-metrics";
+import { QualityGatesRun } from "@/components/case-anim/quality-gates-run";
+import { CaseHeading } from "@/components/case-anim/primitives";
+import {
+  CaseArtifacts,
+  CaseConstraints,
+  CaseCtaGlow,
+  CaseDeliverables,
+  CaseHardParts,
+  CaseMetaStrip,
+  CaseNavLink,
+  CaseOutcome,
+  CaseProblem,
+  CaseSolution,
+  CaseTechStack,
+  RelatedCaseCard,
+  type SolutionStep,
+} from "@/components/case-anim/case-sections";
 
 // Sticky Summary Rail component
 function CaseSummaryRail({ caseItem, language, t }: { caseItem: FlagshipCase; language: "en" | "ru"; t: (key: string) => string }) {
@@ -212,7 +226,50 @@ export function CaseDetailContent({ caseItem }: { caseItem: FlagshipCase }) {
     { name: { en: "Security checklist", ru: "Чеклист безопасности" }, passed: true },
   ];
   const qualityGates = caseItem.qualityGates ?? defaultQualityGates;
-  const passedCount = qualityGates.filter((g) => g.passed).length;
+
+
+  // Solution → pipeline steps: labelled parts ("DESIGN: … FRONTEND: …") when present,
+  // otherwise the text split into sentences (short) or groups of three sentences.
+  const solutionText = caseItem.solution[language];
+  const solution = (() => {
+    const LABELS = [
+      "DESIGN", "FRONTEND", "BACKEND",
+      "ФРОНТЕНД", "БЭКЕНД", "ДИЗАЙН",
+      "iOS[\\s\\-‑]APP", "iOS[\\s\\-‑]ПРИЛОЖЕНИЕ",
+      "CHEF EXPERIENCE", "ОПЫТ ПОВАРА",
+      "API[\\s\\-‑]LAYER", "API[\\s\\-‑]СЛОЙ",
+    ];
+    const sectionRe = new RegExp(`(?:^|[.!]\\s+)((?:${LABELS.join("|")})(?:\\s*\\([^)]*\\))?)\\s*:\\s*`, "gi");
+    const matches: { heading: string; start: number; body: number }[] = [];
+    let m;
+    while ((m = sectionRe.exec(solutionText)) !== null) {
+      matches.push({ heading: m[1].trim(), start: m.index, body: m.index + m[0].length });
+    }
+    if (matches.length >= 2) {
+      const intro = matches[0].start > 0 ? solutionText.slice(0, matches[0].start).replace(/[.\s]+$/, "").trim() : "";
+      const steps: SolutionStep[] = matches.map((match, i) => {
+        const end = i + 1 < matches.length ? matches[i + 1].start : solutionText.length;
+        const body = solutionText.slice(match.body, end).replace(/[.\s]+$/, "").trim();
+        return { heading: match.heading, body: body + "." };
+      });
+      return { intro: intro ? intro + "." : undefined, steps };
+    }
+    // merge tiny fragments (e.g. after abbreviations) back into the previous sentence
+    const sentences = solutionText.split(/(?<=\.)\s+/).reduce<string[]>((acc, cur) => {
+      if (acc.length && (cur.length < 25 || acc[acc.length - 1].length < 25)) acc[acc.length - 1] += " " + cur;
+      else acc.push(cur);
+      return acc;
+    }, []);
+    const per = sentences.length <= 6 ? 1 : 3;
+    const steps: SolutionStep[] = [];
+    for (let i = 0; i < sentences.length; i += per) steps.push({ body: sentences.slice(i, i + per).join(" ") });
+    return { intro: undefined, steps };
+  })();
+
+  // Running chapter numbers for the section headings
+  const chapterIds = scrollItems.map((s) => s.id).filter((id) => id !== "case-summary" && id !== "case-how");
+  const chapter = (id: string) => chapterIds.indexOf(id) + 1;
+  const en = language === "en";
 
   return (
     <>
@@ -245,251 +302,58 @@ export function CaseDetailContent({ caseItem }: { caseItem: FlagshipCase }) {
               </div>
             </div>
           ) : caseItem.metrics && caseItem.metrics.length > 0 ? (
-            <div className="space-y-4">
-              {/* Mobile: horizontal compact metrics */}
-              <div className="flex flex-wrap gap-3 lg:hidden">
-                {caseItem.metrics.slice(0, 4).map((metric) => (
-                  <div key={`hero-mobile-${metric.value}`} className="bg-bg-secondary/80 backdrop-blur-sm px-3 py-2 rounded-lg border border-border flex items-baseline gap-2">
-                    <span className="text-heading-sm text-accent-primary font-bold tabular-nums">{metric.value}</span>
-                    <span className="text-caption text-text-secondary">{metric.label[language]}</span>
-                  </div>
-                ))}
-              </div>
-              {/* Desktop: vertical stacked metrics */}
-              <div className="hidden lg:block space-y-4">
-                {caseItem.metrics.slice(0, 3).map((metric) => (
-                  <div key={`hero-right-${metric.value}`} className="bg-bg-secondary/80 backdrop-blur-sm p-4 rounded-xl border border-border shadow-glow-sm">
-                    <p className="text-display-xs text-accent-primary font-bold tabular-nums">{metric.value}</p>
-                    <p className="text-body-sm text-text-secondary">{metric.label[language]}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
+            <CaseHeroMetrics
+              metrics={caseItem.metrics.map((m) => ({ value: m.value, label: m.label[language] }))}
+              caption={en ? "project metrics" : "метрики проекта"}
+              live={en ? "live" : "live"}
+            />
           ) : undefined
         }
       />
 
       <Section background="primary" padding="none" id="case-summary-meta">
-        <div className="max-w-4xl px-0 lg:px-12 py-8">
-          <AnimatedItem>
-            <div className="flex flex-wrap gap-6 text-body-sm text-text-muted">
-              <span>
-                <strong className="text-text-secondary">
-                  {language === "en" ? "Year" : "Год"}:{" "}
-                </strong>
-                {caseItem.year}
-              </span>
-              <span>
-                <strong className="text-text-secondary">
-                  {language === "en" ? "Industry" : "Индустрия"}:{" "}
-                </strong>
-                {caseItem.industry[language]}
-              </span>
-              <span>
-                <strong className="text-text-secondary">
-                  {language === "en" ? "Timeline" : "Сроки"}:{" "}
-                </strong>
-                {caseItem.timeline[language]}
-              </span>
-            </div>
-          </AnimatedItem>
+        <div className="max-w-5xl py-8 md:py-10">
+          <CaseMetaStrip
+            items={[
+              { label: en ? "Year" : "Год", value: String(caseItem.year), icon: "calendar" },
+              { label: en ? "Industry" : "Индустрия", value: caseItem.industry[language], icon: "building" },
+              { label: en ? "Timeline" : "Сроки", value: caseItem.timeline[language], icon: "timer" },
+            ]}
+          />
         </div>
       </Section>
 
       {/* Problem */}
       <Section background="secondary" padding="lg" id="case-problem">
-        <div className="max-w-3xl">
-          <SectionHeader
-            title={language === "en" ? "Problem" : "Задача"}
-            animate={false}
-          />
-          <AnimatedItem>
-            <p className="text-body-lg text-text-secondary">
-              {caseItem.problem[language]}
-            </p>
-          </AnimatedItem>
+        <div className="max-w-5xl">
+          <CaseHeading index={chapter("case-problem")} kicker={en ? "Context" : "Контекст"} title={en ? "Problem" : "Задача"} />
+          <CaseProblem text={caseItem.problem[language]} />
         </div>
       </Section>
 
       {/* Constraints */}
-      <Section background="primary" padding="lg" id="case-constraints">
-        <div className="max-w-3xl">
-          <SectionHeader
-            title={language === "en" ? "Constraints" : "Ограничения"}
-            animate={false}
-          />
-          <AnimatedItem>
-            <ul className="space-y-3">
-              {caseItem.constraints[language].map((c) => (
-                <li
-                  key={`constraint-${c.slice(0, 30).replace(/\s+/g, '-')}`}
-                  className="flex items-start gap-3 text-body-md text-text-secondary"
-                >
-                  <span className="text-accent-primary mt-1">•</span>
-                  {c}
-                </li>
-              ))}
-            </ul>
-          </AnimatedItem>
+      <Section background="primary" padding="lg" id="case-constraints" className="overflow-x-clip">
+        <div className="max-w-5xl">
+          <CaseHeading index={chapter("case-constraints")} kicker={en ? "Boundaries" : "Рамки"} title={en ? "Constraints" : "Ограничения"} />
+          <CaseConstraints items={caseItem.constraints[language]} />
         </div>
       </Section>
 
       {isL1 && <L1CaseScenes en={language === "en"} />}
 
       {/* Solution */}
-      <Section background="secondary" padding="lg" id="case-solution">
+      <Section background="secondary" padding="lg" id="case-solution" className="overflow-x-clip">
         <div className="max-w-4xl">
-          <SectionHeader
-            title={language === "en" ? "Solution" : "Решение"}
-            animate={false}
-          />
-          {(() => {
-            const solutionText = caseItem.solution[language];
-
-            // Section label keywords (handles regular hyphen, non-breaking hyphen \u2011, and space)
-            const LABELS = [
-              "DESIGN", "FRONTEND", "BACKEND",
-              "ФРОНТЕНД", "БЭКЕНД", "ДИЗАЙН",
-              "iOS[\\s\\-\u2011]APP", "iOS[\\s\\-\u2011]ПРИЛОЖЕНИЕ",
-              "CHEF EXPERIENCE", "ОПЫТ ПОВАРА",
-              "API[\\s\\-\u2011]LAYER", "API[\\s\\-\u2011]СЛОЙ",
-            ];
-            const labelGroup = LABELS.join("|");
-            // Match: LABEL (optional parenthetical): — preceded by ". " or start of string
-            const sectionRe = new RegExp(
-              `(?:^|[.!]\\s+)((?:${labelGroup})(?:\\s*\\([^)]*\\))?)\\s*:\\s*`,
-              "gi"
-            );
-
-            // Collect all match positions
-            const allMatches: { heading: string; fullMatchStart: number; bodyStart: number }[] = [];
-            let m;
-            while ((m = sectionRe.exec(solutionText)) !== null) {
-              allMatches.push({
-                heading: m[1].trim(),
-                fullMatchStart: m.index,
-                bodyStart: m.index + m[0].length,
-              });
-            }
-
-            if (allMatches.length >= 2) {
-              // Extract intro (text before first section label)
-              const firstLabelStart = allMatches[0].fullMatchStart;
-              let intro = "";
-              if (firstLabelStart > 0) {
-                intro = solutionText.slice(0, firstLabelStart).replace(/[.\s]+$/, "").trim();
-              }
-
-              // Extract each section body (from bodyStart to the next label's fullMatchStart)
-              const parts = allMatches.map((match, i) => {
-                const bodyEnd = i + 1 < allMatches.length
-                  ? allMatches[i + 1].fullMatchStart
-                  : solutionText.length;
-                let body = solutionText.slice(match.bodyStart, bodyEnd).replace(/[.\s]+$/, "").trim();
-                // Remove trailing period-space before next section
-                body = body.replace(/\.\s*$/, "").trim();
-                return { heading: match.heading, body: body + "." };
-              });
-
-              // Icons for section headings
-              const sectionIcon = (heading: string) => {
-                const h = heading.toUpperCase();
-                if (h.includes("DESIGN") || h.includes("ДИЗАЙН")) return "🎨";
-                if (h.includes("FRONTEND") || h.includes("ФРОНТЕНД")) return "⚛️";
-                if (h.includes("BACKEND") || h.includes("БЭКЕНД")) return "⚙️";
-                if (h.includes("IOS")) return "📱";
-                if (h.includes("CHEF") || h.includes("ПОВАР")) return "👨‍🍳";
-                if (h.includes("API")) return "🔌";
-                return "📦";
-              };
-
-              return (
-                <div className="space-y-5">
-                  {intro && (
-                    <AnimatedItem>
-                      <p className="text-body-lg text-text-primary font-medium">{intro}.</p>
-                    </AnimatedItem>
-                  )}
-                  <div className="grid gap-4">
-                    {parts.map((part, i) => (
-                      <AnimatedItem key={i} delay={i * 0.08}>
-                        <div className="rounded-xl border border-border bg-bg-primary/60 p-5 md:p-6">
-                          <div className="flex items-center gap-3 mb-3">
-                            <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-accent-primary/10 text-base" aria-hidden="true">{sectionIcon(part.heading)}</span>
-                            <h3 className="text-heading-sm font-semibold text-text-primary uppercase tracking-wider">
-                              {part.heading}
-                            </h3>
-                          </div>
-                          <p className="text-body-md text-text-secondary leading-relaxed">
-                            {part.body}
-                          </p>
-                        </div>
-                      </AnimatedItem>
-                    ))}
-                  </div>
-                </div>
-              );
-            }
-
-            // Fallback: split long text into readable paragraphs (4 sentences each)
-            const sentences = solutionText.split(/(?<=\.)\s+/);
-            if (sentences.length <= 5) {
-              return (
-                <AnimatedItem>
-                  <p className="text-body-lg text-text-secondary leading-relaxed">{solutionText}</p>
-                </AnimatedItem>
-              );
-            }
-
-            const paragraphs: string[] = [];
-            for (let i = 0; i < sentences.length; i += 4) {
-              paragraphs.push(sentences.slice(i, i + 4).join(" "));
-            }
-
-            return (
-              <div className="space-y-4">
-                {paragraphs.map((para, i) => (
-                  <AnimatedItem key={i} delay={i * 0.06}>
-                    <p className="text-body-lg text-text-secondary leading-relaxed">{para}</p>
-                  </AnimatedItem>
-                ))}
-              </div>
-            );
-          })()}
+          <CaseHeading index={chapter("case-solution")} kicker={en ? "Approach" : "Подход"} title={en ? "Solution" : "Решение"} />
+          <CaseSolution intro={solution.intro} steps={solution.steps} />
         </div>
       </Section>
 
       {/* Deliverables */}
-      <Section background="primary" padding="lg" id="case-deliverables">
-        <div className="max-w-3xl">
-          <SectionHeader
-            title={language === "en" ? "Deliverables" : "Результаты"}
-            animate={false}
-          />
-          <AnimatedItem>
-            <ul className="grid sm:grid-cols-2 gap-2">
-              {caseItem.deliverables[language].map((d) => (
-                <li
-                  key={`deliverable-${d.slice(0, 30).replace(/\s+/g, '-')}`}
-                  className="flex items-start gap-2 text-body-md text-text-secondary"
-                >
-                  <svg
-                    className="w-5 h-5 text-success shrink-0 mt-0.5"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                    aria-hidden="true"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  {d}
-                </li>
-              ))}
-            </ul>
-          </AnimatedItem>
+      <Section background="primary" padding="lg" id="case-deliverables" className="overflow-x-clip">
+        <div className="max-w-4xl">
+          <CaseHeading index={chapter("case-deliverables")} kicker={en ? "Shipped" : "Поставлено"} title={en ? "Deliverables" : "Результаты"} />
+          <CaseDeliverables items={caseItem.deliverables[language]} label={en ? "shipped" : "поставлено"} />
         </div>
       </Section>
 
@@ -497,14 +361,15 @@ export function CaseDetailContent({ caseItem }: { caseItem: FlagshipCase }) {
       {hasScreenshots && (
         <Section background="secondary" padding="lg" id="case-screenshots">
           <div className="max-w-5xl">
-            <SectionHeader
-              title={language === "en" ? "Screenshots / UX Flow" : "Скриншоты / UX\u2011поток"}
+            <CaseHeading
+              index={chapter("case-screenshots")}
+              kicker={en ? "Interface" : "Интерфейс"}
+              title={language === "en" ? "Screenshots / UX Flow" : "Скриншоты / UX‑поток"}
               subtitle={
                 language === "en"
                   ? "Step-by-step walkthrough of the product interface"
                   : "Пошаговый обзор интерфейса продукта"
               }
-              animate={false}
             />
             {(() => {
               const isMobileLayout = caseItem.screenshotLayout === "mobile";
@@ -572,182 +437,74 @@ export function CaseDetailContent({ caseItem }: { caseItem: FlagshipCase }) {
       )}
 
       {/* Artifacts */}
-      <Section background={hasScreenshots ? "primary" : "secondary"} padding="lg" id="case-artifacts">
-        <div className="max-w-3xl">
-          <SectionHeader
+      <Section background={hasScreenshots ? "primary" : "secondary"} padding="lg" id="case-artifacts" className="overflow-x-clip">
+        <div className="max-w-5xl">
+          <CaseHeading
+            index={chapter("case-artifacts")}
+            kicker={en ? "Documents" : "Документы"}
             title={language === "en" ? "Artifacts" : "Артефакты"}
             subtitle={language === "en" ? "Documents and deliverables from the project" : "Документы и результаты проекта"}
-            animate={false}
           />
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {artifacts.map((artifact, index) => (
-              <AnimatedItem key={`artifact-${artifact.title.replace(/\s+/g, '-').toLowerCase()}-${artifact.subtitle?.replace(/\s+/g, '-').toLowerCase() ?? 'default'}`} delay={index * 0.05}>
-                <ArtifactCard
-                  title={artifact.title}
-                  subtitle={artifact.subtitle}
-                  tone={artifact.tone}
-                  icon={
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                    </svg>
-                  }
-                />
-              </AnimatedItem>
-            ))}
-          </div>
+          <CaseArtifacts items={artifacts} />
         </div>
       </Section>
 
-      {/* Quality gates - Interactive checklist */}
-      <Section background="primary" padding="lg" id="case-quality">
-        <div className="max-w-3xl">
-          <SectionHeader
+      {/* Quality gates — a live verification run */}
+      <Section background="primary" padding="lg" id="case-quality" className="section-dark overflow-hidden">
+        <div aria-hidden="true" className="section-halo" style={{ ["--halo-y" as string]: "60%" }} />
+        <div className="max-w-4xl">
+          <CaseHeading
+            index={chapter("case-quality")}
+            kicker={en ? "Release" : "Релиз"}
             title={language === "en" ? "Verification / Quality gates" : "Верификация / гейты качества"}
             subtitle={language === "en" ? `${qualityGates.length}-phase checklist before release` : `${qualityGates.length}-фазный чеклист перед релизом`}
-            animate={false}
           />
-          <div className="rounded-2xl border border-border bg-bg-secondary p-6 relative overflow-hidden">
-            {/* Background dot grid */}
-            <div className="absolute inset-0" style={{
-              backgroundImage: `radial-gradient(circle at 1px 1px, rgba(10,10,10,0.05) 1px, transparent 0)`,
-              backgroundSize: '20px 20px',
-            }} />
-            <div className="relative space-y-3">
-              {qualityGates.map((gate, index) => (
-                <AnimatedItem key={`gate-${gate.name.en.slice(0, 20).replace(/\s+/g, '-')}`} delay={index * 0.04}>
-                  <div className={`flex items-center gap-4 p-4 rounded-xl bg-bg-tertiary/60 border border-border transition-colors group ${gate.passed ? 'hover:border-success/30' : 'hover:border-warning/30'}`}>
-                    {/* Checkbox indicator */}
-                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition-colors ${gate.passed ? 'bg-success/20 border border-success/40 group-hover:bg-success/30' : 'bg-warning/20 border border-warning/40 group-hover:bg-warning/30'}`}>
-                      {gate.passed ? (
-                        <svg className="w-4 h-4 text-success" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                        </svg>
-                      ) : (
-                        <svg className="w-4 h-4 text-warning" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-                        </svg>
-                      )}
-                    </div>
-                    {/* Gate info */}
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2">
-                        <span className="text-caption text-text-tertiary font-mono">
-                          {String(index + 1).padStart(2, "0")}
-                        </span>
-                        <span className="text-body-md text-text-primary font-medium">{gate.name[language]}</span>
-                      </div>
-                    </div>
-                    {/* Status */}
-                    <span className={`px-2 py-1 rounded-md text-caption font-medium ${gate.passed ? 'bg-success/10 text-success' : 'bg-warning/10 text-warning'}`}>
-                      {gate.passed
-                        ? (language === "en" ? "Pass" : "Пройден")
-                        : (language === "en" ? "Skipped" : "Пропущен")}
-                    </span>
-                  </div>
-                </AnimatedItem>
-              ))}
-            </div>
-            {/* Summary footer */}
-            <div className="relative mt-6 pt-4 border-t border-border flex items-center justify-between">
-              <span className="text-body-sm text-text-secondary">
-                {passedCount === qualityGates.length
-                  ? (language === "en" ? "All gates passed" : "Все гейты пройдены")
-                  : (language === "en" ? `${passedCount} of ${qualityGates.length} gates passed` : `${passedCount} из ${qualityGates.length} гейтов пройдено`)}
-              </span>
-              <div className="flex items-center gap-2">
-                <span className={`text-heading-sm font-display ${passedCount === qualityGates.length ? 'text-success' : 'text-warning'}`}>
-                  {passedCount}/{qualityGates.length}
-                </span>
-                {passedCount === qualityGates.length ? (
-                  <svg className="w-5 h-5 text-success" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                ) : (
-                  <svg className="w-5 h-5 text-warning" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-                    <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                  </svg>
-                )}
-              </div>
-            </div>
-          </div>
+          <QualityGatesRun
+            gates={qualityGates.map((g) => ({ name: g.name[language], passed: g.passed }))}
+            en={en}
+            label={`release-verify · ${caseItem.slug}`}
+          />
         </div>
       </Section>
 
       {/* Tech stack */}
-      <Section background="secondary" padding="lg" id="case-tech">
-        <div className="max-w-3xl">
-          <SectionHeader
-            title={language === "en" ? "Tech stack" : "Стек технологий"}
-            animate={false}
-          />
-          <AnimatedItem>
-            <div className="flex flex-wrap gap-2">
-              {caseItem.techStack.map((tech) => (
-                <span
-                  key={tech}
-                  className="px-3 py-1.5 rounded-full bg-bg-tertiary border border-border text-body-sm text-text-secondary"
-                >
-                  {tech}
-                </span>
-              ))}
-            </div>
-          </AnimatedItem>
+      <Section background="secondary" padding="lg" id="case-tech" className="overflow-hidden">
+        <div className="max-w-5xl">
+          <CaseHeading index={chapter("case-tech")} kicker={en ? "Tools" : "Инструменты"} title={language === "en" ? "Tech stack" : "Стек технологий"} />
+          <CaseTechStack items={caseItem.techStack} />
         </div>
       </Section>
 
       {/* Outcome */}
-      <Section background="primary" padding="lg" id="case-outcome">
-        <div className="max-w-3xl">
-          <SectionHeader
-            title={language === "en" ? "Outcome" : "Результат"}
-            animate={false}
-          />
-          <AnimatedItem>
-            <p className="text-body-lg text-text-secondary">
-              {caseItem.outcome[language]}
-            </p>
-          </AnimatedItem>
+      <Section background="primary" padding="lg" id="case-outcome" className="overflow-x-clip">
+        <div className="max-w-5xl">
+          <CaseHeading index={chapter("case-outcome")} kicker={en ? "Impact" : "Эффект"} title={language === "en" ? "Outcome" : "Результат"} />
+          <CaseOutcome text={caseItem.outcome[language]} label={caseItem.industry[language]} />
         </div>
       </Section>
 
       {/* Hard parts we solved */}
-      <Section background="secondary" padding="lg" id="case-hardparts">
-        <div className="max-w-3xl">
-          <SectionHeader
-            title={
-              language === "en"
-                ? "Hard parts we solved"
-                : "Сложные задачи, которые мы решили"
-            }
-            animate={false}
+      <Section background="secondary" padding="lg" id="case-hardparts" className="overflow-x-clip">
+        <div className="max-w-4xl">
+          <CaseHeading
+            index={chapter("case-hardparts")}
+            kicker={en ? "Engineering" : "Инженерия"}
+            title={language === "en" ? "Hard parts we solved" : "Сложные задачи, которые мы решили"}
           />
-          <div className="space-y-6">
-            {caseItem.hardParts.map((hp, i) => (
-              <AnimatedItem key={`hardpart-${hp.title.en.slice(0, 20).replace(/\s+/g, '-')}`} delay={i * 0.05}>
-                <Card variant="bordered" padding="md">
-                  <h3 className="text-heading-sm font-medium text-text-primary mb-2">
-                    {hp.title[language]}
-                  </h3>
-                  <p className="text-body-md text-text-secondary">
-                    {hp.description[language]}
-                  </p>
-                </Card>
-              </AnimatedItem>
-            ))}
-          </div>
+          <CaseHardParts items={caseItem.hardParts.map((hp) => ({ title: hp.title[language], description: hp.description[language] }))} />
         </div>
       </Section>
 
       {/* CTA */}
       <Section background="primary" padding="lg">
-        <div className="max-w-2xl mx-auto text-center">
-          <AnimatedItem>
-            <p className="text-body-lg text-text-secondary mb-8">
+        <div className="mx-auto max-w-4xl">
+          <CaseCtaGlow>
+            <p className="mx-auto mb-8 max-w-xl font-brand text-xl font-medium leading-snug tracking-[-0.01em] text-text-primary md:text-2xl">
               {language === "en"
                 ? "Have a similar project? Get an estimate or book a call."
                 : "Похожий проект? Получите оценку или запишитесь на звонок."}
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-col justify-center gap-4 sm:flex-row">
               <ButtonLink href="/contact" buttonVariant="primary" size="lg">
                 {t("cta.primary")}
               </ButtonLink>
@@ -755,11 +512,10 @@ export function CaseDetailContent({ caseItem }: { caseItem: FlagshipCase }) {
                 {language === "en" ? "View all cases" : "Все кейсы"}
               </ButtonLink>
             </div>
-          </AnimatedItem>
+          </CaseCtaGlow>
         </div>
       </Section>
 
-      {/* Navigation between cases */}
       {/* Related Cases */}
       {(() => {
         const related = flagshipCases
@@ -767,22 +523,20 @@ export function CaseDetailContent({ caseItem }: { caseItem: FlagshipCase }) {
           .slice(0, 3);
         if (related.length === 0) return null;
         return (
-          <Section background="primary" padding="lg">
-            <div className="max-w-4xl mx-auto">
-              <h2 className="text-heading-lg font-display text-text-primary mb-6">
+          <Section background="primary" padding="lg" className="!pt-0">
+            <div className="mx-auto max-w-4xl">
+              <h2 className="mb-6 font-brand text-2xl font-semibold tracking-[-0.02em] text-text-primary md:text-3xl">
                 {language === "en" ? "Related Cases" : "Похожие кейсы"}
               </h2>
-              <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
-                {related.map((rc) => (
-                  <NextLink key={rc.id} href={`/cases/${rc.slug}`} className="group block">
-                    <div className="rounded-xl border border-border bg-bg-secondary/60 p-5 hover:border-accent-primary/30 hover:bg-bg-secondary transition-all h-full">
-                      <CategoryBadge category={rc.category} size="sm" />
-                      <h3 className="text-heading-sm font-medium text-text-primary mt-3 mb-2 group-hover:text-accent-primary transition-colors line-clamp-2">
-                        {rc.title[language]}
-                      </h3>
-                      <p className="text-body-sm text-text-secondary line-clamp-2">{rc.summary[language]}</p>
-                    </div>
-                  </NextLink>
+              <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
+                {related.map((rc, i) => (
+                  <RelatedCaseCard key={rc.id} href={`/cases/${rc.slug}`} index={i}>
+                    <CategoryBadge category={rc.category} size="sm" />
+                    <h3 className="mb-2 mt-3 line-clamp-2 text-heading-sm font-medium text-text-primary transition-colors group-hover:text-accent-primary">
+                      {rc.title[language]}
+                    </h3>
+                    <p className="line-clamp-2 text-body-sm text-text-secondary">{rc.summary[language]}</p>
+                  </RelatedCaseCard>
                 ))}
               </div>
             </div>
@@ -790,42 +544,16 @@ export function CaseDetailContent({ caseItem }: { caseItem: FlagshipCase }) {
         );
       })()}
 
-      <Section background="secondary" padding="md">
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 max-w-4xl mx-auto">
-          {/* Previous case */}
+      {/* Navigation between cases */}
+      <Section background="secondary" padding="md" className="overflow-x-clip">
+        <div className="mx-auto flex max-w-4xl flex-col items-stretch justify-between gap-3 sm:flex-row sm:items-center">
           {prevCase ? (
-            <NextLink href={`/cases/${prevCase.slug}`} className="group flex items-center gap-3 p-4 rounded-xl border border-border bg-bg-tertiary/50 hover:border-accent-primary/30 transition-colors w-full sm:max-w-[45%]">
-              <svg className="w-5 h-5 text-text-tertiary group-hover:text-accent-primary transition-colors shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
-              <div className="min-w-0">
-                <p className="text-caption text-text-tertiary mb-1">
-                  {language === "en" ? "Previous" : "Предыдущий"}
-                </p>
-                <p className="text-body-sm text-text-primary font-medium truncate group-hover:text-accent-primary transition-colors">
-                  {prevCase.title[language]}
-                </p>
-              </div>
-            </NextLink>
+            <CaseNavLink href={`/cases/${prevCase.slug}`} dir="prev" kicker={language === "en" ? "Previous" : "Предыдущий"} title={prevCase.title[language]} />
           ) : (
             <div />
           )}
-
-          {/* Next case */}
           {nextCase ? (
-            <NextLink href={`/cases/${nextCase.slug}`} className="group flex items-center gap-3 p-4 rounded-xl border border-border bg-bg-tertiary/50 hover:border-accent-primary/30 transition-colors w-full sm:max-w-[45%] sm:ml-auto text-right">
-              <div className="min-w-0">
-                <p className="text-caption text-text-tertiary mb-1">
-                  {language === "en" ? "Next" : "Следующий"}
-                </p>
-                <p className="text-body-sm text-text-primary font-medium truncate group-hover:text-accent-primary transition-colors">
-                  {nextCase.title[language]}
-                </p>
-              </div>
-              <svg className="w-5 h-5 text-text-tertiary group-hover:text-accent-primary transition-colors shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </NextLink>
+            <CaseNavLink href={`/cases/${nextCase.slug}`} dir="next" kicker={language === "en" ? "Next" : "Следующий"} title={nextCase.title[language]} />
           ) : (
             <div />
           )}
