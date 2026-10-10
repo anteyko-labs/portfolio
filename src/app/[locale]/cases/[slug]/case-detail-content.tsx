@@ -16,6 +16,8 @@ import type { FlagshipCase } from "@/lib/cases-data";
 import { flagshipCases } from "@/lib/cases-data";
 import { Link as NextLink } from "@/i18n/navigation";
 import { CaseBottomCTA } from "@/components/case-bottom-cta";
+import { L1CaseScenes } from "@/components/cases-catalog/l1-case-scenes";
+import { L1Terminal } from "@/components/cases-catalog/l1-terminal";
 
 // Sticky Summary Rail component
 function CaseSummaryRail({ caseItem, language, t }: { caseItem: FlagshipCase; language: "en" | "ru"; t: (key: string) => string }) {
@@ -94,11 +96,13 @@ export function CaseDetailContent({ caseItem }: { caseItem: FlagshipCase }) {
   const nextCase = currentIndex < flagshipCases.length - 1 ? flagshipCases[currentIndex + 1] : null;
 
   const hasScreenshots = caseItem.screenshots && caseItem.screenshots.length > 0;
+  const isL1 = caseItem.slug === "web3-l1-dex";
 
   const scrollItems = [
     { id: "case-summary", label: language === "en" ? "Summary" : "Сводка" },
     { id: "case-problem", label: language === "en" ? "Problem" : "Задача" },
     { id: "case-constraints", label: language === "en" ? "Constraints" : "Ограничения" },
+    ...(isL1 ? [{ id: "case-how", label: language === "en" ? "How it works" : "Как устроено" }] : []),
     { id: "case-solution", label: language === "en" ? "Solution" : "Решение" },
     { id: "case-deliverables", label: language === "en" ? "Deliverables" : "Результаты" },
     ...(hasScreenshots ? [{ id: "case-screenshots", label: language === "en" ? "Screenshots" : "Скриншоты" }] : []),
@@ -226,7 +230,21 @@ export function CaseDetailContent({ caseItem }: { caseItem: FlagshipCase }) {
         backLink={{ href: "/cases", label: language === "en" ? "All Cases" : "Все кейсы" }}
         backgroundImage={caseItem.heroImage}
         rightSlot={
-          caseItem.metrics && caseItem.metrics.length > 0 ? (
+          isL1 ? (
+            <div className="space-y-3 rounded-2xl bg-[#0F0A2A] p-2">
+              <div className="relative aspect-[16/10] overflow-hidden rounded-xl">
+                <L1Terminal active />
+              </div>
+              <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+                {(caseItem.metrics ?? []).slice(0, 4).map((metric) => (
+                  <div key={`hero-l1-${metric.value}`} className="rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-white">
+                    <p className="font-brand text-xl font-semibold tabular-nums">{metric.value}</p>
+                    <p className="text-[11px] leading-tight text-white/55">{metric.label[language]}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : caseItem.metrics && caseItem.metrics.length > 0 ? (
             <div className="space-y-4">
               {/* Mobile: horizontal compact metrics */}
               <div className="flex flex-wrap gap-3 lg:hidden">
@@ -315,6 +333,8 @@ export function CaseDetailContent({ caseItem }: { caseItem: FlagshipCase }) {
           </AnimatedItem>
         </div>
       </Section>
+
+      {isL1 && <L1CaseScenes en={language === "en"} />}
 
       {/* Solution */}
       <Section background="secondary" padding="lg" id="case-solution">
