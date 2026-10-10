@@ -5,7 +5,6 @@ import Image from "next/image";
 import { Link as NextLink } from "@/i18n/navigation";
 import { useLanguage } from "@/lib/language-context";
 import { pick } from "@/lib/i18n-text";
-import { catalogEntries, sortEntries } from "@/lib/catalog";
 
 const COPY = {
   label: { en: "Selected work", ru: "Избранные работы", zh: "精选作品", tr: "Seçilmiş işler", ar: "أعمال مختارة" },
@@ -26,12 +25,16 @@ const COPY = {
  * covers opens on hover, a round button follows the cursor, and the click
  * plays the "portal" transition (see components/effects/portal-transition.tsx).
  */
-export function HomeWork() {
+export type HomeWorkProps = {
+  /** Top featured covers, title already in the page language */
+  covers: { slug: string; cover: string; title: string }[];
+  /** Every catalog domain, for the marquee */
+  domains: string[];
+};
+
+export function HomeWork({ covers, domains }: HomeWorkProps) {
   const { language } = useLanguage();
   const ref = useRef<HTMLAnchorElement>(null);
-  const covers = sortEntries(catalogEntries, "featured", language)
-    .filter((e) => e.cover)
-    .slice(0, 5);
 
   useEffect(() => {
     const el = ref.current;
@@ -60,7 +63,7 @@ export function HomeWork() {
         <span className="cases-gate__marquee" aria-hidden="true">
           <span>
             {[0, 1].map((k) => (
-              <span key={k}>{catalogEntries.map((e) => e.domain).join("  ·  ")}  ·  </span>
+              <span key={k}>{domains.join("  ·  ")}  ·  </span>
             ))}
           </span>
         </span>
@@ -68,7 +71,7 @@ export function HomeWork() {
         <span className="cases-gate__in">
           <span className="cases-gate__label">
             <span>{pick(COPY.label, language)}</span>
-            <span>{String(catalogEntries.length).padStart(2, "0")}</span>
+            <span>{String(domains.length).padStart(2, "0")}</span>
           </span>
 
           <span className="cases-gate__title">
@@ -81,8 +84,8 @@ export function HomeWork() {
           <span className="cases-gate__stack" aria-hidden="true">
             {covers.map((e, i) => (
               <span key={e.slug} className="cases-gate__card" style={{ ["--i" as string]: i - 2 }}>
-                <Image src={e.cover!} alt="" fill sizes="(max-width: 768px) 45vw, 22vw" className="object-cover object-top" />
-                <span className="cases-gate__card-name">{pick(e.title, language)}</span>
+                <Image src={e.cover} alt="" fill sizes="(max-width: 768px) 45vw, 22vw" className="object-cover object-top" />
+                <span className="cases-gate__card-name">{e.title}</span>
               </span>
             ))}
           </span>

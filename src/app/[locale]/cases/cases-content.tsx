@@ -12,11 +12,8 @@ import { CategoryBadge } from "@/components/ui/badge";
 import { SegmentedControl } from "@/components/ui/segmented-control";
 import { CatalogHero } from "@/components/cases-catalog/catalog-hero";
 import { Catalog } from "@/components/cases-catalog/catalog";
-import {
-  microCases,
-  getCasesByCategory,
-  type CaseCategory,
-} from "@/lib/cases-data";
+import type { CaseCategory } from "@/lib/cases-data";
+import { useCaseData } from "@/lib/case-data-context";
 
 const FILTERS: { value: CaseCategory | "all"; key: string }[] = [
   { value: "all", key: "filterAll" },
@@ -27,12 +24,13 @@ const FILTERS: { value: CaseCategory | "all"; key: string }[] = [
 ];
 
 export function CasesContent() {
+  const { microCases } = useCaseData();
   const { t, language } = useLanguage();
   const prefersReducedMotion = useReducedMotion();
   const [filter, setFilter] = useState<CaseCategory | "all">("all");
   const filteredMicro = useMemo(
-    () => getCasesByCategory(filter, microCases),
-    [filter]
+    () => (filter === "all" ? microCases : microCases.filter((c) => c.category === filter)),
+    [filter, microCases]
   );
 
   return (

@@ -64,9 +64,9 @@ export function Footer() {
 
             {/* Navigation Column */}
             <div className="lg:col-span-3">
-              <h3 className="text-heading-sm font-medium text-text-primary mb-4">
+              <h2 className="text-heading-sm font-medium text-text-primary mb-4">
                 {pick({ en: "Navigation", ru: "Навигация", zh: "导航", tr: "Gezinme", ar: "التنقل" }, language)}
-              </h3>
+              </h2>
               <nav className="flex flex-col gap-3">
                 {navLinks.map((link) => (
                   <NextLink
@@ -83,9 +83,9 @@ export function Footer() {
 
             {/* Contact Column */}
             <div className="lg:col-span-4">
-              <h3 className="text-heading-sm font-medium text-text-primary mb-4">
+              <h2 className="text-heading-sm font-medium text-text-primary mb-4">
                 {pick({ en: "Contact", ru: "Контакты", zh: "联系我们", tr: "İletişim", ar: "تواصل معنا" }, language)}
-              </h3>
+              </h2>
               <div className="space-y-4">
                 <div>
                   <p className="text-caption text-text-secondary mb-1">Email</p>

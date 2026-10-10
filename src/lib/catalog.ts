@@ -1,6 +1,6 @@
 import { flagshipCases, type CaseCategory } from "./cases-data";
 import { visibleShowcaseItems, type ShowcaseStatus } from "./showcase-data";
-import { INTL_LOCALE, LANGUAGES, type L, type Language } from "./i18n-text";
+import { LANGUAGES, type L, type Language } from "./i18n-text";
 
 // One list for the /cases catalog: engineering case studies (cases-data.ts)
 // and the website/product showcase (showcase-data.ts) as uniform entries.
@@ -152,34 +152,4 @@ const fromCases: CatalogEntry[] = flagshipCases.filter((c) => !EXCLUDED_CASES.in
 
 export const catalogEntries: CatalogEntry[] = [...fromShowcase, ...fromCases];
 
-export function matchesFilter(e: CatalogEntry, f: CatalogFilter): boolean {
-  if (f === "all") return true;
-  if (f === "motion") return Boolean(e.signature);
-  if (f === "mobile") return Boolean(e.phones?.length || e.mobileFirst);
-  return e.category === f;
-}
-
-export function sortEntries(list: CatalogEntry[], sort: CatalogSort, language: Language): CatalogEntry[] {
-  const out = [...list];
-  switch (sort) {
-    case "featured":
-      return out.sort((a, b) => a.rank - b.rank || b.year - a.year);
-    case "newest":
-      return out.sort((a, b) => b.year - a.year || a.rank - b.rank);
-    case "oldest":
-      return out.sort((a, b) => a.year - b.year || a.rank - b.rank);
-    case "az":
-      return out.sort((a, b) => a.title[language].localeCompare(b.title[language], INTL_LOCALE[language]));
-  }
-}
-
-export function searchEntries(list: CatalogEntry[], query: string, language: Language): CatalogEntry[] {
-  const q = query.trim().toLowerCase();
-  if (!q) return list;
-  return list.filter((e) =>
-    [...LANGUAGES.map((l) => e.title[l]), e.client[language], e.summary[language], e.domain, ...LANGUAGES.flatMap((l) => e.tags[l])]
-      .join(" ")
-      .toLowerCase()
-      .includes(q)
-  );
-}
+export { matchesFilter, sortEntries, searchEntries } from "./catalog-utils";

@@ -1,7 +1,8 @@
 import { notFound } from "next/navigation";
 import { PageWrapper } from "@/components/layout/page-wrapper";
 import { JsonLd } from "@/components/seo/json-ld";
-import { localeAlternates } from "@/i18n/metadata";
+import { seo } from "@/i18n/metadata";
+import { pick, type Language } from "@/lib/i18n-text";
 import { blogPosts, getPostBySlug, type BlogPost } from "@/lib/blog-data";
 import { BlogArticleContent } from "./blog-article-content";
 
@@ -28,19 +29,13 @@ export async function generateMetadata({ params }: Props) {
   const post = getPostBySlug(slug);
   if (!post) return { title: "Article" };
 
-  const description = clampDescription(post.excerpt.en);
-  return {
-    title: post.title.en,
-    description,
-    alternates: localeAlternates(locale, `/blog/${slug}`),
-    openGraph: {
-      type: "article",
-      title: post.title.en,
-      description,
-      url: `${SITE}/blog/${slug}`,
-      publishedTime: post.date,
-    },
-  };
+  const lang = locale as Language;
+  return seo(locale, `/blog/${slug}`, {
+    title: pick(post.title, lang),
+    description: clampDescription(pick(post.excerpt, lang)),
+    type: "article",
+    publishedTime: post.date,
+  });
 }
 
 const ORG = {

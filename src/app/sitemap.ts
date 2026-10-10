@@ -1,5 +1,5 @@
 import { MetadataRoute } from "next";
-import { flagshipCases } from "@/lib/cases-data";
+import { flagshipCases, microCases } from "@/lib/cases-data";
 import { visibleShowcaseItems } from "@/lib/showcase-data";
 import { SERVICE_SLUGS } from "@/lib/service-slugs";
 import { blogPosts } from "@/lib/blog-data";
@@ -12,10 +12,11 @@ const BASE = "https://www.anteyko.com";
 function entry(
   path: string,
   changeFrequency: "weekly" | "monthly" | "yearly",
-  priority: number
+  priority: number,
+  locales: readonly string[] = LANGUAGES
 ): MetadataRoute.Sitemap[number] {
   const en = `${BASE}${path}`;
-  const languages = Object.fromEntries(LANGUAGES.map((l) => [l, l === "en" ? en : `${BASE}/${l}${path}`]));
+  const languages = Object.fromEntries(locales.map((l) => [l, l === "en" ? en : `${BASE}/${l}${path}`]));
   return {
     url: en,
     lastModified: new Date(),
@@ -36,8 +37,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     entry("/faq", "monthly", 0.8),
     entry("/about", "monthly", 0.8),
     entry("/contact", "monthly", 0.9),
-    entry("/privacy", "yearly", 0.3),
-    entry("/terms", "yearly", 0.3),
+    entry("/privacy", "yearly", 0.3, ["en", "ru"]),
+    entry("/terms", "yearly", 0.3, ["en", "ru"]),
   ];
 
   const servicePages: MetadataRoute.Sitemap = SERVICE_SLUGS.map((slug) =>
@@ -47,6 +48,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const casePages: MetadataRoute.Sitemap = [
     ...flagshipCases.map((c) => entry(`/cases/${c.slug}`, "monthly", 0.7)),
     ...visibleShowcaseItems.map((s) => entry(`/cases/${s.slug}`, "monthly", 0.6)),
+    ...microCases.map((m) => entry(`/cases/${m.id}`, "yearly", 0.4)),
   ];
 
   const blogPages: MetadataRoute.Sitemap = blogPosts.map((p) =>

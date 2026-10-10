@@ -123,8 +123,7 @@ function ScrollShot({ item }: { item: ShowcaseItem }) {
       <div className="min-w-0 overflow-hidden rounded-2xl border border-border bg-bg-elevated shadow-[0_40px_80px_-40px_rgba(10,10,10,0.35)]">
         <Chrome domain={item.domain} />
         <div className="relative h-[62vh] max-h-[760px] min-h-[360px] overflow-y-auto overscroll-contain" tabIndex={0} aria-label={pick({ en: "Full page screenshot, scrollable", ru: "Скриншот всей страницы, можно листать", zh: "整页截图，可滚动", tr: "Tam sayfa ekran görüntüsü, kaydırılabilir", ar: "لقطة شاشة كاملة للصفحة قابلة للتمرير" }, language)}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={item.fullPage} alt={item.title[language]} className="block w-full" loading="lazy" />
+          <Image src={item.fullPage!} alt={item.title[language]} width={1200} height={6000} sizes="(max-width: 1024px) 100vw, 900px" className="block h-auto w-full" />
         </div>
         <p className="border-t border-border px-4 py-3 text-center text-body-sm text-text-tertiary">
           {pick({ en: "The whole page — scroll inside the window.", ru: "Вся страница целиком — листайте внутри окна.", zh: "整个页面——在窗口内滚动查看。", tr: "Sayfanın tamamı — pencerenin içinde kaydırın.", ar: "الصفحة كاملة — مرّر داخل النافذة." }, language)}

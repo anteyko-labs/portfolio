@@ -1,6 +1,6 @@
 import { PageWrapper } from "@/components/layout/page-wrapper";
 import { Section, SectionHeader } from "@/components/ui/section";
-import { localeAlternates } from "@/i18n/metadata";
+import { seo } from "@/i18n/metadata";
 import { pick, type Language } from "@/lib/i18n-text";
 
 const EMAIL = "labs@anteyko.com";
@@ -37,12 +37,12 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  return {
+  return seo(locale, "/terms", {
+    locales: ["en", "ru"],
     title: pick({ en: "Terms", ru: "Условия использования" }, locale as Language),
     description:
       pick({ en: "Terms of use for the Anteyko website and services: inquiries, automatic replies, agreements.", ru: "Условия использования сайта и услуг Anteyko: заявки, автоматические ответы, договоры." }, locale as Language),
-    alternates: localeAlternates(locale, "/terms"),
-  };
+  });
 }
 
 function withEmail(text: string) {
@@ -74,6 +74,7 @@ export default async function TermsPage({
       <Section background="primary" padding="xl">
         <div className="max-w-3xl mx-auto">
           <SectionHeader
+            as="h1"
             title={copy.title}
             subtitle={copy.subtitle}
             align="center"

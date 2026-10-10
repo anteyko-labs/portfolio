@@ -6,8 +6,8 @@ import { motion, useScroll, useTransform, animate } from "framer-motion";
 import { Link as NextLink } from "@/i18n/navigation";
 import { useLanguage } from "@/lib/language-context";
 import { useReducedMotion } from "@/lib/hooks";
-import { catalogEntries, sortEntries } from "@/lib/catalog";
-import { microCases } from "@/lib/cases-data";
+import { sortEntries } from "@/lib/catalog-utils";
+import { useCaseData } from "@/lib/case-data-context";
 import { plural } from "./labels";
 import { pick } from "@/lib/i18n-text";
 
@@ -35,6 +35,7 @@ function Counter({ to, delay = 0 }: { to: number; delay?: number }) {
 }
 
 export function CatalogHero() {
+  const { catalogEntries, microCases, industries } = useCaseData();
   const { language } = useLanguage();
   const reduced = useReducedMotion();
   const ref = useRef<HTMLElement>(null);
@@ -47,7 +48,6 @@ export function CatalogHero() {
 
   // Everything on the page: catalog entries plus the "More work" list below it
   const total = catalogEntries.length + microCases.length;
-  const industries = new Set(catalogEntries.map((e) => industryGroup(e.industry.ru))).size;
   const directions = new Set(catalogEntries.map((e) => e.category)).size;
   const years = catalogEntries.map((e) => e.year);
   const span = Math.max(...years) - Math.min(...years) + 1;
@@ -177,21 +177,4 @@ export function CatalogHero() {
       </div>
     </section>
   );
-}
-
-// Industry labels vary per project ("Финтех", "FinTech / Крипто", …) —
-// fold them into broad groups so the counter stays honest.
-const INDUSTRY_GROUPS: [string, RegExp][] = [
-  ["food", /общепит|horeca|foodtech|суши|ресторан/i],
-  ["fintech", /финтех|fintech|банк|инвест|токениз|крипто/i],
-  ["web3", /web3|defi|блокчейн/i],
-  ["travel", /туризм|путешеств/i],
-  ["commerce", /e-commerce|розниц|магазин|продаж|малый бизнес/i],
-  ["auto", /авто|прокат/i],
-  ["transport", /перевозк|логистик/i],
-  ["manufacturing", /производств|металлург|микроэлектрон|швейн/i],
-  ["saas", /saas|business intelligence|аналитик/i],
-];
-function industryGroup(label: string) {
-  return INDUSTRY_GROUPS.find(([, re]) => re.test(label))?.[0] ?? label.toLowerCase();
 }

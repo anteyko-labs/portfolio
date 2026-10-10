@@ -1,6 +1,6 @@
 import { PageWrapper } from "@/components/layout/page-wrapper";
 import { Section, SectionHeader } from "@/components/ui/section";
-import { localeAlternates } from "@/i18n/metadata";
+import { seo } from "@/i18n/metadata";
 import { pick, type Language } from "@/lib/i18n-text";
 import { privacyCopy, type Block } from "./privacy-content";
 
@@ -14,12 +14,12 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  return {
+  return seo(locale, "/privacy", {
+    locales: ["en", "ru"],
     title: pick({ en: "Privacy policy", ru: "Политика конфиденциальности" }, locale as Language),
     description:
       pick({ en: "How Anteyko Labs collects, processes and stores your data: website and analytics, messenger and email conversations, the AI assistant, data deletion.", ru: "Как Anteyko Labs собирает, обрабатывает и хранит ваши данные: сайт и аналитика, переписка в мессенджерах и почте, ИИ-помощник, удаление данных." }, locale as Language),
-    alternates: localeAlternates(locale, "/privacy"),
-  };
+  });
 }
 
 // `{email}` and `{telegram}` become links; everything else is plain text. Split
@@ -85,6 +85,7 @@ export default async function PrivacyPage({
       <Section background="primary" padding="xl">
         <div className="max-w-3xl mx-auto">
           <SectionHeader
+            as="h1"
             title={copy.title}
             subtitle={copy.subtitle}
             align="center"
