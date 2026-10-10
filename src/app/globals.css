@@ -1094,3 +1094,25 @@ body {
 .catalog-card--signature:hover::before { animation-play-state: running; }
 /* geo heatmap columns: still at rest, the wave plays on hover */
 .gcover[data-active="false"] .geo-col { animation: none; }
+
+/* ── L1 case: "how it works" scenes ── */
+.l1s-flow { stroke-dasharray: 4 6; animation: l1s-dash 1.1s linear infinite; }
+@keyframes l1s-dash { to { stroke-dashoffset: -20; } }
+.l1s-core { transform-box: fill-box; transform-origin: center; animation: l1s-pulse 2.4s ease-in-out infinite; }
+@keyframes l1s-pulse { 50% { transform: scale(1.07); filter: drop-shadow(0 0 14px #c084fc); } }
+.l1s-chip { animation: l1s-chip 1.8s ease-in-out infinite; }
+@keyframes l1s-chip { 0%, 70%, 100% { border-color: rgb(255 255 255 / 0.15); } 35% { border-color: #e879f9; box-shadow: 0 0 14px -2px #e879f9; } }
+.l1s-cell { background: rgb(255 255 255 / 0.07); }
+.l1s-run .l1s-cell { animation: l1s-pass 0.5s ease-out both; }
+@keyframes l1s-pass {
+  0% { background: rgb(255 255 255 / 0.07); }
+  50% { background: #a7f3d0; box-shadow: 0 0 8px #34d399; }
+  100% { background: rgb(52 211 153 / 0.65); }
+}
+.l1s-scan { background: linear-gradient(90deg, transparent, rgb(103 232 249 / 0.25), transparent); animation: l1s-scan 0.9s linear infinite; }
+@keyframes l1s-scan { from { left: -33%; } to { left: 100%; } }
+.l1s-card::before { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; background: radial-gradient(60% 50% at 0% 0%, rgb(167 139 250 / 0.12), transparent 70%); }
+@media (prefers-reduced-motion: reduce) {
+  .l1s-flow, .l1s-core, .l1s-chip, .l1s-scan { animation: none; }
+  .l1s-run .l1s-cell { animation: none; background: rgb(52 211 153 / 0.65); }
+}
