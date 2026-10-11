@@ -36,7 +36,7 @@ function LiveSite({ src, title, width = 1440, height = 900, poster }: { src: str
 }
 
 function Poster({ src }: { src?: string }) {
-  return src ? <Image src={src} alt="" fill sizes="600px" priority className="object-cover object-top" /> : null;
+  return src ? <Image src={src} alt="" fill sizes="(min-width: 1024px) 600px, 80vw" priority className="object-cover object-top" /> : null;
 }
 
 function ShotSite({ shot, poster }: { shot: NonNullable<ReturnType<typeof demoShot>>; poster?: string }) {
@@ -45,7 +45,7 @@ function ShotSite({ shot, poster }: { shot: NonNullable<ReturnType<typeof demoSh
     <div className="absolute inset-0 overflow-hidden">
       <Poster src={poster} />
       <div className={`absolute inset-0 transition-opacity duration-700 ${ready ? "opacity-100" : "opacity-0"}`}>
-        <ScrollShot shot={shot} mode="loop" sizes="(min-width: 768px) 600px, 92vw" onReady={() => setReady(true)} />
+        <ScrollShot shot={shot} mode="loop" sizes="(min-width: 768px) 600px, 80vw" onReady={() => setReady(true)} />
       </div>
     </div>
   );
@@ -424,7 +424,7 @@ export function HomeHero() {
               className="absolute inset-0 isolate"
             >
               {/* browser with a live concept site */}
-              <div className="absolute left-[2%] top-[6%] w-[92%] overflow-hidden rounded-2xl border border-white/15 bg-[#111118] shadow-[0_50px_100px_-30px_rgba(79,70,229,0.55)]">
+              <div className="clip-fix absolute left-[2%] top-[6%] w-[92%] overflow-hidden rounded-2xl border border-white/15 bg-[#111118] shadow-[0_50px_100px_-30px_rgba(79,70,229,0.55)]">
                 <div className="flex h-8 items-center gap-1.5 border-b border-white/10 bg-white/[0.04] px-3">
                   <i className="h-2.5 w-2.5 rounded-full bg-[#FF5F57]" />
                   <i className="h-2.5 w-2.5 rounded-full bg-[#FEBC2E]" />
@@ -438,7 +438,7 @@ export function HomeHero() {
 
               {/* phone */}
               <motion.div style={reduced ? undefined : layerPhone} className="absolute -bottom-[4%] left-[-4%] w-[31%] min-w-[130px]">
-                <div className="overflow-hidden rounded-[22px] border-[5px] border-[#0A0A0A] bg-[#0A0A0A] shadow-[0_40px_70px_-20px_rgba(0,0,0,0.8)]">
+                <div className="clip-fix overflow-hidden rounded-[22px] border-[5px] border-[#0A0A0A] bg-[#0A0A0A] shadow-[0_40px_70px_-20px_rgba(0,0,0,0.8)]">
                   <div className="relative aspect-[390/844] bg-[#0A0A0A]">
                     <PhoneScreens run={inView} />
                   </div>

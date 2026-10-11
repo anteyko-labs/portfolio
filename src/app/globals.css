@@ -1102,10 +1102,13 @@ body {
    1.6s rest, slow scroll down, 0.9s rest and fast return the iframe does */
 .scroll-shot-loop { animation: scroll-shot-loop 19.3s linear infinite; }
 @keyframes scroll-shot-loop {
-  0%, 8.3% { transform: translate3d(0, 0, 0); }
-  80.8%, 85.5% { transform: translate3d(0, var(--shot-shift, 0px), 0); }
-  100% { transform: translate3d(0, 0, 0); }
+  0%, 8.3% { background-position: 0 0; }
+  80.8%, 85.5% { background-position: 0 var(--shot-shift, 0px); }
+  100% { background-position: 0 0; }
 }
+/* WebKit: a rounded overflow:hidden box inside a 3D-transformed parent stops clipping its
+   composited (animated) children. A mask forces a real clip. */
+.clip-fix { -webkit-mask-image: -webkit-radial-gradient(white, black); mask-image: radial-gradient(white, black); }
 @media (prefers-reduced-motion: reduce) { .scroll-shot-loop { animation: none; } }
 
 /* Touch devices have a small GPU budget: the moving 3D wall keeps a short loop of

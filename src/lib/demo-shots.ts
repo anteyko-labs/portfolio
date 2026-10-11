@@ -5,6 +5,8 @@
  */
 export interface DemoShot {
   src: string;
+  /** Same frames as a static WebP, served as-is (no image optimizer round trip) */
+  webp: string;
   header: string;
   /** Pixel size of `src` */
   width: number;
@@ -30,6 +32,7 @@ export function demoShot(demo: string | undefined): DemoShot | null {
   if (!slug || !(slug in HEADER_HEIGHT)) return null;
   return {
     src: `/images/showcase/${slug}/scroll.jpg`,
+    webp: `/images/showcase/${slug}/scroll.webp`,
     header: `/images/showcase/${slug}/scroll-header.jpg`,
     width: 900,
     height: 3372,

@@ -214,8 +214,21 @@ export function TiltCard({ children, className = "", onHover }: { children: Reac
   const sy = useSpring(my, { stiffness: 160, damping: 18 });
   const rotY = useTransform(sx, [-1, 1], [5, -5]);
   const rotX = useTransform(sy, [-1, 1], [-4, 4]);
+  // Touch screens have no hover: the card counts as hovered while it is mostly on screen
+  const wrap = useRef<HTMLDivElement>(null);
+  const hoverRef = useRef(onHover);
+  useEffect(() => {
+    hoverRef.current = onHover;
+  });
+  useEffect(() => {
+    const el = wrap.current;
+    if (!el || !window.matchMedia("(hover: none)").matches) return;
+    const io = new IntersectionObserver(([e]) => hoverRef.current?.(e.intersectionRatio >= 0.6), { threshold: [0, 0.6, 1] });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
   return (
-    <div className="h-full [perspective:1200px]">
+    <div ref={wrap} className="h-full [perspective:1200px]">
       <motion.div
         className="h-full"
         style={reduced ? undefined : { rotateX: rotX, rotateY: rotY }}

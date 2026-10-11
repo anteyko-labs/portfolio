@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 import { Link as NextLink } from "@/i18n/navigation";
 import { useLanguage } from "@/lib/language-context";
@@ -34,6 +34,31 @@ export function CatalogCard({
   const title = entry.title[language];
   const href = `/cases/${entry.slug}`;
   const external = entry.url && /^https?:/.test(entry.url);
+
+  // Start loading the preview about a screen and a half before the card arrives instead of
+  // leaving the distance to the browser's lazy loading, which can start late on a phone
+  const [near, setNear] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) {
+        setNear(true);
+        io.disconnect();
+      }
+    }, { rootMargin: "150% 0px" });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  // Touch screens have no hover: the preview plays while the card is mostly on screen
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || !window.matchMedia("(hover: none)").matches) return;
+    const io = new IntersectionObserver(([e]) => setActive(e.intersectionRatio >= 0.6), { threshold: [0, 0.6, 1] });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
 
   // Cursor-following light on the card surface
   const onMove = (e: React.PointerEvent) => {
@@ -88,7 +113,7 @@ export function CatalogCard({
             label={CATEGORY_LABEL[entry.category][language]}
             active={active}
             sizes={SIZES[size]}
-            priority={priority}
+            priority={priority || near}
           />
           {entry.signature && (
             <span className="catalog-signature pointer-events-none absolute left-3 top-3 z-10 inline-flex max-w-[calc(100%-1.5rem)] items-center gap-1.5 rounded-full px-3 py-1 text-[12px] font-semibold text-white shadow-lg">
