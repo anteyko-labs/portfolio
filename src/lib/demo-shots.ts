@@ -26,6 +26,26 @@ const HEADER_HEIGHT: Record<string, number> = {
   forma: 48,
 };
 
+export interface DemoVideo {
+  /** HEVC first: iPhones play it at about two thirds of the H.264 size */
+  hevc: string;
+  h264: string;
+  poster: string;
+}
+
+/**
+ * Recordings of a demo auto-scrolling exactly like the desktop hero iframe (1440×900 capture,
+ * 960×600, 30fps, ~21s seamless loop), so phones see the live animations without running the page.
+ */
+const VIDEOS: Record<string, DemoVideo> = {
+  gran: { hevc: "/videos/gran-hero-hevc.mp4", h264: "/videos/gran-hero-h264.mp4", poster: "/videos/gran-hero-poster.webp" },
+};
+
+export function demoVideo(demo: string | undefined): DemoVideo | null {
+  const slug = demo?.match(/^\/demos\/([a-z0-9-]+)\//)?.[1];
+  return (slug && VIDEOS[slug]) || null;
+}
+
 /** "/demos/gran/index.html" → its screenshot set, or null when none was captured */
 export function demoShot(demo: string | undefined): DemoShot | null {
   const slug = demo?.match(/^\/demos\/([a-z0-9-]+)\//)?.[1];

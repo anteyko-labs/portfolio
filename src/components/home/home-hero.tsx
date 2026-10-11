@@ -7,7 +7,7 @@ import { Link as NextLink } from "@/i18n/navigation";
 import { useLanguage } from "@/lib/language-context";
 import { pick, type Language } from "@/lib/i18n-text";
 import { useReducedMotion, useTouchDevice } from "@/lib/hooks";
-import { demoShot } from "@/lib/demo-shots";
+import { demoShot, demoVideo, type DemoVideo } from "@/lib/demo-shots";
 import { ScrollShot } from "@/components/ui/scroll-shot";
 import { MagneticButton } from "@/components/ui/magnetic-button";
 import { OFFICES, localTime } from "@/lib/locations";
@@ -23,20 +23,52 @@ const WORDS = {
 };
 
 /**
- * A real page in a scaled iframe that scrolls itself in a loop. Touch devices get a
- * stitched screenshot of the same page instead: a second live page inside a 3D scene
- * is more than a phone's memory budget allows.
+ * A real page in a scaled iframe that scrolls itself in a loop. Touch devices get a video
+ * of the same page scrolling the same way (or, without a recording, a stitched screenshot):
+ * a second live page inside a 3D scene is more than a phone's memory budget allows, while
+ * video is decoded by dedicated hardware.
  */
-function LiveSite({ src, title, width = 1440, height = 900, poster }: { src: string; title: string; width?: number; height?: number; poster?: string }) {
+function LiveSite({ src, title, width = 1440, height = 900, poster, run }: { src: string; title: string; width?: number; height?: number; poster?: string; run: boolean }) {
   const touch = useTouchDevice();
+  const video = demoVideo(src);
   const shot = demoShot(src);
   if (touch === null) return <Poster src={poster} />;
+  if (touch && video) return <VideoSite video={video} run={run} />;
   if (touch && shot) return <ShotSite shot={shot} poster={poster} />;
   return <FrameSite src={src} title={title} width={width} height={height} poster={poster} />;
 }
 
 function Poster({ src }: { src?: string }) {
   return src ? <Image src={src} alt="" fill sizes="(min-width: 1024px) 600px, 80vw" priority className="object-cover object-top" /> : null;
+}
+
+function VideoSite({ video, run }: { video: DemoVideo; run: boolean }) {
+  const ref = useRef<HTMLVideoElement>(null);
+  const reduced = useReducedMotion();
+  // Plays only while the hero is on screen; with reduced motion it stays on the first frame
+  useEffect(() => {
+    const v = ref.current;
+    if (!v) return;
+    if (run && !reduced) v.play().catch(() => {});
+    else v.pause();
+  }, [run, reduced]);
+  return (
+    <video
+      ref={ref}
+      className="absolute inset-0 h-full w-full object-cover object-top"
+      poster={video.poster}
+      muted
+      loop
+      playsInline
+      preload="auto"
+      disablePictureInPicture
+      aria-hidden="true"
+      tabIndex={-1}
+    >
+      <source src={video.hevc} type='video/mp4; codecs="hvc1"' />
+      <source src={video.h264} type="video/mp4" />
+    </video>
+  );
 }
 
 function ShotSite({ shot, poster }: { shot: NonNullable<ReturnType<typeof demoShot>>; poster?: string }) {
@@ -432,7 +464,7 @@ export function HomeHero() {
                   <span className="mx-auto rounded-md bg-white/5 px-3 py-0.5 font-mono text-[10px] text-white/50">gran</span>
                 </div>
                 <div className="relative aspect-[16/10]">
-                  <LiveSite src="/demos/gran/index.html" poster="/images/showcase/gran/cover.jpg" title={pick({ en: "Live concept site", ru: "Живой концепт-сайт", zh: "在线概念网站", tr: "Canlı konsept site", ar: "موقع مفهومي مباشر" }, language)} />
+                  <LiveSite src="/demos/gran/index.html" poster="/images/showcase/gran/cover.jpg" run={inView} title={pick({ en: "Live concept site", ru: "Живой концепт-сайт", zh: "在线概念网站", tr: "Canlı konsept site", ar: "موقع مفهومي مباشر" }, language)} />
                 </div>
               </div>
 
