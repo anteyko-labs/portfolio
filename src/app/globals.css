@@ -733,7 +733,7 @@ body {
   margin-left: -20%;
   transform-origin: 50% 0%;
   transform: rotateX(24deg) rotateZ(-7deg);
-  transform-style: preserve-3d;
+  /* flat: rows have no depth, and WebKit z-sorts coplanar layers in preserve-3d arbitrarily */
 }
 .catalog-wall__row {
   display: flex;

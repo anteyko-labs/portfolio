@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { AnimatePresence, motion, useMotionValue, useSpring, useTransform, animate, type MotionValue } from "framer-motion";
+import { AnimatePresence, motion, useInView, useMotionValue, useSpring, useTransform, animate, type MotionValue } from "framer-motion";
 import { Link as NextLink } from "@/i18n/navigation";
 import { useLanguage } from "@/lib/language-context";
 import { pick, type Language } from "@/lib/i18n-text";
@@ -117,7 +117,7 @@ function FrameSite({ src, title, width = 1440, height = 900, poster }: { src: st
 }
 
 /** Office cities cycling with their local time: "Istanbul 10:42" */
-function OfficeClock({ language }: { language: Language }) {
+function OfficeClock({ language, run }: { language: Language; run: boolean }) {
   const reduced = useReducedMotion();
   const [i, setI] = useState(0);
   const [now, setNow] = useState<Date | null>(null);
@@ -125,13 +125,13 @@ function OfficeClock({ language }: { language: Language }) {
     const tick = () => setNow(new Date());
     const first = window.setTimeout(tick, 0);
     const clock = window.setInterval(tick, 15000);
-    const cycle = reduced ? 0 : window.setInterval(() => setI((n) => (n + 1) % OFFICES.length), 2400);
+    const cycle = reduced || !run ? 0 : window.setInterval(() => setI((n) => (n + 1) % OFFICES.length), 2400);
     return () => {
       window.clearTimeout(first);
       window.clearInterval(clock);
       if (cycle) window.clearInterval(cycle);
     };
-  }, [reduced]);
+  }, [reduced, run]);
   const o = OFFICES[i];
   return (
     <span className="relative inline-flex h-4 min-w-[8.5rem] items-center overflow-hidden">
@@ -161,14 +161,14 @@ const SCREENS = [
 ];
 
 /** Real app screens swiping like stories, each slowly panning while shown */
-function PhoneScreens() {
+function PhoneScreens({ run }: { run: boolean }) {
   const reduced = useReducedMotion();
   const [i, setI] = useState(0);
   useEffect(() => {
-    if (reduced) return;
+    if (reduced || !run) return;
     const id = window.setInterval(() => setI((n) => (n + 1) % SCREENS.length), 2600);
     return () => window.clearInterval(id);
-  }, [reduced]);
+  }, [reduced, run]);
   return (
     <div className="absolute inset-0 overflow-hidden">
       {SCREENS.map((src, k) => (
@@ -177,7 +177,8 @@ function PhoneScreens() {
           className="absolute inset-0 transition-[transform,opacity] duration-700 ease-[cubic-bezier(.22,1,.36,1)]"
           style={{ transform: `translateX(${(k - i) * 100}%) scale(${k === i ? 1 : 0.92})`, opacity: Math.abs(k - i) > 1 ? 0 : 1 }}
         >
-          <Image src={src} alt="" fill sizes="170px" className={k === i ? "phone-pan object-cover object-top" : "object-cover object-top"} />
+          {/* Eager: a lazily loaded next screen shows the dark phone body for a moment as it slides in */}
+          <Image src={src} alt="" fill sizes="170px" loading="eager" className={k === i ? "phone-pan object-cover object-top" : "object-cover object-top"} />
         </div>
       ))}
       <div className="absolute inset-x-0 bottom-2 flex justify-center gap-1">
@@ -255,12 +256,15 @@ export function HomeHero() {
   const reduced = useReducedMotion();
   const [word, setWord] = useState(0);
   const words = WORDS[language];
+  // Rotations stop once the hero is scrolled away (each one re-renders part of the hero)
+  const sectionRef = useRef<HTMLElement>(null);
+  const inView = useInView(sectionRef, { margin: "100px" });
 
   useEffect(() => {
-    if (reduced) return;
+    if (reduced || !inView) return;
     const id = window.setInterval(() => setWord((w) => (w + 1) % words.length), 2200);
     return () => window.clearInterval(id);
-  }, [reduced, words.length]);
+  }, [reduced, inView, words.length]);
 
   // Pointer parallax for the device stage
   const mx = useMotionValue(0);
@@ -291,7 +295,7 @@ export function HomeHero() {
   ];
 
   return (
-    <section onPointerMove={onMove} className="relative isolate overflow-hidden bg-[#06060B] pb-16 pt-28 text-white md:pb-24 md:pt-32 lg:min-h-[100svh]">
+    <section ref={sectionRef} onPointerMove={onMove} className="relative isolate overflow-hidden bg-[#06060B] pb-16 pt-28 text-white md:pb-24 md:pt-32 lg:min-h-[100svh]">
       {/* Soft light that follows the pointer */}
       <div aria-hidden="true" className="home-spotlight pointer-events-none absolute inset-0 -z-10" />
       {/* Aurora + grid */}
@@ -313,7 +317,7 @@ export function HomeHero() {
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
             {pick({ en: "Product studio", ru: "Студия продуктов", zh: "产品工作室", tr: "Ürün stüdyosu", ar: "استوديو منتجات" }, language)}
             <span className="text-white/30">·</span>
-            <OfficeClock language={language} />
+            <OfficeClock language={language} run={inView} />
           </motion.p>
 
           <h1 className="mt-7 font-brand text-[2.7rem] font-semibold leading-[0.98] tracking-[-0.035em] sm:text-6xl xl:text-[5.4rem]">
@@ -412,9 +416,12 @@ export function HomeHero() {
             transition={{ duration: 1.2, delay: 0.25, ease: EASE }}
             className="relative mx-auto aspect-[5/4] w-full max-w-[720px] [perspective:1600px] lg:max-w-none lg:w-[104%] 2xl:w-[116%]"
           >
+            {/* Flat on purpose: the layers have no depth of their own, and in a preserve-3d
+                context WebKit z-sorts coplanar layers arbitrarily — on iOS the phone and the
+                browser swapped places and flickered on every repaint */}
             <motion.div
               style={reduced ? undefined : { rotateY: rotY, rotateX: rotX }}
-              className="absolute inset-0 [transform-style:preserve-3d]"
+              className="absolute inset-0 isolate"
             >
               {/* browser with a live concept site */}
               <div className="absolute left-[2%] top-[6%] w-[92%] overflow-hidden rounded-2xl border border-white/15 bg-[#111118] shadow-[0_50px_100px_-30px_rgba(79,70,229,0.55)]">
@@ -433,7 +440,7 @@ export function HomeHero() {
               <motion.div style={reduced ? undefined : layerPhone} className="absolute -bottom-[4%] left-[-4%] w-[31%] min-w-[130px]">
                 <div className="overflow-hidden rounded-[22px] border-[5px] border-[#0A0A0A] bg-[#0A0A0A] shadow-[0_40px_70px_-20px_rgba(0,0,0,0.8)]">
                   <div className="relative aspect-[390/844] bg-[#0A0A0A]">
-                    <PhoneScreens />
+                    <PhoneScreens run={inView} />
                   </div>
                 </div>
               </motion.div>
