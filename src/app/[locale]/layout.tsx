@@ -9,6 +9,7 @@ import { routing } from "@/i18n/routing";
 import "../globals.css";
 import { LanguageProvider } from "@/lib/language-context";
 import { CustomCursor } from "@/components/effects/custom-cursor";
+import { OffscreenPause } from "@/components/effects/offscreen-pause";
 import { CookieConsent } from "@/components/cookie-consent";
 import { AnalyticsBootstrap } from "@/components/analytics-bootstrap";
 import { CrmWidget } from "@/components/crm-widget";
@@ -293,6 +294,7 @@ export default async function LocaleLayout({
           {/* Noise overlay for texture */}
           <div className="noise-overlay" aria-hidden="true" />
           <CustomCursor />
+          <OffscreenPause />
           <main id="main-content">
             {children}
           </main>

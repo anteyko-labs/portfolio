@@ -83,9 +83,13 @@ export function CatalogHero() {
         <div className="catalog-wall__plane">
           {rows.map((row, r) => (
             <div key={r} className="catalog-wall__row" data-dir={r % 2 ? "rev" : "fwd"} style={{ ["--dur" as string]: `${70 + r * 14}s` }}>
-              {[...row, ...row].map((e, i) => (
-                <div key={`${e.slug}-${i}`} className="catalog-wall__tile">
-                  <Image src={e.cover!} alt="" fill sizes="360px" className="object-cover object-top" priority={r === 0 && i < 3} />
+              {[0, 1].map((half) => (
+                <div key={half} className="catalog-wall__half">
+                  {row.map((e, i) => (
+                    <div key={e.slug} className="catalog-wall__tile">
+                      <Image src={e.cover!} alt="" fill sizes="(hover: none) 240px, 360px" className="object-cover object-top" priority={r === 0 && half === 0 && i < 3} />
+                    </div>
+                  ))}
                 </div>
               ))}
             </div>

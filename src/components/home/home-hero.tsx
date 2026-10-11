@@ -6,7 +6,9 @@ import { AnimatePresence, motion, useMotionValue, useSpring, useTransform, anima
 import { Link as NextLink } from "@/i18n/navigation";
 import { useLanguage } from "@/lib/language-context";
 import { pick, type Language } from "@/lib/i18n-text";
-import { useReducedMotion } from "@/lib/hooks";
+import { useReducedMotion, useTouchDevice } from "@/lib/hooks";
+import { demoShot } from "@/lib/demo-shots";
+import { ScrollShot } from "@/components/ui/scroll-shot";
 import { MagneticButton } from "@/components/ui/magnetic-button";
 import { OFFICES, localTime } from "@/lib/locations";
 
@@ -20,8 +22,36 @@ const WORDS = {
   ar: ["مواقع ويب", "منتجات MVP", "Web3", "ERP وCRM", "تطبيقات جوال"],
 };
 
-/** A real page in a scaled iframe that scrolls itself in a loop */
+/**
+ * A real page in a scaled iframe that scrolls itself in a loop. Touch devices get a
+ * stitched screenshot of the same page instead: a second live page inside a 3D scene
+ * is more than a phone's memory budget allows.
+ */
 function LiveSite({ src, title, width = 1440, height = 900, poster }: { src: string; title: string; width?: number; height?: number; poster?: string }) {
+  const touch = useTouchDevice();
+  const shot = demoShot(src);
+  if (touch === null) return <Poster src={poster} />;
+  if (touch && shot) return <ShotSite shot={shot} poster={poster} />;
+  return <FrameSite src={src} title={title} width={width} height={height} poster={poster} />;
+}
+
+function Poster({ src }: { src?: string }) {
+  return src ? <Image src={src} alt="" fill sizes="600px" priority className="object-cover object-top" /> : null;
+}
+
+function ShotSite({ shot, poster }: { shot: NonNullable<ReturnType<typeof demoShot>>; poster?: string }) {
+  const [ready, setReady] = useState(false);
+  return (
+    <div className="absolute inset-0 overflow-hidden">
+      <Poster src={poster} />
+      <div className={`absolute inset-0 transition-opacity duration-700 ${ready ? "opacity-100" : "opacity-0"}`}>
+        <ScrollShot shot={shot} mode="loop" sizes="(min-width: 768px) 600px, 92vw" onReady={() => setReady(true)} />
+      </div>
+    </div>
+  );
+}
+
+function FrameSite({ src, title, width = 1440, height = 900, poster }: { src: string; title: string; width?: number; height?: number; poster?: string }) {
   const wrap = useRef<HTMLDivElement>(null);
   const frame = useRef<HTMLIFrameElement>(null);
   const [scale, setScale] = useState(0.4);
@@ -70,7 +100,7 @@ function LiveSite({ src, title, width = 1440, height = 900, poster }: { src: str
 
   return (
     <div ref={wrap} className="absolute inset-0 overflow-hidden">
-      {poster && <Image src={poster} alt="" fill sizes="600px" priority className="object-cover object-top" />}
+      <Poster src={poster} />
       <iframe
         ref={frame}
         src={src}
@@ -244,7 +274,8 @@ export function HomeHero() {
   const layerChips = useParallax(sx, sy, 2.8);
 
   const onMove = (e: React.PointerEvent) => {
-    if (reduced) return;
+    // Mouse only: a finger dragging or pinching would shake the whole 3D stage
+    if (reduced || e.pointerType !== "mouse") return;
     const r = (e.currentTarget as HTMLElement).getBoundingClientRect();
     (e.currentTarget as HTMLElement).style.setProperty("--sx", `${e.clientX - r.left}px`);
     (e.currentTarget as HTMLElement).style.setProperty("--sy", `${e.clientY - r.top}px`);
