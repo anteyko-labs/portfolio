@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef, type RefObject } from "react";
+import { useState, useEffect, useCallback, useRef, useSyncExternalStore, type RefObject } from "react";
 
 // Check if reduced motion is preferred
 export function useReducedMotion(): boolean {
@@ -19,6 +19,23 @@ export function useReducedMotion(): boolean {
   }, []);
 
   return prefersReducedMotion;
+}
+
+// Touch-first device (phones, tablets, in-app browsers): no hover, coarse pointer.
+// These have a tight memory budget, so heavy live previews are swapped for screenshots.
+// null until mounted: callers render nothing heavy before the answer is known.
+const TOUCH_QUERY = "(hover: none) and (pointer: coarse)";
+
+export function useTouchDevice(): boolean | null {
+  return useSyncExternalStore<boolean | null>(
+    (onChange) => {
+      const mq = window.matchMedia(TOUCH_QUERY);
+      mq.addEventListener("change", onChange);
+      return () => mq.removeEventListener("change", onChange);
+    },
+    () => window.matchMedia(TOUCH_QUERY).matches,
+    () => null
+  );
 }
 
 // Detect mobile device

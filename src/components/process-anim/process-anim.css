@@ -78,3 +78,10 @@
   .pr-aurora, .pr-num, .pr-sweep, .pr-flow, .pr-spin, .pr-ping, .pr-blink, .pr-ring { animation: none; }
   .pr-chip:hover { transform: none; }
 }
+
+/* Touch devices: the page-tall aurora is a ~4900px layer; blurring and drifting it every
+   frame is more than a phone GPU budget allows. The gradients are soft enough that the
+   blur is invisible, and the drift too slow to notice. */
+@media (hover: none) and (pointer: coarse) {
+  .pr-aurora { filter: none; animation: none; }
+}

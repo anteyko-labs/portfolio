@@ -733,7 +733,7 @@ body {
   margin-left: -20%;
   transform-origin: 50% 0%;
   transform: rotateX(24deg) rotateZ(-7deg);
-  transform-style: preserve-3d;
+  /* flat: rows have no depth, and WebKit z-sorts coplanar layers in preserve-3d arbitrarily */
 }
 .catalog-wall__row {
   display: flex;
@@ -1088,6 +1088,36 @@ body {
 
 /* Performance: GPU layers for the marquee, motion only where it is visible */
 .catalog-wall__row { will-change: transform; }
+/* Each row is two identical halves; the trailing gap keeps the -50% loop seamless */
+.catalog-wall__half { display: flex; gap: 18px; padding-inline-end: 18px; }
+.catalog-wall__row { gap: 0; }
+
+/* Sections out of view stop their CSS animations (set by <OffscreenPause />) */
+[data-offscreen="true"],
+[data-offscreen="true"] *,
+[data-offscreen="true"] *::before,
+[data-offscreen="true"] *::after { animation-play-state: paused !important; }
+
+/* Demo screenshot standing in for a live iframe on touch devices: the same
+   1.6s rest, slow scroll down, 0.9s rest and fast return the iframe does */
+.scroll-shot-loop { animation: scroll-shot-loop 19.3s linear infinite; }
+@keyframes scroll-shot-loop {
+  0%, 8.3% { background-position: 0 0; }
+  80.8%, 85.5% { background-position: 0 var(--shot-shift, 0px); }
+  100% { background-position: 0 0; }
+}
+/* WebKit: a rounded overflow:hidden box inside a 3D-transformed parent stops clipping its
+   composited (animated) children. A mask forces a real clip. */
+.clip-fix { -webkit-mask-image: -webkit-radial-gradient(white, black); mask-image: radial-gradient(white, black); }
+@media (prefers-reduced-motion: reduce) { .scroll-shot-loop { animation: none; } }
+
+/* Touch devices have a small GPU budget: the moving 3D wall keeps a short loop of
+   tiles, and the aurora drops its blur (invisible on gradients this soft, costly per frame) */
+@media (hover: none) and (pointer: coarse) {
+  .catalog-wall__row { will-change: auto; }
+  .catalog-wall__half > .catalog-wall__tile:nth-child(n + 5) { display: none; }
+  .home-aurora { filter: none; }
+}
 .catalog-wall__tile { contain: paint; }
 /* signature rim spins only while hovered — idle cards keep a still gradient */
 .catalog-card--signature::before { animation-play-state: paused; }

@@ -223,3 +223,9 @@
   .ms-field:has(.text-error) select,
   .ms-field:has(.text-error) textarea { animation: none; }
 }
+
+/* Touch devices: keep the blurred glow, drop its 14s drift so the blur is rasterised once
+   instead of every frame */
+@media (hover: none) and (pointer: coarse) {
+  .ms-orb { animation: none; }
+}

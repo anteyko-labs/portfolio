@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import clsx from "clsx";
 import { motion } from "framer-motion";
@@ -120,6 +120,23 @@ export function HomeServices() {
   const { language } = useLanguage();
   const reduced = useReducedMotion();
   const [hover, setHover] = useState<number | null>(null);
+
+  // Touch screens have no hover: a card's visual plays while the card is mostly on screen
+  useEffect(() => {
+    if (!window.matchMedia("(hover: none)").matches) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          const i = Number((e.target as HTMLElement).dataset.svc);
+          if (e.intersectionRatio >= 0.6) setHover(i);
+          else setHover((h) => (h === i ? null : h));
+        }
+      },
+      { threshold: [0, 0.6, 1] }
+    );
+    document.querySelectorAll("#home-services [data-svc]").forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, []);
   const Bi = GENERATIVE_COVERS["analytics-pro-enterprise-bi"];
 
   const items = [
@@ -184,6 +201,7 @@ export function HomeServices() {
           {items.map((it, i) => (
             <motion.div
               key={it.href}
+              data-svc={i}
               className={it.span}
               initial={reduced ? false : { opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}

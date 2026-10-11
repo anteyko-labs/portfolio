@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useInView } from "framer-motion";
 import { useReducedMotion } from "@/lib/hooks";
 
 // Illustrated trading terminal for the L1 + perp DEX case — drawn in code,
@@ -46,16 +47,20 @@ export function L1Terminal({ active = false, live = true }: { active?: boolean; 
   }, []);
   const [candles, setCandles] = useState(initial);
   const [tick, setTick] = useState(0);
+  // The market only moves while the terminal is near the screen: off screen it would keep
+  // re-rendering the chart and the order book (width transitions = layout) every tick
+  const root = useRef<HTMLDivElement>(null);
+  const near = useInView(root, { margin: "200px" });
 
   useEffect(() => {
-    if (!live || reduced) return;
+    if (!live || reduced || !near) return;
     const rnd = mulberry32(Date.now() % 100000);
     const id = window.setInterval(() => {
       setCandles((cs) => [...cs.slice(1), nextCandle(cs[cs.length - 1].c, rnd)]);
       setTick((t) => t + 1);
     }, active ? 550 : 1200);
     return () => window.clearInterval(id);
-  }, [live, reduced, active]);
+  }, [live, reduced, active, near]);
 
   const max = Math.max(...candles.map((c) => c.h));
   const min = Math.min(...candles.map((c) => c.l));
@@ -75,6 +80,7 @@ export function L1Terminal({ active = false, live = true }: { active?: boolean; 
 
   return (
     <div
+      ref={root}
       className="@container absolute inset-0 overflow-hidden"
       style={{ background: "radial-gradient(70% 80% at 80% 0%, #6D28D980, transparent 60%), radial-gradient(60% 70% at 0% 100%, #DB277750, transparent 60%), linear-gradient(160deg, #1E1B4B, #0F0A2A)" }}
       aria-hidden="true"

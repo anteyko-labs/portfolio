@@ -6,6 +6,9 @@ import clsx from "clsx";
 import type { CatalogEntry } from "@/lib/catalog";
 import { Poster } from "./poster";
 import { GENERATIVE_COVERS } from "./generative-covers";
+import { useTouchDevice } from "@/lib/hooks";
+import { demoShot } from "@/lib/demo-shots";
+import { ScrollShot } from "@/components/ui/scroll-shot";
 
 const BASE_W = 1440;
 
@@ -32,7 +35,7 @@ export function CatalogMedia({ entry, title, label, active, sizes, priority }: M
   const Illustration = GENERATIVE_COVERS[entry.slug];
   if (Illustration) return <Illustration active={active} />;
   if (entry.phones?.length) return <PhoneStack entry={entry} title={title} active={active} />;
-  if (entry.demo) return <LivePreview entry={entry} title={title} active={active} sizes={sizes} priority={priority} />;
+  if (entry.demo) return <DemoPreview entry={entry} title={title} active={active} sizes={sizes} priority={priority} />;
   if (entry.fullPage) return <PanShot src={entry.fullPage} cover={entry.cover} title={title} active={active} sizes={sizes} priority={priority} />;
   if (entry.frames.length > 1) return <Slideshow frames={entry.frames} title={title} active={active} sizes={sizes} priority={priority} contain={entry.mobileFirst} />;
   if (entry.cover) return <Cover src={entry.cover} title={title} active={active} sizes={sizes} priority={priority} contain={entry.mobileFirst} />;
@@ -54,6 +57,27 @@ function Cover({ src, title, active, sizes, priority, contain }: { src: string; 
       )}
     />
   );
+}
+
+/**
+ * Live demo on devices with a mouse; on touch devices a stitched screenshot of the
+ * same demo that scrolls the same way, so a phone never runs a second page per card.
+ */
+function DemoPreview({ entry, title, active, sizes, priority }: { entry: CatalogEntry; title: string; active: boolean; sizes: string; priority?: boolean }) {
+  const touch = useTouchDevice();
+  const shot = demoShot(entry.demo);
+  if (touch && shot) {
+    return (
+      <div className="absolute inset-0 overflow-hidden">
+        {entry.cover && <Image src={entry.cover} alt={title} fill sizes={sizes} priority={priority} className="object-cover object-top" />}
+        <ScrollShot shot={shot} mode="active" active={active} sizes={sizes} />
+      </div>
+    );
+  }
+  if (touch === null && entry.cover) {
+    return <Image src={entry.cover} alt={title} fill sizes={sizes} priority={priority} className="object-cover object-top" />;
+  }
+  return <LivePreview entry={entry} title={title} active={active} sizes={sizes} priority={priority} />;
 }
 
 /** Real page in a 1440px iframe scaled to the card. Loads near the viewport, scrolls itself while active. */
@@ -234,7 +258,7 @@ function PanShot({ src, cover, title, active, sizes, priority }: { src: string; 
         onLoad={() => {
           if (box.current && pic.current) setShift(Math.max(0, pic.current.offsetHeight - box.current.offsetHeight));
         }}
-        className="absolute left-0 top-0 h-auto w-full will-change-transform"
+        className={clsx("absolute left-0 top-0 h-auto w-full", active && "will-change-transform")}
         style={{
           transform: `translateY(${active ? -shift : 0}px)`,
           transition: `transform ${active ? duration : 1.1}s ${active ? "cubic-bezier(.45,.05,.4,1)" : "cubic-bezier(.2,.8,.2,1)"}`,

@@ -1,6 +1,9 @@
 /*
  * Защита страниц: запрет зума, контекстного меню, выделения/копирования,
  * горячих клавиш инструментов разработчика и просмотра кода.
+ * Зум на телефонах запрещают viewport (user-scalable=no) и touch-action;
+ * жесты щипка здесь не отменяются: iOS всё равно начинает зум, и отмена
+ * посреди жеста заставляла страницу дёргаться.
  * Подключается и на сайте, и в каждом демо из public/demos.
  */
 (function () {
@@ -8,7 +11,6 @@
   window.__guard = 1;
 
   var d = document;
-  var dev = /^(localhost|127\.|192\.168\.|10\.)/.test(location.hostname);
   var stop = function (e) {
     if (e.cancelable) e.preventDefault();
     e.stopPropagation();
@@ -20,10 +22,6 @@
 
   /* ── зум ── */
   window.addEventListener('wheel', function (e) { if (e.ctrlKey || e.metaKey) e.preventDefault(); }, { passive: false });
-  ['gesturestart', 'gesturechange', 'gestureend'].forEach(function (t) {
-    d.addEventListener(t, stop, { passive: false });
-  });
-  d.addEventListener('touchmove', function (e) { if (e.touches && e.touches.length > 1) e.preventDefault(); }, { passive: false });
 
   /* ── клавиши ── */
   d.addEventListener(
@@ -60,17 +58,4 @@
     'input,textarea,[contenteditable]{-webkit-user-select:text;user-select:text}' +
     'img,svg,video,canvas{-webkit-user-drag:none}';
   (d.head || d.documentElement).appendChild(css);
-
-  /* ── открытые DevTools: страница очищается ── */
-  if (dev) return;
-  setInterval(function () {
-    var t = performance.now();
-    // eslint-disable-next-line no-debugger
-    debugger;
-    if (performance.now() - t > 120) {
-      try {
-        d.documentElement.innerHTML = '<head><meta charset="utf-8"></head><body style="background:#101012"></body>';
-      } catch (err) {}
-    }
-  }, 1000);
 })();
