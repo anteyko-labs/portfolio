@@ -76,7 +76,7 @@ export function TrustedBySection() {
         <div className="mb-10 flex flex-col items-center gap-3 text-center">
           <p className="font-mono text-caption uppercase tracking-[0.2em] text-text-tertiary">{pick({ en: "Trusted by", ru: "Нам доверяют", zh: "受信赖于", tr: "Güvenenler", ar: "يثق بنا" }, language)}</p>
           <p className="text-body-md text-text-secondary">
-            {pick({ en: "And 40+ more products in production — many of them under NDA.", ru: "И ещё 40+ продуктов в продакшене — многие из них под NDA.", zh: "另有 40+ 款产品已投入生产——其中许多受 NDA 保护。", tr: "Ayrıca production'da 40'tan fazla ürün daha — çoğu NDA kapsamında.", ar: "وأكثر من 40 منتجًا آخر قيد الإنتاج — كثير منها بموجب NDA." }, language)}
+            {pick({ en: "70+ projects in total — many of them under NDA.", ru: "Всего 70+ проектов — многие из них под NDA.", zh: "累计 70 多个项目——其中许多受 NDA 保护。", tr: "Toplamda 70'ten fazla proje — çoğu NDA kapsamında.", ar: "أكثر من 70 مشروعًا إجمالًا — كثير منها بموجب NDA." }, language)}
           </p>
         </div>
 

@@ -442,3 +442,185 @@ export function SuccessBurst() {
     </div>
   );
 }
+
+/* ───────────────────────── Live brief: the request assembles as you type ───────────────────────── */
+
+export type BriefRow = { key: string; label: string; value: string };
+
+/**
+ * Sidebar card that mirrors the form: every answer drops into its slot as it is
+ * given, empty slots shimmer, the ring tracks completion, and at 100% the card
+ * lights up as "ready to send".
+ */
+export function LiveBrief({ rows, completion, title, readyLabel, draftLabel }: { rows: BriefRow[]; completion: number; title: string; readyLabel: string; draftLabel: string }) {
+  const reduced = useReducedMotion();
+  const ready = completion >= 100;
+  const R = 18;
+  const C = 2 * Math.PI * R;
+  return (
+    <motion.div
+      className={`relative isolate overflow-hidden rounded-3xl border p-6 transition-colors duration-500 ${ready ? "border-emerald-400/60 bg-emerald-50/40" : "border-border bg-bg-primary"}`}
+      animate={ready && !reduced ? { boxShadow: ["0 0 0 0 rgba(16,185,129,0.35)", "0 0 0 14px rgba(16,185,129,0)"] } : { boxShadow: "0 0 0 0 rgba(16,185,129,0)" }}
+      transition={ready ? { duration: 1.6, repeat: Infinity, ease: "easeOut" } : { duration: 0.3 }}
+    >
+      <div className="mb-5 flex items-center justify-between gap-4">
+        <div>
+          <p className="text-caption uppercase tracking-wider text-text-tertiary">{title}</p>
+          <motion.p key={ready ? "ready" : "draft"} initial={reduced ? false : { opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} className={`mt-1 text-body-sm font-semibold ${ready ? "text-emerald-600" : "text-text-secondary"}`}>
+            {ready ? readyLabel : draftLabel}
+          </motion.p>
+        </div>
+        <div className="relative h-12 w-12 shrink-0">
+          <svg viewBox="0 0 44 44" className="h-full w-full -rotate-90">
+            <circle cx="22" cy="22" r={R} fill="none" stroke="currentColor" strokeWidth="4" className="text-border" />
+            <motion.circle
+              cx="22"
+              cy="22"
+              r={R}
+              fill="none"
+              strokeWidth="4"
+              strokeLinecap="round"
+              stroke={ready ? "#10B981" : "#6366F1"}
+              strokeDasharray={C}
+              initial={false}
+              animate={{ strokeDashoffset: C * (1 - completion / 100) }}
+              transition={{ type: "spring", stiffness: 120, damping: 20 }}
+            />
+          </svg>
+          <span className="absolute inset-0 grid place-items-center text-[11px] font-semibold tabular-nums text-text-primary">{completion}%</span>
+        </div>
+      </div>
+      <ul className="space-y-2.5">
+        {rows.map((r) => (
+          <li key={r.key} className="flex items-center justify-between gap-3 border-b border-dashed border-border pb-2.5 last:border-0">
+            <span className="shrink-0 text-caption text-text-tertiary">{r.label}</span>
+            <span className="relative min-h-6 min-w-0 flex-1 text-right">
+              {r.value ? (
+                <motion.span
+                  key={r.value}
+                  className="inline-block max-w-full truncate rounded-full bg-indigo-50 px-2.5 py-0.5 text-body-sm font-medium text-indigo-700"
+                  initial={reduced ? false : { opacity: 0, scale: 0.6, y: -8, filter: "blur(4px)" }}
+                  animate={{ opacity: 1, scale: 1, y: 0, filter: "blur(0px)" }}
+                  transition={{ type: "spring", stiffness: 420, damping: 22 }}
+                >
+                  {r.value}
+                </motion.span>
+              ) : (
+                <span className="ms-skel ml-auto inline-block h-4 w-24 rounded-full bg-border" aria-hidden="true" />
+              )}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </motion.div>
+  );
+}
+
+/* ───────────────────────── Sending: the brief flies off ───────────────────────── */
+
+/** Overlay on the form while it is sending: the brief folds into a plane and loops toward the studio */
+export function SendFlight({ label }: { label: string }) {
+  const reduced = useReducedMotion();
+  return (
+    <motion.div
+      className="absolute inset-0 z-20 grid place-items-center rounded-3xl bg-bg-primary/85 backdrop-blur-sm"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      role="status"
+      aria-live="polite"
+    >
+      <div className="flex flex-col items-center gap-5">
+        <div className="relative h-28 w-56">
+          <svg viewBox="0 0 224 112" className="absolute inset-0 h-full w-full" aria-hidden="true">
+            <motion.path
+              d="M12 96 C 70 96, 90 20, 150 30 S 212 60, 212 14"
+              fill="none"
+              stroke="#A5B4FC"
+              strokeWidth="2"
+              strokeDasharray="4 6"
+              initial={{ pathLength: 0 }}
+              animate={{ pathLength: 1 }}
+              transition={{ duration: 1.2, repeat: reduced ? 0 : Infinity, repeatDelay: 0.2, ease: "easeInOut" }}
+            />
+          </svg>
+          <motion.div
+            className="absolute left-0 top-0 text-accent-primary"
+            style={{ offsetPath: "path('M12 96 C 70 96, 90 20, 150 30 S 212 60, 212 14')", offsetRotate: "auto" } as React.CSSProperties}
+            initial={{ offsetDistance: "0%" } as Record<string, string>}
+            animate={{ offsetDistance: "100%" } as Record<string, string>}
+            transition={{ duration: 1.2, repeat: reduced ? 0 : Infinity, repeatDelay: 0.2, ease: "easeInOut" }}
+          >
+            <svg viewBox="0 0 24 24" className="-ml-3 -mt-3 h-6 w-6" fill="currentColor" aria-hidden="true">
+              <path d="M2 11.5L21 3l-6.5 18-3.2-7.3L2 11.5z" />
+            </svg>
+          </motion.div>
+        </div>
+        <p className="text-body-md font-medium text-text-primary">{label}</p>
+      </div>
+    </motion.div>
+  );
+}
+
+/* ───────────────────────── After sending: a live countdown to the estimate ───────────────────────── */
+
+const pad2c = (n: number) => String(n).padStart(2, "0");
+
+/**
+ * Counts down the promised 24 hours from the moment of sending, names the exact
+ * deadline in the visitor's own time, and tracks the request through its stages.
+ */
+export function ReplyCountdown({ sentAt, locale, labels }: { sentAt: number; locale: string; labels: { until: string; stages: [string, string, string] } }) {
+  const reduced = useReducedMotion();
+  const deadline = sentAt + 24 * 3600 * 1000;
+  const [now, setNow] = useState(sentAt);
+  useEffect(() => {
+    const id = window.setInterval(() => setNow(Date.now()), 1000);
+    return () => window.clearInterval(id);
+  }, []);
+  const left = Math.max(0, deadline - now);
+  const h = Math.floor(left / 3600000);
+  const m = Math.floor((left % 3600000) / 60000);
+  const s = Math.floor((left % 60000) / 1000);
+  const when = new Intl.DateTimeFormat(locale, { weekday: "short", hour: "2-digit", minute: "2-digit" }).format(deadline);
+  const digits = [pad2c(h), pad2c(m), pad2c(s)];
+  return (
+    <div className="rounded-2xl border border-border bg-bg-secondary/80 p-6 text-left">
+      <div className="flex flex-wrap items-end justify-between gap-4">
+        <div className="flex items-end gap-1.5 font-brand text-5xl font-semibold tabular-nums tracking-tight text-text-primary" aria-hidden="true">
+          {digits.map((d, i) => (
+            <span key={i} className="flex items-end">
+              {i > 0 && <span className="mx-0.5 text-text-tertiary">:</span>}
+              <span className="relative inline-block overflow-hidden">
+                <motion.span key={d} className="inline-block" initial={reduced ? false : { y: "-100%", opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.35, ease: EASE }}>
+                  {d}
+                </motion.span>
+              </span>
+            </span>
+          ))}
+        </div>
+        <p className="text-body-sm text-text-secondary">
+          {labels.until} <span className="font-semibold text-text-primary">{when}</span>
+        </p>
+      </div>
+      <ol className="mt-6 grid grid-cols-3 gap-2">
+        {labels.stages.map((st, i) => {
+          const state = i === 0 ? "done" : i === 1 ? "active" : "next";
+          return (
+            <li key={st} className="relative">
+              <div className="h-1.5 overflow-hidden rounded-full bg-border">
+                <motion.div
+                  className={`h-full rounded-full ${state === "done" ? "bg-emerald-500" : "bg-accent-primary"}`}
+                  initial={reduced ? false : { width: 0 }}
+                  animate={{ width: state === "done" ? "100%" : state === "active" ? ["15%", "70%", "15%"] : "0%" }}
+                  transition={state === "active" ? { duration: 2.4, repeat: Infinity, ease: "easeInOut" } : { duration: 0.8, ease: EASE }}
+                />
+              </div>
+              <p className={`mt-2 text-caption ${state === "next" ? "text-text-tertiary" : "font-medium text-text-primary"}`}>{st}</p>
+            </li>
+          );
+        })}
+      </ol>
+    </div>
+  );
+}

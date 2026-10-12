@@ -229,3 +229,9 @@
 @media (hover: none) and (pointer: coarse) {
   .ms-orb { animation: none; }
 }
+
+/* Live brief: empty slots shimmer until answered */
+.ms-skel { position: relative; overflow: hidden; opacity: 0.6; }
+.ms-skel::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent); transform: translateX(-100%); animation: ms-skel 1.6s ease-in-out infinite; }
+@keyframes ms-skel { to { transform: translateX(100%); } }
+@media (prefers-reduced-motion: reduce) { .ms-skel::after { animation: none; } }

@@ -32,18 +32,18 @@ function Bars() {
   );
 }
 
-/** Years in delivery: five year ticks that fill one by one */
+/** Years of experience: seven year ticks that fill one by one */
 function Years({ run }: { run: boolean }) {
   const reduced = useReducedMotion();
   return (
     <div className="flex h-6 w-full items-center gap-1.5" aria-hidden="true">
-      {[0, 1, 2, 3, 4].map((i) => (
+      {[0, 1, 2, 3, 4, 5, 6].map((i) => (
         <span key={i} className="relative h-1.5 flex-1 overflow-hidden rounded-full bg-white/10">
           <motion.span
             className="absolute inset-0 origin-left rounded-full bg-gradient-to-r from-indigo-400 to-fuchsia-400"
             initial={reduced ? false : { scaleX: 0 }}
             animate={run || reduced ? { scaleX: 1 } : { scaleX: 0 }}
-            transition={{ duration: 0.5, delay: 0.6 + i * 0.22, ease: EASE }}
+            transition={{ duration: 0.45, delay: 0.6 + i * 0.16, ease: EASE }}
           />
         </span>
       ))}
@@ -80,12 +80,12 @@ function People() {
   );
 }
 
-/** 3×3 tiles filling in turn — one per service */
+/** Tiles filling in turn — one per service */
 function Tiles() {
   return (
-    <div className="grid grid-cols-9 gap-[3px]" aria-hidden="true">
-      {Array.from({ length: 9 }, (_, i) => (
-        <span key={i} className="ab-tile h-3 w-3 rounded-[3px] bg-current" style={{ animationDelay: `${i * 0.22}s` }} />
+    <div className="grid grid-cols-10 gap-[3px]" aria-hidden="true">
+      {Array.from({ length: 10 }, (_, i) => (
+        <span key={i} className="ab-tile h-3 w-2.5 rounded-[3px] bg-current" style={{ animationDelay: `${i * 0.22}s` }} />
       ))}
     </div>
   );
@@ -110,10 +110,10 @@ export function StatsCard({ metrics, language }: { metrics: readonly Metric[]; l
   const reduced = useReducedMotion();
   // Each metric keeps its own little animation, whatever order the data lists them in
   const visual: Record<string, React.ReactNode> = {
-    "40+": <Bars />,
+    "70+": <Bars />,
     "56": <People />,
-    "5+": <Years run={run} />,
-    "9": <Tiles />,
+    "7+": <Years run={run} />,
+    "10": <Tiles />,
     "24h": <Clock />,
     "0": <Flatline />,
   };

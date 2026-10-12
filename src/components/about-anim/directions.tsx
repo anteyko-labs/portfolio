@@ -23,9 +23,9 @@ export function Directions() {
     <div>
       <RevealTitle
         eyebrow={pick({ en: "What we do", ru: "Что мы делаем", zh: "我们做什么", tr: "Ne yapıyoruz", ar: "ماذا نفعل" }, language)}
-        title={pick({ en: "Nine services, three directions", ru: "Девять услуг, три направления", zh: "九项服务，三大方向", tr: "Dokuz hizmet, üç yön", ar: "تسع خدمات وثلاثة اتجاهات" }, language)}
+        title={pick({ en: "Ten services, four directions", ru: "Десять услуг, четыре направления", zh: "十项服务，四大方向", tr: "On hizmet, dört yön", ar: "عشر خدمات وأربعة اتجاهات" }, language)}
       />
-      <div className="mt-12 grid gap-10 md:grid-cols-3 md:gap-8">
+      <div className="mt-12 grid gap-10 md:grid-cols-2 md:gap-8 xl:grid-cols-4">
         {SERVICE_GROUPS.map((group, g) => {
           const items = packages.filter((p) => p.group === group.id);
           return (

@@ -25,7 +25,7 @@ export function AboutContent() {
   const about = translations.about;
 
   const story = about.story as unknown as Record<"why" | "how" | "who", L>;
-  const industries = (about as unknown as { industries: { title: L; items: { name: L; count: string; icon: string }[] } }).industries;
+  const industries = (about as unknown as { industries: { title: L; items: { name: L; examples: L; icon: string }[] } }).industries;
   const closingCta = (about as unknown as { closingCta: L }).closingCta;
 
   return (

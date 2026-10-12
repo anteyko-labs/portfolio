@@ -19,7 +19,11 @@ import {
   ModeTabs,
   NextStepsFlow,
   SuccessBurst,
+  LiveBrief,
+  SendFlight,
+  ReplyCountdown,
 } from "@/components/misc-anim/contact-anim";
+import { INTL_LOCALE } from "@/lib/i18n-text";
 
 // ── Instant-contact channels ──────────────────────────────────────────────
 // Single source of truth for the direct-contact buttons. The Cal.com booking
@@ -36,7 +40,27 @@ const projectTypeOptions = (t: (k: string) => string) => [
   { value: "mvp", label: t("contact.form.projectTypes.mvp") },
   { value: "product", label: t("contact.form.projectTypes.product") },
   { value: "web3", label: t("contact.form.projectTypes.web3") },
+  { value: "mobile", label: t("contact.form.projectTypes.mobile") },
+  { value: "branding", label: t("contact.form.projectTypes.branding") },
+  { value: "fintech", label: t("contact.form.projectTypes.fintech") },
+  { value: "access", label: t("contact.form.projectTypes.access") },
+  { value: "carbon", label: t("contact.form.projectTypes.carbon") },
+  { value: "support", label: t("contact.form.projectTypes.support") },
 ];
+
+// /contact?package=<service id> (from Pricing and service pages) preselects the project type
+const PACKAGE_TO_TYPE: Record<string, string> = {
+  "launch-site": "website",
+  "mvp-sprint": "mvp",
+  "startup-key": "product",
+  "web3-addon": "web3",
+  "mobile-app": "mobile",
+  branding: "branding",
+  fintech: "fintech",
+  "time-access": "access",
+  "carbon-credits": "carbon",
+  "it-support": "support",
+};
 
 const stageOptions = (t: (k: string) => string) => [
   { value: "idea", label: t("contact.form.stages.idea") },
@@ -61,6 +85,8 @@ const budgetOptions = (t: (k: string) => string) => [
   { value: "unsure", label: t("contact.form.budgets.unsure") },
 ];
 
+const labelOf = (opts: { value: string; label: string }[], v: string) => opts.find((o) => o.value === v)?.label ?? "";
+
 const STORAGE_KEY = "anteyko-contact-form";
 
 type FormField = "projectType" | "stage" | "timeline" | "budget" | "name" | "email" | "phone" | "message" | "website" | "consent";
@@ -84,6 +110,7 @@ const initialFormState = {
 export function ContactContent() {
   const { t, translations, language } = useLanguage();
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
+  const [sentAt, setSentAt] = useState(0);
   const [formData, setFormData] = useState(initialFormState);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [step, setStep] = useState(1);
@@ -113,6 +140,8 @@ export function ContactContent() {
         }
       }
     } catch { /* localStorage unavailable */ }
+    const fromPackage = PACKAGE_TO_TYPE[new URLSearchParams(window.location.search).get("package") ?? ""];
+    if (fromPackage) setFormData((prev) => ({ ...prev, projectType: fromPackage }));
   }, []);
 
   useEffect(() => {
@@ -189,6 +218,7 @@ export function ContactContent() {
         const data = await res.json().catch(() => ({}));
         throw new Error(data.error || "Request failed");
       }
+      setSentAt(Date.now());
       setStatus("success");
       setFormData(initialFormState);
       setStep(1);
@@ -219,10 +249,19 @@ export function ContactContent() {
           <motion.p {...reveal(2)} className="text-body-md text-accent-primary font-medium">
             {pick({ en: "Check your email (including spam) — we\u2019ll confirm receipt within minutes.", ru: "Проверьте почту (включая спам) — мы подтвердим получение в течение нескольких минут.", zh: "请查收邮件（包括垃圾邮件箱）——我们会在几分钟内确认收到。", tr: "E-postanızı (spam klasörü dahil) kontrol edin — alındığını birkaç dakika içinde onaylayacağız.", ar: "تحقّق من بريدك الإلكتروني (بما في ذلك البريد غير الهام) — سنؤكد الاستلام خلال دقائق." }, language)}
           </motion.p>
-          <motion.div {...reveal(3)} className="mt-8 p-5 rounded-xl border border-accent-primary/20 bg-accent-primary/5">
-            <p className="text-body-sm text-text-secondary">
-              {pick({ en: "Estimated response: within 24 hours. A real engineer will review your project — no bots, no templates.", ru: "Ожидаемый ответ: в течение 24 часов. Живой инженер рассмотрит ваш проект — без ботов, без шаблонов.", zh: "预计回复时间：24 小时内。真人工程师将审阅您的项目——没有机器人，没有模板。", tr: "Tahmini yanıt süresi: 24 saat içinde. Projenizi gerçek bir mühendis inceleyecek — bot yok, şablon yok.", ar: "الرد المتوقع: خلال 24 ساعة. سيراجع مشروعك مهندس حقيقي — دون روبوتات ودون قوالب جاهزة." }, language)}
-            </p>
+          <motion.div {...reveal(3)} className="mt-8">
+            <ReplyCountdown
+              sentAt={sentAt || Date.now()}
+              locale={INTL_LOCALE[language]}
+              labels={{
+                until: pick({ en: "Estimate by", ru: "Оценка до", zh: "报价截止", tr: "Teklif şu tarihe kadar:", ar: "التقدير قبل" }, language),
+                stages: [
+                  pick({ en: "Request received", ru: "Заявка получена", zh: "已收到需求", tr: "Talep alındı", ar: "تم استلام الطلب" }, language),
+                  pick({ en: "Engineer reviewing", ru: "Инженер изучает", zh: "工程师评估中", tr: "Mühendis inceliyor", ar: "المهندس يراجع" }, language),
+                  pick({ en: "Estimate sent", ru: "Оценка отправлена", zh: "报价已发送", tr: "Teklif gönderildi", ar: "تم إرسال التقدير" }, language),
+                ],
+              }}
+            />
           </motion.div>
           <motion.div {...reveal(4)} className="mt-10 text-left rounded-2xl border border-border bg-bg-secondary/80 p-6">
             <p className="text-caption uppercase tracking-wider text-text-tertiary mb-4">
@@ -300,8 +339,13 @@ export function ContactContent() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={reduced ? { opacity: 0 } : { opacity: 0, y: -10, scale: 0.99 }}
               transition={{ duration: 0.35, ease: EASE }}
-              className="ms-rim rounded-3xl border border-border bg-bg-primary p-5 shadow-[0_30px_80px_-40px_rgba(79,70,229,0.35)] sm:p-8"
+              className="ms-rim relative rounded-3xl border border-border bg-bg-primary p-5 shadow-[0_30px_80px_-40px_rgba(79,70,229,0.35)] sm:p-8"
             >
+            <AnimatePresence>
+              {status === "sending" && (
+                <SendFlight label={pick({ en: "Sending your brief…", ru: "Отправляем заявку…", zh: "正在发送您的需求…", tr: "Brief gönderiliyor…", ar: "جارٍ إرسال طلبك…" }, language)} />
+              )}
+            </AnimatePresence>
             {/* Progress bar */}
             <FormProgress step={step} completion={completion} />
 
@@ -507,6 +551,22 @@ export function ContactContent() {
 
           {/* ── Sidebar ── */}
           <div className="space-y-6 min-w-0">
+            {contactMode === "form" && (
+              <LiveBrief
+                title={pick({ en: "Your brief", ru: "Ваша заявка", zh: "您的需求", tr: "Brief'iniz", ar: "طلبك" }, language)}
+                draftLabel={pick({ en: "Filling in…", ru: "Заполняется…", zh: "填写中…", tr: "Dolduruluyor…", ar: "قيد التعبئة…" }, language)}
+                readyLabel={pick({ en: "Ready to send", ru: "Готова к отправке", zh: "可以发送", tr: "Göndermeye hazır", ar: "جاهز للإرسال" }, language)}
+                completion={completion}
+                rows={[
+                  { key: "name", label: t("contact.form.name"), value: formData.name },
+                  { key: "email", label: "Email", value: formData.email },
+                  { key: "projectType", label: t("contact.form.projectType"), value: labelOf(projectTypeOptions(t), formData.projectType) },
+                  { key: "stage", label: t("contact.form.stage"), value: labelOf(stageOptions(t), formData.stage) },
+                  { key: "timeline", label: t("contact.form.timeline"), value: labelOf(timelineOptions(t), formData.timeline) },
+                  { key: "budget", label: t("contact.form.budget"), value: labelOf(budgetOptions(t), formData.budget) },
+                ]}
+              />
+            )}
             {/* Social proof */}
             <motion.div
               initial={reduced ? false : { opacity: 0, y: 24 }}
@@ -524,8 +584,8 @@ export function ContactContent() {
               <LiveDesk />
               <div className="grid grid-cols-3 gap-4 text-center mb-6">
                 {[
-                  { v: "40+", l: pick({ en: "projects", ru: "проектов", zh: "个项目", tr: "proje", ar: "مشروع" }, language) },
-                  { v: "5+", l: pick({ en: "years", ru: "лет", zh: "年", tr: "yıl", ar: "سنوات" }, language) },
+                  { v: "70+", l: pick({ en: "projects", ru: "проектов", zh: "个项目", tr: "proje", ar: "مشروع" }, language) },
+                  { v: "7+", l: pick({ en: "years", ru: "лет", zh: "年", tr: "yıl", ar: "سنوات" }, language) },
                   { v: "24h", l: pick({ en: "response", ru: "ответ", zh: "响应", tr: "yanıt", ar: "الرد" }, language) },
                 ].map((stat, i) => (
                   <div key={stat.v} className={i > 0 ? "border-l border-white/10" : ""}>
