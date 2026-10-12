@@ -14,6 +14,7 @@ export const PACKAGE_SLUGS = {
   fintech: "fintech",
   "carbon-credits": "carbon-credits",
   "it-support": "it-support",
+  branding: "branding",
 } as const satisfies Record<string, string>;
 
 export type PackageId = keyof typeof PACKAGE_SLUGS;
@@ -30,6 +31,7 @@ export type ServiceGroup = ServicePackage["group"];
 /** Services grouped for /services and /pricing, in display order */
 export const SERVICE_GROUPS: { id: ServiceGroup; label: Record<"en" | "ru" | "zh" | "tr" | "ar", string> }[] = [
   { id: "build", label: { en: "Product development", ru: "Разработка продуктов", zh: "产品开发", tr: "Ürün geliştirme", ar: "تطوير المنتجات" } },
+  { id: "brand", label: { en: "Brand & design", ru: "Бренд и дизайн", zh: "品牌与设计", tr: "Marka ve tasarım", ar: "العلامة والتصميم" } },
   { id: "industry", label: { en: "Industry solutions", ru: "Отраслевые решения", zh: "行业解决方案", tr: "Sektörel çözümler", ar: "حلول قطاعية" } },
   { id: "care", label: { en: "Modules & support", ru: "Модули и сопровождение", zh: "模块与运维", tr: "Modüller ve destek", ar: "الوحدات والدعم" } },
 ];

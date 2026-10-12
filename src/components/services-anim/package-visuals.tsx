@@ -6,13 +6,13 @@ import { useLanguage } from "@/lib/language-context";
 import { pick } from "@/lib/i18n-text";
 import "./services-anim.css";
 import { Frame, PKG_COLOR, T, r2 } from "./visual-frame";
-import { AppStore, AccessGate, CarbonLedger, FinFlow, UptimeWatch } from "./industry-visuals";
+import { AppStore, AccessGate, BrandBuild, CarbonLedger, FinFlow, UptimeWatch } from "./industry-visuals";
 
 // One small looping scene per package, drawn in code: a site assembling itself,
 // a sprint board, a launch curve and a wallet signing a transaction. Each one
 // ticks only while on screen; with reduced motion it shows its finished frame.
 
-export type PackageKey = "launch-site" | "mvp-sprint" | "startup-key" | "web3-addon" | "mobile-app" | "time-access" | "fintech" | "carbon-credits" | "it-support";
+export type PackageKey = "launch-site" | "mvp-sprint" | "startup-key" | "web3-addon" | "mobile-app" | "time-access" | "fintech" | "carbon-credits" | "it-support" | "branding";
 
 export { PKG_COLOR };
 
@@ -349,5 +349,6 @@ export function PackageVisual({ id, className }: { id: string; className?: strin
   if (id === "fintech") return <FinFlow className={className} />;
   if (id === "carbon-credits") return <CarbonLedger className={className} />;
   if (id === "it-support") return <UptimeWatch className={className} />;
+  if (id === "branding") return <BrandBuild className={className} />;
   return null;
 }

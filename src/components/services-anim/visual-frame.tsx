@@ -13,6 +13,7 @@ export const PKG_COLOR: Record<string, string> = {
   fintech: "234 179 8",
   "carbon-credits": "34 197 94",
   "it-support": "59 130 246",
+  branding: "244 63 94",
 };
 
 export const r2 = (n: number) => Math.round(n * 100) / 100;

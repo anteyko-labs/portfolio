@@ -41,6 +41,7 @@ const PACKAGE_MIN_PRICE: Record<string, string> = {
   "time-access": "3000",
   fintech: "3000",
   "carbon-credits": "8000",
+  branding: "2000",
 };
 
 const offerCatalogSchema = {

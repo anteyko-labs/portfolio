@@ -14,12 +14,13 @@ import { OFFICES, localTime } from "@/lib/locations";
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
+// "We build ___ end to end" — one word per service, in catalog order
 const WORDS = {
-  en: ["websites", "MVPs", "Web3", "ERP & CRM", "mobile apps"],
-  ru: ["сайты", "MVP", "Web3", "ERP и CRM", "мобильные PWA"],
-  zh: ["网站", "MVP", "Web3", "ERP 与 CRM", "移动应用"],
-  tr: ["web siteleri", "MVP'ler", "Web3", "ERP ve CRM", "mobil uygulamalar"],
-  ar: ["مواقع ويب", "منتجات MVP", "Web3", "ERP وCRM", "تطبيقات جوال"],
+  en: ["websites", "MVPs", "digital products", "mobile apps", "brands", "fintech", "access control", "carbon platforms", "Web3", "IT support"],
+  ru: ["сайты", "MVP", "цифровые продукты", "мобильные приложения", "брендинг", "финтех", "УРВ и СКУД", "карбоновые платформы", "Web3", "IT-сопровождение"],
+  zh: ["网站", "MVP", "数字产品", "移动应用", "品牌", "金融科技", "考勤门禁", "碳信用平台", "Web3", "IT 运维"],
+  tr: ["web siteleri", "MVP'ler", "dijital ürünler", "mobil uygulamalar", "markalar", "fintek çözümleri", "geçiş kontrol sistemleri", "karbon platformları", "Web3", "BT destek sistemleri"],
+  ar: ["مواقع ويب", "منتجات MVP", "منتجات رقمية", "تطبيقات جوال", "علامات تجارية", "حلول مالية", "أنظمة الدوام والدخول", "منصات الكربون", "Web3", "الدعم التقني"],
 };
 
 /**
@@ -342,9 +343,9 @@ export function HomeHero() {
   };
 
   const stats = [
-    { to: 40, suffix: "+", label: pick({ en: "products shipped", ru: "запущенных продуктов", zh: "款已交付产品", tr: "teslim edilen ürün", ar: "منتجًا تم تسليمه" }, language) },
+    { to: 70, suffix: "+", label: pick({ en: "projects delivered", ru: "реализованных проектов", zh: "个已交付项目", tr: "teslim edilen proje", ar: "مشروعًا منجزًا" }, language) },
     { to: 15, suffix: "", label: pick({ en: "industries", ru: "отраслей", zh: "个行业", tr: "sektör", ar: "قطاعات" }, language) },
-    { to: 5, suffix: "", label: pick({ en: "years in production", ru: "лет в разработке", zh: "年生产经验", tr: "yıllık production deneyimi", ar: "سنوات في الإنتاج" }, language) },
+    { to: 7, suffix: "+", label: pick({ en: "years of experience", ru: "лет опыта", zh: "年经验", tr: "yıllık deneyim", ar: "سنوات من الخبرة" }, language) },
     { to: 24, suffix: pick({ en: "h", ru: " ч", zh: "小时", tr: "sa", ar: "س" }, language), label: pick({ en: "to an estimate", ru: "до оценки проекта", zh: "出具报价", tr: "teklife kadar", ar: "حتى التقدير" }, language) },
   ];
 

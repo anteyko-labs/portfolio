@@ -25,6 +25,12 @@ const PROJECT_TYPES: Record<string, string> = {
   mvp: "MVP",
   product: "Полный продукт",
   web3: "Web3 модуль",
+  mobile: "Мобильное приложение",
+  branding: "Брендинг",
+  fintech: "Финтех",
+  access: "УРВ и СКУД",
+  carbon: "Карбоновые кредиты",
+  support: "Сопровождение IT",
 };
 
 const STAGES: Record<string, string> = {

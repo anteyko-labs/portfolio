@@ -94,11 +94,11 @@ export const translations = {
       ar: "دون تأخير في المواعيد. دفع حسب المراحل. شيفرتكم ملكٌ لكم من اليوم الأول.",
     },
     trustLine: {
-      en: "40+ projects delivered. Bishkek · Dubai · Istanbul · Chicago · Shenzhen. Milestone-based. NDA on request.",
-      ru: "40+ проектов. Бишкек · Дубай · Стамбул · Чикаго · Шэньчжэнь. Работаем по этапам. NDA по запросу.",
-      zh: "已交付 40 多个项目。比什凯克 · 迪拜 · 伊斯坦布尔 · 芝加哥 · 深圳。按里程碑推进。可签署 NDA。",
-      tr: "40'tan fazla proje teslim edildi. Bişkek · Dubai · İstanbul · Chicago · Shenzhen. Aşama bazlı. İsteğe bağlı NDA.",
-      ar: "أكثر من 40 مشروعًا منجزًا. بيشكيك · دبي · إسطنبول · شيكاغو · شنتشن. عمل على أساس المراحل. اتفاقية سرية عند الطلب.",
+      en: "70+ projects delivered. Bishkek · Dubai · Istanbul · Chicago · Shenzhen. Milestone-based. NDA on request.",
+      ru: "70+ проектов. Бишкек · Дубай · Стамбул · Чикаго · Шэньчжэнь. Работаем по этапам. NDA по запросу.",
+      zh: "已交付 70 多个项目。比什凯克 · 迪拜 · 伊斯坦布尔 · 芝加哥 · 深圳。按里程碑推进。可签署 NDA。",
+      tr: "70'ten fazla proje teslim edildi. Bişkek · Dubai · İstanbul · Chicago · Shenzhen. Aşama bazlı. İsteğe bağlı NDA.",
+      ar: "أكثر من 70 مشروعًا منجزًا. بيشكيك · دبي · إسطنبول · شيكاغو · شنتشن. عمل على أساس المراحل. اتفاقية سرية عند الطلب.",
     },
   },
 
@@ -142,7 +142,7 @@ export const translations = {
   // Why us
   whyUs: {
     title: { en: "Why teams choose us", ru: "Почему выбирают нас", zh: "团队为什么选择我们", tr: "Ekipler neden bizi seçiyor", ar: "لماذا تختارنا الفرق" },
-    statsLine: { en: "40+ projects · 5+ years", ru: "40+\u00A0проектов · 5+\u00A0лет", zh: "40+ 个项目 · 5 年以上", tr: "40'tan fazla proje · 5+ yıl", ar: "أكثر من 40 مشروعًا · أكثر من 5 سنوات" },
+    statsLine: { en: "70+ projects · 7+ years", ru: "70+\u00A0проектов · 7+\u00A0лет", zh: "70+ 个项目 · 7 年以上", tr: "70'ten fazla proje · 7+ yıl", ar: "أكثر من 70 مشروعًا · أكثر من 7 سنوات" },
     items: [
       {
         title: { en: "End-to-end delivery", ru: "Полный цикл", zh: "端到端交付", tr: "Uçtan uca teslimat", ar: "تنفيذ متكامل" },
@@ -615,6 +615,41 @@ export const translations = {
           ar: "منتج يبقى سريعًا وآمنًا ومحدّثًا، مع فريق واحد مسؤول عنه.",
         },
       },
+      {
+        id: "branding",
+        group: "brand",
+        title: { en: "Branding", ru: "Брендинг", zh: "品牌建设", tr: "Marka kimliği", ar: "بناء العلامة التجارية" },
+        startingPrice: { en: "From $2k", ru: "От $2k", zh: "$2k 起", tr: "2 bin $'dan başlayan", ar: "ابتداءً من $2k" },
+        timeline: { en: "3–6 weeks", ru: "3–6 недель", zh: "3–6 周", tr: "3–6 hafta", ar: "3–6 أسابيع" },
+        description: {
+          en: "Brand strategy, positioning and identity: from the idea of the brand to a logo, style and brandbook.",
+          ru: "Стратегия бренда, позиционирование и айдентика: от идеи бренда до логотипа, фирменного стиля и брендбука.",
+          zh: "品牌战略、定位与视觉识别：从品牌理念到标志、视觉风格与品牌手册。",
+          tr: "Marka stratejisi, konumlandırma ve kimlik: markanın fikrinden logoya, görsel stile ve marka kitabına.",
+          ar: "استراتيجية العلامة والتموضع والهوية: من فكرة العلامة إلى الشعار والأسلوب البصري ودليل الهوية.",
+        },
+        forWhom: {
+          en: "For new companies and products, and for businesses that have outgrown their old look.",
+          ru: "Для новых компаний и продуктов и для бизнеса, который перерос старый образ.",
+          zh: "适合新公司与新产品，也适合已经不再适配旧形象的企业。",
+          tr: "Yeni şirketler ve ürünler ile eski görünümünü aşmış işletmeler için.",
+          ar: "للشركات والمنتجات الجديدة، وللأعمال التي تجاوزت صورتها القديمة.",
+        },
+        deliverables: {
+          en: ["Market, audience and competitor research", "Brand strategy and positioning", "Naming and tone of voice", "Logo and visual identity", "Brandbook and ready-to-use templates"],
+          ru: ["Исследование рынка, аудитории и конкурентов", "Стратегия бренда и позиционирование", "Нейминг и tone of voice", "Логотип и фирменный стиль", "Брендбук и готовые шаблоны"],
+          zh: ["市场、受众与竞品研究", "品牌战略与定位", "命名与品牌语调", "标志与视觉识别系统", "品牌手册与可直接使用的模板"],
+          tr: ["Pazar, hedef kitle ve rakip araştırması", "Marka stratejisi ve konumlandırma", "İsimlendirme ve iletişim tonu", "Logo ve görsel kimlik", "Marka kitabı ve kullanıma hazır şablonlar"],
+          ar: ["أبحاث السوق والجمهور والمنافسين", "استراتيجية العلامة والتموضع", "التسمية ونبرة الخطاب", "الشعار والهوية البصرية", "دليل الهوية وقوالب جاهزة للاستخدام"],
+        },
+        result: {
+          en: "A brand that is easy to recognise and explain — with a strategy, identity and rules your team can use.",
+          ru: "Бренд, который легко узнать и объяснить, — со стратегией, стилем и правилами, по которым работает команда.",
+          zh: "一个易于识别、易于讲清楚的品牌——拥有团队可直接遵循的战略、视觉与规范。",
+          tr: "Tanınması ve anlatılması kolay bir marka; ekibinizin kullanabileceği strateji, kimlik ve kurallarla.",
+          ar: "علامة يسهل التعرف عليها وشرحها، مع استراتيجية وهوية وقواعد يعمل بها فريقك.",
+        },
+      },
     ],
   },
 
@@ -818,11 +853,11 @@ export const translations = {
   about: {
     title: { en: "We build products that work after launch", ru: "Мы строим продукты, которые работают после запуска", zh: "我们打造上线后依然可靠运转的产品", tr: "Yayından sonra da çalışan ürünler geliştiriyoruz", ar: "نبني منتجات تواصل العمل بعد الإطلاق" },
     subtitle: {
-      en: "Engineering studio of 56 people with offices in Bishkek, Dubai, Istanbul, Chicago and Shenzhen. 40+ products. From MVP to L1 blockchain.",
-      ru: "Инженерная студия из 56 человек с офисами в Бишкеке, Дубае, Стамбуле, Чикаго и Шэньчжэне. 40+ продуктов. От MVP до L1 блокчейна.",
-      zh: "拥有 56 名员工的工程工作室，在比什凯克、迪拜、伊斯坦布尔、芝加哥和深圳设有办公室。40 多款产品。从 MVP 到 L1 区块链。",
-      tr: "Bişkek, Dubai, İstanbul, Chicago ve Shenzhen'de ofisleri olan 56 kişilik mühendislik stüdyosu. 40'tan fazla ürün. MVP'den L1 blockchain'e.",
-      ar: "استوديو هندسي يضم 56 موظفًا بمكاتب في بيشكيك ودبي وإسطنبول وشيكاغو وشنتشن. أكثر من 40 منتجًا. من MVP إلى بلوكتشين L1.",
+      en: "Engineering studio of 56 people with offices in Bishkek, Dubai, Istanbul, Chicago and Shenzhen. 70+ projects. From MVP to L1 blockchain.",
+      ru: "Инженерная студия из 56 человек с офисами в Бишкеке, Дубае, Стамбуле, Чикаго и Шэньчжэне. 70+ проектов. От MVP до L1 блокчейна.",
+      zh: "拥有 56 名员工的工程工作室，在比什凯克、迪拜、伊斯坦布尔、芝加哥和深圳设有办公室。70 多个项目。从 MVP 到 L1 区块链。",
+      tr: "Bişkek, Dubai, İstanbul, Chicago ve Shenzhen'de ofisleri olan 56 kişilik mühendislik stüdyosu. 70'ten fazla proje. MVP'den L1 blockchain'e.",
+      ar: "استوديو هندسي يضم 56 موظفًا بمكاتب في بيشكيك ودبي وإسطنبول وشيكاغو وشنتشن. أكثر من 70 مشروعًا. من MVP إلى بلوكتشين L1.",
     },
     story: {
       why: {
@@ -921,20 +956,31 @@ export const translations = {
       ],
     },
     metrics: [
-      { value: "40+", label: { en: "products shipped", ru: "продуктов запущено", zh: "已交付产品", tr: "teslim edilen ürün", ar: "منتجًا أُطلق" } },
+      { value: "70+", label: { en: "projects delivered", ru: "проектов реализовано", zh: "个已交付项目", tr: "teslim edilen proje", ar: "مشروعًا منجزًا" } },
       { value: "56", label: { en: "people on staff", ru: "человек в штате", zh: "名全职员工", tr: "kadrolu çalışan", ar: "موظفًا بدوام كامل" } },
-      { value: "9", label: { en: "services, one team", ru: "услуг — одна команда", zh: "项服务，一个团队", tr: "hizmet, tek ekip", ar: "خدمات بفريق واحد" } },
-      { value: "5+", label: { en: "years in delivery", ru: "лет в поставке", zh: "年交付经验", tr: "yıllık teslimat deneyimi", ar: "سنوات في التسليم" } },
+      { value: "10", label: { en: "directions, one team", ru: "направлений — одна команда", zh: "个方向，一个团队", tr: "yön, tek ekip", ar: "اتجاهات بفريق واحد" } },
+      { value: "7+", label: { en: "years of experience", ru: "лет опыта", zh: "年经验", tr: "yıllık deneyim", ar: "سنوات من الخبرة" } },
       { value: "24h", label: { en: "response time", ru: "время ответа", zh: "响应时间", tr: "yanıt süresi", ar: "زمن الاستجابة" } },
       { value: "0", label: { en: "failed launches", ru: "провальных запусков", zh: "失败上线", tr: "başarısız lansman", ar: "عمليات إطلاق فاشلة" } },
     ],
     industries: {
       title: { en: "Industries we know", ru: "Индустрии, которые мы знаем", zh: "我们熟悉的行业", tr: "Bildiğimiz sektörler", ar: "القطاعات التي نعرفها" },
       items: [
-        { name: { en: "FinTech / Banking", ru: "FinTech / Банкинг", zh: "金融科技 / 银行", tr: "FinTech / Bankacılık", ar: "التقنية المالية / الخدمات المصرفية" }, count: "3", icon: "bank" },
-        { name: { en: "Web3 / DeFi / Tokenization", ru: "Web3 / DeFi / Токенизация", zh: "Web3 / DeFi / 代币化", tr: "Web3 / DeFi / Tokenizasyon", ar: "Web3 / DeFi / الترميز" }, count: "4", icon: "chain" },
-        { name: { en: "FoodTech / Marketplace", ru: "FoodTech / Маркетплейс", zh: "FoodTech / 电商平台", tr: "FoodTech / Pazaryeri", ar: "تقنيات الغذاء / الأسواق الإلكترونية" }, count: "3", icon: "cart" },
-        { name: { en: "Enterprise / SaaS", ru: "Enterprise / SaaS", zh: "企业级 / SaaS", tr: "Kurumsal / SaaS", ar: "المؤسسات / SaaS" }, count: "3", icon: "building" },
+        { icon: "bank", name: { en: "FinTech & Banking", ru: "Финтех и банкинг", zh: "金融科技与银行", tr: "Fintek ve bankacılık", ar: "التكنولوجيا المالية والمصارف" }, examples: { en: "payments, wallets, lending", ru: "платежи, кошельки, кредиты", zh: "支付、钱包、借贷", tr: "ödemeler, cüzdanlar, krediler", ar: "المدفوعات والمحافظ والإقراض" } },
+        { icon: "chain", name: { en: "Web3 & Tokenization", ru: "Web3 и токенизация", zh: "Web3 与代币化", tr: "Web3 ve tokenizasyon", ar: "Web3 والترميز" }, examples: { en: "L1, DEX, token sales", ru: "L1, DEX, токенсейлы", zh: "L1、DEX、代币发售", tr: "L1, DEX, token satışları", ar: "L1 وDEX وبيع الرموز" } },
+        { icon: "cart", name: { en: "FoodTech & Delivery", ru: "FoodTech и доставка", zh: "餐饮科技与配送", tr: "FoodTech ve teslimat", ar: "تقنيات الغذاء والتوصيل" }, examples: { en: "restaurants, couriers, loyalty", ru: "рестораны, курьеры, лояльность", zh: "餐厅、骑手、会员", tr: "restoranlar, kuryeler, sadakat", ar: "المطاعم والمندوبون والولاء" } },
+        { icon: "building", name: { en: "Enterprise & SaaS", ru: "Enterprise и SaaS", zh: "企业级与 SaaS", tr: "Kurumsal ve SaaS", ar: "المؤسسات وSaaS" }, examples: { en: "ERP, CRM, BI dashboards", ru: "ERP, CRM, BI-панели", zh: "ERP、CRM、BI 看板", tr: "ERP, CRM, BI panoları", ar: "ERP وCRM ولوحات BI" } },
+        { icon: "bag", name: { en: "E-commerce & Retail", ru: "E-commerce и ритейл", zh: "电商与零售", tr: "E-ticaret ve perakende", ar: "التجارة الإلكترونية والتجزئة" }, examples: { en: "stores, marketplaces, catalogs", ru: "магазины, маркетплейсы, каталоги", zh: "商城、交易平台、商品目录", tr: "mağazalar, pazar yerleri, kataloglar", ar: "المتاجر والأسواق والكتالوجات" } },
+        { icon: "truck", name: { en: "Logistics & Transport", ru: "Логистика и перевозки", zh: "物流与运输", tr: "Lojistik ve taşımacılık", ar: "اللوجستيات والنقل" }, examples: { en: "fleets, routes, tracking", ru: "автопарки, маршруты, трекинг", zh: "车队、路线、追踪", tr: "filolar, rotalar, takip", ar: "الأساطيل والمسارات والتتبع" } },
+        { icon: "plane", name: { en: "Travel & Hospitality", ru: "Туризм и гостеприимство", zh: "旅游与酒店", tr: "Turizm ve konaklama", ar: "السياحة والضيافة" }, examples: { en: "tours, hotels, bookings", ru: "туры, отели, бронирования", zh: "旅游线路、酒店、预订", tr: "turlar, oteller, rezervasyonlar", ar: "الجولات والفنادق والحجوزات" } },
+        { icon: "home", name: { en: "Real Estate & Construction", ru: "Недвижимость и девелопмент", zh: "房地产与开发", tr: "Gayrimenkul ve inşaat", ar: "العقارات والتطوير" }, examples: { en: "developers, listings, CRM", ru: "застройщики, объекты, CRM", zh: "开发商、房源、CRM", tr: "geliştiriciler, ilanlar, CRM", ar: "المطوّرون والعقارات وCRM" } },
+        { icon: "factory", name: { en: "Manufacturing & Industry", ru: "Производство и промышленность", zh: "制造与工业", tr: "Üretim ve sanayi", ar: "التصنيع والصناعة" }, examples: { en: "plants, ERP, quality control", ru: "заводы, ERP, контроль качества", zh: "工厂、ERP、质量控制", tr: "fabrikalar, ERP, kalite kontrol", ar: "المصانع وERP ومراقبة الجودة" } },
+        { icon: "car", name: { en: "Automotive & Rental", ru: "Авто и прокат", zh: "汽车与租赁", tr: "Otomotiv ve kiralama", ar: "السيارات والتأجير" }, examples: { en: "car rental, detailing, service", ru: "прокат, детейлинг, сервис", zh: "租车、汽车美容、维修", tr: "araç kiralama, detaylı temizlik, servis", ar: "تأجير السيارات والعناية والصيانة" } },
+        { icon: "leaf", name: { en: "ClimateTech & Carbon", ru: "ClimateTech и карбон", zh: "气候科技与碳", tr: "İklim teknolojisi ve karbon", ar: "تقنيات المناخ والكربون" }, examples: { en: "MRV, registries, credits", ru: "MRV, реестры, кредиты", zh: "MRV、登记簿、碳信用", tr: "MRV, siciller, krediler", ar: "MRV والسجلات والأرصدة" } },
+        { icon: "shield", name: { en: "HR-tech & Security", ru: "HR-tech и безопасность", zh: "人力科技与安防", tr: "İK teknolojisi ve güvenlik", ar: "تقنيات الموارد البشرية والأمن" }, examples: { en: "time tracking, access control", ru: "УРВ, СКУД, пропуска", zh: "考勤、门禁、通行证", tr: "mesai takibi, geçiş kontrolü", ar: "تتبع الدوام والتحكم في الدخول" } },
+        { icon: "bolt", name: { en: "Energy & Utilities", ru: "Энергетика", zh: "能源与公用事业", tr: "Enerji ve altyapı", ar: "الطاقة والمرافق" }, examples: { en: "wind, grids, monitoring", ru: "ветропарки, сети, мониторинг", zh: "风电、电网、监测", tr: "rüzgâr, şebekeler, izleme", ar: "الرياح والشبكات والمراقبة" } },
+        { icon: "doc", name: { en: "GovTech & Tenders", ru: "GovTech и госзакупки", zh: "政务科技与招投标", tr: "GovTech ve ihaleler", ar: "التقنية الحكومية والمناقصات" }, examples: { en: "B2G platforms, tenders", ru: "B2G-платформы, тендеры", zh: "B2G 平台、招标", tr: "B2G platformları, ihaleler", ar: "منصات B2G والمناقصات" } },
+        { icon: "cap", name: { en: "EdTech & LegalTech", ru: "EdTech и LegalTech", zh: "教育科技与法律科技", tr: "EdTech ve LegalTech", ar: "تقنيات التعليم والقانون" }, examples: { en: "courses, offers, registrations", ru: "курсы, оферты, регистрации", zh: "课程、要约、报名", tr: "kurslar, teklifler, kayıtlar", ar: "الدورات والعروض والتسجيلات" } },
       ],
     },
     toolchain: {
@@ -1012,6 +1058,12 @@ export const translations = {
         mvp: { en: "MVP", ru: "MVP", zh: "MVP", tr: "MVP", ar: "MVP" },
         product: { en: "Full product", ru: "Полный продукт", zh: "完整产品", tr: "Eksiksiz ürün", ar: "منتج متكامل" },
         web3: { en: "Web3 module", ru: "Web3 модуль", zh: "Web3 模块", tr: "Web3 modülü", ar: "وحدة Web3" },
+        mobile: { en: "Mobile app", ru: "Мобильное приложение", zh: "移动应用", tr: "Mobil uygulama", ar: "تطبيق جوال" },
+        branding: { en: "Branding", ru: "Брендинг", zh: "品牌建设", tr: "Marka kimliği", ar: "بناء العلامة التجارية" },
+        fintech: { en: "Fintech", ru: "Финтех", zh: "金融科技", tr: "Fintek", ar: "التكنولوجيا المالية" },
+        access: { en: "Time tracking & access control", ru: "УРВ и СКУД", zh: "考勤与门禁", tr: "Mesai takibi ve geçiş kontrolü", ar: "تتبع الدوام والتحكم في الدخول" },
+        carbon: { en: "Carbon credits", ru: "Карбоновые кредиты", zh: "碳信用平台", tr: "Karbon kredileri", ar: "أرصدة الكربون" },
+        support: { en: "IT support", ru: "Сопровождение IT", zh: "IT 运维", tr: "BT desteği", ar: "دعم تقني" },
       },
       stage: { en: "Current stage", ru: "Текущий этап", zh: "当前阶段", tr: "Mevcut aşama", ar: "المرحلة الحالية" },
       stages: {

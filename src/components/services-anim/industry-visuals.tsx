@@ -328,3 +328,104 @@ export function UptimeWatch({ className }: { className?: string }) {
     </Frame>
   );
 }
+
+/* ───────────── Branding: construction grid → logo mark → palette, type, brandbook ───────────── */
+
+const PALETTE = ["#F43F5E", "#FB923C", "#FDE68A", "#0B0B14", "#F5F5F4"];
+
+export function BrandBuild({ className }: { className?: string }) {
+  const { language } = useLanguage();
+  const { ref, tick, reduced } = useLoop<HTMLDivElement>(800);
+  const s = reduced ? 9 : tick % 10;
+  const built = s >= 3; // mark assembled from the construction circles
+  const swatches = Math.max(0, Math.min(5, s - 3));
+  const typeOn = s >= 6;
+  const page = s >= 8 ? 2 : s >= 7 ? 1 : 0;
+  return (
+    <Frame id="branding" svgRef={ref} className={className} label={pick({ en: "A logo built on a construction grid, then its palette, type and brandbook", ru: "Логотип строится по сетке, затем появляются палитра, шрифт и брендбук", zh: "标志在构图网格上成形，随后出现配色、字体与品牌手册", tr: "Yapı ızgarasında oluşan logo, ardından palet, yazı tipi ve marka kitabı", ar: "شعار يُبنى على شبكة إنشائية ثم تظهر الألوان والخط ودليل الهوية" }, language)}>
+      <defs>
+        <linearGradient id="sv-br-g" x1="0" x2="1" y1="0" y2="1">
+          <stop offset="0" stopColor="#F43F5E" />
+          <stop offset="1" stopColor="#FB923C" />
+        </linearGradient>
+      </defs>
+      {/* construction grid + circles */}
+      <g opacity="0.5">
+        {[0, 1, 2, 3].map((i) => (
+          <line key={`v${i}`} x1={24 + i * 30} x2={24 + i * 30} y1="16" y2="134" stroke={FAINT} />
+        ))}
+        {[0, 1, 2, 3].map((i) => (
+          <line key={`h${i}`} x1="14" x2="124" y1={30 + i * 30} y2={30 + i * 30} stroke={FAINT} />
+        ))}
+      </g>
+      {[
+        { cx: 54, cy: 60, r: 30 },
+        { cx: 84, cy: 60, r: 30 },
+        { cx: 69, cy: 86, r: 30 },
+      ].map((c, i) => (
+        <motion.circle
+          key={i}
+          cx={c.cx}
+          cy={c.cy}
+          r={c.r}
+          fill="none"
+          stroke="rgba(251,113,133,0.55)"
+          strokeDasharray="3 3"
+          initial={false}
+          animate={{ pathLength: s >= i ? 1 : 0, opacity: built ? 0.25 : 0.9 }}
+          transition={{ duration: 0.7, ease: EASE }}
+        />
+      ))}
+      {/* the mark: the overlap of the three circles fills in */}
+      <motion.path
+        d="M69 56 A30 30 0 0 1 84 82 A30 30 0 0 1 54 82 A30 30 0 0 1 69 56 Z"
+        fill="url(#sv-br-g)"
+        initial={false}
+        animate={{ scale: built ? 1 : 0.2, opacity: built ? 1 : 0 }}
+        transition={{ type: "spring", stiffness: 220, damping: 16 }}
+        style={{ transformOrigin: "69px 73px" }}
+      />
+      <motion.text x="69" y="128" fontSize="9" textAnchor="middle" fill="#fff" fontWeight="700" initial={false} animate={{ opacity: built ? 1 : 0, y: built ? 0 : 4 }} transition={T}>
+        your brand
+      </motion.text>
+
+      {/* palette */}
+      <text x="146" y="24" fontSize="7" fill={MUTED}>{pick({ en: "Palette", ru: "Палитра", zh: "配色", tr: "Palet", ar: "الألوان" }, language)}</text>
+      {PALETTE.map((c, i) => (
+        <motion.rect
+          key={c}
+          x={146 + i * 32}
+          y="30"
+          width="26"
+          height="26"
+          rx="6"
+          fill={c}
+          stroke="rgba(255,255,255,0.15)"
+          initial={false}
+          animate={{ opacity: i < swatches ? 1 : 0, y: i < swatches ? 0 : 8 }}
+          transition={{ duration: 0.4, ease: EASE }}
+        />
+      ))}
+
+      {/* type */}
+      <motion.g initial={false} animate={{ opacity: typeOn ? 1 : 0, x: typeOn ? 0 : -8 }} transition={T}>
+        <text x="146" y="92" fontSize="30" fontWeight="700" fill="#fff">Aa</text>
+        <rect x="196" y="72" width="70" height="5" rx="2.5" fill="rgba(255,255,255,0.6)" />
+        <rect x="196" y="82" width="54" height="4" rx="2" fill={MUTED} />
+        <rect x="196" y="90" width="62" height="4" rx="2" fill="rgba(255,255,255,0.25)" />
+      </motion.g>
+
+      {/* brandbook pages */}
+      <g transform="translate(146 104)">
+        {[0, 1, 2].map((i) => (
+          <motion.g key={i} initial={false} animate={{ x: i <= page && s >= 7 ? i * 54 : 0, opacity: s >= 7 ? 1 : 0 }} transition={{ duration: 0.5, ease: EASE }}>
+            <rect width="48" height="30" rx="4" fill="rgba(255,255,255,0.06)" stroke={FAINT} />
+            <rect x="6" y="6" width={[14, 30, 20][i]} height="4" rx="2" fill={["#F43F5E", "rgba(255,255,255,0.5)", "#FB923C"][i]} />
+            <rect x="6" y="14" width="34" height="3" rx="1.5" fill="rgba(255,255,255,0.2)" />
+            <rect x="6" y="20" width="26" height="3" rx="1.5" fill="rgba(255,255,255,0.2)" />
+          </motion.g>
+        ))}
+      </g>
+    </Frame>
+  );
+}
