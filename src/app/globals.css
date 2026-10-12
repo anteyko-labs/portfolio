@@ -1581,3 +1581,17 @@ body {
 :lang(ar) * {
   letter-spacing: 0 !important;
 }
+
+/* Home hero entrance — CSS, not framer-motion: it starts with the server HTML and
+   runs on the compositor, so it keeps moving while React hydrates on a phone */
+.hero-in { animation: hero-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) var(--d, 0s) both; }
+@keyframes hero-in { from { opacity: 0; transform: translate3d(0, 12px, 0); } }
+.hero-rise { animation: hero-rise 1s cubic-bezier(0.22, 1, 0.36, 1) var(--d, 0s) both; }
+@keyframes hero-rise { from { transform: translate3d(0, 110%, 0); } }
+.hero-stage-in { animation: hero-stage-in 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.25s both; }
+@keyframes hero-stage-in { from { opacity: 0; transform: translate3d(0, 60px, 0) scale(0.94); } }
+@media (prefers-reduced-motion: reduce) {
+  .hero-in, .hero-rise, .hero-stage-in { animation: none; }
+}
+/* Below-the-fold home sections: laid out and painted only near the viewport */
+.cv-auto { content-visibility: auto; contain-intrinsic-size: auto 900px; }
