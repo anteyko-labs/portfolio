@@ -13,7 +13,6 @@ import { CalEmbed } from "@/components/ui/cal-embed";
 import { CountUp, DrawCheck, EASE } from "@/components/motion/kit";
 import { useReducedMotion } from "@/lib/hooks";
 import {
-  ContactHeroScene,
   FormProgress,
   LiveDesk,
   ModeTabs,
@@ -22,6 +21,7 @@ import {
   LiveBrief,
   SendFlight,
   ReplyCountdown,
+  ChannelLinks,
 } from "@/components/misc-anim/contact-anim";
 import { INTL_LOCALE } from "@/lib/i18n-text";
 
@@ -34,6 +34,8 @@ const TELEGRAM_URL = "https://t.me/Anteyko_labs";
 // While empty, the WhatsApp button is hidden so we never ship a dead/wrong link.
 const WHATSAPP_NUMBER: string = "996551180770";
 const WHATSAPP_URL: string = WHATSAPP_NUMBER ? `https://wa.me/${WHATSAPP_NUMBER}` : "";
+// "996551180770" → "+996 551 180 770"
+const formatPhone = (n: string) => (n ? `+${n.slice(0, 3)} ${n.slice(3, 6)} ${n.slice(6, 9)} ${n.slice(9)}` : "");
 
 const projectTypeOptions = (t: (k: string) => string) => [
   { value: "website", label: t("contact.form.projectTypes.website") },
@@ -312,7 +314,7 @@ export function ContactContent() {
         subtitle={t("contact.subtitle")}
         eyebrow={pick({ en: "Contact", ru: "Контакты", zh: "联系我们", tr: "İletişim", ar: "تواصل معنا" }, language)}
         align="left"
-        rightSlot={<ContactHeroScene />}
+        rightSlot={<ChannelLinks telegram={TELEGRAM_URL} whatsapp={WHATSAPP_URL} email={CONTACT_EMAIL} phone={formatPhone(WHATSAPP_NUMBER)} />}
       />
 
       <Section background="secondary" padding="lg" className="relative overflow-hidden">
