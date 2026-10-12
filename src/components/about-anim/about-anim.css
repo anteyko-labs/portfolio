@@ -82,3 +82,17 @@
   .ab-spark, .ab-ripple { opacity: 0; }
   .ab-tick { stroke-dashoffset: 0; }
 }
+
+/* Stats card: people light up in a row; service tiles fill in turn */
+.ab-person { opacity: 0.25; animation: ab-person 2.6s ease-in-out infinite; }
+@keyframes ab-person { 0%, 100% { opacity: 0.25; transform: translateY(0); } 20%, 60% { opacity: 1; transform: translateY(-1px); } }
+.ab-tile { opacity: 0.18; animation: ab-tile 3s ease-in-out infinite; }
+@keyframes ab-tile { 0%, 100% { opacity: 0.18; transform: scale(0.8); } 25%, 70% { opacity: 1; transform: scale(1); } }
+.ab-scope[data-run="false"] .ab-person, .ab-scope[data-run="false"] .ab-tile { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) { .ab-person, .ab-tile { animation: none; opacity: 1; } }
+
+/* Crew grid: figures dim and brighten at random-looking offsets once revealed */
+.ab-crew-dot { opacity: 1; }
+.ab-crew[data-run="true"] .ab-crew-dot > span { animation: ab-online 6s ease-in-out infinite; animation-delay: inherit; }
+@keyframes ab-online { 0%, 100% { opacity: 0.45; } 40%, 60% { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .ab-crew .ab-crew-dot > span { animation: none; opacity: 1; } }

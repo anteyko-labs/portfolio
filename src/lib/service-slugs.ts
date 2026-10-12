@@ -9,6 +9,11 @@ export const PACKAGE_SLUGS = {
   "mvp-sprint": "mvp-sprint",
   "startup-key": "startup-under-key",
   "web3-addon": "web3-addon",
+  "mobile-app": "mobile-apps",
+  "time-access": "time-tracking-access-control",
+  fintech: "fintech",
+  "carbon-credits": "carbon-credits",
+  "it-support": "it-support",
 } as const satisfies Record<string, string>;
 
 export type PackageId = keyof typeof PACKAGE_SLUGS;
@@ -19,6 +24,17 @@ const SLUG_TO_ID: Record<string, PackageId> = Object.fromEntries(
 ) as Record<string, PackageId>;
 
 export type ServicePackage = (typeof translations.packages.items)[number];
+
+export type ServiceGroup = ServicePackage["group"];
+
+/** Services grouped for /services and /pricing, in display order */
+export const SERVICE_GROUPS: { id: ServiceGroup; label: Record<"en" | "ru" | "zh" | "tr" | "ar", string> }[] = [
+  { id: "build", label: { en: "Product development", ru: "Разработка продуктов", zh: "产品开发", tr: "Ürün geliştirme", ar: "تطوير المنتجات" } },
+  { id: "industry", label: { en: "Industry solutions", ru: "Отраслевые решения", zh: "行业解决方案", tr: "Sektörel çözümler", ar: "حلول قطاعية" } },
+  { id: "care", label: { en: "Modules & support", ru: "Модули и сопровождение", zh: "模块与运维", tr: "Modüller ve destek", ar: "الوحدات والدعم" } },
+];
+
+export const packagesIn = (group: ServiceGroup) => translations.packages.items.filter((p) => p.group === group);
 
 // All slugs, in catalog order — used for generateStaticParams.
 export const SERVICE_SLUGS: string[] = translations.packages.items.map(

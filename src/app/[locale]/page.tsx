@@ -14,7 +14,6 @@ import { HomeProcess } from "@/components/home/home-process";
 import { HomeCta } from "@/components/home/home-cta";
 import { TrustedBySection } from "@/components/sections/trusted-by";
 import { TestimonialsSection } from "@/components/sections/testimonials";
-import { PackagesSection } from "@/components/sections/packages";
 import { FAQPreviewSection } from "@/components/sections/faq-preview";
 
 // WebSite entity for the home page. No SearchAction is included because the site
@@ -72,7 +71,6 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
       <Below><HomeL1 /></Below>
       <Below><HomeProcess /></Below>
       <Below><TestimonialsSection /></Below>
-      <Below><PackagesSection /></Below>
       <Below><FAQPreviewSection /></Below>
       <Below><HomeCta /></Below>
     </PageWrapper>

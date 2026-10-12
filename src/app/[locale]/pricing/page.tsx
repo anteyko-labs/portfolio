@@ -37,6 +37,10 @@ const PACKAGE_MIN_PRICE: Record<string, string> = {
   "mvp-sprint": "3000",
   "startup-key": "5000",
   "web3-addon": "3000",
+  "mobile-app": "5000",
+  "time-access": "3000",
+  fintech: "3000",
+  "carbon-credits": "8000",
 };
 
 const offerCatalogSchema = {
@@ -44,17 +48,18 @@ const offerCatalogSchema = {
   "@type": "OfferCatalog",
   name: "Anteyko pricing",
   url: `${SITE_BASE}/pricing`,
+  // IT support is priced by agreement, so its offer carries no price
   itemListElement: translations.packages.items.map((pkg) => ({
     "@type": "Offer",
     name: pkg.title.en,
     description: pkg.description.en,
-    priceCurrency: "USD",
-    price: PACKAGE_MIN_PRICE[pkg.id],
-    priceSpecification: {
-      "@type": "PriceSpecification",
-      priceCurrency: "USD",
-      minPrice: PACKAGE_MIN_PRICE[pkg.id],
-    },
+    ...(PACKAGE_MIN_PRICE[pkg.id]
+      ? {
+          priceCurrency: "USD",
+          price: PACKAGE_MIN_PRICE[pkg.id],
+          priceSpecification: { "@type": "PriceSpecification", priceCurrency: "USD", minPrice: PACKAGE_MIN_PRICE[pkg.id] },
+        }
+      : {}),
     itemOffered: {
       "@type": "Service",
       name: pkg.title.en,
