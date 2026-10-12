@@ -624,3 +624,150 @@ export function ReplyCountdown({ sentAt, locale, labels }: { sentAt: number; loc
     </div>
   );
 }
+
+/* ───────────────────────── Hero: the three direct channels ───────────────────────── */
+
+const TG_PATH = "M11.944 0A12 12 0 000 12a12 12 0 0012 12 12 12 0 0012-12A12 12 0 0012 0a12 12 0 00-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 01.171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z";
+const WA_PATH = "M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.71.306 1.263.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z";
+
+/**
+ * Hero side of /contact: Telegram, WhatsApp and email as live cards. Each one
+ * moves in its own way — the plane circles its orbit and takes off on hover,
+ * WhatsApp is "typing…", the envelope opens and a letter slides out — and the
+ * email can be copied in one tap.
+ */
+export function ChannelLinks({ telegram, whatsapp, email, phone }: { telegram: string; whatsapp: string; email: string; phone: string }) {
+  const { language } = useLanguage();
+  const reduced = useReducedMotion();
+  const [copied, setCopied] = useState(false);
+  const copy = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    try {
+      await navigator.clipboard.writeText(email);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1800);
+    } catch {
+      window.location.href = `mailto:${email}`;
+    }
+  };
+  const handle = telegram.replace(/^https?:\/\/t\.me\//, "@");
+  const cards = [
+    {
+      key: "tg",
+      href: telegram,
+      color: "34 158 217",
+      name: "Telegram",
+      value: handle,
+      hint: pick({ en: "Fastest reply", ru: "Быстрее всего", zh: "回复最快", tr: "En hızlı yanıt", ar: "الأسرع ردًا" }, language),
+      icon: (
+        <span className="relative grid h-12 w-12 place-items-center">
+          <svg viewBox="0 0 48 48" className={`absolute inset-0 h-full w-full ${reduced ? "" : "ms-orbit-dash"}`} aria-hidden="true">
+            <circle cx="24" cy="24" r="22" fill="none" stroke="currentColor" strokeOpacity="0.35" strokeDasharray="2 4" />
+          </svg>
+          <svg viewBox="0 0 24 24" className="ms-ch-plane h-6 w-6" fill="currentColor" aria-hidden="true">
+            <path d={TG_PATH} />
+          </svg>
+        </span>
+      ),
+    },
+    whatsapp && {
+      key: "wa",
+      href: whatsapp,
+      color: "37 211 102",
+      name: "WhatsApp",
+      value: phone,
+      hint: pick({ en: "Voice or chat", ru: "Чат или звонок", zh: "聊天或通话", tr: "Mesaj veya arama", ar: "دردشة أو مكالمة" }, language),
+      icon: (
+        <span className="relative grid h-12 w-12 place-items-center">
+          <svg viewBox="0 0 24 24" className="ms-ch-ring h-6 w-6" fill="currentColor" aria-hidden="true">
+            <path d={WA_PATH} />
+          </svg>
+          <span className="absolute -right-2 -top-1 flex items-center gap-[3px] rounded-full border border-border bg-white px-1.5 py-1 shadow-sm" aria-hidden="true">
+            {[0, 1, 2].map((i) => (
+              <span key={i} className="ms-typing h-1 w-1 rounded-full bg-[#25D366]" style={{ animationDelay: `${i * 0.18}s` }} />
+            ))}
+          </span>
+        </span>
+      ),
+    },
+    {
+      key: "mail",
+      href: `mailto:${email}`,
+      color: "129 140 248",
+      name: "Email",
+      value: email,
+      hint: pick({ en: "For briefs and documents", ru: "Для брифов и документов", zh: "适合发送需求与文件", tr: "Brief ve belgeler için", ar: "للملخصات والمستندات" }, language),
+      icon: (
+        <span className="ms-ch-mail relative grid h-12 w-12 place-items-center" aria-hidden="true">
+          <svg viewBox="0 0 32 32" className="h-8 w-8">
+            <rect className="ms-letter" x="9" y="9" width="14" height="12" rx="1.5" fill="#fff" stroke="currentColor" strokeOpacity="0.4" />
+            <path d="M5 12 L16 20 L27 12 V25 H5 Z" fill="currentColor" fillOpacity="0.25" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
+            <path className="ms-flap" d="M5 12 L16 4 L27 12" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
+          </svg>
+        </span>
+      ),
+    },
+  ].filter(Boolean) as { key: string; href: string; color: string; name: string; value: string; hint: string; icon: React.ReactNode }[];
+
+  return (
+    <div className="p-3 sm:p-4">
+      <div className="mb-3 flex items-center justify-between px-1">
+        <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-text-tertiary">
+          {pick({ en: "Message us directly", ru: "Напишите напрямую", zh: "直接联系我们", tr: "Doğrudan yazın", ar: "راسلنا مباشرة" }, language)}
+        </p>
+        <span className="inline-flex items-center gap-1.5 text-caption text-emerald-600">
+          <span className="relative flex h-2 w-2">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-70 motion-reduce:animate-none" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+          </span>
+          {pick({ en: "online", ru: "на связи", zh: "在线", tr: "çevrimiçi", ar: "متصل" }, language)}
+        </span>
+      </div>
+      <div className="flex flex-col gap-2.5">
+      {cards.map((c, i) => (
+        <motion.div
+          key={c.key}
+          className="ms-ch group relative flex items-center gap-4 overflow-hidden rounded-2xl border border-border bg-bg-secondary p-4 text-text-primary transition-[border-color,background-color,transform,box-shadow] duration-300 hover:-translate-y-0.5 hover:border-[rgb(var(--ch)/0.5)] hover:bg-bg-primary hover:shadow-[0_18px_40px_-24px_rgb(var(--ch)/0.8)]"
+          style={{ ["--ch" as string]: c.color }}
+          initial={reduced ? false : { opacity: 0, x: 40 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.7, delay: 0.35 + i * 0.12, ease: EASE }}
+        >
+          {/* the whole card is the link; the copy button sits above it */}
+          <a
+            href={c.href}
+            target={c.key === "mail" ? undefined : "_blank"}
+            rel={c.key === "mail" ? undefined : "noopener noreferrer"}
+            aria-label={`${c.name}: ${c.value}`}
+            className="absolute inset-0 z-10 rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
+          />
+          <span aria-hidden="true" className="ms-ch-glow pointer-events-none absolute -left-10 top-1/2 h-28 w-28 -translate-y-1/2 rounded-full opacity-15 blur-2xl transition-opacity duration-500 group-hover:opacity-35" style={{ background: `rgb(${c.color})` }} />
+          <span className="relative shrink-0" style={{ color: `rgb(${c.color})` }}>{c.icon}</span>
+          <span className="relative min-w-0 flex-1">
+            <span className="flex items-center gap-2">
+              <span className="font-semibold">{c.name}</span>
+              <span className="hidden rounded-full border border-border px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.14em] text-text-tertiary sm:inline">{c.hint}</span>
+            </span>
+            <span className="mt-0.5 block truncate text-body-sm text-text-secondary">{c.value}</span>
+          </span>
+          {c.key === "mail" ? (
+            <button
+              type="button"
+              onClick={copy}
+              className="relative z-20 shrink-0 rounded-lg border border-border bg-bg-primary px-2.5 py-1.5 text-caption text-text-secondary transition-colors hover:border-text-primary hover:text-text-primary"
+              aria-live="polite"
+            >
+              {copied
+                ? pick({ en: "Copied ✓", ru: "Скопировано ✓", zh: "已复制 ✓", tr: "Kopyalandı ✓", ar: "تم النسخ ✓" }, language)
+                : pick({ en: "Copy", ru: "Копировать", zh: "复制", tr: "Kopyala", ar: "نسخ" }, language)}
+            </button>
+          ) : (
+            <span aria-hidden="true" className="relative shrink-0 text-lg text-text-tertiary transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-text-primary">↗</span>
+          )}
+        </motion.div>
+      ))}
+      </div>
+    </div>
+  );
+}
