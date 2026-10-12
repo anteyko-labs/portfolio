@@ -33,7 +33,7 @@ function LiveSite({ src, title, width = 1440, height = 900, poster, run }: { src
   const video = demoVideo(src);
   const shot = demoShot(src);
   if (touch === null) return <Poster src={poster} />;
-  if (touch && video) return <VideoSite video={video} run={run} />;
+  if (touch && video) return <VideoSite video={video} run={run} fallback={shot ? <ShotSite shot={shot} poster={poster} /> : null} />;
   if (touch && shot) return <ShotSite shot={shot} poster={poster} />;
   return <FrameSite src={src} title={title} width={width} height={height} poster={poster} />;
 }
@@ -42,22 +42,41 @@ function Poster({ src }: { src?: string }) {
   return src ? <Image src={src} alt="" fill sizes="(min-width: 1024px) 600px, 80vw" priority className="object-cover object-top" /> : null;
 }
 
-function VideoSite({ video, run }: { video: DemoVideo; run: boolean }) {
+function VideoSite({ video, run, fallback }: { video: DemoVideo; run: boolean; fallback: React.ReactNode }) {
   const ref = useRef<HTMLVideoElement>(null);
   const reduced = useReducedMotion();
+  // iOS refused to play: Low Power Mode or data saver block every autoplay
+  const [blocked, setBlocked] = useState(false);
+
   // Plays only while the hero is on screen; with reduced motion it stays on the first frame
   useEffect(() => {
     const v = ref.current;
     if (!v) return;
-    if (run && !reduced) v.play().catch(() => {});
-    else v.pause();
+    if (!run || reduced) {
+      v.pause();
+      return;
+    }
+    // React sets `muted` only as a property; iOS Safari autoplays only with the attribute
+    v.muted = true;
+    v.defaultMuted = true;
+    v.setAttribute("muted", "");
+    // A tap counts as a user gesture, which Low Power Mode lets through
+    const retry = () => v.play().then(() => setBlocked(false)).catch(() => {});
+    v.play().catch(() => {
+      window.addEventListener("touchend", retry, { once: true, passive: true });
+      setBlocked(true);
+    });
+    return () => window.removeEventListener("touchend", retry);
   }, [run, reduced]);
+
   return (
+    <>
     <video
       ref={ref}
       className="absolute inset-0 h-full w-full object-cover object-top"
       poster={video.poster}
       muted
+      autoPlay={run && !reduced}
       loop
       playsInline
       preload="auto"
@@ -68,6 +87,9 @@ function VideoSite({ video, run }: { video: DemoVideo; run: boolean }) {
       <source src={video.hevc} type='video/mp4; codecs="hvc1"' />
       <source src={video.h264} type="video/mp4" />
     </video>
+    {/* Until the video may play, the stitched screenshot pans instead of a frozen frame */}
+    {blocked && fallback ? <div className="absolute inset-0">{fallback}</div> : null}
+    </>
   );
 }
 
