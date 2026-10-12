@@ -15,6 +15,8 @@ import { Industries } from "@/components/about-anim/industries";
 import { Quality } from "@/components/about-anim/quality";
 import { Offices } from "@/components/about-anim/offices";
 import { Team } from "@/components/about-anim/team";
+import { Crew } from "@/components/about-anim/crew";
+import { Directions } from "@/components/about-anim/directions";
 
 
 export function AboutContent() {
@@ -38,11 +40,19 @@ export function AboutContent() {
       {/* Story — 3 structured blocks */}
       <Story story={story} language={language} />
 
+      {/* Team in numbers + what we do */}
+      <RunScope className="relative overflow-hidden bg-bg-secondary py-20 md:py-28">
+        <div className="container mx-auto space-y-24 px-4 sm:px-6 md:space-y-32 lg:px-8">
+          <Crew language={language} />
+          <Directions />
+        </div>
+      </RunScope>
+
       {/* Principles */}
       <Principles title={about.values.title} items={about.values.items} language={language} />
 
       {/* Industries + quality */}
-      <RunScope className="relative overflow-hidden bg-bg-secondary py-20 md:py-28">
+      <RunScope className="relative overflow-hidden bg-bg-primary py-20 md:py-28">
         <div className="container mx-auto space-y-20 px-4 sm:px-6 md:space-y-28 lg:px-8">
           <Industries title={industries.title} items={industries.items} language={language} />
           <Quality title={about.toolchain.title} items={about.toolchain.items} language={language} />

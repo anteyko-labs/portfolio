@@ -6,10 +6,10 @@ import { pick } from "@/lib/i18n-text";
 import { useReducedMotion } from "@/lib/hooks";
 import { PageHero } from "@/components/sections/page-hero";
 import { Section, AnimatedItem } from "@/components/ui/section";
-import { ButtonLink } from "@/components/ui/link";
+import { ButtonLink, Link } from "@/components/ui/link";
 import { EASE, SpotlightCard } from "@/components/motion/kit";
 import { PKG_COLOR, PackageVisual } from "@/components/services-anim/package-visuals";
-import { AuroraCta, CheckList, Price, ShineBadge } from "@/components/services-anim/parts";
+import { AuroraCta, CheckList, ShineBadge } from "@/components/services-anim/parts";
 
 export function ServiceDetailContent({ packageId }: { packageId: string }) {
   const { t, translations, language } = useLanguage();
@@ -38,19 +38,19 @@ export function ServiceDetailContent({ packageId }: { packageId: string }) {
             <div className="grid grid-cols-2 gap-4 px-1">
               <div>
                 <p className="text-caption uppercase tracking-wider text-text-tertiary mb-1">
-                  {pick({ en: "Starting price", ru: "Цена от", zh: "起价", tr: "Başlangıç fiyatı", ar: "السعر يبدأ من" }, language)}
-                </p>
-                <p className="text-heading-md font-display font-bold text-accent-primary">
-                  <Price value={pkg.startingPrice[language]} />
-                </p>
-              </div>
-              <div className="border-l border-border pl-4">
-                <p className="text-caption uppercase tracking-wider text-text-tertiary mb-1">
                   {pick({ en: "Timeline", ru: "Сроки", zh: "周期", tr: "Takvim", ar: "المدة الزمنية" }, language)}
                 </p>
                 <p className="text-body-md text-text-primary">
                   {pkg.timeline[language]}
                 </p>
+              </div>
+              <div className="border-l border-border pl-4">
+                <p className="text-caption uppercase tracking-wider text-text-tertiary mb-1">
+                  {pick({ en: "Cost", ru: "Стоимость", zh: "费用", tr: "Maliyet", ar: "التكلفة" }, language)}
+                </p>
+                <Link href="/pricing" variant="underline" className="text-body-md">
+                  {pick({ en: "See pricing", ru: "Смотреть цены", zh: "查看价格", tr: "Fiyatları gör", ar: "عرض الأسعار" }, language)}
+                </Link>
               </div>
             </div>
             <div className="border-t border-border pt-4">

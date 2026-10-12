@@ -1,3 +1,4 @@
+import { translations } from "@/lib/translations";
 import { PageWrapper } from "@/components/layout/page-wrapper";
 import { JsonLd } from "@/components/seo/json-ld";
 import { homeBreadcrumb, SITE_BASE } from "@/components/seo/breadcrumbs";
@@ -28,35 +29,7 @@ const PROVIDER = {
   url: SITE_BASE,
 };
 
-// Mirrors the package catalog defined in src/lib/translations.ts. Prices reuse the
-// existing startingPrice strings (USD, lower-bound offers).
-const PACKAGES = [
-  {
-    name: "Launch Site",
-    description:
-      "Landing page or corporate site that converts. Design, development, deployment.",
-    price: "800",
-  },
-  {
-    name: "MVP Sprint",
-    description:
-      "Working product with core features. Validate your idea with real users.",
-    price: "3000",
-  },
-  {
-    name: "Startup Under Key",
-    description:
-      "Full product build with complex features, integrations, and scale considerations.",
-    price: "5000",
-  },
-  {
-    name: "Web3 Add-on",
-    description:
-      "Blockchain modules for existing or new products. Wallets, tokens, DeFi.",
-    price: "3000",
-  },
-];
-
+// Prices are only on /pricing (its OfferCatalog); this page describes the services.
 const serviceSchema = {
   "@context": "https://schema.org",
   "@type": "Service",
@@ -65,27 +38,12 @@ const serviceSchema = {
   url: `${SITE_BASE}/services`,
   provider: PROVIDER,
   areaServed: "Worldwide",
-  hasOfferCatalog: {
-    "@type": "OfferCatalog",
-    name: "Anteyko service packages",
-    itemListElement: PACKAGES.map((pkg) => ({
-      "@type": "Offer",
-      name: pkg.name,
-      description: pkg.description,
-      priceCurrency: "USD",
-      price: pkg.price,
-      priceSpecification: {
-        "@type": "PriceSpecification",
-        priceCurrency: "USD",
-        minPrice: pkg.price,
-      },
-      itemOffered: {
-        "@type": "Service",
-        name: pkg.name,
-        provider: PROVIDER,
-      },
-    })),
-  },
+  hasPart: translations.packages.items.map((pkg) => ({
+    "@type": "Service",
+    name: pkg.title.en,
+    description: pkg.description.en,
+    provider: PROVIDER,
+  })),
 };
 
 export default function ServicesPage() {

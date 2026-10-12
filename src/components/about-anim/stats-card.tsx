@@ -66,6 +66,31 @@ function Clock() {
 }
 
 /** Failed launches: a calm, flat health line with a pulse travelling along it */
+/** A row of people lighting up one after another */
+function People() {
+  return (
+    <div className="flex items-end gap-[3px]" aria-hidden="true">
+      {Array.from({ length: 10 }, (_, i) => (
+        <span key={i} className="ab-person flex flex-col items-center" style={{ animationDelay: `${i * 0.18}s` }}>
+          <span className="h-1.5 w-1.5 rounded-full bg-current" />
+          <span className="mt-[1px] h-2 w-2.5 rounded-t-full bg-current" />
+        </span>
+      ))}
+    </div>
+  );
+}
+
+/** 3×3 tiles filling in turn — one per service */
+function Tiles() {
+  return (
+    <div className="grid grid-cols-9 gap-[3px]" aria-hidden="true">
+      {Array.from({ length: 9 }, (_, i) => (
+        <span key={i} className="ab-tile h-3 w-3 rounded-[3px] bg-current" style={{ animationDelay: `${i * 0.22}s` }} />
+      ))}
+    </div>
+  );
+}
+
 function Flatline() {
   return (
     <svg viewBox="0 0 104 24" className="h-6 w-full overflow-visible" aria-hidden="true">
@@ -83,7 +108,15 @@ export function StatsCard({ metrics, language }: { metrics: readonly Metric[]; l
   const ref = useRef<HTMLDivElement>(null);
   const run = useInView(ref, { once: true, amount: 0.4 });
   const reduced = useReducedMotion();
-  const visuals = [<Bars key="b" />, <Years key="y" run={run} />, <Clock key="c" />, <Flatline key="f" />];
+  // Each metric keeps its own little animation, whatever order the data lists them in
+  const visual: Record<string, React.ReactNode> = {
+    "40+": <Bars />,
+    "56": <People />,
+    "5+": <Years run={run} />,
+    "9": <Tiles />,
+    "24h": <Clock />,
+    "0": <Flatline />,
+  };
 
   return (
     <div ref={ref} className="ab-scope relative isolate overflow-hidden rounded-2xl border border-white/10 bg-[#0B0B14] p-5 text-white sm:p-6" data-run="true">
@@ -125,7 +158,7 @@ export function StatsCard({ metrics, language }: { metrics: readonly Metric[]; l
               <CountUp value={m.value} duration={1.8} />
             </div>
             <div className="mt-1 min-h-[2.5em] text-caption leading-snug text-white/60">{m.label[language]}</div>
-            <div className="mt-3 flex h-6 items-center">{visuals[i]}</div>
+            <div className="mt-3 flex h-6 items-center text-indigo-300">{visual[m.value]}</div>
           </motion.div>
         ))}
       </div>

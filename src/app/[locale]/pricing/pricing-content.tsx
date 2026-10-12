@@ -4,10 +4,10 @@ import { useLanguage } from "@/lib/language-context";
 import { pick } from "@/lib/i18n-text";
 import { PageHero } from "@/components/sections/page-hero";
 import { Section, AnimatedItem } from "@/components/ui/section";
-import { AuroraCta, CheckList, MilestoneTrack, PackageShell, Price, ShineBadge } from "@/components/services-anim/parts";
-import { PKG_COLOR } from "@/components/services-anim/package-visuals";
-import { ButtonLink, Link } from "@/components/ui/link";
-import { PACKAGE_SLUGS } from "@/lib/service-slugs";
+import { AuroraCta, MilestoneTrack } from "@/components/services-anim/parts";
+import { PriceRow, PriceTier } from "@/components/services-anim/price-tier";
+import { PriceGroupLabel } from "@/components/services-anim/price-group-label";
+import { SERVICE_GROUPS } from "@/lib/service-slugs";
 
 export function PricingContent() {
   const { t, translations, language } = useLanguage();
@@ -37,81 +37,27 @@ export function PricingContent() {
       />
 
       <Section background="secondary" padding="lg">
-        <div className="grid md:grid-cols-2 gap-6 items-stretch">
-          {packages.map((pkg, index) => {
-            const slug = PACKAGE_SLUGS[pkg.id];
-            const isRecommended = pkg.id === "mvp-sprint";
-            return (
-              <AnimatedItem key={pkg.id} delay={(index % 2) * 0.1} className="h-full">
-                <PackageShell id={pkg.id} highlight={isRecommended}>
-                  <div className="flex-1">
-                    {/* Header */}
-                    <div className="flex items-start justify-between gap-4 mb-4">
-                      <div>
-                        <div className="flex flex-wrap items-center gap-3">
-                          <h2 className="text-heading-lg font-display font-bold text-text-primary">
-                            {pkg.title[language]}
-                          </h2>
-                          {isRecommended && <ShineBadge>{pick({ en: "Popular", ru: "Популярный", zh: "热门", tr: "Popüler", ar: "الأكثر طلبًا" }, language)}</ShineBadge>}
-                          {pkg.id === "web3-addon" && <ShineBadge tone="soft">Add-on</ShineBadge>}
-                        </div>
-                        <p className="mt-2 font-brand text-3xl font-semibold tracking-[-0.02em] text-accent-primary">
-                          <Price value={pkg.startingPrice[language]} />
-                        </p>
-                        <p className="text-body-sm text-text-muted mt-1">
-                          {pkg.timeline[language]}
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Description */}
-                    <p className="text-body-md text-text-secondary mb-6">
-                      {pkg.description[language]}
-                    </p>
-
-                    {/* Deliverables */}
-                    <div className="mb-6">
-                      <h3 className="text-caption text-text-muted uppercase tracking-wider mb-3">
-                        {pick({ en: "What's included", ru: "Что входит", zh: "包含内容", tr: "Neler dahil", ar: "ما تشمله الباقة" }, language)}
-                      </h3>
-                      <CheckList items={pkg.deliverables[language]} />
-                    </div>
-
-                    {/* Result */}
-                    <div className="relative overflow-hidden rounded-xl border border-border bg-gradient-to-br from-bg-tertiary/70 to-bg-secondary p-4">
-                      <span aria-hidden="true" className="absolute inset-y-3 left-0 w-1 rounded-r-full" style={{ background: `rgb(${PKG_COLOR[pkg.id]})` }} />
-                      <h3 className="text-caption text-text-muted uppercase tracking-wider mb-2">
-                        {pick({ en: "End result", ru: "Итоговый результат", zh: "最终成果", tr: "Nihai sonuç", ar: "النتيجة النهائية" }, language)}
-                      </h3>
-                      <p className="text-body-sm text-text-primary">
-                        {pkg.result[language]}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* CTA + details link - always at bottom */}
-                  <div className="pt-6 mt-6 border-t border-border space-y-3">
-                    <ButtonLink
-                      href={`/contact?package=${pkg.id}`}
-                      buttonVariant={isRecommended ? "primary" : "secondary"}
-                      size="md"
-                      className="w-full justify-center"
-                    >
-                      {t("cta.primary")}
-                    </ButtonLink>
-                    <Link
-                      href={`/services/${slug}`}
-                      variant="underline"
-                      className="block text-center text-body-sm no-underline hover:underline"
-                    >
-                      {pick({ en: "See full details", ru: "Подробнее об услуге", zh: "查看完整详情", tr: "Tüm ayrıntılar", ar: "عرض التفاصيل الكاملة" }, language)}
-                    </Link>
-                  </div>
-                </PackageShell>
-              </AnimatedItem>
-            );
-          })}
-        </div>
+        {SERVICE_GROUPS.map((group, g) => {
+          const items = packages.filter((pkg) => pkg.group === group.id);
+          return (
+            <div key={group.id} className={g ? "mt-20" : undefined}>
+              <PriceGroupLabel label={pick(group.label, language)} />
+              {group.id === "care" ? (
+                <ul className="mt-8 space-y-5">
+                  {items.map((pkg, i) => (
+                    <PriceRow key={pkg.id} pkg={pkg} index={i} />
+                  ))}
+                </ul>
+              ) : (
+                <div className={`mt-8 grid items-stretch gap-6 md:grid-cols-2 ${items.length > 3 ? "xl:grid-cols-4" : "lg:grid-cols-3"}`}>
+                  {items.map((pkg, i) => (
+                    <PriceTier key={pkg.id} pkg={pkg} index={i} recommended={pkg.id === "mvp-sprint"} entrance={group.id === "build" ? "flip" : "curtain"} />
+                  ))}
+                </div>
+              )}
+            </div>
+          );
+        })}
 
         {/* USD note */}
         <AnimatedItem delay={0.4}>
@@ -130,7 +76,7 @@ export function PricingContent() {
             pick({ en: "Tell us about your project and we'll recommend the right approach based on your goals and constraints.", ru: "Расскажите о проекте, и мы порекомендуем подходящий подход на основе ваших целей и ограничений.", zh: "告诉我们您的项目，我们会根据您的目标和约束条件推荐合适的方案。", tr: "Projenizden bahsedin, hedeflerinize ve kısıtlarınıza göre doğru yaklaşımı önerelim.", ar: "حدّثنا عن مشروعك وسنوصي بالنهج الأنسب بناءً على أهدافك وقيودك." }, language)
           }
           primary={{ href: "/contact", label: t("cta.primary") }}
-          secondary={{ href: "/services", label: pick({ en: "Compare packages", ru: "Сравнить пакеты", zh: "对比方案", tr: "Paketleri karşılaştır", ar: "قارن بين الباقات" }, language) }}
+          secondary={{ href: "/services", label: pick({ en: "All services", ru: "Все услуги", zh: "全部服务", tr: "Tüm hizmetler", ar: "جميع الخدمات" }, language) }}
         />
       </Section>
     </>

@@ -5,33 +5,16 @@ import { EASE, useLoop } from "@/components/motion/kit";
 import { useLanguage } from "@/lib/language-context";
 import { pick } from "@/lib/i18n-text";
 import "./services-anim.css";
+import { Frame, PKG_COLOR, T, r2 } from "./visual-frame";
+import { AppStore, AccessGate, CarbonLedger, FinFlow, UptimeWatch } from "./industry-visuals";
 
 // One small looping scene per package, drawn in code: a site assembling itself,
 // a sprint board, a launch curve and a wallet signing a transaction. Each one
 // ticks only while on screen; with reduced motion it shows its finished frame.
 
-export type PackageKey = "launch-site" | "mvp-sprint" | "startup-key" | "web3-addon";
+export type PackageKey = "launch-site" | "mvp-sprint" | "startup-key" | "web3-addon" | "mobile-app" | "time-access" | "fintech" | "carbon-credits" | "it-support";
 
-/** Accent colour per package as "r g b" (for rgb(var() / a) and SpotlightCard) */
-export const PKG_COLOR: Record<string, string> = {
-  "launch-site": "6 182 212",
-  "mvp-sprint": "99 102 241",
-  "startup-key": "236 72 153",
-  "web3-addon": "139 92 246",
-};
-
-const r2 = (n: number) => Math.round(n * 100) / 100;
-const T = { duration: 0.6, ease: EASE };
-
-function Frame({ id, label, children, svgRef, className = "" }: { id: string; label: string; children: React.ReactNode; svgRef: React.RefObject<HTMLDivElement | null>; className?: string }) {
-  return (
-    <div ref={svgRef} role="img" aria-label={label} className={`sv-scene w-full rounded-xl ${className}`} style={{ ["--sv-c" as string]: PKG_COLOR[id] }}>
-      <svg viewBox="0 0 320 150" className="relative z-10 block h-auto w-full" aria-hidden="true">
-        {children}
-      </svg>
-    </div>
-  );
-}
+export { PKG_COLOR };
 
 /* ───────────── Quick start: a website assembling itself block by block ───────────── */
 
@@ -361,5 +344,10 @@ export function PackageVisual({ id, className }: { id: string; className?: strin
   if (id === "mvp-sprint") return <SprintBoard className={className} />;
   if (id === "startup-key") return <LaunchCurve className={className} />;
   if (id === "web3-addon") return <WalletTx className={className} />;
+  if (id === "mobile-app") return <AppStore className={className} />;
+  if (id === "time-access") return <AccessGate className={className} />;
+  if (id === "fintech") return <FinFlow className={className} />;
+  if (id === "carbon-credits") return <CarbonLedger className={className} />;
+  if (id === "it-support") return <UptimeWatch className={className} />;
   return null;
 }

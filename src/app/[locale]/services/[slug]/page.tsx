@@ -24,10 +24,10 @@ export async function generateMetadata({ params }: Props) {
   const lang = locale as Language;
   const description = `${pkg.description[lang]} ${
     pick({ en: "Timeline", ru: "Срок", zh: "周期", tr: "Süre", ar: "المدة" }, lang)
-  }: ${pkg.timeline[lang]}. ${pkg.startingPrice[lang]}.`;
+  }: ${pkg.timeline[lang]}.`;
 
   return seo(locale, `/services/${slug}`, {
-    title: `${pkg.title[lang]} — ${pkg.startingPrice[lang]}`,
+    title: `${pkg.title[lang]} — ${pkg.timeline[lang]}`,
     description,
   });
 }
@@ -36,15 +36,6 @@ const PROVIDER = {
   "@type": "Organization",
   name: "Anteyko",
   url: SITE_BASE,
-};
-
-// Lower-bound USD price per package id, mirroring the startingPrice strings in
-// src/lib/translations.ts (e.g. "From $800" -> 800). Used for Offer structured data.
-const PACKAGE_MIN_PRICE: Record<string, string> = {
-  "launch-site": "800",
-  "mvp-sprint": "3000",
-  "startup-key": "5000",
-  "web3-addon": "3000",
 };
 
 export default async function ServicePage({ params }: Props) {
@@ -65,16 +56,6 @@ export default async function ServicePage({ params }: Props) {
     url,
     provider: PROVIDER,
     areaServed: "Worldwide",
-    offers: {
-      "@type": "Offer",
-      priceCurrency: "USD",
-      price: PACKAGE_MIN_PRICE[pkg.id],
-      priceSpecification: {
-        "@type": "PriceSpecification",
-        priceCurrency: "USD",
-        minPrice: PACKAGE_MIN_PRICE[pkg.id],
-      },
-    },
   };
   const breadcrumbSchema = {
     "@context": "https://schema.org",
