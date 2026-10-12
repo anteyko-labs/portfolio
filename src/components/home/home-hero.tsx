@@ -33,7 +33,7 @@ function LiveSite({ src, title, width = 1440, height = 900, poster, run }: { src
   const video = demoVideo(src);
   const shot = demoShot(src);
   if (touch === null) return <Poster src={poster} />;
-  if (touch && video) return <VideoSite video={video} run={run} />;
+  if (touch && video) return <VideoSite video={video} run={run} fallback={shot ? <ShotSite shot={shot} poster={poster} /> : null} />;
   if (touch && shot) return <ShotSite shot={shot} poster={poster} />;
   return <FrameSite src={src} title={title} width={width} height={height} poster={poster} />;
 }
@@ -42,22 +42,41 @@ function Poster({ src }: { src?: string }) {
   return src ? <Image src={src} alt="" fill sizes="(min-width: 1024px) 600px, 80vw" priority className="object-cover object-top" /> : null;
 }
 
-function VideoSite({ video, run }: { video: DemoVideo; run: boolean }) {
+function VideoSite({ video, run, fallback }: { video: DemoVideo; run: boolean; fallback: React.ReactNode }) {
   const ref = useRef<HTMLVideoElement>(null);
   const reduced = useReducedMotion();
+  // iOS refused to play: Low Power Mode or data saver block every autoplay
+  const [blocked, setBlocked] = useState(false);
+
   // Plays only while the hero is on screen; with reduced motion it stays on the first frame
   useEffect(() => {
     const v = ref.current;
     if (!v) return;
-    if (run && !reduced) v.play().catch(() => {});
-    else v.pause();
+    if (!run || reduced) {
+      v.pause();
+      return;
+    }
+    // React sets `muted` only as a property; iOS Safari autoplays only with the attribute
+    v.muted = true;
+    v.defaultMuted = true;
+    v.setAttribute("muted", "");
+    // A tap counts as a user gesture, which Low Power Mode lets through
+    const retry = () => v.play().then(() => setBlocked(false)).catch(() => {});
+    v.play().catch(() => {
+      window.addEventListener("touchend", retry, { once: true, passive: true });
+      setBlocked(true);
+    });
+    return () => window.removeEventListener("touchend", retry);
   }, [run, reduced]);
+
   return (
+    <>
     <video
       ref={ref}
       className="absolute inset-0 h-full w-full object-cover object-top"
       poster={video.poster}
       muted
+      autoPlay={run && !reduced}
       loop
       playsInline
       preload="auto"
@@ -68,6 +87,9 @@ function VideoSite({ video, run }: { video: DemoVideo; run: boolean }) {
       <source src={video.hevc} type='video/mp4; codecs="hvc1"' />
       <source src={video.h264} type="video/mp4" />
     </video>
+    {/* Until the video may play, the stitched screenshot pans instead of a frozen frame */}
+    {blocked && fallback ? <div className="absolute inset-0">{fallback}</div> : null}
+    </>
   );
 }
 
@@ -340,38 +362,28 @@ export function HomeHero() {
 
       <div className="container mx-auto grid items-center gap-14 px-4 sm:px-6 lg:grid-cols-[1fr_1.15fr] lg:gap-6 lg:px-8">
         <div>
-          <motion.p
-            initial={reduced ? false : { opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: EASE }}
-            className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-white/70 backdrop-blur"
+          <p
+            className="hero-in inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-white/70 backdrop-blur"
           >
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
             {pick({ en: "Product studio", ru: "Студия продуктов", zh: "产品工作室", tr: "Ürün stüdyosu", ar: "استوديو منتجات" }, language)}
             <span className="text-white/30">·</span>
             <OfficeClock language={language} run={inView} />
-          </motion.p>
+          </p>
 
           <h1 className="mt-7 font-brand text-[2.7rem] font-semibold leading-[0.98] tracking-[-0.035em] sm:text-6xl xl:text-[5.4rem]">
             {[t("hero.titleAccent"), t("hero.titleRest")].map((line, i) => (
               <span key={i} className="block overflow-hidden pb-[0.08em]">
-                <motion.span
-                  className={i === 0 ? "home-gradient-text block" : "block text-white"}
-                  initial={reduced ? false : { y: "110%" }}
-                  animate={{ y: 0 }}
-                  transition={{ duration: 1, delay: 0.1 + i * 0.12, ease: EASE }}
-                >
-                  {line}
-                </motion.span>
+                <span className="hero-rise block" style={{ ["--d" as string]: `${0.1 + i * 0.12}s` }}>
+                  <span className={i === 0 ? "home-gradient-text block" : "block text-white"}>{line}</span>
+                </span>
               </span>
             ))}
           </h1>
 
-          <motion.div
-            initial={reduced ? false : { opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4, ease: EASE }}
-            className="mt-6 flex flex-wrap items-center gap-3 text-lg text-white/70 md:text-xl"
+          <div
+            style={{ ["--d" as string]: "0.4s" }}
+            className="hero-in mt-6 flex flex-wrap items-center gap-3 text-lg text-white/70 md:text-xl"
           >
             <span>{pick({ en: "We build", ru: "Делаем", zh: "我们打造", tr: "Uçtan uca", ar: "نبني" }, language)}</span>
             <span className="relative inline-flex h-11 min-w-[11rem] items-center overflow-hidden rounded-xl border border-white/15 bg-white/5 px-4 font-semibold text-white">
@@ -389,23 +401,13 @@ export function HomeHero() {
               </AnimatePresence>
             </span>
             <span>{pick({ en: "end to end", ru: "под ключ", zh: "端到端", tr: "inşa ediyoruz", ar: "من الفكرة إلى الإطلاق" }, language)}</span>
-          </motion.div>
+          </div>
 
-          <motion.p
-            initial={reduced ? false : { opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.5, ease: EASE }}
-            className="mt-5 max-w-xl text-body-lg text-white/60"
-          >
+          <p style={{ ["--d" as string]: "0.5s" }} className="hero-in mt-5 max-w-xl text-body-lg text-white/60">
             {t("hero.subtitle")}
-          </motion.p>
+          </p>
 
-          <motion.div
-            initial={reduced ? false : { opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.6, ease: EASE }}
-            className="mt-8 flex flex-wrap gap-3"
-          >
+          <div style={{ ["--d" as string]: "0.6s" }} className="hero-in mt-8 flex flex-wrap gap-3">
             <MagneticButton>
               <NextLink
                 href="/contact"
@@ -423,7 +425,7 @@ export function HomeHero() {
                 {pick({ en: "See the work", ru: "Смотреть работы", zh: "查看作品", tr: "İşleri gör", ar: "شاهد الأعمال" }, language)}
               </NextLink>
             </MagneticButton>
-          </motion.div>
+          </div>
 
           <dl className="mt-12 grid max-w-xl grid-cols-2 gap-x-6 gap-y-5 border-t border-white/10 pt-6 sm:grid-cols-4">
             {stats.map((s, i) => (
@@ -442,11 +444,10 @@ export function HomeHero() {
 
         {/* Device stage */}
         <div className="relative">
-          <motion.div
-            initial={reduced ? false : { opacity: 0, y: 60, scale: 0.94 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 1.2, delay: 0.25, ease: EASE }}
-            className="relative mx-auto aspect-[5/4] w-full max-w-[720px] [perspective:1600px] lg:max-w-none lg:w-[104%] 2xl:w-[116%]"
+          {/* Entrance animations are CSS (globals.css, .hero-*): they start with the
+              server HTML and run on the compositor, so they don't stall while React hydrates */}
+          <div
+            className="hero-stage-in relative mx-auto aspect-[5/4] w-full max-w-[720px] [perspective:1600px] lg:max-w-none lg:w-[104%] 2xl:w-[116%]"
           >
             {/* Flat on purpose: the layers have no depth of their own, and in a preserve-3d
                 context WebKit z-sorts coplanar layers arbitrarily — on iOS the phone and the
@@ -492,7 +493,7 @@ export function HomeHero() {
                 </span>
               </motion.div>
             </motion.div>
-          </motion.div>
+          </div>
         </div>
       </div>
 

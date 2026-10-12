@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { PageWrapper } from "@/components/layout/page-wrapper";
 import { JsonLd } from "@/components/seo/json-ld";
 import { SITE_BASE } from "@/components/seo/breadcrumbs";
@@ -38,6 +39,20 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   return seo(locale, "/", { title: pick(SITE_TITLE, lang), description: pick(SITE_DESCRIPTION, lang) });
 }
 
+/**
+ * A home section below the hero. content-visibility skips its layout and paint
+ * until it nears the viewport (the first layout on a phone was ~2x heavier
+ * with every section in it), and the Suspense boundary lets React hydrate it as
+ * its own chunk. Together they keep the hero's entrance from stalling on load.
+ */
+function Below({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="cv-auto">
+      <Suspense>{children}</Suspense>
+    </div>
+  );
+}
+
 export default async function Home({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   const lang = locale as Language;
@@ -50,15 +65,16 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
     <PageWrapper>
       <JsonLd data={websiteSchema} />
       <HomeHero />
-      <TrustedBySection />
-      <HomeServices />
-      <HomeWork covers={covers} domains={catalogEntries.map((e) => e.domain)} />
-      <HomeL1 />
-      <HomeProcess />
-      <TestimonialsSection />
-      <PackagesSection />
-      <FAQPreviewSection />
-      <HomeCta />
+      {/* Sections below the hero: see Below */}
+      <Below><TrustedBySection /></Below>
+      <Below><HomeServices /></Below>
+      <Below><HomeWork covers={covers} domains={catalogEntries.map((e) => e.domain)} /></Below>
+      <Below><HomeL1 /></Below>
+      <Below><HomeProcess /></Below>
+      <Below><TestimonialsSection /></Below>
+      <Below><PackagesSection /></Below>
+      <Below><FAQPreviewSection /></Below>
+      <Below><HomeCta /></Below>
     </PageWrapper>
   );
 }
