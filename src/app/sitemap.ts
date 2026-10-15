@@ -7,53 +7,80 @@ import { LANGUAGES } from "@/lib/i18n-text";
 
 const BASE = "https://www.anteyko.com";
 
-// One entry per path with hreflang alternates for every locale. en is unprefixed;
-// the rest live under /ru, /zh, /tr, /ar (matches localePrefix "as-needed").
-function entry(
+type Options = {
+  locales?: readonly string[];
+  /** Real content date only: a build-time "now" on every page teaches Google to ignore lastmod */
+  lastModified?: string;
+  images?: (string | undefined)[];
+};
+
+const localeUrl = (l: string, path: string) => (l === "en" ? `${BASE}${path}` : `${BASE}/${l}${path}`);
+const abs = (src: string) => (src.startsWith("http") ? src : `${BASE}${src}`);
+
+// One <url> per locale (en unprefixed, the rest under /ru, /zh, /tr, /ar — matches
+// localePrefix "as-needed"), each with the full hreflang set plus x-default, so
+// every language version is listed on its own and linked to its siblings.
+function entries(
   path: string,
   changeFrequency: "weekly" | "monthly" | "yearly",
   priority: number,
-  locales: readonly string[] = LANGUAGES
-): MetadataRoute.Sitemap[number] {
-  const en = `${BASE}${path}`;
-  const languages = Object.fromEntries(locales.map((l) => [l, l === "en" ? en : `${BASE}/${l}${path}`]));
-  return {
-    url: en,
-    lastModified: new Date(),
+  opts: Options = {}
+): MetadataRoute.Sitemap {
+  const locales = opts.locales ?? LANGUAGES;
+  const languages: Record<string, string> = Object.fromEntries(locales.map((l) => [l, localeUrl(l, path)]));
+  languages["x-default"] = localeUrl("en", path);
+  const images = [...new Set(opts.images?.filter((s): s is string => Boolean(s)).map(abs))].slice(0, 10);
+  return locales.map((l) => ({
+    url: localeUrl(l, path),
+    ...(opts.lastModified ? { lastModified: opts.lastModified } : {}),
     changeFrequency,
     priority,
     alternates: { languages },
-  };
+    ...(images.length ? { images } : {}),
+  }));
 }
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const staticPages: MetadataRoute.Sitemap = [
-    entry("", "weekly", 1),
-    entry("/services", "monthly", 0.9),
-    entry("/pricing", "monthly", 0.8),
-    entry("/blog", "weekly", 0.7),
-    entry("/cases", "weekly", 0.9),
-    entry("/process", "monthly", 0.8),
-    entry("/faq", "monthly", 0.8),
-    entry("/about", "monthly", 0.8),
-    entry("/contact", "monthly", 0.9),
-    entry("/privacy", "yearly", 0.3, ["en", "ru"]),
-    entry("/terms", "yearly", 0.3, ["en", "ru"]),
+  const latestPost = blogPosts.map((p) => p.date).sort().at(-1);
+
+  const staticPages = [
+    entries("", "weekly", 1),
+    entries("/services", "monthly", 0.9),
+    entries("/pricing", "monthly", 0.8),
+    entries("/blog", "weekly", 0.7, { lastModified: latestPost }),
+    entries("/cases", "weekly", 0.9),
+    entries("/process", "monthly", 0.8),
+    entries("/faq", "monthly", 0.8),
+    entries("/about", "monthly", 0.8),
+    entries("/contact", "monthly", 0.9),
+    entries("/privacy", "yearly", 0.3, { locales: ["en", "ru"] }),
+    entries("/terms", "yearly", 0.3, { locales: ["en", "ru"] }),
   ];
 
-  const servicePages: MetadataRoute.Sitemap = SERVICE_SLUGS.map((slug) =>
-    entry(`/services/${slug}`, "monthly", 0.7)
-  );
+  const servicePages = SERVICE_SLUGS.map((slug) => entries(`/services/${slug}`, "monthly", 0.7));
 
-  const casePages: MetadataRoute.Sitemap = [
-    ...flagshipCases.map((c) => entry(`/cases/${c.slug}`, "monthly", 0.7)),
-    ...visibleShowcaseItems.map((s) => entry(`/cases/${s.slug}`, "monthly", 0.6)),
-    ...microCases.map((m) => entry(`/cases/${m.id}`, "yearly", 0.4)),
+  const casePages = [
+    ...flagshipCases.map((c) =>
+      entries(`/cases/${c.slug}`, "monthly", 0.7, {
+        images: [c.heroImage, c.imageUrl, ...(c.screenshots ?? []).map((s) => s.src)],
+      })
+    ),
+    ...visibleShowcaseItems.map((s) =>
+      entries(`/cases/${s.slug}`, "monthly", 0.6, {
+        images: [
+          s.cover,
+          s.fullPage,
+          ...(s.gallery ?? []).map((g) => g.src),
+          s.mobile,
+          ...(s.phones ?? []),
+          ...(s.admin ?? []).map((a) => a.src),
+        ],
+      })
+    ),
+    ...microCases.map((m) => entries(`/cases/${m.id}`, "yearly", 0.4)),
   ];
 
-  const blogPages: MetadataRoute.Sitemap = blogPosts.map((p) =>
-    entry(`/blog/${p.slug}`, "monthly", 0.6)
-  );
+  const blogPages = blogPosts.map((p) => entries(`/blog/${p.slug}`, "monthly", 0.6, { lastModified: p.date }));
 
-  return [...staticPages, ...servicePages, ...casePages, ...blogPages];
+  return [...staticPages, ...servicePages, ...casePages, ...blogPages].flat();
 }
