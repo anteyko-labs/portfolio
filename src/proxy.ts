@@ -3,9 +3,9 @@ import { NextResponse, type NextRequest } from "next/server";
 import { routing } from "./i18n/routing";
 
 // Next.js 16 renamed the middleware entry to proxy.ts.
-// 1. Scrapers, site downloaders, headless browsers and AI crawlers get a 403 on
-//    pages and on the /demos sites. Search engines and link-preview bots
-//    (Google, Yandex, Bing, Telegram, WhatsApp…) pass. Images and other files
+// 1. Scrapers, site downloaders, headless browsers and SEO crawlers get a 403 on
+//    pages and on the /demos sites. Search engines, AI assistants' crawlers
+//    (GPTBot, ClaudeBot, PerplexityBot…) and link-preview bots pass. Images and other files
 //    are not filtered: the image optimizer fetches them internally without a
 //    browser user agent.
 // 2. Pages then go through next-intl for locale negotiation and the as-needed
@@ -17,9 +17,7 @@ const BLOCKED = new RegExp(
     "curl", "wget", "httpie", "python", "aiohttp", "httpx", "scrapy", "go-http-client", "java/", "okhttp",
     "node-fetch", "axios", "undici", "libwww", "lwp::", "mechanize", "httrack", "webcopier", "webzip",
     "teleport", "offline explorer", "sitesucker", "website downloader", "headlesschrome", "phantomjs",
-    "puppeteer", "playwright", "selenium", "gptbot", "chatgpt-user", "oai-searchbot", "ccbot", "claudebot",
-    "claude-web", "anthropic-ai", "bytespider", "perplexitybot", "amazonbot", "diffbot", "cohere-ai",
-    "imagesiftbot", "omgili", "ahrefsbot", "semrushbot", "mj12bot", "dotbot", "petalbot", "dataforseobot",
+    "puppeteer", "playwright", "selenium", "imagesiftbot", "omgili", "ahrefsbot", "semrushbot", "mj12bot", "dotbot", "petalbot", "dataforseobot",
     "blexbot", "zoominfobot", "screaming frog",
   ].join("|"),
   "i"

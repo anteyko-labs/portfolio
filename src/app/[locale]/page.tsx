@@ -25,11 +25,7 @@ const websiteSchema = {
   name: "Anteyko",
   alternateName: "Anteyko Labs",
   url: SITE_BASE,
-  publisher: {
-    "@type": "Organization",
-    name: "Anteyko",
-    url: SITE_BASE,
-  },
+  publisher: { "@id": `${SITE_BASE}/#organization` },
 };
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {

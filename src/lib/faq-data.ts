@@ -38,6 +38,24 @@ export const faqItems: FAQItem[] = [
     },
   },
   {
+    id: "faq-21",
+    category: "pricing",
+    question: {
+      en: "How much does it cost to build a website?",
+      ru: "Сколько стоит разработка сайта?",
+      zh: "开发一个网站需要多少钱？",
+      tr: "Bir web sitesi yaptırmak ne kadar tutar?",
+      ar: "كم تكلفة تطوير موقع إلكتروني؟",
+    },
+    answer: {
+      en: "A landing page or corporate website starts from $800 and takes 7–14 days, including design, development, SEO setup and deployment. An MVP with core product features starts from $3k and takes 3–6 weeks. You get a fixed price before work starts and own the source code.",
+      ru: "Лендинг или корпоративный сайт — от $800 и 7–14\u00A0дней, включая дизайн, разработку, настройку SEO и запуск. MVP с ключевыми функциями продукта — от $3k и 3–6\u00A0недель. Цена фиксируется до начала работ, исходный код принадлежит вам.",
+      zh: "落地页或企业官网 $800 起，周期 7–14 天，包含设计、开发、SEO 配置和上线部署。具备核心功能的 MVP $3k 起，周期 3–6 周。开工前确定固定价格，源代码归您所有。",
+      tr: "Açılış sayfası veya kurumsal site 800 $'dan başlar ve 7–14 gün sürer; tasarım, geliştirme, SEO kurulumu ve yayına alma dahildir. Temel ürün özelliklerine sahip bir MVP 3 bin $'dan başlar ve 3–6 hafta sürer. Fiyat iş başlamadan sabitlenir, kaynak kodu sizindir.",
+      ar: "تبدأ صفحة الهبوط أو الموقع المؤسسي من $800 وتستغرق من 7 إلى 14 يومًا، وتشمل التصميم والتطوير وإعداد SEO والنشر. ويبدأ MVP بالميزات الأساسية للمنتج من $3k ويستغرق من 3 إلى 6 أسابيع. يُحدَّد السعر قبل بدء العمل، والشيفرة المصدرية ملك لك.",
+    },
+  },
+  {
     id: "faq-2",
     category: "timeline",
     question: {

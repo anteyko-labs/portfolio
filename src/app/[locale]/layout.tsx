@@ -15,6 +15,8 @@ import { AnalyticsBootstrap } from "@/components/analytics-bootstrap";
 import { CrmWidget } from "@/components/crm-widget";
 import { WhatsAppButton } from "@/components/whatsapp-button";
 import { OFFICES } from "@/lib/locations";
+import { translations } from "@/lib/translations";
+import { PACKAGE_SLUGS, type PackageId } from "@/lib/service-slugs";
 import { PortalTransition } from "@/components/effects/portal-transition";
 import { isRtl, pick, type Language } from "@/lib/i18n-text";
 import { SITE_DESCRIPTION, SITE_TITLE } from "@/i18n/site-copy";
@@ -169,6 +171,14 @@ export async function generateMetadata({
 // Validate analytics IDs from env. Only allow alphanumeric and hyphen — these IDs
 // are set by the project owner via NEXT_PUBLIC_* env vars, but we still validate
 // strictly to prevent any possibility of injection if env is misconfigured.
+/** "From $800" / "From $3k" → a schema.org minimum price; "By agreement" → nothing */
+function fromPrice(label: string) {
+  const m = label.match(/\$(\d+(?:\.\d+)?)(k?)/i);
+  if (!m) return {};
+  const value = Number(m[1]) * (m[2] ? 1000 : 1);
+  return { priceSpecification: { "@type": "PriceSpecification", minPrice: value, priceCurrency: "USD" } };
+}
+
 const GTM_ID_PATTERN = /^GTM-[A-Z0-9]{4,20}$/;
 const YM_ID_PATTERN = /^\d{6,12}$/;
 
@@ -257,12 +267,39 @@ export default async function LocaleLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "Organization",
+              "@id": "https://www.anteyko.com/#organization",
               name: "Anteyko",
+              alternateName: "Anteyko Labs",
               url: "https://www.anteyko.com",
+              logo: "https://www.anteyko.com/icon-512.png",
               description:
                 "End-to-end product development studio. Design, frontend, backend, admin panels, integrations, infrastructure. Web2 + Web3. Offices in Bishkek, Dubai, Istanbul, Chicago and Shenzhen.",
               email: "labs@anteyko.com",
               address: OFFICES.map((o) => ({ "@type": "PostalAddress", addressLocality: o.city.en, addressCountry: o.countryCode })),
+              areaServed: "Worldwide",
+              sameAs: ["https://www.linkedin.com/company/anteyko", "https://github.com/anteyko-labs", "https://t.me/anteyko_labs"],
+              contactPoint: {
+                "@type": "ContactPoint",
+                contactType: "sales",
+                email: "labs@anteyko.com",
+                url: "https://www.anteyko.com/contact",
+                availableLanguage: ["English", "Russian", "Chinese", "Turkish", "Arabic"],
+              },
+              knowsAbout: [
+                "Website development", "Web application development", "MVP development", "Mobile app development",
+                "UI/UX design", "Branding", "Next.js", "React", "Admin panels", "API integrations",
+                "Cloud infrastructure", "Web3", "Smart contracts", "Fintech", "IT support",
+              ],
+              hasOfferCatalog: {
+                "@type": "OfferCatalog",
+                name: "Services",
+                itemListElement: translations.packages.items.map((p) => ({
+                  "@type": "Offer",
+                  url: `https://www.anteyko.com/services/${PACKAGE_SLUGS[p.id as PackageId]}`,
+                  itemOffered: { "@type": "Service", name: p.title.en, description: p.description.en },
+                  ...fromPrice(p.startingPrice.en),
+                })),
+              },
             }),
           }}
         />
