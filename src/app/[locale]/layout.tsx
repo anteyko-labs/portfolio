@@ -164,6 +164,8 @@ export async function generateMetadata({
   verification: {
     google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || undefined,
     yandex: process.env.NEXT_PUBLIC_YANDEX_VERIFICATION || undefined,
+    // Bing Webmaster Tools (also feeds ChatGPT search)
+    other: { "msvalidate.01": "96892F4F071DE61B8F00B429406397C1" },
   },
   };
 }
