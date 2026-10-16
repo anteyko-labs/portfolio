@@ -26,7 +26,7 @@ export interface BlogPost {
 // Posts are authored as genuine thought-leadership grounded in the studio's real
 // approach (see /about and /process): 4-phase, milestone-based delivery; the four
 // principles Clarity / Predictability / Speed / Ownership; verification gates before
-// release; full repo + IP ownership from day one; and a team that ships Web2 and
+// release; repo access from day one; and a team that ships Web2 and
 // Web3 in one loop. No client names, no invented metrics, no awards — claims are
 // kept general and defensible.
 const _posts: BlogPost[] = [
@@ -258,14 +258,14 @@ const _posts: BlogPost[] = [
       ar: "لماذا يتفوق التسليم بالمراحل والوصول إلى المستودع على العقود الثابتة ذات الصندوق الأسود",
     },
     excerpt: {
-      en: "A fixed-bid contract feels safe and quietly transfers all the risk to you. Milestone-based delivery with repo access from day one is the opposite trade: you see the work as it happens and you own it at every step.",
-      ru: "Контракт с фиксированной ценой кажется безопасным и тихо перекладывает весь риск на вас. Поставка по майлстоунам с доступом к репозиторию с первого дня — противоположная сделка: вы видите работу по мере её появления и владеете ею на каждом шаге.",
-      zh: "固定总价合同看似安全，却悄悄把所有风险转嫁给您。里程碑交付加第一天起的仓库权限则是相反的交换：您能实时看到工作进展，并在每一步都拥有它。",
-      tr: "Sabit bedelli sözleşme güvenli hissettirir ve tüm riski sessizce size aktarır. İlk günden depo erişimli, kilometre taşı bazlı teslimat bunun tam tersi bir takastır: işi olurken görürsünüz ve her adımda sahibi sizsiniz.",
-      ar: "العقد بسعر ثابت يبدو آمنًا لكنه ينقل المخاطر كلها إليك بهدوء. أما التسليم القائم على المراحل مع الوصول إلى المستودع منذ اليوم الأول فهو الصفقة المعاكسة: ترى العمل أثناء حدوثه وتملكه في كل خطوة.",
+      en: "A fixed-bid contract feels safe and quietly transfers all the risk to you. Milestone-based delivery with repo access from day one is the opposite trade: you see the work as it happens and can steer it at every step.",
+      ru: "Контракт с фиксированной ценой кажется безопасным и тихо перекладывает весь риск на вас. Поставка по майлстоунам с доступом к репозиторию с первого дня — противоположная сделка: вы видите работу по мере её появления и можете управлять ею на каждом шаге.",
+      zh: "固定总价合同看似安全，却悄悄把所有风险转嫁给您。里程碑交付加第一天起的仓库权限则是相反的交换：您能实时看到工作进展，并在每一步把握方向。",
+      tr: "Sabit bedelli sözleşme güvenli hissettirir ve tüm riski sessizce size aktarır. İlk günden depo erişimli, kilometre taşı bazlı teslimat bunun tam tersi bir takastır: işi olurken görürsünüz ve her adımda yönlendirebilirsiniz.",
+      ar: "العقد بسعر ثابت يبدو آمنًا لكنه ينقل المخاطر كلها إليك بهدوء. أما التسليم القائم على المراحل مع الوصول إلى المستودع منذ اليوم الأول فهو الصفقة المعاكسة: ترى العمل أثناء حدوثه وتوجّهه في كل خطوة.",
     },
     date: "2026-03-31",
-    tags: ["Delivery", "Ownership", "Process"],
+    tags: ["Delivery", "Transparency", "Process"],
     body: [
       {
         heading: {
@@ -321,38 +321,38 @@ const _posts: BlogPost[] = [
         },
         paragraphs: {
           en: [
-            "Milestones only deliver on their promise if you can actually see the work, so we give repository access from day one. Not a demo build at the end, not a zip file on handover — the real repository, from the first commit. You can watch the history accumulate, ask your own engineers to look, and know at any moment that the thing being built exists and is yours.",
-            "This also kills the worst failure mode of outsourced software: the handover where the code finally arrives and turns out to be undocumented, untested, or impossible to run. When you have had access throughout, there is no dramatic handover — ownership was never on the other side of a wall.",
+            "Milestones only deliver on their promise if you can actually see the work, so we give repository access from day one. Not a demo build at the end, not a zip file on handover — the real repository, from the first commit. You can watch the history accumulate, ask your own engineers to look, and know at any moment that the thing being built really exists.",
+            "This also kills the worst failure mode of outsourced software: the handover where the code finally arrives and turns out to be undocumented, untested, or impossible to run. When you have had access throughout, there is no dramatic handover — nothing was ever on the other side of a wall.",
           ],
           ru: [
-            "Майлстоуны выполняют своё обещание, только если вы реально видите работу, поэтому мы даём доступ к репозиторию с первого дня. Не демо-сборку в конце, не zip-архив при передаче — настоящий репозиторий, с первого коммита. Вы видите, как накапливается история, можете попросить своих инженеров посмотреть и в любой момент знаете, что то, что строится, существует и принадлежит вам.",
-            "Это убивает и худший сценарий провала в аутсорсе: передачу, когда код наконец приезжает и оказывается недокументированным, непротестированным или незапускаемым. Когда у вас был доступ всё время, никакой драматичной передачи нет — владение никогда не находилось по ту сторону стены.",
+            "Майлстоуны выполняют своё обещание, только если вы реально видите работу, поэтому мы даём доступ к репозиторию с первого дня. Не демо-сборку в конце, не zip-архив при передаче — настоящий репозиторий, с первого коммита. Вы видите, как накапливается история, можете попросить своих инженеров посмотреть и в любой момент знаете, что то, что строится, действительно существует.",
+            "Это убивает и худший сценарий провала в аутсорсе: передачу, когда код наконец приезжает и оказывается недокументированным, непротестированным или незапускаемым. Когда у вас был доступ всё время, никакой драматичной передачи нет — ничего никогда не находилось по ту сторону стены.",
           ],
-          zh: ["只有您真正看得到工作，里程碑才能兑现承诺，所以我们从第一天起就提供代码仓库权限。不是最后才给的演示版本，也不是移交时的一个压缩包——而是真实的仓库，从第一次提交开始。您可以看着提交历史不断累积，请自己的工程师来审阅，并随时确信正在构建的东西真实存在且属于您。", "这也消除了外包软件最糟糕的失败模式：移交时代码终于到手，却发现没有文档、没有测试，或根本无法运行。当您全程拥有访问权限，就不会有戏剧性的移交——所有权从来不在一堵墙的另一边。"],
-          tr: ["Kilometre taşları ancak işi gerçekten görebiliyorsanız vaadini yerine getirir; bu yüzden ilk günden depo erişimi veririz. Sonda bir demo derlemesi değil, teslimde bir zip dosyası değil — ilk commit'ten itibaren gerçek depo. Geçmişin birikmesini izleyebilir, kendi mühendislerinizden bakmalarını isteyebilir ve inşa edilen şeyin var olduğunu ve sizin olduğunu her an bilebilirsiniz.", "Bu aynı zamanda dış kaynaklı yazılımın en kötü hata modunu da ortadan kaldırır: kodun sonunda geldiği, ancak dokümansız, testsiz ya da çalıştırılması imkânsız çıktığı teslim anı. Baştan sona erişiminiz olduğunda dramatik bir teslim olmaz — mülkiyet hiçbir zaman bir duvarın öbür tarafında değildi."],
-          ar: ["لا تفي المراحل بوعدها إلا إن استطعت رؤية العمل فعلًا، ولذلك نمنح الوصول إلى المستودع منذ اليوم الأول. ليس نسخة تجريبية في النهاية، ولا ملف zip عند التسليم — بل المستودع الحقيقي منذ أول commit. يمكنك مشاهدة السجل يتراكم، وأن تطلب من مهندسيك الاطلاع عليه، وأن تعلم في أي لحظة أن ما يُبنى موجود وأنه ملكك.", "وهذا يقضي أيضًا على أسوأ أنماط فشل البرمجيات المُسندة للخارج: تسليم تصل فيه الشيفرة أخيرًا فتتبين غير موثقة أو غير مختبرة أو يستحيل تشغيلها. وحين يكون وصولك متاحًا طوال الوقت، لا يوجد تسليم درامي — فالملكية لم تكن يومًا خلف جدار."],
+          zh: ["只有您真正看得到工作，里程碑才能兑现承诺，所以我们从第一天起就提供代码仓库权限。不是最后才给的演示版本，也不是移交时的一个压缩包——而是真实的仓库，从第一次提交开始。您可以看着提交历史不断累积，请自己的工程师来审阅，并随时确信正在构建的东西真实存在。", "这也消除了外包软件最糟糕的失败模式：移交时代码终于到手，却发现没有文档、没有测试，或根本无法运行。当您全程拥有访问权限，就不会有戏剧性的移交——一切从来不在一堵墙的另一边。"],
+          tr: ["Kilometre taşları ancak işi gerçekten görebiliyorsanız vaadini yerine getirir; bu yüzden ilk günden depo erişimi veririz. Sonda bir demo derlemesi değil, teslimde bir zip dosyası değil — ilk commit'ten itibaren gerçek depo. Geçmişin birikmesini izleyebilir, kendi mühendislerinizden bakmalarını isteyebilir ve inşa edilen şeyin gerçekten var olduğunu her an bilebilirsiniz.", "Bu aynı zamanda dış kaynaklı yazılımın en kötü hata modunu da ortadan kaldırır: kodun sonunda geldiği, ancak dokümansız, testsiz ya da çalıştırılması imkânsız çıktığı teslim anı. Baştan sona erişiminiz olduğunda dramatik bir teslim olmaz — hiçbir şey hiçbir zaman bir duvarın öbür tarafında değildi."],
+          ar: ["لا تفي المراحل بوعدها إلا إن استطعت رؤية العمل فعلًا، ولذلك نمنح الوصول إلى المستودع منذ اليوم الأول. ليس نسخة تجريبية في النهاية، ولا ملف zip عند التسليم — بل المستودع الحقيقي منذ أول commit. يمكنك مشاهدة السجل يتراكم، وأن تطلب من مهندسيك الاطلاع عليه، وأن تعلم في أي لحظة أن ما يُبنى موجود فعلًا.", "وهذا يقضي أيضًا على أسوأ أنماط فشل البرمجيات المُسندة للخارج: تسليم تصل فيه الشيفرة أخيرًا فتتبين غير موثقة أو غير مختبرة أو يستحيل تشغيلها. وحين يكون وصولك متاحًا طوال الوقت، لا يوجد تسليم درامي — فلم يكن شيء يومًا خلف جدار."],
         },
       },
       {
         heading: {
-          en: "Ownership is a property of how you work, not a clause",
-          ru: "Владение — это свойство того, как вы работаете, а не пункт договора",
-          zh: "所有权取决于你如何工作，而不是一纸条款",
-          tr: "Mülkiyet bir maddeyi değil, çalışma biçimini ifade eder",
-          ar: "الملكية صفة في طريقة العمل وليست بندًا",
+          en: "Visibility is a property of how you work, not a clause",
+          ru: "Прозрачность — это свойство того, как вы работаете, а не пункт договора",
+          zh: "透明取决于你如何工作，而不是一纸条款",
+          tr: "Şeffaflık bir maddeyi değil, çalışma biçimini ifade eder",
+          ar: "الشفافية صفة في طريقة العمل وليست بندًا",
         },
         paragraphs: {
           en: [
-            "Plenty of contracts say you own the code. That sentence is worth very little if the code shows up only at the end, in a state you cannot independently verify. Real ownership is the ability to take the project somewhere else and keep going — and that ability is built up step by step, through visible milestones and a repository you have held the whole time.",
-            "Fixed-bid black boxes ask you to trade visibility for the comfort of a single number. Milestone delivery with day-one repo access offers the opposite: you give up the illusion that everything is knowable in advance, and in return you get a project you can see, steer, and own at every step. That is the trade we think is actually safe.",
+            "Plenty of contracts promise a smooth handover. That promise is worth very little if the code shows up only at the end, in a state you cannot independently verify. A real handover means another team can pick the project up and keep going — and that is built up step by step, through visible milestones, documentation and a repository you have been able to see the whole time.",
+            "Fixed-bid black boxes ask you to trade visibility for the comfort of a single number. Milestone delivery with day-one repo access offers the opposite: you give up the illusion that everything is knowable in advance, and in return you get a project you can see and steer at every step. That is the trade we think is actually safe.",
           ],
           ru: [
-            "Множество договоров говорят, что код принадлежит вам. Эта фраза стоит немного, если код появляется только в конце, в состоянии, которое вы не можете независимо проверить. Настоящее владение — это возможность забрать проект в другое место и продолжить, а эта возможность набирается шаг за шагом: через видимые майлстоуны и репозиторий, который был у вас всё время.",
-            "Fixed-bid чёрные ящики предлагают обменять прозрачность на комфорт единственного числа. Поставка по майлстоунам с доступом к репозиторию с первого дня предлагает обратное: вы отказываетесь от иллюзии, что всё можно знать заранее, а взамен получаете проект, который видите, которым управляете и владеете на каждом шаге. Именно эту сделку мы считаем по-настоящему безопасной.",
+            "Множество договоров обещают гладкую передачу проекта. Это обещание стоит немного, если код появляется только в конце, в состоянии, которое вы не можете независимо проверить. Настоящая передача — это когда другая команда может подхватить проект и продолжить, а это набирается шаг за шагом: через видимые майлстоуны, документацию и репозиторий, который вы видели всё время.",
+            "Fixed-bid чёрные ящики предлагают обменять прозрачность на комфорт единственного числа. Поставка по майлстоунам с доступом к репозиторию с первого дня предлагает обратное: вы отказываетесь от иллюзии, что всё можно знать заранее, а взамен получаете проект, который видите и которым управляете на каждом шаге. Именно эту сделку мы считаем по-настоящему безопасной.",
           ],
-          zh: ["很多合同都写着代码归您所有。但如果代码只在最后才出现，且处于您无法独立验证的状态，这句话就没多大价值。真正的所有权，是能把项目带到别处继续推进——而这种能力是一步一步建立起来的，靠的是可见的里程碑，和您始终持有的代码仓库。", "固定总价的黑箱要求您用可见性来换取单一数字带来的安心。带第一天起仓库权限的里程碑交付则相反：您放弃“一切都能提前预知”的幻觉，换来一个每一步都看得见、掌得了舵、拥有得了的项目。我们认为这才是真正安全的交换。"],
-          tr: ["Birçok sözleşme kodun sizin olduğunu söyler. Kod yalnızca sonda, bağımsız olarak doğrulayamayacağınız bir halde gelirse bu cümlenin değeri çok azdır. Gerçek mülkiyet, projeyi başka bir yere götürüp devam edebilme yeteneğidir ve bu yetenek adım adım, görünür kilometre taşları ve baştan beri elinizde tuttuğunuz bir depo aracılığıyla oluşur.", "Sabit bedelli kara kutular, görünürlüğü tek bir rakamın rahatlığıyla takas etmenizi ister. Kilometre taşı teslimatı ve ilk gün depo erişimi ise tersini sunar: her şeyin önceden bilinebileceği yanılsamasından vazgeçersiniz ve karşılığında görebileceğiniz, yönlendirebileceğiniz ve her adımda sahip olabileceğiniz bir proje elde edersiniz. Bizce gerçekten güvenli olan takas budur."],
-          ar: ["كثير من العقود تنص على أنك تملك الشيفرة. لكن هذه الجملة قليلة القيمة إن وصلت الشيفرة في النهاية فقط، بحالة لا تستطيع التحقق منها بشكل مستقل. الملكية الحقيقية هي القدرة على نقل المشروع إلى مكان آخر ومواصلة العمل — وهذه القدرة تُبنى خطوة بخطوة، عبر مراحل مرئية ومستودع في حوزتك طوال الوقت.", "العقود الثابتة ذات الصندوق الأسود تطلب منك مقايضة الشفافية براحة الرقم الواحد. أما التسليم بالمراحل مع الوصول إلى المستودع منذ اليوم الأول فيقدّم العكس: تتخلى عن وهم أن كل شيء معلوم مسبقًا، وتحصل في المقابل على مشروع تراه وتوجّهه وتملكه في كل خطوة. هذه هي الصفقة التي نراها آمنة حقًا."],
+          zh: ["很多合同都承诺顺利交接。但如果代码只在最后才出现，且处于您无法独立验证的状态，这个承诺就没多大价值。真正的交接，是另一支团队能接手项目继续推进——而这是一步一步建立起来的，靠的是可见的里程碑、文档，和您始终看得到的代码仓库。", "固定总价的黑箱要求您用可见性来换取单一数字带来的安心。带第一天起仓库权限的里程碑交付则相反：您放弃“一切都能提前预知”的幻觉，换来一个每一步都看得见、掌得了舵的项目。我们认为这才是真正安全的交换。"],
+          tr: ["Birçok sözleşme sorunsuz bir devir vaat eder. Kod yalnızca sonda, bağımsız olarak doğrulayamayacağınız bir halde gelirse bu vaadin değeri çok azdır. Gerçek devir, başka bir ekibin projeyi devralıp devam edebilmesidir ve bu adım adım, görünür kilometre taşları, dokümantasyon ve baştan beri görebildiğiniz bir depo aracılığıyla oluşur.", "Sabit bedelli kara kutular, görünürlüğü tek bir rakamın rahatlığıyla takas etmenizi ister. Kilometre taşı teslimatı ve ilk gün depo erişimi ise tersini sunar: her şeyin önceden bilinebileceği yanılsamasından vazgeçersiniz ve karşılığında her adımda görebileceğiniz ve yönlendirebileceğiniz bir proje elde edersiniz. Bizce gerçekten güvenli olan takas budur."],
+          ar: ["كثير من العقود تعد بتسليم سلس. لكن هذا الوعد قليل القيمة إن وصلت الشيفرة في النهاية فقط، بحالة لا تستطيع التحقق منها بشكل مستقل. التسليم الحقيقي هو أن يتمكن فريق آخر من استلام المشروع ومواصلة العمل — وهذا يُبنى خطوة بخطوة، عبر مراحل مرئية وتوثيق ومستودع تراه طوال الوقت.", "العقود الثابتة ذات الصندوق الأسود تطلب منك مقايضة الشفافية براحة الرقم الواحد. أما التسليم بالمراحل مع الوصول إلى المستودع منذ اليوم الأول فيقدّم العكس: تتخلى عن وهم أن كل شيء معلوم مسبقًا، وتحصل في المقابل على مشروع تراه وتوجّهه في كل خطوة. هذه هي الصفقة التي نراها آمنة حقًا."],
         },
       },
     ],

@@ -2151,18 +2151,18 @@ const _flagshipCases: FlagshipCase[] = [
       en: [
         "Fixed scope per phase (MVP → Launch → Support)",
         "Weekly demos and async updates",
-        "Full IP transfer at final milestone",
+        "Documentation and handover at the final milestone",
         "3 months post-launch support with SLA",
       ],
       ru: [
         "Фиксированный объём по фазам (MVP → Запуск → Поддержка)",
         "Еженедельные демо и асинхронные обновления",
-        "Полная передача IP на финальной вехе",
+        "Документация и передача проекта на финальной вехе",
         "3\u00A0месяца поддержки после запуска с SLA",
       ],
-      zh: ["按阶段固定范围（MVP → 上线 → 支持）", "每周演示与异步进展更新", "在最终里程碑完成知识产权的全部转让", "上线后 3 个月支持，附 SLA"],
-      tr: ["Faz başına sabit kapsam (MVP → Lansman → Destek)", "Haftalık demolar ve asenkron güncellemeler", "Son kilometre taşında tam IP devri", "SLA'li, lansman sonrası 3 ay destek"],
-      ar: ["نطاق ثابت لكل مرحلة (MVP ← الإطلاق ← الدعم)", "عروض أسبوعية وتحديثات غير متزامنة", "نقل كامل للملكية الفكرية (IP) عند المرحلة النهائية", "3 أشهر من الدعم بعد الإطلاق مع SLA"],
+      zh: ["按阶段固定范围（MVP → 上线 → 支持）", "每周演示与异步进展更新", "在最终里程碑完成文档与交接", "上线后 3 个月支持，附 SLA"],
+      tr: ["Faz başına sabit kapsam (MVP → Lansman → Destek)", "Haftalık demolar ve asenkron güncellemeler", "Son kilometre taşında dokümantasyon ve devir", "SLA'li, lansman sonrası 3 ay destek"],
+      ar: ["نطاق ثابت لكل مرحلة (MVP ← الإطلاق ← الدعم)", "عروض أسبوعية وتحديثات غير متزامنة", "التوثيق والتسليم عند المرحلة النهائية", "3 أشهر من الدعم بعد الإطلاق مع SLA"],
     },
     solution: {
       en: "Ran three phases with clear deliverables and sign-off. Phase 1: MVP (core flows, admin, staging). Phase 2: Launch (prod infra, monitoring, docs, handover). Phase 3: Support (bugfix SLA, small improvements, knowledge base). Same team throughout; no re-onboarding.",
@@ -2174,21 +2174,21 @@ const _flagshipCases: FlagshipCase[] = [
     deliverables: {
       en: [
         "MVP: product + admin + staging deploy",
-        "Launch: production, monitoring, runbooks, IP transfer",
+        "Launch: production, monitoring, runbooks",
         "Support: 3-month SLA, incident process, KB",
         "Weekly demo recordings and progress updates",
         "Technical documentation and handover session",
       ],
       ru: [
         "MVP: продукт + админка + запуск на тестовый сервер",
-        "Запуск: продакшн, мониторинг, инструкции, передача IP",
+        "Запуск: продакшн, мониторинг, инструкции",
         "Поддержка: 3-месячный SLA, процесс инцидентов, база знаний",
         "Записи еженедельных демо и обновления прогресса",
         "Техническая документация и сессия передачи",
       ],
-      zh: ["MVP：产品 + 管理后台 + 预发布环境部署", "上线：生产环境、监控、操作手册、知识产权转让", "支持：3 个月 SLA、事件处理流程、知识库", "每周演示录屏与进展更新", "技术文档与交接会议"],
-      tr: ["MVP: ürün + yönetim paneli + staging dağıtımı", "Lansman: production, izleme, runbook'lar, IP devri", "Destek: 3 aylık SLA, olay süreci, bilgi tabanı", "Haftalık demo kayıtları ve ilerleme güncellemeleri", "Teknik dokümantasyon ve devir oturumu"],
-      ar: ["MVP: المنتج + لوحة الإدارة + النشر على staging", "الإطلاق: الإنتاج والمراقبة وأدلة التشغيل ونقل IP", "الدعم: SLA لـ 3 أشهر، وإجراءات الحوادث، وقاعدة المعرفة", "تسجيلات العروض الأسبوعية وتحديثات التقدم", "التوثيق التقني وجلسة التسليم"],
+      zh: ["MVP：产品 + 管理后台 + 预发布环境部署", "上线：生产环境、监控、操作手册", "支持：3 个月 SLA、事件处理流程、知识库", "每周演示录屏与进展更新", "技术文档与交接会议"],
+      tr: ["MVP: ürün + yönetim paneli + staging dağıtımı", "Lansman: production, izleme, runbook'lar", "Destek: 3 aylık SLA, olay süreci, bilgi tabanı", "Haftalık demo kayıtları ve ilerleme güncellemeleri", "Teknik dokümantasyon ve devir oturumu"],
+      ar: ["MVP: المنتج + لوحة الإدارة + النشر على staging", "الإطلاق: الإنتاج والمراقبة وأدلة التشغيل", "الدعم: SLA لـ 3 أشهر، وإجراءات الحوادث، وقاعدة المعرفة", "تسجيلات العروض الأسبوعية وتحديثات التقدم", "التوثيق التقني وجلسة التسليم"],
     },
     techStack: ["Next.js", "Node.js", "PostgreSQL", "Redis", "Vercel", "AWS"],
     outcome: {
@@ -2226,7 +2226,6 @@ const _flagshipCases: FlagshipCase[] = [
       { name: { en: "Production deployment", ru: "Запуск в продакшн", zh: "生产环境部署", tr: "Production dağıtımı", ar: "النشر في الإنتاج" }, passed: true },
       { name: { en: "Monitoring setup", ru: "Настройка мониторинга", zh: "监控搭建", tr: "İzleme kurulumu", ar: "إعداد المراقبة" }, passed: true },
       { name: { en: "Documentation handover", ru: "Передача документации", zh: "文档交接", tr: "Dokümantasyon devri", ar: "تسليم التوثيق" }, passed: true },
-      { name: { en: "IP transfer complete", ru: "Передача IP завершена", zh: "知识产权转让完成", tr: "IP devri tamamlandı", ar: "اكتمال نقل IP" }, passed: true },
     ],
   },
   {
@@ -2709,7 +2708,7 @@ export const microCases: MicroCase[] = [
     category: "product",
     title: { en: "NDA-ready delivery", ru: "Поставка с готовностью к NDA", zh: "随时可签 NDA 的交付", tr: "NDA'ya hazır teslimat", ar: "تسليم جاهز لاتفاقيات السرية (NDA)" },
     what: { en: "Confidential project handling", ru: "Работа с конфиденциальными проектами", zh: "保密项目处理", tr: "Gizli proje yönetimi", ar: "التعامل مع المشاريع السرية" },
-    outcome: { en: "Full IP protection, clear ownership", ru: "Полная защита IP, чёткое владение", zh: "知识产权全面保护，归属清晰", tr: "Tam IP koruması, net sahiplik", ar: "حماية كاملة للملكية الفكرية وملكية واضحة" },
+    outcome: { en: "Full confidentiality under NDA", ru: "Полная конфиденциальность под NDA", zh: "在 NDA 下全程保密", tr: "NDA kapsamında tam gizlilik", ar: "سرية تامة بموجب NDA" },
   },
   {
     id: "micro-30",

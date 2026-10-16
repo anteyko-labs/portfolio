@@ -111,7 +111,7 @@ export function BlogIndexContent() {
       <PageHero
         title={pick({ en: "Blog / Insights", ru: "Блог / Инсайты", zh: "博客 / 洞见", tr: "Blog / İçgörüler", ar: "المدونة / رؤى" }, language)}
         subtitle={
-          pick({ en: "Field notes on how we ship: fast MVPs, Web2 and Web3 in one loop, and delivery you can see and own at every step.", ru: "Заметки о том, как мы поставляем: быстрые MVP, Web2 и Web3 в одном цикле и поставка, которую вы видите и которой владеете на каждом шаге.", zh: "交付一线笔记：快速 MVP、Web2 与 Web3 一体化迭代，以及每一步都看得见、握得住的交付。", tr: "Nasıl teslim ettiğimize dair saha notları: hızlı MVP'ler, tek döngüde Web2 ve Web3 ve her adımda görebileceğiniz, sahip olabileceğiniz teslimat.", ar: "ملاحظات ميدانية حول طريقة عملنا: منتجات MVP سريعة، وWeb2 وWeb3 في دورة واحدة، وتسليم ترونه وتملكونه في كل خطوة." }, language)
+          pick({ en: "Field notes on how we ship: fast MVPs, Web2 and Web3 in one loop, and delivery you can see at every step.", ru: "Заметки о том, как мы поставляем: быстрые MVP, Web2 и Web3 в одном цикле и поставка, которую вы видите на каждом шаге.", zh: "交付一线笔记：快速 MVP、Web2 与 Web3 一体化迭代，以及每一步都看得见的交付。", tr: "Nasıl teslim ettiğimize dair saha notları: hızlı MVP'ler, tek döngüde Web2 ve Web3 ve her adımda görebileceğiniz teslimat.", ar: "ملاحظات ميدانية حول طريقة عملنا: منتجات MVP سريعة، وWeb2 وWeb3 في دورة واحدة، وتسليم ترونه في كل خطوة." }, language)
         }
         eyebrow={pick({ en: "Insights", ru: "Инсайты", zh: "洞见", tr: "İçgörüler", ar: "رؤى" }, language)}
         metric={{
