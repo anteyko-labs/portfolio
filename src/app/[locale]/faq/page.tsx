@@ -13,11 +13,11 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   description:
     pick(
       {
-        en: "Frequently asked questions about pricing, timelines, ownership, NDA, support, Web3, and how we work. Anteyko — Bishkek, Dubai, Istanbul, Chicago, Shenzhen.",
-        ru: "Частые вопросы о ценах, сроках, правах собственности, NDA, поддержке, Web3 и о том, как мы работаем. Anteyko — Бишкек, Дубай, Стамбул, Чикаго, Шэньчжэнь.",
-        zh: "关于价格、周期、所有权、NDA、支持、Web3 以及我们工作方式的常见问题。Anteyko——比什凯克、迪拜、伊斯坦布尔、芝加哥、深圳。",
-        tr: "Fiyatlandırma, takvim, mülkiyet, NDA, destek, Web3 ve çalışma şeklimiz hakkında sık sorulan sorular. Anteyko — Bişkek, Dubai, İstanbul, Chicago, Shenzhen.",
-        ar: "أسئلة شائعة حول الأسعار والمدد الزمنية وحقوق الملكية واتفاقية NDA والدعم وWeb3 وطريقة عملنا. Anteyko — بيشكيك ودبي وإسطنبول وشيكاغو وشنتشن.",
+        en: "Frequently asked questions about pricing, timelines, NDA, support, Web3, and how we work. Anteyko — Bishkek, Dubai, Istanbul, Chicago, Shenzhen.",
+        ru: "Частые вопросы о ценах, сроках, NDA, поддержке, Web3 и о том, как мы работаем. Anteyko — Бишкек, Дубай, Стамбул, Чикаго, Шэньчжэнь.",
+        zh: "关于价格、周期、NDA、支持、Web3 以及我们工作方式的常见问题。Anteyko——比什凯克、迪拜、伊斯坦布尔、芝加哥、深圳。",
+        tr: "Fiyatlandırma, takvim, NDA, destek, Web3 ve çalışma şeklimiz hakkında sık sorulan sorular. Anteyko — Bişkek, Dubai, İstanbul, Chicago, Shenzhen.",
+        ar: "أسئلة شائعة حول الأسعار والمدد الزمنية واتفاقية NDA والدعم وWeb3 وطريقة عملنا. Anteyko — بيشكيك ودبي وإسطنبول وشيكاغو وشنتشن.",
       },
       locale as Language
     ),

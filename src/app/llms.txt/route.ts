@@ -39,7 +39,7 @@ function build(): string {
     "",
     `> Anteyko (Anteyko Labs) is an end-to-end product development studio that builds websites, web apps, MVPs and mobile apps. ${SITE_DESCRIPTION.en}`,
     "",
-    "Anteyko designs, builds and launches websites and software products for startups and businesses worldwide, with fixed scope, fixed timelines and full code ownership for the client. Websites start from $800 and ship in 7–14 days; MVPs start from $3k and ship in 3–6 weeks. The site is available in English, Russian, Chinese, Turkish and Arabic.",
+    "Anteyko designs, builds and launches websites and software products for startups and businesses worldwide, with fixed scope and fixed timelines. Websites start from $800 and ship in 7–14 days; MVPs start from $3k and ship in 3–6 weeks. The site is available in English, Russian, Chinese, Turkish and Arabic.",
     "",
     "## Contact",
     "",

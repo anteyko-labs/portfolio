@@ -191,7 +191,7 @@ export function CaseDetailContent({
       "startup-under-key-mvp-launch-support": [
         { title: "MVP → Launch playbook", subtitle: "3 phases", tone: "primary" },
         { title: pick({ en: "Support SLA doc", ru: "Доки SLA поддержки", zh: "支持 SLA 文档", tr: "Destek SLA dokümanı", ar: "وثيقة SLA للدعم" }, language), subtitle: "3 months", tone: "success" },
-        { title: pick({ en: "IP transfer checklist", ru: "Чеклист передачи IP", zh: "IP 转让清单", tr: "IP devri kontrol listesi", ar: "قائمة مراجعة نقل الملكية الفكرية" }, language), subtitle: "Full ownership", tone: "warning" },
+        { title: pick({ en: "Handover checklist", ru: "Чеклист передачи проекта", zh: "交接清单", tr: "Devir kontrol listesi", ar: "قائمة مراجعة التسليم" }, language), subtitle: "Docs + runbooks", tone: "warning" },
       ],
       "multi-location-restaurant-management": [
         { title: pick({ en: "RBAC Model (4 roles)", ru: "RBAC\u2011модель (4 роли)", zh: "RBAC 模型（4 种角色）", tr: "RBAC Modeli (4 rol)", ar: "نموذج RBAC (4 أدوار)" }, language), subtitle: pick({ en: "Chef / Employee / Accountant / Owner", ru: "Шеф / Сотрудник / Бухгалтер / Владелец", zh: "厨师 / 员工 / 会计 / 店主", tr: "Şef / Çalışan / Muhasebeci / Sahip", ar: "الشيف / الموظف / المحاسب / المالك" }, language), tone: "primary" },

@@ -48,11 +48,11 @@ export const faqItems: FAQItem[] = [
       ar: "كم تكلفة تطوير موقع إلكتروني؟",
     },
     answer: {
-      en: "A landing page or corporate website starts from $800 and takes 7–14 days, including design, development, SEO setup and deployment. An MVP with core product features starts from $3k and takes 3–6 weeks. You get a fixed price before work starts and own the source code.",
-      ru: "Лендинг или корпоративный сайт — от $800 и 7–14\u00A0дней, включая дизайн, разработку, настройку SEO и запуск. MVP с ключевыми функциями продукта — от $3k и 3–6\u00A0недель. Цена фиксируется до начала работ, исходный код принадлежит вам.",
-      zh: "落地页或企业官网 $800 起，周期 7–14 天，包含设计、开发、SEO 配置和上线部署。具备核心功能的 MVP $3k 起，周期 3–6 周。开工前确定固定价格，源代码归您所有。",
-      tr: "Açılış sayfası veya kurumsal site 800 $'dan başlar ve 7–14 gün sürer; tasarım, geliştirme, SEO kurulumu ve yayına alma dahildir. Temel ürün özelliklerine sahip bir MVP 3 bin $'dan başlar ve 3–6 hafta sürer. Fiyat iş başlamadan sabitlenir, kaynak kodu sizindir.",
-      ar: "تبدأ صفحة الهبوط أو الموقع المؤسسي من $800 وتستغرق من 7 إلى 14 يومًا، وتشمل التصميم والتطوير وإعداد SEO والنشر. ويبدأ MVP بالميزات الأساسية للمنتج من $3k ويستغرق من 3 إلى 6 أسابيع. يُحدَّد السعر قبل بدء العمل، والشيفرة المصدرية ملك لك.",
+      en: "A landing page or corporate website starts from $800 and takes 7–14 days, including design, development, SEO setup and deployment. An MVP with core product features starts from $3k and takes 3–6 weeks. You get a fixed price before work starts.",
+      ru: "Лендинг или корпоративный сайт — от $800 и 7–14\u00A0дней, включая дизайн, разработку, настройку SEO и запуск. MVP с ключевыми функциями продукта — от $3k и 3–6\u00A0недель. Цена фиксируется до начала работ.",
+      zh: "落地页或企业官网 $800 起，周期 7–14 天，包含设计、开发、SEO 配置和上线部署。具备核心功能的 MVP $3k 起，周期 3–6 周。开工前确定固定价格。",
+      tr: "Açılış sayfası veya kurumsal site 800 $'dan başlar ve 7–14 gün sürer; tasarım, geliştirme, SEO kurulumu ve yayına alma dahildir. Temel ürün özelliklerine sahip bir MVP 3 bin $'dan başlar ve 3–6 hafta sürer. Fiyat iş başlamadan sabitlenir.",
+      ar: "تبدأ صفحة الهبوط أو الموقع المؤسسي من $800 وتستغرق من 7 إلى 14 يومًا، وتشمل التصميم والتطوير وإعداد SEO والنشر. ويبدأ MVP بالميزات الأساسية للمنتج من $3k ويستغرق من 3 إلى 6 أسابيع. يُحدَّد السعر قبل بدء العمل.",
     },
   },
   {
@@ -71,24 +71,6 @@ export const faqItems: FAQItem[] = [
       zh: "落地页：7–14 天。MVP：3–6 周。完整产品：6–12 周以上。实际周期取决于范围的复杂程度和反馈轮次。",
       tr: "Açılış sayfaları: 7–14 gün. MVP'ler: 3–6 hafta. Tam ürünler: 6–12+ hafta. Gerçek süre, kapsamın karmaşıklığına ve geri bildirim döngülerine bağlıdır.",
       ar: "صفحات الهبوط: من 7 إلى 14 يومًا. MVP: من 3 إلى 6 أسابيع. المنتجات الكاملة: من 6 إلى 12 أسبوعًا فأكثر. ويعتمد الجدول الفعلي على تعقيد النطاق ودورات الملاحظات.",
-    },
-  },
-  {
-    id: "faq-3",
-    category: "legal",
-    question: {
-      en: "Who owns the code and design?",
-      ru: "Кому принадлежит код и дизайн?",
-      zh: "代码和设计归谁所有？",
-      tr: "Kod ve tasarımın sahibi kim?",
-      ar: "لمن تعود ملكية الشيفرة والتصميم؟",
-    },
-    answer: {
-      en: "You do. Full IP transfer upon final payment. Source code, design files, documentation — everything is yours.",
-      ru: "Вам. Полная передача IP после финального платежа. Исходный код, файлы дизайна, документация — всё ваше.",
-      zh: "归您所有。付清尾款后，知识产权全部转让。源代码、设计文件、文档——一切都属于您。",
-      tr: "Siz. Son ödemeyle birlikte tam IP devri. Kaynak kod, tasarım dosyaları, dokümantasyon — hepsi sizin.",
-      ar: "لكم. تنتقل الملكية الفكرية (IP) كاملة عند الدفعة الأخيرة. الشيفرة المصدرية وملفات التصميم والتوثيق — كل شيء لكم.",
     },
   },
   {
@@ -372,11 +354,11 @@ export const faqItems: FAQItem[] = [
       ar: "هل توفّرون خدمة الاستضافة؟",
     },
     answer: {
-      en: "We set up infrastructure on your cloud account (AWS, Vercel, etc.). You own and control it. We can manage it for you on a support retainer.",
-      ru: "Мы настраиваем инфраструктуру на вашем облачном аккаунте (AWS, Vercel и др.). Вы владеете и контролируете её. Можем управлять ею за вас по контракту поддержки.",
-      zh: "我们会在您自己的云账户（AWS、Vercel 等）上搭建基础设施，所有权和控制权都归您。我们也可以通过支持服务合约为您代为运维。",
-      tr: "Altyapıyı sizin bulut hesabınızda (AWS, Vercel vb.) kurarız. Sahibi siz olur, kontrolü siz elinizde tutarsınız. İsterseniz destek sözleşmesi kapsamında sizin adınıza yönetebiliriz.",
-      ar: "نجهّز البنية التحتية على حسابكم السحابي (AWS وVercel وغيرهما)، وتملكونها وتتحكمون بها. ويمكننا إدارتها نيابةً عنكم ضمن عقد دعم دوري.",
+      en: "We set up infrastructure on a cloud platform (AWS, Vercel, etc.). We can also manage it for you on a support retainer.",
+      ru: "Мы настраиваем инфраструктуру на облачной платформе (AWS, Vercel и др.). Можем также управлять ею за вас по контракту поддержки.",
+      zh: "我们会在云平台（AWS、Vercel 等）上搭建基础设施，也可以通过支持服务合约为您代为运维。",
+      tr: "Altyapıyı bir bulut platformunda (AWS, Vercel vb.) kurarız. İsterseniz destek sözleşmesi kapsamında sizin adınıza yönetebiliriz.",
+      ar: "نجهّز البنية التحتية على منصة سحابية (AWS وVercel وغيرهما)، ويمكننا إدارتها نيابةً عنكم ضمن عقد دعم دوري.",
     },
   },
   {
