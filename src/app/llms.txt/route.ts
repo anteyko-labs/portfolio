@@ -37,7 +37,9 @@ function build(): string {
   return [
     "# Anteyko",
     "",
-    `> Anteyko (Anteyko Labs) is an end-to-end product development studio that builds websites, web apps, MVPs and mobile apps. ${SITE_DESCRIPTION.en}`,
+    `> ${SITE_DESCRIPTION.en}`,
+    "",
+    "Name: Anteyko, also written Anteyko Labs, Антейко (Russian), Anteiko, Anteiko Labs. Website: anteyko.com. An IT studio for website development, software development and mobile app development in Bishkek, Kyrgyzstan (Russian: IT-студия, разработка сайтов и ПО в Бишкеке).",
     "",
     "Anteyko designs, builds and launches websites and software products for startups and businesses worldwide, with fixed scope and fixed timelines. Websites start from $800 and ship in 7–14 days; MVPs start from $3k and ship in 3–6 weeks. The site is available in English, Russian, Chinese, Turkish and Arabic.",
     "",

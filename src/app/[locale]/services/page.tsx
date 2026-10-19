@@ -9,7 +9,7 @@ import { ServicesContent } from "./services-content";
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   return seo(locale, "/services", {
-  title: pick({ en: "Services", ru: "Услуги", zh: "服务", tr: "Hizmetler", ar: "الخدمات" }, locale as Language),
+  title: pick({ en: "Website, MVP and app development services in Bishkek", ru: "Услуги и цены: разработка сайтов, MVP и приложений в Бишкеке", zh: "比什凯克网站、MVP 与应用开发服务", tr: "Bişkek'te web sitesi, MVP ve uygulama geliştirme hizmetleri", ar: "خدمات تطوير المواقع وMVP والتطبيقات في بيشكيك" }, locale as Language),
   description: pick(
     {
       en: "Launch Site, MVP Sprint, Startup Under Key, Web3 Add-on. Clear scope, fixed timeline, predictable outcomes. Offices in Bishkek, Dubai, Istanbul, Chicago and Shenzhen.",
