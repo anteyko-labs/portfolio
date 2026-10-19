@@ -410,6 +410,8 @@ export function HomeHero() {
                 <span className="hero-rise block" style={{ ["--d" as string]: `${0.1 + i * 0.12}s` }}>
                   <span className={i === 0 ? "home-gradient-text block" : "block text-white"}>{line}</span>
                 </span>
+                {/* Keeps the lines apart in the text crawlers read; not drawn at a line end */}
+                {i === 0 ? " " : null}
               </span>
             ))}
           </h1>

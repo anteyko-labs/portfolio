@@ -276,7 +276,7 @@ export default async function LocaleLayout({
               "@type": "Organization",
               "@id": "https://www.anteyko.com/#organization",
               name: "Anteyko",
-              alternateName: "Anteyko Labs",
+              alternateName: ["Anteyko Labs", "Антейко", "Anteiko", "Anteiko Labs", "Антейко Лабс"],
               url: "https://www.anteyko.com",
               logo: "https://www.anteyko.com/icon-512.png",
               description:

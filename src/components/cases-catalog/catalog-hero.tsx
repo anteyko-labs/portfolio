@@ -128,6 +128,8 @@ export function CatalogHero() {
                   )
                 )}
               </motion.span>
+              {/* Keeps the lines apart in the text crawlers read; not drawn at a line end */}
+              {i < lines.length - 1 ? " " : null}
             </span>
           ))}
         </h1>

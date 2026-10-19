@@ -23,7 +23,7 @@ const websiteSchema = {
   "@context": "https://schema.org",
   "@type": "WebSite",
   name: "Anteyko",
-  alternateName: "Anteyko Labs",
+  alternateName: ["Anteyko Labs", "Антейко", "Anteiko", "Anteiko Labs", "Антейко Лабс"],
   url: SITE_BASE,
   publisher: { "@id": `${SITE_BASE}/#organization` },
 };

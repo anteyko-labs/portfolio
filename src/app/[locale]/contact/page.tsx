@@ -9,7 +9,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const { locale } = await params;
   const language = locale as Language;
   return seo(locale, "/contact", {
-    title: pick({ en: "Contact", ru: "Контакты", zh: "联系我们", tr: "İletişim", ar: "تواصل معنا" }, language),
+    title: pick({ en: "Contact — order website or app development in Bishkek", ru: "Контакты — заказать разработку сайта или приложения в Бишкеке", zh: "联系我们——在比什凯克定制网站或应用开发", tr: "İletişim — Bişkek'te web sitesi veya uygulama geliştirme siparişi", ar: "تواصل معنا — اطلب تطوير موقع أو تطبيق في بيشكيك" }, language),
     description: pick(
       {
         en: "Get an estimate in 24 hours or book a 45-minute scoping call. Tell us about your project. Anteyko — Bishkek, Dubai, Istanbul, Chicago, Shenzhen.",

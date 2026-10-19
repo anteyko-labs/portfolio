@@ -149,9 +149,20 @@ export function Footer() {
 
         {/* Bottom Bar */}
         <div className="py-6 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-caption text-text-secondary">
-            {t("footer.copyright")}
-          </p>
+          <div className="text-center sm:text-left">
+            <p className="text-caption text-text-secondary">
+              {t("footer.copyright")}
+            </p>
+            <p className="mt-1 text-caption text-text-tertiary">
+              {pick({
+                en: "Anteyko Labs — an IT studio in Bishkek: website, software and mobile app development.",
+                ru: "Anteyko (Антейко) — IT-студия разработки сайтов, ПО и мобильных приложений в Бишкеке.",
+                zh: "Anteyko Labs——比什凯克 IT 工作室：网站、软件与移动应用开发。",
+                tr: "Anteyko Labs — Bişkek'te bir BT stüdyosu: web sitesi, yazılım ve mobil uygulama geliştirme.",
+                ar: "Anteyko Labs — استوديو تقنية معلومات في بيشكيك: تطوير المواقع والبرمجيات وتطبيقات الجوال.",
+              }, language)}
+            </p>
+          </div>
           <div className="flex items-center gap-6">
             <NextLink
               href="/privacy"
