@@ -98,7 +98,7 @@ export function PageHero({
         <div className={isSplit ? "grid items-center gap-12 lg:grid-cols-[1.15fr_0.85fr]" : center ? "mx-auto max-w-4xl text-center" : "max-w-4xl"}>
           <div>
             {backLink && (
-              <motion.div initial={reduced ? false : { opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, ease: EASE }}>
+              <div className="hero-left">
                 <NextLink
                   href={backLink.href}
                   className="group mb-8 inline-flex items-center gap-2 font-mono text-caption uppercase tracking-[0.16em] text-white/60 transition-colors hover:text-white"
@@ -106,69 +106,57 @@ export function PageHero({
                   <span aria-hidden="true" className="transition-transform group-hover:-translate-x-1">←</span>
                   {backLink.label}
                 </NextLink>
-              </motion.div>
+              </div>
             )}
 
             {eyebrow && (
-              <motion.p
-                initial={reduced ? false : { opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, ease: EASE }}
-                className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-white/70 backdrop-blur"
+              <p
+                className="hero-in inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-white/70 backdrop-blur"
               >
                 <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
                 {eyebrow}
-              </motion.p>
+              </p>
             )}
 
             <h1 className="mt-6 font-brand text-4xl font-semibold leading-[1.04] tracking-[-0.03em] sm:text-5xl md:text-6xl">
               {words.map((w, i) => (
                 <span key={i} className="inline-block overflow-hidden pb-[0.1em] align-bottom">
-                  <motion.span
-                    className={i === 0 ? "home-gradient-text inline-block" : "inline-block"}
-                    initial={reduced ? false : { y: "110%" }}
-                    animate={{ y: 0 }}
-                    transition={{ duration: 0.8, delay: 0.08 + i * 0.05, ease: EASE }}
+                  <span
+                    className={i === 0 ? "hero-rise home-gradient-text inline-block" : "hero-rise inline-block"}
+                    style={{ "--d": `${0.08 + i * 0.05}s`, animationDuration: "0.8s" } as React.CSSProperties}
                   >
                     {w}
                     {i < words.length - 1 ? " " : ""}
-                  </motion.span>
+                  </span>
                 </span>
               ))}
             </h1>
 
             {subtitle && (
-              <motion.p
-                initial={reduced ? false : { opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.3, ease: EASE }}
-                className={`mt-6 text-body-lg text-white/60 ${center ? "mx-auto max-w-2xl" : "max-w-2xl"}`}
+              <p
+                style={{ "--d": "0.3s" } as React.CSSProperties}
+                className={`hero-in mt-6 text-body-lg text-white/60 ${center ? "mx-auto max-w-2xl" : "max-w-2xl"}`}
               >
                 {subtitle}
-              </motion.p>
+              </p>
             )}
 
             {metric && (
-              <motion.div
-                initial={reduced ? false : { opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.4, ease: EASE }}
-                className={`mt-8 flex items-baseline gap-3 ${center ? "justify-center" : ""}`}
+              <div
+                style={{ "--d": "0.4s" } as React.CSSProperties}
+                className={`hero-in mt-8 flex items-baseline gap-3 ${center ? "justify-center" : ""}`}
               >
                 <span className="home-gradient-text font-brand text-5xl font-semibold tabular-nums">
                   <MetricValue value={metric.value} />
                 </span>
                 <span className="text-body-md text-white/60">{metric.label}</span>
-              </motion.div>
+              </div>
             )}
           </div>
 
           {rightSlot && (
-            <div className="[perspective:1400px]">
+            <div className="hero-up [perspective:1400px]">
               <motion.div
-                initial={reduced ? false : { opacity: 0, y: 40 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.9, delay: 0.25, ease: EASE }}
                 style={reduced ? undefined : { rotateY: rotY, rotateX: rotX }}
                 className="relative"
               >

@@ -10,7 +10,7 @@ import "../globals.css";
 import { LanguageProvider } from "@/lib/language-context";
 import { CustomCursor } from "@/components/effects/custom-cursor";
 import { OffscreenPause } from "@/components/effects/offscreen-pause";
-import { CookieConsent } from "@/components/cookie-consent";
+import { CONSENT_HEAD_SCRIPT, CookieConsent } from "@/components/cookie-consent";
 import { AnalyticsBootstrap } from "@/components/analytics-bootstrap";
 import { CrmWidget } from "@/components/crm-widget";
 import { WhatsAppButton } from "@/components/whatsapp-button";
@@ -38,6 +38,8 @@ const notoArabic = Noto_Sans_Arabic({
   subsets: ["arabic"],
   weight: ["400", "500", "600", "700"],
   display: "swap",
+  // Not preloaded: only /ar needs it, and unicode-range fetches it there on demand
+  preload: false,
 });
 
 const notoSc = Noto_Sans_SC({
@@ -222,7 +224,10 @@ export default async function LocaleLayout({
         <link rel="manifest" href="/manifest.json" />
         {/* Blocks zoom, context menu, copying and dev-tools shortcuts (also loaded by every /demos page) */}
         {/* eslint-disable-next-line @next/next/no-sync-scripts */}
-        <script src="/guard.js" />
+        {/* defer: runs before DOMContentLoaded without blocking the first paint */}
+        <script src="/guard.js" defer />
+        {/* Hides the cookie banner before first paint for visitors who already answered */}
+        <script dangerouslySetInnerHTML={{ __html: CONSENT_HEAD_SCRIPT }} />
 
         {/* Google Tag Manager — only if validated NEXT_PUBLIC_GTM_ID is set */}
         {GTM_ID ? (

@@ -43,7 +43,39 @@ function Poster({ src }: { src?: string }) {
   return src ? <Image src={src} alt="" fill sizes="(min-width: 1024px) 600px, 80vw" priority className="object-cover object-top" /> : null;
 }
 
+/**
+ * True once the page has loaded and the main thread is idle. The hero video is
+ * megabytes on a phone connection; fetched up front it competed with the page's
+ * own HTML, fonts and images, so it now starts after them over the poster.
+ */
+function useAfterLoad() {
+  const [ok, setOk] = useState(false);
+  useEffect(() => {
+    let idle = 0;
+    let t = 0;
+    const go = () => {
+      const ric = window.requestIdleCallback;
+      if (ric) idle = ric(() => setOk(true), { timeout: 2000 });
+      else t = window.setTimeout(() => setOk(true), 300);
+    };
+    if (document.readyState === "complete") go();
+    else window.addEventListener("load", go, { once: true });
+    return () => {
+      window.removeEventListener("load", go);
+      if (idle) window.cancelIdleCallback(idle);
+      window.clearTimeout(t);
+    };
+  }, []);
+  return ok;
+}
+
 function VideoSite({ video, run, fallback }: { video: DemoVideo; run: boolean; fallback: React.ReactNode }) {
+  const loaded = useAfterLoad();
+  if (!loaded) return <Poster src={video.poster} />;
+  return <VideoPlayer video={video} run={run} fallback={fallback} />;
+}
+
+function VideoPlayer({ video, run, fallback }: { video: DemoVideo; run: boolean; fallback: React.ReactNode }) {
   const ref = useRef<HTMLVideoElement>(null);
   const reduced = useReducedMotion();
   // iOS refused to play: Low Power Mode or data saver block every autoplay
