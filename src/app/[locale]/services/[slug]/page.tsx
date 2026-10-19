@@ -34,6 +34,8 @@ export async function generateMetadata({ params }: Props) {
 
 const PROVIDER = {
   "@type": "Organization",
+  // Same entity as the root layout's Organization, so Google merges them
+  "@id": `${SITE_BASE}/#organization`,
   name: "Anteyko",
   url: SITE_BASE,
 };

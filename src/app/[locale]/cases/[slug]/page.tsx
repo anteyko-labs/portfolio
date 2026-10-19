@@ -79,6 +79,8 @@ export async function generateMetadata({ params }: Props) {
 
 const ORG = {
   "@type": "Organization",
+  // Same entity as the root layout's Organization, so Google merges them
+  "@id": `${SITE}/#organization`,
   name: "Anteyko",
   url: SITE,
   logo: { "@type": "ImageObject", url: `${SITE}/icon-512.png` },
