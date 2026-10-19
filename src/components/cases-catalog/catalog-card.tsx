@@ -106,7 +106,7 @@ export function CatalogCard({
           <span className="w-[42px]" aria-hidden="true" />
         </div>
 
-        <div className={clsx("relative overflow-hidden bg-bg-tertiary", size === "wide" ? "aspect-[16/10]" : "aspect-[16/11]")}>
+        <div className={clsx("cv-media relative overflow-hidden bg-bg-tertiary", size === "wide" ? "aspect-[16/10]" : "aspect-[16/11]")}>
           <CatalogMedia
             entry={entry}
             title={title}

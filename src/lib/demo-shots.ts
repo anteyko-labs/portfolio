@@ -38,7 +38,7 @@ export interface DemoVideo {
  * 960×600, 30fps, ~21s seamless loop), so phones see the live animations without running the page.
  */
 const VIDEOS: Record<string, DemoVideo> = {
-  gran: { hevc: "/videos/gran-hero-hevc.mp4", h264: "/videos/gran-hero-h264.mp4", poster: "/videos/gran-hero-poster.webp" },
+  gran: { hevc: "/videos/gran-hero-hevc-v2.mp4", h264: "/videos/gran-hero-h264-v2.mp4", poster: "/videos/gran-hero-poster.webp" },
 };
 
 export function demoVideo(demo: string | undefined): DemoVideo | null {

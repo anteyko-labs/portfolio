@@ -198,6 +198,9 @@ body {
   display: none;
 }
 
+/* Set in <head> by CONSENT_HEAD_SCRIPT for visitors who already answered */
+html[data-consent] .cookie-consent { display: none; }
+
 /* Hide scrollbar utility */
 .scrollbar-hide {
   -ms-overflow-style: none;
@@ -1586,12 +1589,25 @@ body {
    runs on the compositor, so it keeps moving while React hydrates on a phone */
 .hero-in { animation: hero-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) var(--d, 0s) both; }
 @keyframes hero-in { from { opacity: 0; transform: translate3d(0, 12px, 0); } }
+/* CSS, not framer-motion: these run from the first paint instead of waiting for hydration */
+.hero-left { animation: hero-left 0.5s cubic-bezier(0.22, 1, 0.36, 1) both; }
+@keyframes hero-left { from { opacity: 0; transform: translate3d(-10px, 0, 0); } }
+.hero-up { animation: hero-up 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.25s both; }
+@keyframes hero-up { from { opacity: 0; transform: translate3d(0, 40px, 0); } }
 .hero-rise { animation: hero-rise 1s cubic-bezier(0.22, 1, 0.36, 1) var(--d, 0s) both; }
 @keyframes hero-rise { from { transform: translate3d(0, 110%, 0); } }
 .hero-stage-in { animation: hero-stage-in 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.25s both; }
 @keyframes hero-stage-in { from { opacity: 0; transform: translate3d(0, 60px, 0) scale(0.94); } }
 @media (prefers-reduced-motion: reduce) {
-  .hero-in, .hero-rise, .hero-stage-in { animation: none; }
+  .hero-in, .hero-rise, .hero-stage-in, .hero-left, .hero-up { animation: none; }
+}
+/* Phones and tablets: backdrop blur re-renders everything behind it on every scroll
+   frame, and the site had 50+ of them. The translucent backgrounds stay. */
+@media (hover: none) and (pointer: coarse) {
+  *, *::before, *::after { -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
 }
 /* Below-the-fold home sections: laid out and painted only near the viewport */
 .cv-auto { content-visibility: auto; contain-intrinsic-size: auto 900px; }
+/* Catalog card media: generative SVG covers run to 300+ nodes each, so off-screen
+   ones are skipped. The box already clips and gets its height from aspect-ratio. */
+.cv-media { content-visibility: auto; contain-intrinsic-size: auto 260px; }

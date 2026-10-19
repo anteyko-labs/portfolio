@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link } from "@/i18n/navigation";
 import { useLanguage } from "@/lib/language-context";
 
@@ -54,16 +54,19 @@ const COPY = {
   },
 } as const;
 
+/**
+ * Runs in <head> before the first paint: a visitor who already answered gets
+ * html[data-consent], and globals.css hides the banner. The banner itself is in
+ * the server HTML, so a new visitor sees it at first paint instead of after
+ * hydration (a late banner was the page's LCP element on phones).
+ */
+export const CONSENT_HEAD_SCRIPT = `try{if(localStorage.getItem(${JSON.stringify(CONSENT_KEY)})!==null)document.documentElement.setAttribute("data-consent","")}catch(e){}`;
+
 export function CookieConsent() {
-  const [shown, setShown] = useState(false);
+  // Returning visitors keep it in the DOM, hidden by html[data-consent]
+  const [shown, setShown] = useState(true);
   const { language } = useLanguage();
   const copy = COPY[language] ?? COPY.en;
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const stored = localStorage.getItem(CONSENT_KEY);
-    if (!stored) setShown(true);
-  }, []);
 
   const accept = (mode: "all" | "necessary") => {
     localStorage.setItem(CONSENT_KEY, mode);
@@ -78,6 +81,7 @@ export function CookieConsent() {
       });
     }
     window.dispatchEvent(new Event(CONSENT_EVENT));
+    document.documentElement.setAttribute("data-consent", "");
     setShown(false);
   };
 
@@ -87,7 +91,7 @@ export function CookieConsent() {
     <div
       role="dialog"
       aria-labelledby="cookie-consent-title"
-      className="fixed bottom-4 left-4 right-4 md:right-auto md:max-w-md z-[10000] bg-bg-secondary border border-border rounded-2xl p-5 shadow-2xl"
+      className="cookie-consent fixed bottom-4 left-4 right-4 md:right-auto md:max-w-md z-[10000] bg-bg-secondary border border-border rounded-2xl p-5 shadow-2xl"
     >
       <h2
         id="cookie-consent-title"
