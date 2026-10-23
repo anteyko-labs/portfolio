@@ -9,6 +9,7 @@ import { AuroraCta, DeliveryGates } from "@/components/services-anim/parts";
 import { GroupHeading } from "@/components/services-anim/group-heading";
 import { SERVICE_GROUPS } from "@/lib/service-slugs";
 import { ServiceChapter } from "@/components/services-anim/service-chapter";
+import { ServicesStrip } from "@/components/services-anim/services-strip";
 
 export function ServicesContent() {
   const { t, translations, language } = useLanguage();
@@ -43,6 +44,9 @@ export function ServicesContent() {
         }
       />
 
+      {/* the strip sticks only while the chapters are on screen */}
+      <div>
+      <ServicesStrip />
       <Section background="secondary" padding="lg">
         {SERVICE_GROUPS.map((group, g) => {
           const items = packages.filter((pkg) => pkg.group === group.id);
@@ -66,6 +70,7 @@ export function ServicesContent() {
           </Link>
         </p>
       </Section>
+      </div>
 
       <Section background="primary" padding="lg">
         {/* CTA section */}
