@@ -13,6 +13,7 @@ export const PACKAGE_SLUGS = {
   "time-access": "time-tracking-access-control",
   parking: "parking-system",
   cctv: "video-surveillance",
+  "conference-av": "conference-room-audio",
   fintech: "fintech",
   "carbon-credits": "carbon-credits",
   "it-support": "it-support",

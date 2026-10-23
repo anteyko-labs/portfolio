@@ -41,6 +41,7 @@ const PACKAGE_MIN_PRICE: Record<string, string> = {
   "time-access": "800",
   parking: "1000",
   cctv: "800",
+  "conference-av": "1000",
   fintech: "3000",
   "carbon-credits": "8000",
   branding: "2000",
