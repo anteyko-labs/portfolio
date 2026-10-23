@@ -46,6 +46,8 @@ const projectTypeOptions = (t: (k: string) => string) => [
   { value: "branding", label: t("contact.form.projectTypes.branding") },
   { value: "fintech", label: t("contact.form.projectTypes.fintech") },
   { value: "access", label: t("contact.form.projectTypes.access") },
+  { value: "parking", label: t("contact.form.projectTypes.parking") },
+  { value: "cctv", label: t("contact.form.projectTypes.cctv") },
   { value: "carbon", label: t("contact.form.projectTypes.carbon") },
   { value: "support", label: t("contact.form.projectTypes.support") },
 ];
@@ -60,6 +62,8 @@ const PACKAGE_TO_TYPE: Record<string, string> = {
   branding: "branding",
   fintech: "fintech",
   "time-access": "access",
+  parking: "parking",
+  cctv: "cctv",
   "carbon-credits": "carbon",
   "it-support": "support",
 };

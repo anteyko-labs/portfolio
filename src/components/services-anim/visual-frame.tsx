@@ -10,6 +10,8 @@ export const PKG_COLOR: Record<string, string> = {
   "web3-addon": "139 92 246",
   "mobile-app": "249 115 22",
   "time-access": "20 184 166",
+  parking: "14 165 233",
+  cctv: "239 68 68",
   fintech: "234 179 8",
   "carbon-credits": "34 197 94",
   "it-support": "59 130 246",

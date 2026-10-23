@@ -11,6 +11,8 @@ export const PACKAGE_SLUGS = {
   "web3-addon": "web3-addon",
   "mobile-app": "mobile-apps",
   "time-access": "time-tracking-access-control",
+  parking: "parking-system",
+  cctv: "video-surveillance",
   fintech: "fintech",
   "carbon-credits": "carbon-credits",
   "it-support": "it-support",

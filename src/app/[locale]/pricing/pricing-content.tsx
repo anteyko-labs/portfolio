@@ -49,7 +49,7 @@ export function PricingContent() {
                   ))}
                 </ul>
               ) : (
-                <div className={`mt-8 grid items-stretch gap-6 md:grid-cols-2 ${items.length > 3 ? "xl:grid-cols-4" : "lg:grid-cols-3"}`}>
+                <div className={`mt-8 grid items-stretch gap-6 md:grid-cols-2 ${items.length === 4 ? "xl:grid-cols-4" : "lg:grid-cols-3"}`}>
                   {items.map((pkg, i) => (
                     <PriceTier key={pkg.id} pkg={pkg} index={i} recommended={pkg.id === "mvp-sprint"} entrance={group.id === "build" ? "flip" : "curtain"} />
                   ))}
