@@ -44,10 +44,10 @@ export function ServiceChapter({ pkg, index }: { pkg: Package; index: number }) 
         };
 
   return (
-    <li ref={ref} className="grid items-start gap-10 lg:grid-cols-2 lg:gap-16">
+    <li ref={ref} id={PACKAGE_SLUGS[pkg.id as keyof typeof PACKAGE_SLUGS]} className="grid scroll-mt-32 items-start gap-10 md:scroll-mt-36 lg:grid-cols-2 lg:gap-16">
       {/* visual: wipes in from the outer edge */}
       <motion.div
-        className={clsx("relative lg:sticky lg:top-28", flip && "lg:order-2")}
+        className={clsx("relative lg:sticky lg:top-36", flip && "lg:order-2")}
         initial={reduced ? false : { clipPath: flip ? "inset(0 0 0 100%)" : "inset(0 100% 0 0)" }}
         animate={shown ? { clipPath: "inset(0 0% 0 0%)" } : undefined}
         transition={{ duration: 1.1, ease: EASE }}
