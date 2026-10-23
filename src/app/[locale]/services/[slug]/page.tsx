@@ -6,6 +6,7 @@ import { pick, type Language } from "@/lib/i18n-text";
 import { seo } from "@/i18n/metadata";
 import { SERVICE_SLUGS, getPackageBySlug } from "@/lib/service-slugs";
 import { ServiceDetailContent } from "./service-detail-content";
+import { getServiceDetail } from "@/lib/service-details";
 
 type Props = { params: Promise<{ locale: string; slug: string }> };
 
@@ -41,7 +42,8 @@ const PROVIDER = {
 };
 
 export default async function ServicePage({ params }: Props) {
-  const { slug } = await params;
+  const { locale, slug } = await params;
+  const lang = locale as Language;
   const pkg = getPackageBySlug(slug);
 
   if (!pkg) {
@@ -53,7 +55,7 @@ export default async function ServicePage({ params }: Props) {
     "@context": "https://schema.org",
     "@type": "Service",
     name: pkg.title.en,
-    description: pkg.description.en,
+    description: getServiceDetail(pkg.id)?.intro.en ?? pkg.description.en,
     serviceType: "End-to-end product development",
     url,
     provider: PROVIDER,
@@ -69,10 +71,20 @@ export default async function ServicePage({ params }: Props) {
     ],
   };
 
+  const detail = getServiceDetail(pkg.id);
+  // The page's own questions, in the page's language
+  const faqSchema = detail
+    ? {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: detail.faq.map((f) => ({ "@type": "Question", name: pick(f.q, lang), acceptedAnswer: { "@type": "Answer", text: pick(f.a, lang) } })),
+      }
+    : null;
+
   return (
     <PageWrapper>
-      <JsonLd data={[serviceSchema, breadcrumbSchema]} />
-      <ServiceDetailContent packageId={pkg.id} />
+      <JsonLd data={faqSchema ? [serviceSchema, breadcrumbSchema, faqSchema] : [serviceSchema, breadcrumbSchema]} />
+      <ServiceDetailContent packageId={pkg.id} detail={detail} />
     </PageWrapper>
   );
 }

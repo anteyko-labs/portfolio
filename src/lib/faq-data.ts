@@ -210,11 +210,11 @@ export const faqItems: FAQItem[] = [
       ar: "ماذا عن تطبيقات الجوال؟",
     },
     answer: {
-      en: "We focus on web products. For mobile, we build responsive web apps or PWAs. If you need native iOS/Android, we can recommend partners.",
-      ru: "Мы фокусируемся на веб-продуктах. Для мобильных делаем адаптивные веб-приложения или PWA. Если нужен нативный iOS/Android, можем порекомендовать партнёров.",
-      zh: "我们专注于 Web 产品。移动端我们会开发响应式 Web 应用或 PWA。如果您需要原生 iOS/Android 应用，我们可以推荐合作伙伴。",
-      tr: "Odağımız web ürünleri. Mobil için responsive web uygulamaları veya PWA geliştiriyoruz. Yerel iOS/Android gerekiyorsa iş ortaklarımızı önerebiliriz.",
-      ar: "نركّز على المنتجات الرقمية للويب. وللجوال نبني تطبيقات ويب متجاوبة أو PWA. وإن كنتم بحاجة إلى تطبيق أصلي لنظامَي iOS وAndroid، فيسعدنا أن نرشّح لكم شركاء.",
+      en: "Yes. We build iOS and Android apps from one codebase: design, development, backend and store release, from $5k in 6–10 weeks. If a responsive web app or PWA covers your needs, we will suggest that instead.",
+      ru: "Да. Делаем приложения для iOS и Android из одной кодовой базы: дизайн, разработка, бэкенд и публикация в сторах — от $5k за 6–10\u00A0недель. Если задачу закрывает адаптивное веб-приложение или PWA, предложим этот вариант.",
+      zh: "可以。我们用同一套代码开发 iOS 和 Android 应用：设计、开发、后端和应用商店上架，$5k 起，6–10 周。如果响应式 Web 应用或 PWA 就能满足需求，我们会建议这种方案。",
+      tr: "Evet. iOS ve Android uygulamalarını tek kod tabanından geliştiriyoruz: tasarım, geliştirme, backend ve mağaza yayını; 5 bin $'dan başlayan fiyatla 6–10 haftada. İhtiyacınızı responsive bir web uygulaması veya PWA karşılıyorsa bunu öneririz.",
+      ar: "نعم. نطوّر تطبيقات iOS وAndroid من قاعدة شيفرة واحدة: التصميم والتطوير والواجهة الخلفية والنشر في المتاجر، ابتداءً من $5k خلال 6–10 أسابيع. وإذا كان تطبيق ويب متجاوب أو PWA يكفي احتياجك فسنقترحه بدلًا من ذلك.",
     },
   },
   {
