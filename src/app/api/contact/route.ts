@@ -31,6 +31,7 @@ const PROJECT_TYPES: Record<string, string> = {
   access: "УРВ и СКУД",
   parking: "Система парковки",
   cctv: "Видеонаблюдение",
+  av: "Акустика для конференц-залов",
   carbon: "Карбоновые кредиты",
   support: "Сопровождение IT",
 };

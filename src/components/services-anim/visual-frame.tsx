@@ -12,6 +12,7 @@ export const PKG_COLOR: Record<string, string> = {
   "time-access": "20 184 166",
   parking: "14 165 233",
   cctv: "239 68 68",
+  "conference-av": "217 70 239",
   fintech: "234 179 8",
   "carbon-credits": "34 197 94",
   "it-support": "59 130 246",
