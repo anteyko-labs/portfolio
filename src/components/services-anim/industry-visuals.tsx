@@ -580,3 +580,82 @@ export function CctvGrid({ className }: { className?: string }) {
     </Frame>
   );
 }
+
+/* ───────────── Conference audio: the speaking mic lights up, the panel switches room scenes ───────────── */
+
+const AV_SCENES = [
+  { n: { en: "Presentation", ru: "Доклад", zh: "演讲", tr: "Sunum", ar: "عرض تقديمي" }, vol: 0.72, mics: [0] },
+  { n: { en: "Round table", ru: "Круглый стол", zh: "圆桌", tr: "Yuvarlak masa", ar: "طاولة مستديرة" }, vol: 0.56, mics: [0, 1, 2] },
+  { n: { en: "Video call", ru: "Видеосвязь", zh: "视频会议", tr: "Görüntülü görüşme", ar: "مكالمة فيديو" }, vol: 0.64, mics: [1, 2] },
+];
+const MIC_X = [40, 86, 132];
+const BARS = [0.45, 0.9, 0.6, 1, 0.5, 0.8, 0.35];
+
+export function AudioRoom({ className }: { className?: string }) {
+  const { language } = useLanguage();
+  const { ref, tick, reduced } = useLoop<HTMLDivElement>(800);
+  // each scene holds for 3 ticks; within it the floor passes between its mics
+  const s = reduced ? 1 : Math.floor(tick / 3) % AV_SCENES.length;
+  const scene = AV_SCENES[s];
+  const mic = reduced ? 1 : scene.mics[tick % scene.mics.length];
+  const call = s === 2;
+  return (
+    <Frame id="conference-av" svgRef={ref} className={className} label={pick({ en: "Ceiling speakers fill the room, the speaking microphone lights up and the control panel switches room scenes", ru: "Потолочные колонки озвучивают зал, говорящий микрофон подсвечивается, панель переключает сценарии зала", zh: "吸顶音箱覆盖全场，发言话筒亮起，控制面板切换会议场景", tr: "Tavan hoparlörleri salonu dolduruyor, konuşan mikrofon yanıyor, kontrol paneli senaryoları değiştiriyor", ar: "تملأ سماعات السقف القاعة ويضيء الميكروفون المتحدث وتبدّل لوحة التحكم سيناريوهات القاعة" }, language)}>
+      {/* room */}
+      <rect x="8" y="14" width="188" height="122" rx="10" fill="rgba(255,255,255,0.03)" stroke={FAINT} />
+      <text x="18" y="30" fontSize="7" fill={MUTED}>{pick({ en: "Hall A · 40 seats", ru: "Зал А · 40 мест", zh: "A 厅 · 40 座", tr: "Salon A · 40 kişilik", ar: "القاعة A · 40 مقعدًا" }, language)}</text>
+      {/* ceiling speakers and their waves */}
+      {[52, 110].map((cx) => (
+        <g key={cx}>
+          <rect x={cx - 9} y="36" width="18" height="5" rx="2.5" fill="rgba(255,255,255,0.35)" />
+          {[10, 18, 26].map((r, k) => (
+            <path key={r} d={`M${cx - r} ${42 + r * 0.25} Q${cx} ${42 + r * 1.1} ${cx + r} ${42 + r * 0.25}`} fill="none" stroke="#E879F9" strokeWidth="1.2" opacity={reduced ? 0.5 - k * 0.12 : (tick + k) % 3 === 0 ? 0.75 : 0.18} style={{ transition: "opacity 0.4s" }} />
+          ))}
+        </g>
+      ))}
+      {/* video-call screen on the wall */}
+      <motion.g initial={false} animate={{ opacity: call ? 1 : 0.35 }} transition={T}>
+        <rect x="152" y="50" width="38" height="26" rx="3" fill="#0B0B14" stroke="rgba(255,255,255,0.3)" />
+        {[0, 1, 2].map((k) => (
+          <circle key={k} cx={160 + k * 11} cy="62" r="3.5" fill={["#F472B6", "#38BDF8", "#FBBF24"][k]} opacity={call ? 0.9 : 0.3} />
+        ))}
+        <text x="155" y="72" fontSize="4.5" fill={MUTED}>{call ? "Zoom · 3" : "—"}</text>
+      </motion.g>
+      {/* table with microphones */}
+      <rect x="18" y="112" width="138" height="6" rx="3" fill="rgba(255,255,255,0.16)" />
+      {MIC_X.map((x, i) => {
+        const on = i === mic;
+        return (
+          <g key={x}>
+            <rect x={x - 1} y="98" width="2" height="14" fill="rgba(255,255,255,0.4)" />
+            <motion.circle cx={x} cy="96" r="3.5" initial={false} animate={{ fill: on ? "#4ADE80" : "rgba(255,255,255,0.35)" }} transition={{ duration: 0.2 }} />
+            <motion.circle cx={x} cy="96" r="8" fill="none" stroke="#4ADE80" initial={false} animate={{ opacity: on ? 0.6 : 0, scale: on ? 1 : 0.6 }} transition={{ duration: 0.3 }} style={{ originX: 0.5, originY: 0.5 }} />
+            {/* the speaker's level */}
+            {BARS.slice(0, 5).map((h, b) => {
+              const level = on ? BARS[(b + tick) % BARS.length] * h : 0.08;
+              return <rect key={b} x={x - 9 + b * 4} y={88 - level * 16} width="2.5" height={Math.max(1, level * 16)} rx="1" fill="#4ADE80" opacity={on ? 0.85 : 0.2} style={{ transition: "all 0.3s" }} />;
+            })}
+          </g>
+        );
+      })}
+
+      {/* control panel */}
+      <rect x="204" y="14" width="106" height="122" rx="12" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.2)" />
+      <text x="214" y="30" fontSize="7" fill="rgba(255,255,255,0.8)">{pick({ en: "Hall A · panel", ru: "Зал А · панель", zh: "A 厅 · 面板", tr: "Salon A · panel", ar: "القاعة A · اللوحة" }, language)}</text>
+      {AV_SCENES.map((sc, i) => {
+        const on = i === s;
+        return (
+          <g key={i}>
+            <motion.rect x="212" y={38 + i * 21} width="90" height="16" rx="5" initial={false} animate={{ fill: on ? "rgba(217,70,239,0.85)" : "rgba(255,255,255,0.06)" }} transition={{ duration: 0.3 }} />
+            <text x="220" y={48.5 + i * 21} fontSize="6.5" fill={on ? "#fff" : "rgba(255,255,255,0.7)"}>{pick(sc.n, language)}</text>
+          </g>
+        );
+      })}
+      <text x="214" y="112" fontSize="6" fill={MUTED}>{pick({ en: "Volume", ru: "Громкость", zh: "音量", tr: "Ses", ar: "الصوت" }, language)}</text>
+      <rect x="214" y="117" width="72" height="4" rx="2" fill="rgba(255,255,255,0.1)" />
+      <motion.rect x="214" y="117" height="4" rx="2" fill="#E879F9" initial={false} animate={{ width: r2(72 * scene.vol) }} transition={T} />
+      <motion.circle cy="119" r="4" fill="#fff" initial={false} animate={{ cx: r2(214 + 72 * scene.vol) }} transition={T} />
+      <circle cx="298" cy="119" r="3" fill="#EF4444" opacity={reduced || tick % 2 === 0 ? 1 : 0.3} />
+    </Frame>
+  );
+}
