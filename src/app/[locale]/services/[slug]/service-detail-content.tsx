@@ -10,8 +10,10 @@ import { ButtonLink, Link } from "@/components/ui/link";
 import { EASE, SpotlightCard } from "@/components/motion/kit";
 import { PKG_COLOR, PackageVisual } from "@/components/services-anim/package-visuals";
 import { AuroraCta, CheckList, ShineBadge } from "@/components/services-anim/parts";
+import { ServiceDeepDive } from "@/components/services-anim/service-deep-dive";
+import type { ServiceDetail } from "@/lib/service-details/types";
 
-export function ServiceDetailContent({ packageId }: { packageId: string }) {
+export function ServiceDetailContent({ packageId, detail }: { packageId: string; detail?: ServiceDetail }) {
   const { t, translations, language } = useLanguage();
   const reduced = useReducedMotion();
   const pkg = translations.packages.items.find((p) => p.id === packageId);
@@ -142,6 +144,8 @@ export function ServiceDetailContent({ packageId }: { packageId: string }) {
           </div>
         </AnimatedItem>
       </Section>
+
+      {detail ? <ServiceDeepDive id={pkg.id} detail={detail} /> : null}
 
       {/* CTA */}
       <Section background="primary" padding="lg">

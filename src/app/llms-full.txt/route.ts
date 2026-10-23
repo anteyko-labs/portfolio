@@ -5,6 +5,7 @@ import { visibleShowcaseItems, type ShowcaseStatus } from "@/lib/showcase-data";
 import { blogPosts } from "@/lib/blog-data";
 import { faqItems } from "@/lib/faq-data";
 import { SITE_DESCRIPTION } from "@/i18n/site-copy";
+import { getServiceDetail } from "@/lib/service-details";
 
 // /llms-full.txt: the long companion to /llms.txt (llmstxt.org). Everything an AI
 // assistant needs to describe and recommend the studio in one plain-markdown file,
@@ -19,6 +20,19 @@ const STATUS: Record<ShowcaseStatus, string> = {
   concept: "studio concept",
 };
 
+function detailLines(id: string): string[] {
+  const d = getServiceDetail(id);
+  if (!d) return [];
+  return [
+    "",
+    d.intro.en,
+    `- Stack: ${d.stack.join(", ")}`,
+    `- How the work goes: ${d.steps.map((s, i) => `${i + 1}) ${s.title.en}: ${s.text.en}`).join(" ")}`,
+    ...d.features.map((f) => `- ${f.title.en}: ${f.text.en}`),
+    ...d.faq.map((f) => `- Q: ${f.q.en} A: ${f.a.en}`),
+  ];
+}
+
 function build(): string {
   const services = SERVICE_GROUPS.flatMap((g) => [
     `### ${g.label.en}`,
@@ -30,6 +44,7 @@ function build(): string {
       `- Timeline: ${p.timeline.en}`,
       `- Includes: ${p.deliverables.en.join("; ")}`,
       `- Result: ${p.result.en}`,
+      ...detailLines(p.id),
       "",
     ]),
   ]);
