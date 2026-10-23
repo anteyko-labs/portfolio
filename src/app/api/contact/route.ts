@@ -29,6 +29,8 @@ const PROJECT_TYPES: Record<string, string> = {
   branding: "Брендинг",
   fintech: "Финтех",
   access: "УРВ и СКУД",
+  parking: "Система парковки",
+  cctv: "Видеонаблюдение",
   carbon: "Карбоновые кредиты",
   support: "Сопровождение IT",
 };

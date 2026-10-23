@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { EASE, useLoop } from "@/components/motion/kit";
 import { useLanguage } from "@/lib/language-context";
 import { pick } from "@/lib/i18n-text";
-import { Frame, T } from "./visual-frame";
+import { Frame, T, r2 } from "./visual-frame";
 
 // Scenes for the newer services: a phone app going live in the stores, a pass
 // opening a turnstile, a payment stream with anti-fraud, carbon tonnes turning
@@ -426,6 +426,157 @@ export function BrandBuild({ className }: { className?: string }) {
           </motion.g>
         ))}
       </g>
+    </Frame>
+  );
+}
+
+/* ───────────── Parking: the camera reads a plate, the barrier lifts, the car is logged ───────────── */
+
+const CARS = [
+  { plate: "01 777 ABK", c: "#38BDF8", t: "09:14", kind: "sub" },
+  { plate: "08 215 KGZ", c: "#F472B6", t: "09:21", kind: "paid" },
+  { plate: "01 504 AAM", c: "#FBBF24", t: "09:26", kind: "guest" },
+] as const;
+
+export function ParkingGate({ className }: { className?: string }) {
+  const { language } = useLanguage();
+  const { ref, tick, reduced } = useLoop<HTMLDivElement>(950);
+  // 4 phases per car: drive up, plate read, barrier up and drive through, logged
+  const step = reduced ? CARS.length * 4 - 1 : tick % (CARS.length * 4);
+  const car = Math.floor(step / 4);
+  const phase = step % 4;
+  const open = phase === 2;
+  const logged = reduced ? CARS.length : car + (phase >= 3 ? 1 : 0);
+  const x = phase === 0 ? 22 : phase === 1 ? 22 : phase === 2 ? 190 : -80;
+  const kind = {
+    sub: pick({ en: "subscription", ru: "абонемент", zh: "月卡", tr: "abonelik", ar: "اشتراك" }, language),
+    paid: pick({ en: "paid", ru: "оплачено", zh: "已付", tr: "ödendi", ar: "مدفوع" }, language),
+    guest: pick({ en: "guest pass", ru: "гостевой", zh: "访客", tr: "misafir", ar: "ضيف" }, language),
+  };
+  return (
+    <Frame id="parking" svgRef={ref} className={className} label={pick({ en: "A camera reads the number plate, the barrier lifts and the car is logged", ru: "Камера считывает номер, шлагбаум поднимается, машина записана в журнал", zh: "摄像头识别车牌，道闸抬起，车辆记录入库", tr: "Kamera plakayı okuyor, bariyer kalkıyor, araç kaydediliyor", ar: "تقرأ الكاميرا اللوحة فيرتفع الحاجز ويُسجَّل دخول السيارة" }, language)}>
+      <defs>
+        <clipPath id="sv-pk-lane">
+          <rect x="8" y="14" width="168" height="122" rx="10" />
+        </clipPath>
+      </defs>
+      <rect x="8" y="14" width="168" height="122" rx="10" fill="rgba(255,255,255,0.03)" stroke={FAINT} />
+      <text x="18" y="30" fontSize="7" fill={MUTED}>{pick({ en: "Entry A · level −1", ru: "Въезд A · уровень −1", zh: "A 入口 · 负一层", tr: "Giriş A · kat −1", ar: "المدخل A · الطابق −1" }, language)}</text>
+      {/* road */}
+      <rect x="8" y="118" width="168" height="2" fill="rgba(255,255,255,0.18)" />
+      {[18, 48, 78, 108, 138].map((rx) => (
+        <rect key={rx} x={rx} y="127" width="16" height="2" rx="1" fill="rgba(255,255,255,0.12)" />
+      ))}
+      {/* barrier post and ANPR camera */}
+      <rect x="132" y="70" width="9" height="48" rx="2" fill="rgba(255,255,255,0.12)" stroke={FAINT} />
+      <rect x="128" y="50" width="17" height="10" rx="3" fill="#0B0B14" stroke="rgba(255,255,255,0.35)" />
+      <circle cx="131" cy="55" r="2.2" fill="#38BDF8" />
+      <motion.path d="M129 57 L84 101 L84 111 Z" fill="#38BDF8" initial={false} animate={{ opacity: phase === 1 ? 0.22 : 0 }} transition={{ duration: 0.3 }} />
+      {/* car */}
+      <g clipPath="url(#sv-pk-lane)">
+        {/* drives off only once the arm is up; jumps back off-screen for the next car */}
+        <motion.g initial={false} animate={{ x }} transition={phase === 3 ? { duration: 0 } : { duration: phase === 2 ? 0.7 : 0.85, delay: phase === 2 ? 0.3 : 0, ease: EASE }}>
+          <path d="M2 112 L4 100 Q6 96 12 96 L20 96 L28 86 Q30 84 34 84 L46 84 Q50 84 52 87 L58 96 Q64 97 64 103 L64 112 Z" fill={CARS[car].c} opacity="0.9" />
+          <path d="M23 96 L30 88 L40 88 L40 96 Z M43 96 L43 88 L49 88 L54 96 Z" fill="rgba(11,11,20,0.55)" />
+          <circle cx="16" cy="113" r="5.5" fill="#0B0B14" stroke="rgba(255,255,255,0.4)" />
+          <circle cx="50" cy="113" r="5.5" fill="#0B0B14" stroke="rgba(255,255,255,0.4)" />
+          <motion.rect x="52" y="103" width="12" height="6" rx="1.2" fill="#fff" initial={false} animate={{ stroke: phase === 1 ? "#38BDF8" : "rgba(0,0,0,0)" }} strokeWidth="1.2" />
+        </motion.g>
+      </g>
+      {/* barrier arm, pivoting on the post */}
+      <g transform="translate(136 82)">
+        <motion.g initial={false} animate={{ rotate: open ? 78 : 0 }} transition={{ duration: 0.5, ease: EASE }} style={{ originX: 1, originY: 0.5 }}>
+          <rect x="-62" y="-3" width="62" height="6" rx="3" fill="rgba(255,255,255,0.85)" />
+          {[-54, -38, -22].map((sx) => (
+            <rect key={sx} x={sx} y="-3" width="7" height="6" fill="#F87171" />
+          ))}
+        </motion.g>
+      </g>
+      <circle cx="136.5" cy="82" r="3.5" fill="#0B0B14" stroke="rgba(255,255,255,0.5)" />
+      {/* plate read-out */}
+      <motion.g initial={false} animate={{ opacity: phase === 1 ? 1 : 0, y: phase === 1 ? 0 : 4 }} transition={T}>
+        <rect x="18" y="38" width="80" height="16" rx="4" fill="rgba(56,189,248,0.15)" stroke="rgba(56,189,248,0.6)" />
+        <text x="24" y="49" fontSize="7.5" fill="#E0F2FE" fontFamily="var(--font-mono)">{CARS[car].plate}</text>
+      </motion.g>
+
+      {/* occupancy and log */}
+      <rect x="186" y="14" width="124" height="122" rx="10" fill="rgba(255,255,255,0.04)" stroke={FAINT} />
+      <text x="196" y="30" fontSize="7" fill={MUTED}>{pick({ en: "Free spaces", ru: "Свободно мест", zh: "空余车位", tr: "Boş yer", ar: "أماكن شاغرة" }, language)}</text>
+      <text x="196" y="50" fontSize="18" fontWeight="600" fill="#fff">{42 - logged}<tspan fontSize="9" fill={MUTED}> / 120</tspan></text>
+      <rect x="196" y="56" width="104" height="4" rx="2" fill="rgba(255,255,255,0.08)" />
+      <motion.rect x="196" y="56" height="4" rx="2" fill="#38BDF8" initial={false} animate={{ width: r2(104 * (78 + logged) / 120) }} transition={T} />
+      {CARS.map((c, i) => (
+        <motion.g key={c.plate} initial={false} animate={{ opacity: i < logged ? 1 : 0, x: i < logged ? 0 : 10 }} transition={T}>
+          <rect x="194" y={68 + i * 21} width="108" height="17" rx="5" fill="rgba(255,255,255,0.05)" />
+          <circle cx="203" cy={76.5 + i * 21} r="3.5" fill={c.c} opacity="0.85" />
+          <text x="211" y={79 + i * 21} fontSize="6.5" fill="rgba(255,255,255,0.85)" fontFamily="var(--font-mono)">{c.plate}</text>
+          <text x="298" y={79 + i * 21} fontSize="6" textAnchor="end" fill={c.kind === "guest" ? "#FBBF24" : "#4ADE80"}>{kind[c.kind]}</text>
+        </motion.g>
+      ))}
+    </Frame>
+  );
+}
+
+/* ───────────── Video surveillance: four cameras, motion is boxed and an alert lands ───────────── */
+
+const CAMS = [
+  { n: { en: "Warehouse", ru: "Склад", zh: "仓库", tr: "Depo", ar: "المستودع" }, e: { en: "Motion", ru: "Движение", zh: "移动", tr: "Hareket", ar: "حركة" }, t: "02:14" },
+  { n: { en: "Entrance", ru: "Вход", zh: "入口", tr: "Giriş", ar: "المدخل" }, e: { en: "Face match", ru: "Лицо опознано", zh: "人脸匹配", tr: "Yüz eşleşti", ar: "تطابق وجه" }, t: "08:52" },
+  { n: { en: "Parking", ru: "Парковка", zh: "停车场", tr: "Otopark", ar: "الموقف" }, e: { en: "Plate read", ru: "Номер считан", zh: "车牌识别", tr: "Plaka okundu", ar: "قراءة لوحة" }, t: "09:03" },
+  { n: { en: "Checkout", ru: "Касса", zh: "收银台", tr: "Kasa", ar: "الصندوق" }, e: { en: "Line crossed", ru: "Пересечение линии", zh: "越线", tr: "Çizgi geçildi", ar: "عبور الخط" }, t: "21:40" },
+];
+const TILE = [[12, 18], [92, 18], [12, 78], [92, 78]];
+const CAM_C = ["#F87171", "#818CF8", "#38BDF8", "#FBBF24"];
+
+export function CctvGrid({ className }: { className?: string }) {
+  const { language } = useLanguage();
+  const { ref, tick, reduced } = useLoop<HTMLDivElement>(900);
+  // 2 phases per camera: someone moves into view, then the box and the alert
+  const step = reduced ? CAMS.length * 2 - 1 : tick;
+  const active = Math.floor(step / 2) % CAMS.length;
+  const flagged = step % 2 === 1;
+  // Events so far; the feed keeps rolling across loops instead of emptying
+  const events = reduced ? CAMS.length : Math.floor((step + 1) / 2);
+  const recent = Array.from({ length: Math.min(events, 3) }, (_, i) => events - 1 - i);
+  return (
+    <Frame id="cctv" svgRef={ref} className={className} label={pick({ en: "Four camera feeds; motion is detected, boxed and sent as an alert", ru: "Четыре камеры: движение обнаружено, выделено рамкой и пришло уведомлением", zh: "四路摄像头：检测到移动，框选目标并推送告警", tr: "Dört kamera: hareket algılanıyor, çerçeveleniyor ve uyarı gönderiliyor", ar: "أربع كاميرات: تُكتشف الحركة وتُحدَّد بإطار ويصل تنبيه" }, language)}>
+      {TILE.map(([tx, ty], i) => {
+        const on = i === active;
+        return (
+          <g key={i}>
+            <motion.rect x={tx} y={ty} width="74" height="54" rx="6" fill="#0B0B14" initial={false} animate={{ stroke: on && flagged ? "#F87171" : "rgba(255,255,255,0.14)" }} strokeWidth="1.2" transition={{ duration: 0.25 }} />
+            {/* a simple room: floor line and shelves */}
+            <rect x={tx + 4} y={ty + 40} width="66" height="1" fill="rgba(255,255,255,0.12)" />
+            <rect x={tx + 8} y={ty + 18} width="16" height="22" rx="1.5" fill="rgba(255,255,255,0.06)" />
+            <rect x={tx + 50} y={ty + 22} width="16" height="18" rx="1.5" fill="rgba(255,255,255,0.06)" />
+            <text x={tx + 5} y={ty + 10} fontSize="5.5" fill={MUTED} fontFamily="var(--font-mono)">CAM 0{i + 1} · {pick(CAMS[i].n, language)}</text>
+            <circle cx={tx + 68} cy={ty + 8} r="2" fill="#EF4444" opacity={reduced || tick % 2 === 0 ? 1 : 0.25} />
+            {/* someone walks in, then gets boxed */}
+            <motion.g initial={false} animate={{ opacity: on ? 1 : 0, x: on ? 0 : -14 }} transition={{ duration: 0.6, ease: EASE }}>
+              <circle cx={tx + 37} cy={ty + 24} r="3.5" fill="rgba(255,255,255,0.75)" />
+              <rect x={tx + 33} y={ty + 28.5} width="8" height="11.5" rx="3" fill="rgba(255,255,255,0.6)" />
+              <motion.rect x={tx + 29} y={ty + 18} width="16" height="24" rx="2" fill="none" stroke={CAM_C[i]} strokeWidth="1.2" strokeDasharray="3 2" initial={false} animate={{ opacity: on && flagged ? 1 : 0, scale: on && flagged ? 1 : 1.25 }} transition={{ duration: 0.35 }} style={{ originX: 0.5, originY: 0.5 }} />
+            </motion.g>
+          </g>
+        );
+      })}
+
+      {/* alert feed */}
+      <rect x="174" y="14" width="136" height="122" rx="10" fill="rgba(255,255,255,0.04)" stroke={FAINT} />
+      <text x="184" y="30" fontSize="7.5" fill="rgba(255,255,255,0.8)">{pick({ en: "Alerts · live", ru: "События · онлайн", zh: "告警 · 实时", tr: "Uyarılar · canlı", ar: "التنبيهات · مباشر" }, language)}</text>
+      <circle cx="300" cy="27.5" r="2.5" fill="#EF4444" opacity={reduced || tick % 2 === 0 ? 1 : 0.3} />
+      {recent.map((ev, row) => {
+        const ci = ev % CAMS.length;
+        return (
+        <motion.g key={ev} initial={reduced ? false : { opacity: 0, y: -8 }} animate={{ opacity: 1 - row * 0.25, y: 0 }} transition={T}>
+          <rect x="182" y={40 + row * 31} width="120" height="26" rx="6" fill="rgba(255,255,255,0.05)" />
+          <rect x="182" y={40 + row * 31} width="3" height="26" rx="1.5" fill={CAM_C[ci]} />
+          <text x="191" y={51 + row * 31} fontSize="7" fill="rgba(255,255,255,0.88)">{pick(CAMS[ci].e, language)}</text>
+          <text x="191" y={61 + row * 31} fontSize="6" fill={MUTED}>{pick(CAMS[ci].n, language)} · CAM 0{ci + 1}</text>
+          <text x="296" y={51 + row * 31} fontSize="6" textAnchor="end" fill={MUTED} fontFamily="var(--font-mono)">{CAMS[ci].t}</text>
+        </motion.g>
+        );
+      })}
     </Frame>
   );
 }
