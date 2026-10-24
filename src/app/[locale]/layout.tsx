@@ -130,7 +130,8 @@ export async function generateMetadata({
   },
   // Search Console / Yandex Webmaster ownership: set the tokens in Vercel env
   verification: {
-    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || undefined,
+    // Google Search Console (HTML tag method); an env value, if set, is added too
+    google: ["rAEhc8r9bbDBMtW5wJdSAO6aM7j8AluOfPR5W4Z3Kr0", ...(process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION ? [process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION] : [])],
     yandex: process.env.NEXT_PUBLIC_YANDEX_VERIFICATION || undefined,
     // Bing Webmaster Tools (also feeds ChatGPT search)
     other: { "msvalidate.01": "96892F4F071DE61B8F00B429406397C1" },
