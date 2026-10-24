@@ -399,12 +399,12 @@ export function HomeHero() {
             className="hero-in inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-white/70 backdrop-blur"
           >
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-            {pick({ en: "Product studio", ru: "Студия продуктов", zh: "产品工作室", tr: "Ürün stüdyosu", ar: "استوديو منتجات" }, language)}
+            {pick({ en: "IT studio Anteyko", ru: "IT-студия Anteyko", zh: "Anteyko IT 工作室", tr: "BT stüdyosu Anteyko", ar: "استوديو Anteyko التقني" }, language)}
             <span className="text-white/30">·</span>
             <OfficeClock language={language} run={inView} />
           </p>
 
-          <h1 className="mt-7 font-brand text-[2.7rem] font-semibold leading-[0.98] tracking-[-0.035em] sm:text-6xl xl:text-[5.4rem]">
+          <h1 className="mt-7 font-brand text-[2.1rem] font-semibold leading-[1.02] tracking-[-0.035em] sm:text-[2.8rem] xl:text-[3.25rem]">
             {[t("hero.titleAccent"), t("hero.titleRest")].map((line, i) => (
               <span key={i} className="block overflow-hidden pb-[0.08em]">
                 <span className="hero-rise block" style={{ ["--d" as string]: `${0.1 + i * 0.12}s` }}>
