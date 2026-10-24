@@ -1,21 +1,18 @@
 "use client";
 
-import { Fragment, useRef, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { useLanguage } from "@/lib/language-context";
 import { pick, type Language } from "@/lib/i18n-text";
-import { EASE, useLoop } from "@/components/motion/kit";
-import { useReducedMotion } from "@/lib/hooks";
 import { SERVICE_GROUPS, type ServiceGroup } from "@/lib/service-slugs";
 import { PKG_COLOR } from "./visual-frame";
 
-// /services hero: the headline, and under it the four directions as wide
-// panels. One panel is open at a time (the one under the cursor, or each in
-// turn): it widens, the others narrow, and it shows its services with prices.
-// A click opens that direction in the catalog below. On phones the panels
-// stack as an accordion. Loops tick only while the hero is on screen.
+// /services hero: the headline on the left; on the right a glass orb with the
+// four directions on a slowly turning, tilted orbit and one dot per service on
+// an inner orbit turning the other way. Positions are set per frame (transform
+// only, no React renders), paused off screen and under reduced motion. Hovering
+// a direction eases the orbit to a stop and tints the glow; a click opens it in
+// the catalog below.
 
-const CYCLE = 5000;
 
 /** "1 услуга / 3 услуги / 6 услуг", "1 service / 4 services" */
 function countLabel(count: number, language: Language) {
@@ -44,72 +41,37 @@ const ICON: Record<ServiceGroup, string[]> = {
   care: ["M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.4-.6-.6-2.4z"],
 };
 
-function Icon({ id, color, draw }: { id: ServiceGroup; color: string; draw: boolean }) {
-  const reduced = useReducedMotion();
-  return (
-    <span aria-hidden="true" className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl border" style={{ borderColor: `rgb(${color} / 0.35)`, background: `rgb(${color} / 0.1)` }}>
-      <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke={`rgb(${color})`} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-        {ICON[id].map((d, k) => (
-          <motion.path key={`${k}-${draw}`} d={d} initial={reduced || !draw ? false : { pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 0.9, delay: 0.15 + k * 0.12, ease: EASE }} />
-        ))}
-      </svg>
-    </span>
-  );
-}
 
 type Group = (typeof SERVICE_GROUPS)[number] & { items: ReturnType<typeof useLanguage>["translations"]["packages"]["items"][number][] };
 
 export function ServicesHero({ onPick }: { onPick: (g: ServiceGroup) => void }) {
   const { translations, language } = useLanguage();
   const packages = translations.packages.items;
-  const reduced = useReducedMotion();
   const groups: Group[] = SERVICE_GROUPS.map((g) => ({ ...g, items: packages.filter((p) => p.group === g.id) })).filter((g) => g.items.length);
   const colors = groups.map((g) => PKG_COLOR[g.items[0].id]);
-
-  // the open panel: the one under the cursor (after a short rest), or each in turn
   const [hover, setHover] = useState<number | null>(null);
-  const timer = useRef(0);
-  const rest = (i: number | null) => {
-    window.clearTimeout(timer.current);
-    timer.current = window.setTimeout(() => setHover(i), i === null ? 0 : 110);
-  };
-  const { ref, tick } = useLoop<HTMLDivElement>(CYCLE);
-  const open = hover ?? (reduced ? 0 : tick % groups.length);
-  const auto = hover === null && !reduced;
-  // phones: no auto-cycling, which would fold and unfold rows under the thumb
-  const [mOpen, setMOpen] = useState(0);
 
   const lines = [
     pick({ en: "Services", ru: "Услуги", zh: "服务", tr: "Hizmetler", ar: "الخدمات" }, language),
     pick({ en: "end to end", ru: "под ключ", zh: "全流程交付", tr: "uçtan uca", ar: "من البداية إلى النهاية" }, language),
   ];
   const openLabel = pick({ en: "Open", ru: "Открыть", zh: "打开", tr: "Aç", ar: "افتح" }, language);
-  const openDirection = pick({ en: "Open the direction", ru: "Открыть направление", zh: "查看方向", tr: "Alanı aç", ar: "افتح المجال" }, language);
 
   return (
-    <section className="relative isolate overflow-hidden bg-[#06060B] pb-16 pt-16 text-white md:pb-24 md:pt-20">
-      <div aria-hidden="true" className="home-aurora pointer-events-none absolute inset-0 -z-10 opacity-70" />
-      {/* one soft glow in the colour of the open direction; layers cross-fade */}
-      {colors.map((c, i) => (
-        <div
-          key={i}
-          aria-hidden="true"
-          className="pointer-events-none absolute left-1/2 top-[38%] -z-10 h-[700px] w-[1100px] -translate-x-1/2 rounded-full transition-opacity duration-[1600ms] ease-in-out"
-          style={{ background: `radial-gradient(closest-side, rgb(${c} / 0.16), transparent)`, opacity: i === open ? 1 : 0 }}
-        />
-      ))}
+    <section className="relative isolate overflow-hidden bg-[#06060B] pb-10 pt-14 text-white md:pb-16 md:pt-16">
+      <div aria-hidden="true" className="home-aurora pointer-events-none absolute inset-0 -z-10 opacity-60" />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 -z-10 opacity-[0.06] [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_75%)]"
+        className="pointer-events-none absolute inset-0 -z-10 opacity-[0.05] [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_75%)]"
         style={{ backgroundImage: "linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)", backgroundSize: "64px 64px" }}
       />
 
-      <div ref={ref} className="container relative mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 className="text-center font-brand text-[3.4rem] font-semibold leading-[0.95] tracking-[-0.04em] sm:text-7xl lg:text-[6.5rem]">
+      <div className="container relative mx-auto grid items-center gap-6 px-4 sm:px-6 lg:grid-cols-[1fr_1.05fr] lg:px-8">
+        <h1 className="font-brand text-[3.6rem] font-semibold leading-[0.92] tracking-[-0.04em] sm:text-8xl xl:text-[7.5rem]">
           {lines.map((line, i) => (
             <Fragment key={i}>
-              <span className="inline-block overflow-hidden pb-[0.08em] align-bottom">
-                <span className="hero-rise inline-block" style={{ ["--d" as string]: `${0.08 + i * 0.12}s` }}>
+              <span className="block overflow-hidden pb-[0.08em]">
+                <span className="hero-rise block" style={{ ["--d" as string]: `${0.08 + i * 0.12}s` }}>
                   <span className={i === 0 ? "home-gradient-text" : undefined}>{line}</span>
                 </span>
               </span>
@@ -118,130 +80,174 @@ export function ServicesHero({ onPick }: { onPick: (g: ServiceGroup) => void }) 
           ))}
         </h1>
 
-        {/* desktop: panels in a row; the open one widens */}
-        <div className="hero-up mt-12 hidden h-[400px] gap-3 md:flex lg:mt-16" onMouseLeave={() => rest(null)}>
-          {groups.map((g, i) => {
-            const on = i === open;
-            const c = colors[i];
-            return (
-              <button
-                key={g.id}
-                type="button"
-                onMouseEnter={() => rest(i)}
-                onFocus={() => setHover(i)}
-                onClick={() => onPick(g.id)}
-                aria-label={`${openLabel}: ${pick(g.label, language)}`}
-                aria-expanded={on}
-                className="group relative flex min-w-0 flex-col overflow-hidden rounded-[28px] border text-left transition-[flex-grow,border-color,box-shadow] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
-                style={{
-                  flexGrow: on ? 3.2 : 1,
-                  flexBasis: 0,
-                  background: "linear-gradient(180deg, #14141D 0%, #0C0C13 100%)",
-                  borderColor: on ? `rgb(${c} / 0.35)` : "rgba(255,255,255,0.07)",
-                  boxShadow: on ? `0 40px 80px -50px rgb(${c} / 0.7), inset 0 1px 0 rgba(255,255,255,0.07)` : "inset 0 1px 0 rgba(255,255,255,0.05)",
-                }}
-              >
-                <span aria-hidden="true" className="absolute inset-x-0 top-0 h-px transition-opacity duration-700" style={{ background: `linear-gradient(90deg, transparent, rgb(${c}), transparent)`, opacity: on ? 1 : 0.25 }} />
-                <span aria-hidden="true" className="absolute -right-24 -top-24 h-64 w-64 rounded-full transition-opacity duration-700" style={{ background: `radial-gradient(closest-side, rgb(${c} / 0.2), transparent)`, opacity: on ? 1 : 0 }} />
-
-                <span className="relative flex h-full flex-col p-6 lg:p-7">
-                  <span className="flex items-start justify-between gap-3">
-                    <Icon id={g.id} color={c} draw={on} />
-                    <span className="font-mono text-[11px] text-white/35">{String(i + 1).padStart(2, "0")}</span>
-                  </span>
-
-                  <span className="mt-auto">
-                    <span className={`block font-brand font-semibold leading-[1.05] tracking-[-0.02em] text-white transition-[font-size] duration-500 ${on ? "text-[1.9rem] lg:text-[2.2rem]" : "text-[1.15rem] lg:text-[1.3rem]"}`}>
-                      {/* a narrow panel shows the short name */}
-                      {on ? pick(g.label, language) : pick(SHORT[g.id], language)}
-                    </span>
-                    <span className="mt-2 block font-mono text-[11px] text-white/45">{countLabel(g.items.length, language)}</span>
-
-                    {/* the open panel's services */}
-                    <AnimatePresence initial={false}>
-                      {on && (
-                        <motion.span
-                          key="list"
-                          className="block"
-                          initial={reduced ? false : { opacity: 0 }}
-                          animate={{ opacity: 1, transition: { duration: 0.45, delay: 0.3 } }}
-                          exit={{ opacity: 0, transition: { duration: 0.15 } }}
-                        >
-                          <span className={`mt-6 grid gap-x-8 gap-y-2.5 ${g.items.length > 3 ? "grid-cols-2" : "grid-cols-1"}`}>
-                            {g.items.map((p, k) => (
-                              <motion.span
-                                key={p.id}
-                                className="flex items-center justify-between gap-3 border-b border-white/[0.06] pb-2 text-[14px]"
-                                initial={reduced ? false : { opacity: 0, y: 4 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.45, delay: 0.35 + k * 0.05, ease: EASE }}
-                              >
-                                <span className="flex min-w-0 items-center gap-2 text-white/85">
-                                  <span aria-hidden="true" className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: `rgb(${PKG_COLOR[p.id]})` }} />
-                                  <span className="truncate">{pick(p.title, language)}</span>
-                                </span>
-                                <span className="shrink-0 font-mono text-[11px] text-white/40">{pick(p.startingPrice, language)}</span>
-                              </motion.span>
-                            ))}
-                          </span>
-                          <span className="mt-6 flex items-center justify-between gap-6">
-                            <span className="inline-flex items-center gap-2 text-body-sm font-medium" style={{ color: `rgb(${c})` }}>
-                              {openDirection}
-                              <span aria-hidden="true" className="transition-transform group-hover:translate-x-1">→</span>
-                            </span>
-                            {/* time until the next panel opens on its own */}
-                            <span aria-hidden="true" className="h-[2px] w-24 overflow-hidden rounded-full bg-white/[0.08] transition-opacity duration-500" style={{ opacity: auto ? 1 : 0 }}>
-                              {auto && <motion.span key={`${g.id}-${tick}`} className="block h-full origin-left rounded-full" style={{ background: `rgb(${c})` }} initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: CYCLE / 1000, ease: "linear" }} />}
-                            </span>
-                          </span>
-                        </motion.span>
-                      )}
-                    </AnimatePresence>
-                  </span>
-                </span>
-              </button>
-            );
-          })}
-        </div>
-
-        {/* phones: an accordion; a tap opens a panel, a tap on the open one opens it below */}
-        <div className="hero-up mt-10 space-y-3 md:hidden">
-          {groups.map((g, i) => {
-            const on = i === mOpen;
-            const c = colors[i];
-            return (
-              <div key={g.id} className="overflow-hidden rounded-[22px] border transition-colors duration-500" style={{ background: "linear-gradient(180deg, #14141D, #0C0C13)", borderColor: on ? `rgb(${c} / 0.35)` : "rgba(255,255,255,0.07)" }}>
-                <button type="button" onClick={() => (on ? onPick(g.id) : setMOpen(i))} aria-expanded={on} className="flex w-full items-center gap-4 p-4 text-left">
-                  <Icon id={g.id} color={c} draw={on} />
-                  <span className="min-w-0 flex-1">
-                    <span className="block font-brand text-lg font-semibold leading-tight text-white">{pick(g.label, language)}</span>
-                    <span className="block font-mono text-[11px] text-white/45">{countLabel(g.items.length, language)}</span>
-                  </span>
-                  <span aria-hidden="true" className="transition-transform duration-500" style={{ transform: on ? "rotate(90deg)" : "none", color: on ? `rgb(${c})` : "rgba(255,255,255,0.4)" }}>→</span>
-                </button>
-                <div className={`grid transition-[grid-template-rows] duration-500 ease-out ${on ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}>
-                  <div className="overflow-hidden">
-                    <div className="space-y-2 px-4 pb-4">
-                      {g.items.map((p) => (
-                        <div key={p.id} className="flex items-center justify-between gap-3 border-b border-white/[0.06] pb-2 text-[13px]">
-                          <span className="flex min-w-0 items-center gap-2 text-white/85">
-                            <span aria-hidden="true" className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: `rgb(${PKG_COLOR[p.id]})` }} />
-                            <span className="truncate">{pick(p.title, language)}</span>
-                          </span>
-                          <span className="shrink-0 font-mono text-[11px] text-white/40">{pick(p.startingPrice, language)}</span>
-                        </div>
-                      ))}
-                      <button type="button" onClick={() => onPick(g.id)} className="mt-2 inline-flex items-center gap-2 text-body-sm font-medium" style={{ color: `rgb(${c})` }}>
-                        {openDirection} <span aria-hidden="true">→</span>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
+        <Orbit groups={groups} colors={colors} hover={hover} setHover={setHover} onPick={onPick} openLabel={openLabel} />
       </div>
     </section>
+  );
+}
+
+/* ───────────── The orbit, positioned per frame ───────────── */
+
+// The orbit is drawn flat and placed in JS each frame: CSS 3D depth sorting put
+// the back of the orbit in front of the orb. Here every node knows its depth
+// (front half in front of the orb, back half behind it, smaller and dimmer).
+const TILT = 0.34; // vertical squash of the orbit ellipse
+/** Orbit radii for a box width: narrower on phones so the labels stay on screen */
+const radii = (w: number) => {
+  const r1 = w < 480 ? w * 0.33 : Math.min(230, w * 0.44);
+  return { r1, r2: r1 * 0.6, tilt: w < 480 ? 0.62 : TILT };
+};
+
+function Orbit({ groups, colors, hover, setHover, onPick, openLabel }: { groups: Group[]; colors: string[]; hover: number | null; setHover: (i: number | null) => void; onPick: (g: ServiceGroup) => void; openLabel: string }) {
+  const { translations, language } = useLanguage();
+  const packages = translations.packages.items;
+  const box = useRef<HTMLDivElement>(null);
+  const outer = useRef<(HTMLDivElement | null)[]>([]);
+  const inner = useRef<(HTMLSpanElement | null)[]>([]);
+  const paused = useRef(false);
+  paused.current = hover !== null;
+  const glow = hover === null ? "167 139 250" : colors[hover];
+
+  useEffect(() => {
+    const el = box.current;
+    if (!el) return;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let raf = 0, last = 0, a = 0, speed = 0, visible = true;
+    const place = () => {
+      const { r1, r2, tilt } = radii(el.clientWidth);
+      groups.forEach((_, i) => {
+        const node = outer.current[i];
+        if (!node) return;
+        const t = a + (i / groups.length) * Math.PI * 2 - Math.PI / 2;
+        const depth = Math.sin(t); // +1 nearest (bottom), -1 farthest (top)
+        const k = (depth + 1) / 2;
+        node.style.transform = `translate(-50%, -50%) translate(${Math.cos(t) * r1}px, ${depth * r1 * tilt}px) scale(${0.86 + k * 0.18})`;
+        node.style.opacity = String(0.62 + k * 0.38);
+        node.style.zIndex = depth > 0 ? "30" : "10";
+      });
+      packages.forEach((_, i) => {
+        const dot = inner.current[i];
+        if (!dot) return;
+        const t = -a * 1.4 + (i / packages.length) * Math.PI * 2;
+        const depth = Math.sin(t);
+        const k = (depth + 1) / 2;
+        dot.style.transform = `translate(-50%, -50%) translate(${Math.cos(t) * r2}px, ${depth * r2 * tilt}px) scale(${0.6 + k * 0.6})`;
+        dot.style.opacity = String(0.35 + k * 0.65);
+        dot.style.zIndex = depth > 0 ? "30" : "10";
+      });
+    };
+    const frame = (now: number) => {
+      const dt = last ? Math.min(64, now - last) : 16;
+      last = now;
+      // ease the spin down while a direction is hovered, and back up after
+      const target = paused.current ? 0 : 0.00011;
+      speed += (target - speed) * Math.min(1, dt / 220);
+      a += speed * dt;
+      place();
+      raf = visible ? requestAnimationFrame(frame) : 0;
+    };
+    place();
+    if (reduced) return;
+    const io = new IntersectionObserver(([e]) => {
+      visible = e.isIntersecting;
+      if (visible && !raf) { last = 0; raf = requestAnimationFrame(frame); }
+    });
+    io.observe(el);
+    raf = requestAnimationFrame(frame);
+    return () => { cancelAnimationFrame(raf); io.disconnect(); };
+    // groups and packages come from static data
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+
+  return (
+    <div ref={box} className="hero-up relative mx-auto h-[330px] w-full max-w-[560px] sm:h-[470px]" onMouseLeave={() => setHover(null)}>
+      {/* glow behind the orb, in the colour of the direction under the cursor */}
+      <div aria-hidden="true" className="pointer-events-none absolute left-1/2 top-1/2 h-[520px] w-[520px] -translate-x-1/2 -translate-y-1/2 rounded-full transition-[background] duration-1000" style={{ background: `radial-gradient(closest-side, rgb(${glow} / 0.28), transparent)` }} />
+
+      {/* orbit lines: back halves behind the orb, front halves over it */}
+      <OrbitLines />
+
+      {/* the glass orb */}
+      <div aria-hidden="true" className="sv-orb absolute left-1/2 top-1/2 z-20 -ml-[46px] -mt-[46px] h-[92px] w-[92px] rounded-full sm:-ml-[90px] sm:-mt-[90px] sm:h-[180px] sm:w-[180px]">
+        <div className="absolute inset-0 rounded-full" style={{ background: "radial-gradient(circle at 34% 28%, rgba(255,255,255,0.95) 0 3%, rgba(221,214,254,0.85) 9%, rgba(139,92,246,0.85) 32%, rgba(49,46,129,0.95) 60%, rgba(12,10,30,1) 78%)" }} />
+        <div className="sv-orb-sheen absolute inset-0 rounded-full opacity-60 mix-blend-screen" style={{ background: "conic-gradient(from 0deg, transparent 0 20%, rgba(34,211,238,0.45) 30%, transparent 45%, rgba(236,72,153,0.4) 70%, transparent 85%)" }} />
+        <div className="absolute inset-0 rounded-full" style={{ boxShadow: "inset -14px -18px 40px rgba(0,0,0,0.55), inset 8px 10px 24px rgba(255,255,255,0.18), 0 0 80px rgba(139,92,246,0.45)" }} />
+      </div>
+
+      {/* inner orbit: one dot per service */}
+      {packages.map((p, i) => (
+        <span
+          key={p.id}
+          ref={(n) => { inner.current[i] = n; }}
+          aria-hidden="true"
+          className="absolute left-1/2 top-1/2 block h-2 w-2 rounded-full will-change-transform"
+          style={{ background: `rgb(${PKG_COLOR[p.id]})`, boxShadow: `0 0 10px rgb(${PKG_COLOR[p.id]})` }}
+        />
+      ))}
+
+      {/* outer orbit: the four directions */}
+      {groups.map((g, i) => {
+        const c = colors[i];
+        const on = hover === i;
+        return (
+          <div key={g.id} ref={(n) => { outer.current[i] = n; }} className="absolute left-1/2 top-1/2 will-change-transform">
+            <button
+              type="button"
+              onMouseEnter={() => setHover(i)}
+              onFocus={() => setHover(i)}
+              onClick={() => onPick(g.id)}
+              aria-label={`${openLabel}: ${pick(g.label, language)}`}
+              className="flex items-center gap-2 whitespace-nowrap rounded-full border px-2.5 py-1.5 text-left sm:gap-2.5 transition-[background-color,border-color,box-shadow,transform] duration-500 ease-out hover:scale-[1.06] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 sm:px-4 sm:py-2.5"
+              style={{
+                background: on ? `rgb(${c} / 0.16)` : "rgba(18,18,28,0.78)",
+                borderColor: on ? `rgb(${c} / 0.6)` : "rgba(255,255,255,0.12)",
+                boxShadow: on ? `0 0 32px -6px rgb(${c} / 0.7)` : "0 10px 30px -18px rgba(0,0,0,0.9)",
+              }}
+            >
+              <span aria-hidden="true" className="grid h-6 w-6 place-items-center rounded-full sm:h-8 sm:w-8" style={{ background: `radial-gradient(circle at 35% 30%, rgb(${c}), rgb(${c} / 0.35))`, boxShadow: `0 0 16px rgb(${c} / 0.55)` }}>
+                <svg viewBox="0 0 24 24" className="h-3.5 w-3.5 sm:h-4 sm:w-4" fill="none" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  {ICON[g.id].map((d, k) => <path key={k} d={d} />)}
+                </svg>
+              </span>
+              <span>
+                <span className="block text-[12px] font-medium leading-tight text-white sm:text-[14px]">{pick(SHORT[g.id], language)}</span>
+                <span className="block font-mono text-[10px] leading-tight text-white/45">{countLabel(g.items.length, language)}</span>
+              </span>
+            </button>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+/** The two orbit ellipses, each split into a back half (behind the orb) and a front half (over it) */
+function OrbitLines() {
+  const ref = useRef<SVGSVGElement>(null);
+  const [size, setSize] = useState({ w: 560, h: 470 });
+  useEffect(() => {
+    const el = ref.current?.parentElement;
+    if (!el) return;
+    const ro = new ResizeObserver(() => setSize({ w: el.clientWidth, h: el.clientHeight }));
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+  const cx = size.w / 2, cy = size.h / 2;
+  const { r1, r2, tilt } = radii(size.w);
+  const half = (r: number, front: boolean) => `M ${cx - r} ${cy} A ${r} ${r * tilt} 0 0 ${front ? 0 : 1} ${cx + r} ${cy}`;
+  return (
+    <>
+      <svg ref={ref} aria-hidden="true" className="pointer-events-none absolute inset-0 z-[5] h-full w-full">
+        <path d={half(r1, false)} fill="none" stroke="rgba(255,255,255,0.12)" />
+        <path d={half(r1 + 34, false)} fill="none" stroke="rgba(255,255,255,0.05)" strokeDasharray="3 5" />
+        <path d={half(r2, false)} fill="none" stroke="rgba(255,255,255,0.08)" />
+      </svg>
+      <svg aria-hidden="true" className="pointer-events-none absolute inset-0 z-[25] h-full w-full">
+        <path d={half(r1, true)} fill="none" stroke="rgba(255,255,255,0.14)" />
+        <path d={half(r1 + 34, true)} fill="none" stroke="rgba(255,255,255,0.05)" strokeDasharray="3 5" />
+        <path d={half(r2, true)} fill="none" stroke="rgba(255,255,255,0.1)" />
+      </svg>
+    </>
   );
 }
