@@ -1,19 +1,21 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
+import { useState } from "react";
+import { motion } from "framer-motion";
 import { useLanguage } from "@/lib/language-context";
 import { pick } from "@/lib/i18n-text";
 import { EASE, useLoop } from "@/components/motion/kit";
 import { ButtonLink } from "@/components/ui/link";
-import { SERVICE_GROUPS } from "@/lib/service-slugs";
+import { useReducedMotion } from "@/lib/hooks";
+import { SERVICE_GROUPS, type ServiceGroup } from "@/lib/service-slugs";
 import { PKG_COLOR } from "./visual-frame";
 
 // /services hero. Left: headline (CSS-animated, so it paints before hydration),
-// what the catalog holds, two actions. Right: a deck of index cards, one per
-// service; every few seconds the front card lifts away and the next one comes
-// forward. The deck ticks only while it is on screen.
+// what the catalog holds, two actions. Right: the four directions as folders in
+// a card index. The back ones peek out by their tabs; hovering one lifts it over
+// the others, and a click opens the same folder in the catalog below and scrolls
+// there. Without a hover the folders take turns (ticking only while on screen).
 
-const DEPTH = 4;
 
 /** "From $800" / "От $3k" → 800 / 3000; "By agreement" → Infinity */
 const usd = (label: string) => {
@@ -21,14 +23,11 @@ const usd = (label: string) => {
   return m ? Number(m[1]) * (m[2] ? 1000 : 1) : Infinity;
 };
 
-export function ServicesHero() {
+export function ServicesHero({ onPick }: { onPick: (g: ServiceGroup) => void }) {
   const { t, translations, language } = useLanguage();
   const packages = translations.packages.items;
-  const { ref, tick, reduced } = useLoop<HTMLDivElement>(2600);
-  const front = reduced ? 0 : tick % packages.length;
-  const visible = Array.from({ length: DEPTH }, (_, d) => packages[(front + d) % packages.length]);
+  const reduced = useReducedMotion();
   const min = Math.min(...packages.map((p) => usd(p.startingPrice.en)));
-  const groupOf = (g: string) => SERVICE_GROUPS.find((x) => x.id === g)!;
 
   const stats = [
     { v: String(packages.length), l: pick({ en: "services", ru: "услуг", zh: "项服务", tr: "hizmet", ar: "خدمة" }, language) },
@@ -102,53 +101,91 @@ export function ServicesHero() {
           </div>
         </div>
 
-        {/* the deck */}
-        <div ref={ref} className="hero-up relative mx-auto h-[360px] w-full max-w-[440px]" aria-hidden="true">
-          <AnimatePresence initial={false}>
-            {visible.map((p, d) => {
-              const color = PKG_COLOR[p.id];
-              const group = groupOf(p.group);
-              const n = packages.indexOf(p) + 1;
-              return (
-                <motion.div
-                  key={p.id}
-                  className="absolute inset-x-0 bottom-0 flex h-[270px] flex-col rounded-2xl border border-white/10 p-6 shadow-[0_30px_60px_-30px_rgba(0,0,0,0.9)]"
-                  style={{ zIndex: DEPTH - d, transformOrigin: "50% 100%", background: d === 0 ? "#12121C" : `color-mix(in srgb, #12121C ${100 - d * 14}%, #000)` }}
-                  initial={{ opacity: 0, y: -DEPTH * 26, scale: 1 - DEPTH * 0.04 }}
-                  animate={{ opacity: 1 - d * 0.12, y: -d * 26, scale: 1 - d * 0.04 }}
-                  exit={{ opacity: 0, y: 60, rotate: -4, scale: 1.03, transition: { duration: 0.55, ease: EASE } }}
-                  transition={{ duration: 0.6, ease: EASE }}
-                >
-                  {/* index tab */}
-                  <span className="absolute -top-3 max-w-[60%] truncate rounded-t-lg rounded-br-lg px-3 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-white" style={{ background: `rgb(${color})`, left: `${24 + (packages.indexOf(p) % 3) * 104}px` }}>
-                    {pick(group.label, language)}
-                  </span>
-                  <div className="flex items-start justify-between">
-                    <span className="font-mono text-caption text-white/40">
-                      {String(n).padStart(2, "0")} / {String(packages.length).padStart(2, "0")}
-                    </span>
-                    <span className="h-2.5 w-2.5 rounded-full" style={{ background: `rgb(${color})`, boxShadow: `0 0 16px rgb(${color})` }} />
-                  </div>
-                  <p className="mt-4 font-brand text-2xl font-semibold leading-tight text-white">{pick(p.title, language)}</p>
-                  <p className="mt-1 text-body-sm text-white/50">{pick(p.timeline, language)}</p>
-                  <ul className="mt-4 space-y-1.5">
-                    {p.deliverables[language].slice(0, 2).map((x) => (
-                      <li key={x} className="flex items-center gap-2 truncate text-body-sm text-white/70">
-                        <span className="h-1 w-3 shrink-0 rounded-full" style={{ background: `rgb(${color})` }} />
-                        <span className="truncate">{x}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  <div className="mt-auto flex items-center justify-between border-t border-white/10 pt-4">
-                    <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-white/40">{pick({ en: "from", ru: "цена", zh: "价格", tr: "fiyat", ar: "السعر" }, language)}</span>
-                    <span className="font-brand text-xl font-semibold" style={{ color: `rgb(${color})` }}>{pick(p.startingPrice, language)}</span>
-                  </div>
-                </motion.div>
-              );
-            })}
-          </AnimatePresence>
-        </div>
+        <Folders onPick={onPick} />
       </div>
     </section>
+  );
+}
+
+/* ───────────── The four directions as folders ───────────── */
+
+/** Short names for the folder tabs, where the full label doesn't fit */
+const TAB: Record<ServiceGroup, Record<"en" | "ru" | "zh" | "tr" | "ar", string>> = {
+  build: { en: "Development", ru: "Разработка", zh: "开发", tr: "Geliştirme", ar: "التطوير" },
+  brand: { en: "Brand", ru: "Бренд", zh: "品牌", tr: "Marka", ar: "العلامة" },
+  industry: { en: "Industries", ru: "Отрасли", zh: "行业", tr: "Sektörler", ar: "القطاعات" },
+  care: { en: "Modules", ru: "Модули", zh: "模块", tr: "Modüller", ar: "الوحدات" },
+};
+
+function Folders({ onPick }: { onPick: (g: ServiceGroup) => void }) {
+  const { translations, language } = useLanguage();
+  const packages = translations.packages.items;
+  const groups = SERVICE_GROUPS.map((g) => ({ ...g, items: packages.filter((p) => p.group === g.id) })).filter((g) => g.items.length);
+  const [hover, setHover] = useState<number | null>(null);
+  const { ref, tick, reduced } = useLoop<HTMLDivElement>(3000);
+  const n = groups.length;
+  const focus = hover ?? (reduced ? 0 : tick % n);
+  const svc = pick({ en: "services", ru: "услуг", zh: "项服务", tr: "hizmet", ar: "خدمات" }, language);
+
+  return (
+    <div ref={ref} className="hero-up relative mx-auto h-[450px] w-full max-w-[460px]" onMouseLeave={() => setHover(null)}>
+      {groups.map((g, i) => {
+        // each folder keeps its place and layer in the stack (the first one in
+        // front); the focused one slides up out of the stack, so it never moves
+        // away from the cursor or covers another folder's tab
+        const d = i;
+        const on = i === focus;
+        const color = PKG_COLOR[g.items[0].id];
+        return (
+          <motion.button
+            key={g.id}
+            type="button"
+            onClick={() => onPick(g.id)}
+            onMouseEnter={() => setHover(i)}
+            onFocus={() => setHover(i)}
+            aria-label={`${pick({ en: "Open", ru: "Открыть", zh: "打开", tr: "Aç", ar: "افتح" }, language)}: ${pick(g.label, language)}`}
+            className={`absolute inset-x-0 bottom-0 flex h-[280px] flex-col justify-start rounded-2xl ${i === 0 ? "rounded-tl-none" : ""} border border-white/10 text-left shadow-[0_30px_60px_-30px_rgba(0,0,0,0.9)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60`}
+            style={{ zIndex: n - d, transformOrigin: "50% 100%", background: d === 0 ? "#13131D" : `color-mix(in srgb, #13131D ${100 - d * 10}%, #000)` }}
+            initial={false}
+            animate={{ y: -d * 36 - (on && d > 0 ? 26 : 0), scale: 1 - d * 0.03, opacity: on ? 1 : 1 - d * 0.1 }}
+            transition={{ duration: 0.55, ease: EASE }}
+          >
+            {/* the folder tab, at its own place so all four stay visible */}
+            <span
+              className="absolute -top-8 flex h-8 items-center gap-1.5 truncate rounded-t-xl border border-b-0 border-white/10 px-3 font-mono text-[9px] uppercase tracking-[0.08em] text-white/80 transition-colors duration-300 sm:text-[10px]"
+              style={{ left: `${i * 24}%`, width: "26%", background: on && d > 0 ? `rgb(${color})` : "inherit", color: on && d > 0 ? "#fff" : undefined }}
+            >
+              <span aria-hidden="true" className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: on && d > 0 ? "#fff" : `rgb(${color})` }} />
+              <span className="truncate">{pick(TAB[g.id], language)}</span>
+            </span>
+            <span aria-hidden="true" className="absolute inset-x-0 top-0 h-[3px] rounded-tr-2xl" style={{ background: `linear-gradient(90deg, rgb(${color}), transparent)` }} />
+
+            {d === 0 && (
+            <span className="flex w-full flex-1 flex-col p-6">
+              <span className="flex items-baseline justify-between">
+                <span className="font-brand text-2xl font-semibold leading-tight text-white">{pick(g.label, language)}</span>
+                <span className="font-mono text-caption text-white/40">{g.items.length} {svc}</span>
+              </span>
+              <span className="mt-4 space-y-2">
+                {g.items.slice(0, 6).map((p) => (
+                  <span key={p.id} className="flex items-center justify-between gap-3 text-body-sm">
+                    <span className="flex min-w-0 items-center gap-2 text-white/75">
+                      <span aria-hidden="true" className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: `rgb(${PKG_COLOR[p.id]})` }} />
+                      <span className="truncate">{pick(p.title, language)}</span>
+                    </span>
+                    <span className="shrink-0 font-mono text-[11px] text-white/45">{pick(p.startingPrice, language)}</span>
+                  </span>
+                ))}
+              </span>
+              <span className="mt-auto inline-flex items-center gap-2 text-body-sm font-medium" style={{ color: `rgb(${color})` }}>
+                {pick({ en: "Open the folder", ru: "Открыть папку", zh: "打开文件夹", tr: "Klasörü aç", ar: "افتح المجلد" }, language)}
+                <span aria-hidden="true">↓</span>
+              </span>
+            </span>
+            )}
+          </motion.button>
+        );
+      })}
+    </div>
   );
 }
