@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Manrope, Noto_Sans_Arabic, Noto_Sans_SC, Unbounded } from "next/font/google";
+import { Manrope, Noto_Sans_Arabic, Unbounded } from "next/font/google";
 import { GeistMono } from "geist/font/mono";
 import Script from "next/script";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
@@ -39,13 +39,6 @@ const notoArabic = Noto_Sans_Arabic({
   weight: ["400", "500", "600", "700"],
   display: "swap",
   // Not preloaded: only /ar needs it, and unicode-range fetches it there on demand
-  preload: false,
-});
-
-const notoSc = Noto_Sans_SC({
-  variable: "--font-noto-sc",
-  weight: ["400", "500", "600", "700"],
-  display: "swap",
   preload: false,
 });
 
@@ -312,7 +305,7 @@ export default async function LocaleLayout({
         />
       </head>
       <body
-        className={`${manrope.variable} ${unbounded.variable} ${notoArabic.variable} ${notoSc.variable} ${GeistMono.variable} font-sans antialiased`}
+        className={`${manrope.variable} ${unbounded.variable} ${notoArabic.variable} ${GeistMono.variable} font-sans antialiased`}
       >
         {/* GTM noscript fallback */}
         {GTM_ID ? (

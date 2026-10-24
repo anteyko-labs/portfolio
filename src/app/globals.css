@@ -26,6 +26,9 @@
   --color-warning: #D97706;
   --color-error: #DC2626;
 
+  /* Chinese uses the system CJK fonts: Noto Sans SC from Google Fonts ships in
+     hundreds of unicode-range files and broke the Turbopack build */
+  --font-noto-sc: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", "Source Han Sans SC";
   --font-sans: var(--font-manrope), var(--font-noto-arabic), var(--font-noto-sc), system-ui, sans-serif;
   --font-display: var(--font-manrope), var(--font-noto-arabic), var(--font-noto-sc), system-ui, sans-serif;
   --font-mono: var(--font-geist-mono);
