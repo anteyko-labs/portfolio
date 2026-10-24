@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { motion } from "framer-motion";
 import clsx from "clsx";
 import { useLanguage } from "@/lib/language-context";
@@ -68,30 +68,25 @@ function IndexCard({ p, n, total, i, animate }: { p: Pkg; n: number; total: numb
   );
 }
 
-export function ServiceCabinet() {
+/** The open folder lives in the page, so the hero's folders can open one too */
+export function ServiceCabinet({ tab, opened, onTab }: { tab: ServiceGroup; opened: boolean; onTab: (g: ServiceGroup, deal?: boolean) => void }) {
   const { translations, language } = useLanguage();
   const reduced = useReducedMotion();
   const packages = translations.packages.items;
   const groups = SERVICE_GROUPS.map((g) => ({ ...g, items: packages.filter((p) => p.group === g.id) })).filter((g) => g.items.length);
-  const [tab, setTab] = useState<ServiceGroup>(groups[0].id);
-  // cards animate in when a folder is opened, not on first paint
-  const [opened, setOpened] = useState(false);
 
   // /services#<slug>: open that card's folder and bring the card into view
   useEffect(() => {
     const slug = decodeURIComponent(location.hash.slice(1));
     const pkg = packages.find((p) => PACKAGE_SLUGS[p.id as PackageId] === slug);
     if (!pkg) return;
-    setTab(pkg.group);
+    onTab(pkg.group, false);
     requestAnimationFrame(() => document.getElementById(slug)?.scrollIntoView({ block: "start" }));
     // packages come from static data
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const open = (id: ServiceGroup) => {
-    setOpened(true);
-    setTab(id);
-  };
+  const open = (id: ServiceGroup) => onTab(id);
 
   let offset = 0;
   return (

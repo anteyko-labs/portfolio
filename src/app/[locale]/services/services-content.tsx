@@ -1,6 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import { useLanguage } from "@/lib/language-context";
+import { useReducedMotion } from "@/lib/hooks";
+import type { ServiceGroup } from "@/lib/service-slugs";
 import { pick } from "@/lib/i18n-text";
 import { Section } from "@/components/ui/section";
 import { Link } from "@/components/ui/link";
@@ -10,11 +13,25 @@ import { ServiceCabinet } from "@/components/services-anim/service-cabinet";
 
 export function ServicesContent() {
   const { t, language } = useLanguage();
+  const reduced = useReducedMotion();
+  // the open catalog folder; the hero's folders and the catalog's tabs both set it
+  const [tab, setTab] = useState<ServiceGroup>("build");
+  // cards are dealt in when a folder is opened by hand, not on first paint
+  const [opened, setOpened] = useState(false);
+  const openFolder = (g: ServiceGroup, deal = true) => {
+    if (deal) setOpened(true);
+    setTab(g);
+  };
 
   return (
     <>
-      <ServicesHero />
-      <ServiceCabinet />
+      <ServicesHero
+        onPick={(g) => {
+          openFolder(g);
+          document.getElementById("catalog")?.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" });
+        }}
+      />
+      <ServiceCabinet tab={tab} opened={opened} onTab={openFolder} />
       <div className="bg-bg-secondary pb-16">
         <p className="text-center text-body-md text-text-secondary">
           {pick({ en: "Prices and payment terms are on the", ru: "Цены и условия оплаты — на странице", zh: "价格与付款条件请见", tr: "Fiyatlar ve ödeme koşulları için", ar: "الأسعار وشروط الدفع في صفحة" }, language)}{" "}
