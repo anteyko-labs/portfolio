@@ -32,13 +32,6 @@ export function CustomCursor() {
         return;
       }
 
-      // Buttons get "Tap"
-      const btn = el.closest("button") || el.closest("[role='button']") || el.closest("input[type='submit']");
-      if (btn) {
-        setLabel("Tap");
-        return;
-      }
-
       setLabel("");
     };
 
