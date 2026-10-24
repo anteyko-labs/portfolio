@@ -9,7 +9,7 @@ import { PricingContent } from "./pricing-content";
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   return seo(locale, "/pricing", {
-    title: pick({ en: "Pricing", ru: "Цены", zh: "价格", tr: "Fiyatlar", ar: "الأسعار" }, locale as Language),
+    title: pick({ en: "Website and app development prices in Bishkek", ru: "Цены на разработку сайтов и приложений в Бишкеке", zh: "比什凯克网站与应用开发价格", tr: "Bişkek'te web sitesi ve uygulama geliştirme fiyatları", ar: "أسعار تطوير المواقع والتطبيقات في بيشكيك" }, locale as Language),
     description: pick(
       {
         en: "Transparent pricing: Launch Site from $800, MVP Sprint from $3k, Startup Under Key from $5k, Web3 Add-on from $3k. Clear scope, fixed timeline.",

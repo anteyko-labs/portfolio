@@ -7,6 +7,7 @@ import { seo } from "@/i18n/metadata";
 import { SERVICE_SLUGS, getPackageBySlug } from "@/lib/service-slugs";
 import { ServiceDetailContent } from "./service-detail-content";
 import { getServiceDetail } from "@/lib/service-details";
+import { searchTitle } from "@/lib/footer-search-links";
 
 type Props = { params: Promise<{ locale: string; slug: string }> };
 
@@ -23,12 +24,14 @@ export async function generateMetadata({ params }: Props) {
   }
 
   const lang = locale as Language;
-  const description = `${pkg.description[lang]} ${
-    pick({ en: "Timeline", ru: "Срок", zh: "周期", tr: "Süre", ar: "المدة" }, lang)
-  }: ${pkg.timeline[lang]}.`;
+  const description = `${pkg.description[lang]} ${pkg.startingPrice[lang]}, ${pkg.timeline[lang]}. ${
+    pick({ en: "Anteyko, IT studio in Bishkek.", ru: "Anteyko — IT-студия в Бишкеке.", zh: "Anteyko——比什凯克 IT 工作室。", tr: "Anteyko — Bişkek'te BT stüdyosu.", ar: "Anteyko — استوديو تقني في بيشكيك." }, lang)
+  }`;
+  // the phrase people search for, e.g. «Автоматизация парковки в Бишкеке — от $1k»
+  const phrase = searchTitle(`/services/${slug}`, lang) ?? pkg.title[lang];
 
   return seo(locale, `/services/${slug}`, {
-    title: `${pkg.title[lang]} — ${pkg.timeline[lang]}`,
+    title: `${phrase} — ${pkg.startingPrice[lang].toLowerCase()}`,
     description,
   });
 }

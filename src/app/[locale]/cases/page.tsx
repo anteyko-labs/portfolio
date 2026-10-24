@@ -14,7 +14,7 @@ import { CasesContent } from "./cases-content";
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   return seo(locale, "/cases", {
-  title: pick({ en: "Cases", ru: "Кейсы", zh: "案例", tr: "Projeler", ar: "المشاريع" }, locale as Language),
+  title: pick({ en: "Portfolio: websites, apps and systems built in Bishkek", ru: "Портфолио и кейсы: сайты, приложения и системы из Бишкека", zh: "作品集：比什凯克打造的网站、应用与系统", tr: "Portföy: Bişkek'te geliştirilen siteler, uygulamalar ve sistemler", ar: "أعمالنا: مواقع وتطبيقات وأنظمة من بيشكيك" }, locale as Language),
   description:
     pick(
       {

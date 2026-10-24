@@ -11,6 +11,8 @@ import { EASE, SpotlightCard } from "@/components/motion/kit";
 import { PKG_COLOR, PackageVisual } from "@/components/services-anim/package-visuals";
 import { AuroraCta, CheckList, ShineBadge } from "@/components/services-anim/parts";
 import { ServiceDeepDive } from "@/components/services-anim/service-deep-dive";
+import { FOOTER_SEARCH_LINKS } from "@/lib/footer-search-links";
+import { PACKAGE_SLUGS, type PackageId } from "@/lib/service-slugs";
 import type { ServiceDetail } from "@/lib/service-details/types";
 
 export function ServiceDetailContent({ packageId, detail }: { packageId: string; detail?: ServiceDetail }) {
@@ -146,6 +148,24 @@ export function ServiceDetailContent({ packageId, detail }: { packageId: string;
       </Section>
 
       {detail ? <ServiceDeepDive id={pkg.id} detail={detail} /> : null}
+
+      {/* every other service, worded the way people search for it */}
+      <section className="border-t border-border bg-bg-secondary py-10">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="font-mono text-caption uppercase tracking-[0.16em] text-text-tertiary">
+            {pick({ en: "Other services", ru: "Другие услуги", zh: "其他服务", tr: "Diğer hizmetler", ar: "خدمات أخرى" }, language)}
+          </h2>
+          <ul className="mt-4 flex flex-wrap gap-2">
+            {FOOTER_SEARCH_LINKS.filter((l) => l.href !== `/services/${PACKAGE_SLUGS[pkg.id as PackageId]}`).map((l) => (
+              <li key={l.href}>
+                <Link href={l.href} variant="nav" className="inline-flex rounded-full border border-border bg-bg-primary px-3.5 py-1.5 text-body-sm text-text-secondary transition-colors hover:border-accent-primary/40 hover:text-text-primary">
+                  {pick(l.label, language)}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
 
       {/* CTA */}
       <Section background="primary" padding="lg">

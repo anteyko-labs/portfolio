@@ -8,6 +8,7 @@ import { ButtonLink } from "@/components/ui/link";
 import { OFFICES, localTime } from "@/lib/locations";
 import { FooterWordmark, useNow } from "@/components/layout/footer-wordmark";
 import { FOOTER_SEARCH_LINKS } from "@/lib/footer-search-links";
+import { FOOTER_CASE_LINKS } from "@/lib/footer-case-links";
 
 const navLinks = [
   { href: "/services", key: "services" },
@@ -158,6 +159,21 @@ export function Footer() {
                 </NextLink>
               </li>
             ))}
+          </ul>
+          {/* real projects, labelled by what was built and for whom */}
+          <ul className="mt-3 flex flex-wrap gap-x-5 gap-y-2">
+            {FOOTER_CASE_LINKS.map((c) => (
+              <li key={c.slug}>
+                <NextLink href={`/cases/${c.slug}`} className="text-caption text-text-tertiary transition-colors hover:text-text-secondary">
+                  {pick(c.format, language)} — {pick(c.sphere, language).toLowerCase()}
+                </NextLink>
+              </li>
+            ))}
+            <li>
+              <NextLink href="/cases" className="text-caption text-text-tertiary transition-colors hover:text-text-secondary">
+                {pick({ en: "Portfolio", ru: "Портфолио", zh: "作品集", tr: "Portföy", ar: "الأعمال" }, language)} →
+              </NextLink>
+            </li>
           </ul>
         </nav>
 
