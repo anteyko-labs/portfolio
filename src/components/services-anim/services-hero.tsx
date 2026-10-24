@@ -1,107 +1,21 @@
 "use client";
 
-import { useState } from "react";
-import { AnimatePresence, motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { Fragment, useRef, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { useLanguage } from "@/lib/language-context";
-import { pick, type L, type Language } from "@/lib/i18n-text";
+import { pick, type Language } from "@/lib/i18n-text";
 import { EASE, useLoop } from "@/components/motion/kit";
 import { useReducedMotion } from "@/lib/hooks";
 import { SERVICE_GROUPS, type ServiceGroup } from "@/lib/service-slugs";
 import { PKG_COLOR } from "./visual-frame";
 
-// /services hero. Left: just the headline (CSS-animated, so it paints before
-// hydration). Right: the four directions
-// as folders fanned out like cards in a hand. One comes up at a time (in turn,
-// or the one under the cursor): it lifts, glows softly in its colour and fades its
-// services in; the hero's glow takes the same colour, and the fan tilts after the
-// pointer. A click opens that folder in the catalog below. Everything that loops
-// ticks only while the hero is on screen.
+// /services hero: the headline, and under it the four directions as wide
+// panels. One panel is open at a time (the one under the cursor, or each in
+// turn): it widens, the others narrow, and it shows its services with prices.
+// A click opens that direction in the catalog below. On phones the panels
+// stack as an accordion. Loops tick only while the hero is on screen.
 
-
-/** Short names for the folder tabs */
-const TAB: Record<ServiceGroup, L> = {
-  build: { en: "Development", ru: "Разработка", zh: "开发", tr: "Geliştirme", ar: "التطوير" },
-  brand: { en: "Brand", ru: "Бренд", zh: "品牌", tr: "Marka", ar: "العلامة" },
-  industry: { en: "Industries", ru: "Отрасли", zh: "行业", tr: "Sektörler", ar: "القطاعات" },
-  care: { en: "Modules", ru: "Модули", zh: "模块", tr: "Modüller", ar: "الوحدات" },
-};
-
-
-export function ServicesHero({ onPick }: { onPick: (g: ServiceGroup) => void }) {
-  const { translations, language } = useLanguage();
-  const packages = translations.packages.items;
-  const reduced = useReducedMotion();
-  const groups = SERVICE_GROUPS.map((g) => ({ ...g, items: packages.filter((p) => p.group === g.id) })).filter((g) => g.items.length);
-
-  // which folder is up: the hovered one, or the next one in turn
-  const [hover, setHover] = useState<number | null>(null);
-  const { ref, tick } = useLoop<HTMLDivElement>(4500);
-  const focus = hover ?? (reduced ? 0 : tick % groups.length);
-  const colors = groups.map((g) => PKG_COLOR[g.items[0].id]);
-
-  // the fan tilts after the pointer (desktop only)
-  const mx = useMotionValue(0);
-  const my = useMotionValue(0);
-  const rotY = useSpring(useTransform(mx, [-1, 1], [-4, 4]), { stiffness: 40, damping: 20 });
-  const rotX = useSpring(useTransform(my, [-1, 1], [3, -3]), { stiffness: 40, damping: 20 });
-  const onMove = (e: React.PointerEvent) => {
-    if (reduced || e.pointerType !== "mouse") return;
-    const r = e.currentTarget.getBoundingClientRect();
-    mx.set(((e.clientX - r.left) / r.width) * 2 - 1);
-    my.set(((e.clientY - r.top) / r.height) * 2 - 1);
-  };
-
-  const lines = [
-    pick({ en: "Services", ru: "Услуги", zh: "服务", tr: "Hizmetler", ar: "الخدمات" }, language),
-    pick({ en: "end to end", ru: "под ключ", zh: "全流程交付", tr: "uçtan uca", ar: "من البداية إلى النهاية" }, language),
-  ];
-
-  return (
-    <section onPointerMove={onMove} onPointerLeave={() => { mx.set(0); my.set(0); }} className="relative isolate overflow-hidden bg-[#06060B] pb-16 pt-16 text-white md:pb-24 md:pt-20">
-      <div aria-hidden="true" className="home-aurora pointer-events-none absolute inset-0 -z-10" />
-      {/* a glow in the colour of the folder that is up; layers cross-fade */}
-      {colors.map((c, i) => (
-        <div
-          key={i}
-          aria-hidden="true"
-          className="pointer-events-none absolute -z-10 h-[620px] w-[620px] rounded-full transition-opacity duration-[1600ms] ease-in-out"
-          style={{ right: "-8%", top: "8%", background: `radial-gradient(closest-side, rgb(${c} / 0.2), transparent)`, opacity: i === focus ? 1 : 0 }}
-        />
-      ))}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 -z-10 opacity-[0.07] [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_75%)]"
-        style={{ backgroundImage: "linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)", backgroundSize: "64px 64px" }}
-      />
-
-      <div className="container relative mx-auto grid items-center gap-12 px-4 sm:px-6 lg:grid-cols-[0.85fr_1.15fr] lg:gap-10 lg:px-8">
-        {/* just the headline */}
-        <h1 className="font-brand text-[3.6rem] font-semibold leading-[0.92] tracking-[-0.04em] sm:text-8xl xl:text-[7.5rem]">
-          {lines.map((line, i) => (
-            <span key={i} className="block overflow-hidden pb-[0.08em]">
-              <span className="hero-rise block" style={{ ["--d" as string]: `${0.08 + i * 0.12}s` }}>
-                <span className={i === 0 ? "home-gradient-text block" : "block"}>{line}</span>
-              </span>
-              {i === 0 ? " " : null}
-            </span>
-          ))}
-        </h1>
-
-        <div ref={ref} className="hero-up [perspective:1400px]">
-          {/* the whole fan tilts as one plane; no preserve-3d, which would sort the
-              folders by depth and ignore their stacking order */}
-          <motion.div style={reduced ? undefined : { rotateX: rotX, rotateY: rotY }}>
-            <Folder groups={groups} colors={colors} focus={focus} auto={hover === null && !reduced} setHover={setHover} onPick={onPick} />
-          </motion.div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ───────────── One folder, four dividers sticking out of it ───────────── */
-
-type Group = (typeof SERVICE_GROUPS)[number] & { items: ReturnType<typeof useLanguage>["translations"]["packages"]["items"][number][] };
+const CYCLE = 5000;
 
 /** "1 услуга / 3 услуги / 6 услуг", "1 service / 4 services" */
 function countLabel(count: number, language: Language) {
@@ -114,177 +28,220 @@ function countLabel(count: number, language: Language) {
   return `${count} ${pick({ en: "", ru: "", zh: "项服务", tr: "hizmet", ar: "خدمات" }, language)}`;
 }
 
-/** A line icon per direction, drawn in when its divider comes up */
+/** Short names for the narrow panels */
+const SHORT: Record<ServiceGroup, { en: string; ru: string; zh: string; tr: string; ar: string }> = {
+  build: { en: "Development", ru: "Разработка", zh: "开发", tr: "Geliştirme", ar: "التطوير" },
+  brand: { en: "Brand", ru: "Бренд", zh: "品牌", tr: "Marka", ar: "العلامة" },
+  industry: { en: "Industries", ru: "Отрасли", zh: "行业", tr: "Sektörler", ar: "القطاعات" },
+  care: { en: "Modules", ru: "Модули", zh: "模块", tr: "Modüller", ar: "الوحدات" },
+};
+
+/** A line icon per direction */
 const ICON: Record<ServiceGroup, string[]> = {
   build: ["M9 7 4 12l5 5", "M15 7l5 5-5 5", "M13.5 5l-3 14"],
   brand: ["M12 3l2.6 5.6 6.1.7-4.5 4.2 1.2 6L12 16.6 6.6 19.5l1.2-6L3.3 9.3l6.1-.7z"],
   industry: ["M3 21V10l6 4V10l6 4V6h6v15z", "M3 21h18", "M17 10h2", "M17 14h2"],
-  care: ["M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z", "M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.6 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.6-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"],
+  care: ["M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.4-.6-.6-2.4z"],
 };
 
-function Folder({ groups, colors, focus, auto, setHover, onPick }: { groups: Group[]; colors: string[]; focus: number; auto: boolean; setHover: (i: number | null) => void; onPick: (g: ServiceGroup) => void }) {
-  const { language } = useLanguage();
+function Icon({ id, color, draw }: { id: ServiceGroup; color: string; draw: boolean }) {
   const reduced = useReducedMotion();
-  const n = groups.length;
-  const g = groups[focus];
-  const color = colors[focus];
-  const open = pick({ en: "Open", ru: "Открыть", zh: "打开", tr: "Aç", ar: "افتح" }, language);
+  return (
+    <span aria-hidden="true" className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl border" style={{ borderColor: `rgb(${color} / 0.35)`, background: `rgb(${color} / 0.1)` }}>
+      <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke={`rgb(${color})`} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+        {ICON[id].map((d, k) => (
+          <motion.path key={`${k}-${draw}`} d={d} initial={reduced || !draw ? false : { pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 0.9, delay: 0.15 + k * 0.12, ease: EASE }} />
+        ))}
+      </svg>
+    </span>
+  );
+}
+
+type Group = (typeof SERVICE_GROUPS)[number] & { items: ReturnType<typeof useLanguage>["translations"]["packages"]["items"][number][] };
+
+export function ServicesHero({ onPick }: { onPick: (g: ServiceGroup) => void }) {
+  const { translations, language } = useLanguage();
+  const packages = translations.packages.items;
+  const reduced = useReducedMotion();
+  const groups: Group[] = SERVICE_GROUPS.map((g) => ({ ...g, items: packages.filter((p) => p.group === g.id) })).filter((g) => g.items.length);
+  const colors = groups.map((g) => PKG_COLOR[g.items[0].id]);
+
+  // the open panel: the one under the cursor (after a short rest), or each in turn
+  const [hover, setHover] = useState<number | null>(null);
+  const timer = useRef(0);
+  const rest = (i: number | null) => {
+    window.clearTimeout(timer.current);
+    timer.current = window.setTimeout(() => setHover(i), i === null ? 0 : 110);
+  };
+  const { ref, tick } = useLoop<HTMLDivElement>(CYCLE);
+  const open = hover ?? (reduced ? 0 : tick % groups.length);
+  const auto = hover === null && !reduced;
+  // phones: no auto-cycling, which would fold and unfold rows under the thumb
+  const [mOpen, setMOpen] = useState(0);
+
+  const lines = [
+    pick({ en: "Services", ru: "Услуги", zh: "服务", tr: "Hizmetler", ar: "الخدمات" }, language),
+    pick({ en: "end to end", ru: "под ключ", zh: "全流程交付", tr: "uçtan uca", ar: "من البداية إلى النهاية" }, language),
+  ];
+  const openLabel = pick({ en: "Open", ru: "Открыть", zh: "打开", tr: "Aç", ar: "افتح" }, language);
+  const openDirection = pick({ en: "Open the direction", ru: "Открыть направление", zh: "查看方向", tr: "Alanı aç", ar: "افتح المجال" }, language);
 
   return (
-    <div className="relative mx-auto h-[400px] w-full max-w-[620px] sm:h-[440px]" onMouseLeave={() => setHover(null)}>
-      {/* back of the folder */}
-      <div aria-hidden="true" className="absolute inset-x-0 bottom-0 top-[38px] rounded-[24px] border border-white/[0.07] shadow-[0_50px_90px_-45px_rgba(0,0,0,0.95)]" style={{ background: "linear-gradient(180deg, #0F0F18, #08080D)" }} />
+    <section className="relative isolate overflow-hidden bg-[#06060B] pb-16 pt-16 text-white md:pb-24 md:pt-20">
+      <div aria-hidden="true" className="home-aurora pointer-events-none absolute inset-0 -z-10 opacity-70" />
+      {/* one soft glow in the colour of the open direction; layers cross-fade */}
+      {colors.map((c, i) => (
+        <div
+          key={i}
+          aria-hidden="true"
+          className="pointer-events-none absolute left-1/2 top-[38%] -z-10 h-[700px] w-[1100px] -translate-x-1/2 rounded-full transition-opacity duration-[1600ms] ease-in-out"
+          style={{ background: `radial-gradient(closest-side, rgb(${c} / 0.16), transparent)`, opacity: i === open ? 1 : 0 }}
+        />
+      ))}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 -z-10 opacity-[0.06] [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_75%)]"
+        style={{ backgroundImage: "linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)", backgroundSize: "64px 64px" }}
+      />
 
-      {/* the sheets, stepped so each paper edge reads; a few ruled lines on each */}
-      {groups.map((d, i) => {
-        const on = i === focus;
-        const inset = 10 + (n - 1 - i) * 4;
-        return (
-          <motion.div
-            key={d.id}
-            aria-hidden="true"
-            className="pointer-events-none absolute bottom-3 top-[74px] overflow-hidden rounded-t-[16px]"
-            style={{
-              left: inset,
-              right: inset,
-              zIndex: 1 + i,
-              background: `linear-gradient(180deg, color-mix(in srgb, rgb(${colors[i]}) ${on ? 9 : 4}%, #1C1C28), #13131C 60%)`,
-              boxShadow: "inset 0 1px 0 rgba(255,255,255,0.07), 0 -6px 14px -10px rgba(0,0,0,0.8)",
-              transition: "background 0.8s ease",
-            }}
-            initial={false}
-            animate={{ y: on ? -10 : 0 }}
-            transition={{ duration: 0.75, ease: EASE }}
-          >
-            <span className="absolute inset-x-0 top-0 h-px transition-opacity duration-700" style={{ background: `linear-gradient(90deg, transparent, rgb(${colors[i]}), transparent)`, opacity: on ? 0.9 : 0.18 }} />
-            {[6, 12].map((y, k) => (
-              <span key={y} className="absolute left-5 h-[2px] rounded-full bg-white/[0.08]" style={{ top: y, width: `${[46, 30][k]}%` }} />
-            ))}
-          </motion.div>
-        );
-      })}
-
-      {/* tabs: own layer, so no sheet ever covers a label; each moves with its
-          sheet and reaches below its edge (after:), so a raised tab stays under
-          the cursor that raised it */}
-      {groups.map((d, i) => {
-        const on = i === focus;
-        const c = colors[i];
-        return (
-          <motion.button
-            key={d.id}
-            type="button"
-            onMouseEnter={() => setHover(i)}
-            onFocus={() => setHover(i)}
-            onClick={() => onPick(d.id)}
-            aria-label={`${open}: ${pick(d.label, language)}`}
-            aria-pressed={on}
-            className="absolute top-[42px] z-10 flex h-[32px] items-center gap-1.5 rounded-t-[12px] border border-b-0 px-2 font-mono text-[8px] uppercase tracking-[0.02em] transition-[color,background-color,border-color] duration-500 lg:text-[11px] after:absolute after:inset-x-0 after:top-full after:h-6 after:content-[''] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 sm:px-3 sm:text-[10px] sm:tracking-[0.08em]"
-            style={{
-              left: `calc(${3 + i * 24.5}% + 4px)`,
-              width: "22.5%",
-              background: on ? `linear-gradient(180deg, color-mix(in srgb, rgb(${c}) 22%, #1C1C28), color-mix(in srgb, rgb(${c}) 9%, #1C1C28))` : "linear-gradient(180deg, #20202D, #1A1A25)",
-              borderColor: on ? `rgb(${c} / 0.4)` : "rgba(255,255,255,0.08)",
-              color: on ? `rgb(${c})` : "rgba(255,255,255,0.55)",
-              boxShadow: "inset 0 1px 0 rgba(255,255,255,0.08)",
-            }}
-            initial={false}
-            animate={{ y: on ? -10 : 0 }}
-            transition={{ duration: 0.75, ease: EASE }}
-            whileHover={reduced ? undefined : { y: on ? -10 : -3 }}
-          >
-            <span aria-hidden="true" className="absolute inset-x-2 top-0 h-[2px] rounded-b-full transition-opacity duration-500" style={{ background: `rgb(${c})`, opacity: on ? 1 : 0 }} />
-            <span aria-hidden="true" className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: `rgb(${c})`, boxShadow: on ? `0 0 10px rgb(${c})` : "none" }} />
-            <span className="truncate">{pick(TAB[d.id], language)}</span>
-          </motion.button>
-        );
-      })}
-
-      {/* front of the folder: the pocket */}
-      <button
-        type="button"
-        onClick={() => onPick(g.id)}
-        aria-label={`${open}: ${pick(g.label, language)}`}
-        className="absolute inset-x-0 bottom-0 top-[88px] z-20 overflow-hidden rounded-[24px] border text-left transition-[border-color,box-shadow] duration-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
-        style={{
-          background: "linear-gradient(180deg, #191922 0%, #101017 55%, #0C0C12 100%)",
-          borderColor: `rgb(${color} / 0.24)`,
-          boxShadow: `0 -22px 34px -24px rgba(0,0,0,0.95), 0 34px 80px -44px rgb(${color} / 0.5), inset 0 1px 0 rgba(255,255,255,0.08)`,
-        }}
-      >
-        {/* a slow sheen across the cover (CSS, paused off screen) */}
-        <span aria-hidden="true" className="pointer-events-none absolute inset-0 motion-reduce:hidden" style={{ background: "linear-gradient(115deg, transparent 38%, rgba(255,255,255,0.05) 48%, transparent 58%)", backgroundSize: "260% 100%", animation: "sv-sheen 9s ease-in-out infinite" }} />
-        {/* the thumb cut and the lip */}
-        <span aria-hidden="true" className="absolute left-1/2 top-[-1px] h-3.5 w-24 -translate-x-1/2 rounded-b-full border-x border-b border-white/[0.06] bg-[#0A0A10]" />
-        <span aria-hidden="true" className="absolute inset-x-8 top-0 h-px" style={{ background: `linear-gradient(90deg, transparent, rgb(${color} / 0.55), transparent)` }} />
-        <span aria-hidden="true" className="absolute -right-20 -top-20 h-56 w-56 rounded-full" style={{ background: `radial-gradient(closest-side, rgb(${color} / 0.15), transparent)`, transition: "background 1s ease" }} />
-
-        <AnimatePresence mode="wait" initial={false}>
-          <motion.span
-            key={g.id}
-            className="relative flex h-full flex-col p-5 sm:px-7 sm:py-6"
-            initial={reduced ? false : { opacity: 0, y: 8, filter: "blur(4px)" }}
-            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-            exit={{ opacity: 0, y: -6, filter: "blur(4px)" }}
-            transition={{ duration: 0.45, ease: EASE }}
-          >
-            <span className="flex items-start justify-between gap-4">
-              <span>
-                <span className="block font-mono text-[11px] text-white/40">
-                  {String(focus + 1).padStart(2, "0")} / {String(n).padStart(2, "0")} · {countLabel(g.items.length, language)}
+      <div ref={ref} className="container relative mx-auto px-4 sm:px-6 lg:px-8">
+        <h1 className="text-center font-brand text-[3.4rem] font-semibold leading-[0.95] tracking-[-0.04em] sm:text-7xl lg:text-[6.5rem]">
+          {lines.map((line, i) => (
+            <Fragment key={i}>
+              <span className="inline-block overflow-hidden pb-[0.08em] align-bottom">
+                <span className="hero-rise inline-block" style={{ ["--d" as string]: `${0.08 + i * 0.12}s` }}>
+                  <span className={i === 0 ? "home-gradient-text" : undefined}>{line}</span>
                 </span>
-                <span className="mt-1.5 block font-brand text-[1.35rem] font-semibold leading-[1.1] text-white sm:text-[1.65rem]">{pick(g.label, language)}</span>
               </span>
-              <span aria-hidden="true" className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl border" style={{ borderColor: `rgb(${color} / 0.3)`, background: `rgb(${color} / 0.08)` }}>
-                <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke={`rgb(${color})`} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-                  {ICON[g.id].map((d, k) => (
-                    <motion.path key={k} d={d} initial={reduced ? false : { pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 0.9, delay: 0.1 + k * 0.12, ease: EASE }} />
-                  ))}
-                </svg>
-              </span>
-            </span>
+              {i === 0 ? " " : null}
+            </Fragment>
+          ))}
+        </h1>
 
-            <span className={`mt-4 grid gap-x-6 ${g.items.length > 4 ? "gap-y-2 sm:grid-cols-2" : "gap-y-2.5"}`}>
-              {g.items.slice(0, 6).map((p, k) => (
-                <motion.span
-                  key={p.id}
-                  // phones show four rows; the rest are counted below
-                  className={`${k >= 4 ? "hidden sm:flex" : "flex"} items-center justify-between gap-3 border-b border-white/[0.05] pb-2 ${g.items.length > 4 ? "text-[13px]" : "text-[13px] sm:text-[15px]"}`}
-                  initial={reduced ? false : { opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.5, delay: 0.12 + k * 0.05, ease: "easeOut" }}
-                >
-                  <span className="flex min-w-0 items-center gap-2 text-white/80">
-                    <span aria-hidden="true" className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: `rgb(${PKG_COLOR[p.id]})` }} />
-                    <span className="min-w-0">
-                      <span className="block truncate">{pick(p.title, language)}</span>
-                      {/* few services: room for what each one is */}
-                      {g.items.length <= 2 && <span className="mt-0.5 hidden text-[12px] leading-snug text-white/45 sm:line-clamp-2">{pick(p.description, language)}</span>}
-                    </span>
+        {/* desktop: panels in a row; the open one widens */}
+        <div className="hero-up mt-12 hidden h-[400px] gap-3 md:flex lg:mt-16" onMouseLeave={() => rest(null)}>
+          {groups.map((g, i) => {
+            const on = i === open;
+            const c = colors[i];
+            return (
+              <button
+                key={g.id}
+                type="button"
+                onMouseEnter={() => rest(i)}
+                onFocus={() => setHover(i)}
+                onClick={() => onPick(g.id)}
+                aria-label={`${openLabel}: ${pick(g.label, language)}`}
+                aria-expanded={on}
+                className="group relative flex min-w-0 flex-col overflow-hidden rounded-[28px] border text-left transition-[flex-grow,border-color,box-shadow] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
+                style={{
+                  flexGrow: on ? 3.2 : 1,
+                  flexBasis: 0,
+                  background: "linear-gradient(180deg, #14141D 0%, #0C0C13 100%)",
+                  borderColor: on ? `rgb(${c} / 0.35)` : "rgba(255,255,255,0.07)",
+                  boxShadow: on ? `0 40px 80px -50px rgb(${c} / 0.7), inset 0 1px 0 rgba(255,255,255,0.07)` : "inset 0 1px 0 rgba(255,255,255,0.05)",
+                }}
+              >
+                <span aria-hidden="true" className="absolute inset-x-0 top-0 h-px transition-opacity duration-700" style={{ background: `linear-gradient(90deg, transparent, rgb(${c}), transparent)`, opacity: on ? 1 : 0.25 }} />
+                <span aria-hidden="true" className="absolute -right-24 -top-24 h-64 w-64 rounded-full transition-opacity duration-700" style={{ background: `radial-gradient(closest-side, rgb(${c} / 0.2), transparent)`, opacity: on ? 1 : 0 }} />
+
+                <span className="relative flex h-full flex-col p-6 lg:p-7">
+                  <span className="flex items-start justify-between gap-3">
+                    <Icon id={g.id} color={c} draw={on} />
+                    <span className="font-mono text-[11px] text-white/35">{String(i + 1).padStart(2, "0")}</span>
                   </span>
-                  <span className="shrink-0 font-mono text-[11px] text-white/40">{pick(p.startingPrice, language)}</span>
-                </motion.span>
-              ))}
-              {g.items.length > 4 && (
-                <span className="font-mono text-[11px] text-white/40 sm:hidden">
-                  + {pick({ en: "more", ru: "ещё", zh: "另有", tr: "daha", ar: "والمزيد" }, language)} {Math.min(g.items.length, 6) - 4}
-                </span>
-              )}
-            </span>
 
-            <span className="mt-auto flex items-center justify-between gap-4 pt-3">
-              <span className="inline-flex items-center gap-2 text-body-sm font-medium" style={{ color: `rgb(${color})` }}>
-                {pick({ en: "Open the folder", ru: "Открыть папку", zh: "打开文件夹", tr: "Klasörü aç", ar: "افتح المجلد" }, language)}
-                <span aria-hidden="true">→</span>
-              </span>
-              {/* time until the next divider comes up on its own */}
-              <span aria-hidden="true" className="h-[2px] w-20 overflow-hidden rounded-full bg-white/[0.08] transition-opacity duration-500" style={{ opacity: auto ? 1 : 0 }}>
-                {auto && <motion.span key={`${g.id}-t`} className="block h-full origin-left rounded-full" style={{ background: `rgb(${color})` }} initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 4.5, ease: "linear" }} />}
-              </span>
-            </span>
-          </motion.span>
-        </AnimatePresence>
-      </button>
-    </div>
+                  <span className="mt-auto">
+                    <span className={`block font-brand font-semibold leading-[1.05] tracking-[-0.02em] text-white transition-[font-size] duration-500 ${on ? "text-[1.9rem] lg:text-[2.2rem]" : "text-[1.15rem] lg:text-[1.3rem]"}`}>
+                      {/* a narrow panel shows the short name */}
+                      {on ? pick(g.label, language) : pick(SHORT[g.id], language)}
+                    </span>
+                    <span className="mt-2 block font-mono text-[11px] text-white/45">{countLabel(g.items.length, language)}</span>
+
+                    {/* the open panel's services */}
+                    <AnimatePresence initial={false}>
+                      {on && (
+                        <motion.span
+                          key="list"
+                          className="block"
+                          initial={reduced ? false : { opacity: 0 }}
+                          animate={{ opacity: 1, transition: { duration: 0.45, delay: 0.3 } }}
+                          exit={{ opacity: 0, transition: { duration: 0.15 } }}
+                        >
+                          <span className={`mt-6 grid gap-x-8 gap-y-2.5 ${g.items.length > 3 ? "grid-cols-2" : "grid-cols-1"}`}>
+                            {g.items.map((p, k) => (
+                              <motion.span
+                                key={p.id}
+                                className="flex items-center justify-between gap-3 border-b border-white/[0.06] pb-2 text-[14px]"
+                                initial={reduced ? false : { opacity: 0, y: 4 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.45, delay: 0.35 + k * 0.05, ease: EASE }}
+                              >
+                                <span className="flex min-w-0 items-center gap-2 text-white/85">
+                                  <span aria-hidden="true" className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: `rgb(${PKG_COLOR[p.id]})` }} />
+                                  <span className="truncate">{pick(p.title, language)}</span>
+                                </span>
+                                <span className="shrink-0 font-mono text-[11px] text-white/40">{pick(p.startingPrice, language)}</span>
+                              </motion.span>
+                            ))}
+                          </span>
+                          <span className="mt-6 flex items-center justify-between gap-6">
+                            <span className="inline-flex items-center gap-2 text-body-sm font-medium" style={{ color: `rgb(${c})` }}>
+                              {openDirection}
+                              <span aria-hidden="true" className="transition-transform group-hover:translate-x-1">→</span>
+                            </span>
+                            {/* time until the next panel opens on its own */}
+                            <span aria-hidden="true" className="h-[2px] w-24 overflow-hidden rounded-full bg-white/[0.08] transition-opacity duration-500" style={{ opacity: auto ? 1 : 0 }}>
+                              {auto && <motion.span key={`${g.id}-${tick}`} className="block h-full origin-left rounded-full" style={{ background: `rgb(${c})` }} initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: CYCLE / 1000, ease: "linear" }} />}
+                            </span>
+                          </span>
+                        </motion.span>
+                      )}
+                    </AnimatePresence>
+                  </span>
+                </span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* phones: an accordion; a tap opens a panel, a tap on the open one opens it below */}
+        <div className="hero-up mt-10 space-y-3 md:hidden">
+          {groups.map((g, i) => {
+            const on = i === mOpen;
+            const c = colors[i];
+            return (
+              <div key={g.id} className="overflow-hidden rounded-[22px] border transition-colors duration-500" style={{ background: "linear-gradient(180deg, #14141D, #0C0C13)", borderColor: on ? `rgb(${c} / 0.35)` : "rgba(255,255,255,0.07)" }}>
+                <button type="button" onClick={() => (on ? onPick(g.id) : setMOpen(i))} aria-expanded={on} className="flex w-full items-center gap-4 p-4 text-left">
+                  <Icon id={g.id} color={c} draw={on} />
+                  <span className="min-w-0 flex-1">
+                    <span className="block font-brand text-lg font-semibold leading-tight text-white">{pick(g.label, language)}</span>
+                    <span className="block font-mono text-[11px] text-white/45">{countLabel(g.items.length, language)}</span>
+                  </span>
+                  <span aria-hidden="true" className="transition-transform duration-500" style={{ transform: on ? "rotate(90deg)" : "none", color: on ? `rgb(${c})` : "rgba(255,255,255,0.4)" }}>→</span>
+                </button>
+                <div className={`grid transition-[grid-template-rows] duration-500 ease-out ${on ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}>
+                  <div className="overflow-hidden">
+                    <div className="space-y-2 px-4 pb-4">
+                      {g.items.map((p) => (
+                        <div key={p.id} className="flex items-center justify-between gap-3 border-b border-white/[0.06] pb-2 text-[13px]">
+                          <span className="flex min-w-0 items-center gap-2 text-white/85">
+                            <span aria-hidden="true" className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: `rgb(${PKG_COLOR[p.id]})` }} />
+                            <span className="truncate">{pick(p.title, language)}</span>
+                          </span>
+                          <span className="shrink-0 font-mono text-[11px] text-white/40">{pick(p.startingPrice, language)}</span>
+                        </div>
+                      ))}
+                      <button type="button" onClick={() => onPick(g.id)} className="mt-2 inline-flex items-center gap-2 text-body-sm font-medium" style={{ color: `rgb(${c})` }}>
+                        {openDirection} <span aria-hidden="true">→</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
   );
 }
