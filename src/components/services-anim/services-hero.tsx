@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useSyncExternalStore } from "react";
+import { useRef, useState, useSyncExternalStore } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { useLanguage } from "@/lib/language-context";
 import { pick, type L } from "@/lib/i18n-text";
@@ -13,8 +13,8 @@ import { PKG_COLOR } from "./visual-frame";
 // /services hero. Left: headline (CSS-animated, so it paints before hydration),
 // the catalog in four counting numbers, two actions. Right: the four directions
 // as folders fanned out like cards in a hand. One comes up at a time (in turn,
-// or the one under the cursor): it lifts, glows in its colour and deals out its
-// services; the hero's glow takes the same colour, and the fan tilts after the
+// or the one under the cursor): it lifts, glows softly in its colour and fades its
+// services in; the hero's glow takes the same colour, and the fan tilts after the
 // pointer. A click opens that folder in the catalog below. Everything that loops
 // ticks only while the hero is on screen.
 
@@ -49,15 +49,15 @@ export function ServicesHero({ onPick }: { onPick: (g: ServiceGroup) => void }) 
 
   // which folder is up: the hovered one, or the next one in turn
   const [hover, setHover] = useState<number | null>(null);
-  const { ref, tick } = useLoop<HTMLDivElement>(3000);
+  const { ref, tick } = useLoop<HTMLDivElement>(4500);
   const focus = hover ?? (reduced ? 0 : tick % groups.length);
   const colors = groups.map((g) => PKG_COLOR[g.items[0].id]);
 
   // the fan tilts after the pointer (desktop only)
   const mx = useMotionValue(0);
   const my = useMotionValue(0);
-  const rotY = useSpring(useTransform(mx, [-1, 1], [-9, 9]), { stiffness: 90, damping: 18 });
-  const rotX = useSpring(useTransform(my, [-1, 1], [7, -7]), { stiffness: 90, damping: 18 });
+  const rotY = useSpring(useTransform(mx, [-1, 1], [-4, 4]), { stiffness: 40, damping: 20 });
+  const rotX = useSpring(useTransform(my, [-1, 1], [3, -3]), { stiffness: 40, damping: 20 });
   const onMove = (e: React.PointerEvent) => {
     if (reduced || e.pointerType !== "mouse") return;
     const r = e.currentTarget.getBoundingClientRect();
@@ -84,8 +84,8 @@ export function ServicesHero({ onPick }: { onPick: (g: ServiceGroup) => void }) 
         <div
           key={i}
           aria-hidden="true"
-          className="pointer-events-none absolute -z-10 h-[620px] w-[620px] rounded-full transition-opacity duration-1000 ease-out"
-          style={{ right: "-8%", top: "8%", background: `radial-gradient(closest-side, rgb(${c} / 0.32), transparent)`, opacity: i === focus ? 1 : 0 }}
+          className="pointer-events-none absolute -z-10 h-[620px] w-[620px] rounded-full transition-opacity duration-[1600ms] ease-in-out"
+          style={{ right: "-8%", top: "8%", background: `radial-gradient(closest-side, rgb(${c} / 0.2), transparent)`, opacity: i === focus ? 1 : 0 }}
         />
       ))}
       <div
@@ -172,8 +172,10 @@ function Fan({ groups, colors, focus, setHover, onPick }: { groups: Group[]; col
   const mid = (n - 1) / 2;
   // cards in a hand: all turn around one point far below, so their tops (and
   // tabs) fan apart and stay visible whichever folder is up
-  const step = narrow ? 6 : 13;
+  const step = narrow ? 5 : 9;
   const svc = pick({ en: "services", ru: "услуг", zh: "项服务", tr: "hizmet", ar: "خدمات" }, language);
+  const pending = useRef<number | null>(null);
+  const timer = useRef(0);
   const zoneOf = (e: React.MouseEvent<HTMLElement>) => {
     const r = e.currentTarget.getBoundingClientRect();
     return Math.min(n - 1, Math.max(0, Math.floor(((e.clientX - r.left) / r.width) * n)));
@@ -186,16 +188,27 @@ function Fan({ groups, colors, focus, setHover, onPick }: { groups: Group[]; col
       // for the zone under the cursor comes up and covers that zone, so a click
       // always lands on the folder you see (folders overlap, hit-testing alone
       // would pick a neighbour)
-      onMouseMove={(e) => setHover(zoneOf(e))}
-      onMouseLeave={() => setHover(null)}
+      // a short rest before a folder comes up, so sweeping across doesn't flicker
+      onMouseMove={(e) => {
+        const z = zoneOf(e);
+        if (z === pending.current) return;
+        pending.current = z;
+        window.clearTimeout(timer.current);
+        timer.current = window.setTimeout(() => setHover(z), 160);
+      }}
+      onMouseLeave={() => {
+        pending.current = null;
+        window.clearTimeout(timer.current);
+        setHover(null);
+      }}
       // mouse clicks and taps go by zone too; keyboard Enter reaches the button
       onClick={(e) => {
         if (e.detail > 0) onPick(groups[zoneOf(e)].id);
       }}
     >
       {/* sparks drifting around the fan */}
-      {[[8, 18], [88, 12], [94, 64], [4, 72], [50, 4]].map(([l, t], k) => (
-        <span key={k} aria-hidden="true" className="sv-float absolute h-1.5 w-1.5 rounded-full" style={{ left: `${l}%`, top: `${t}%`, background: `rgb(${colors[k % n]})`, boxShadow: `0 0 12px rgb(${colors[k % n]})`, animationDelay: `${k * -1.3}s` }} />
+      {[[10, 22], [90, 16], [6, 70]].map(([l, t], k) => (
+        <span key={k} aria-hidden="true" className="sv-float absolute h-1 w-1 rounded-full opacity-60" style={{ left: `${l}%`, top: `${t}%`, background: `rgb(${colors[k % n]})`, boxShadow: `0 0 8px rgb(${colors[k % n]})`, animationDelay: `${k * -2.3}s`, animationDuration: "11s" }} />
       ))}
       {groups.map((g, i) => {
         const on = i === focus;
@@ -214,39 +227,42 @@ function Fan({ groups, colors, focus, setHover, onPick }: { groups: Group[]; col
             style={{
               zIndex: on ? n + 1 : i,
               transformOrigin: "50% 190%",
-              background: "linear-gradient(180deg, #171722, #0E0E16)",
-              borderColor: on ? `rgb(${color} / 0.7)` : "rgba(255,255,255,0.1)",
-              boxShadow: on ? `0 30px 80px -30px rgb(${color} / 0.75), 0 0 0 1px rgb(${color} / 0.25)` : "0 24px 50px -30px rgba(0,0,0,0.9)",
+              background: "linear-gradient(180deg, #16161F 0%, #0F0F17 100%)",
+              borderColor: on ? `rgb(${color} / 0.38)` : "rgba(255,255,255,0.08)",
+              boxShadow: on ? `0 28px 60px -34px rgb(${color} / 0.5), inset 0 1px 0 rgba(255,255,255,0.06)` : "0 20px 44px -32px rgba(0,0,0,0.85), inset 0 1px 0 rgba(255,255,255,0.04)",
+              transition: "border-color 0.8s ease, box-shadow 0.8s ease",
             }}
             initial={false}
             animate={{
               rotate: off * step,
-              y: on ? -30 : 0,
-              scale: on ? 1.04 : 0.96,
+              y: on ? -14 : 0,
+              scale: on ? 1.015 : 0.975,
             }}
-            transition={{ type: "spring", stiffness: 170, damping: 22 }}
+            transition={{ duration: 0.9, ease: EASE }}
           >
             {/* folder tab */}
-            <span className="absolute -top-7 left-4 flex h-7 items-center gap-1.5 rounded-t-xl px-3 font-mono text-[10px] uppercase tracking-[0.1em] transition-colors duration-300" style={{ background: on ? `rgb(${color})` : "#171722", color: on ? "#fff" : "rgba(255,255,255,0.7)", border: "1px solid rgba(255,255,255,0.1)", borderBottom: 0 }}>
-              <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full" style={{ background: on ? "#fff" : `rgb(${color})` }} />
+            <span className="absolute -top-7 left-4 flex h-7 items-center gap-1.5 rounded-t-xl px-3 font-mono text-[10px] uppercase tracking-[0.1em] transition-colors duration-700" style={{ background: on ? `color-mix(in srgb, rgb(${color}) 18%, #16161F)` : "#16161F", color: on ? `rgb(${color})` : "rgba(255,255,255,0.6)", border: "1px solid rgba(255,255,255,0.08)", borderBottom: 0 }}>
+              <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full" style={{ background: `rgb(${color})` }} />
               {pick(TAB[g.id], language)}
             </span>
-            <span aria-hidden="true" className="absolute inset-x-0 top-0 h-[3px] rounded-t-2xl" style={{ background: `linear-gradient(90deg, rgb(${color}), transparent)` }} />
+            <span aria-hidden="true" className="absolute inset-x-0 top-0 h-px rounded-t-2xl transition-opacity duration-700" style={{ background: `linear-gradient(90deg, rgb(${color}), transparent 70%)`, opacity: on ? 1 : 0.45 }} />
 
             <span className="flex w-full flex-1 flex-col p-4 sm:p-6">
-              <span className="flex items-center justify-between font-mono text-[11px] text-white/40">
+              <span className="flex items-center justify-between font-mono text-[11px] text-white/40 transition-opacity duration-700" style={{ opacity: on ? 1 : 0.6 }}>
                 <span>{String(i + 1).padStart(2, "0")} / {String(n).padStart(2, "0")}</span>
                 <span>{g.items.length} {svc}</span>
               </span>
-              <span className="mt-3 font-brand text-[1.2rem] font-semibold leading-tight text-white sm:text-2xl">{pick(g.label, language)}</span>
+              <span className="mt-3 font-brand text-[1.2rem] font-semibold leading-tight text-white transition-opacity duration-700 sm:text-2xl" style={{ opacity: on ? 1 : 0.28 }}>
+                {pick(g.label, language)}
+              </span>
               <span className="mt-4 space-y-2">
                 {g.items.slice(0, 6).map((p, k) => (
                   <motion.span
                     key={p.id}
                     className="flex items-center justify-between gap-2 text-[12px] sm:gap-3 sm:text-[13px]"
                     initial={false}
-                    animate={{ opacity: on ? 1 : 0.35, x: on ? 0 : -6 }}
-                    transition={{ duration: 0.4, delay: on ? 0.12 + k * 0.06 : 0, ease: EASE }}
+                    animate={{ opacity: on ? 1 : 0.18 }}
+                    transition={{ duration: 0.6, delay: on ? 0.15 + k * 0.05 : 0, ease: "easeOut" }}
                   >
                     <span className="flex min-w-0 items-center gap-2 text-white/80">
                       <span aria-hidden="true" className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: `rgb(${PKG_COLOR[p.id]})` }} />
@@ -260,8 +276,8 @@ function Fan({ groups, colors, focus, setHover, onPick }: { groups: Group[]; col
                 className="mt-auto inline-flex items-center gap-2 text-body-sm font-medium"
                 style={{ color: `rgb(${color})` }}
                 initial={false}
-                animate={{ opacity: on ? 1 : 0, y: on ? 0 : 6 }}
-                transition={{ duration: 0.35, delay: on ? 0.3 : 0 }}
+                animate={{ opacity: on ? 1 : 0 }}
+                transition={{ duration: 0.6, delay: on ? 0.35 : 0, ease: "easeOut" }}
               >
                 {pick({ en: "Open the folder", ru: "Открыть папку", zh: "打开文件夹", tr: "Klasörü aç", ar: "افتح المجلد" }, language)}
                 <span aria-hidden="true">→</span>
