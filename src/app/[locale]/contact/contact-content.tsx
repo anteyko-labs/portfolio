@@ -24,17 +24,15 @@ import {
   ChannelLinks,
 } from "@/components/misc-anim/contact-anim";
 import { INTL_LOCALE } from "@/lib/i18n-text";
+import { WHATSAPP_NUMBER, WHATSAPP_URL } from "@/lib/whatsapp";
 
 // ── Instant-contact channels ──────────────────────────────────────────────
 // Single source of truth for the direct-contact buttons. The Cal.com booking
-// link lives in the CalEmbed component (src/components/ui/cal-embed.tsx).
+// link lives in the CalEmbed component (src/components/ui/cal-embed.tsx), the
+// WhatsApp number in src/lib/whatsapp.ts, shared with the floating button.
 const CONTACT_EMAIL = "labs@anteyko.com";
 const TELEGRAM_URL = "https://t.me/Anteyko_labs";
-// WhatsApp number in wa.me/<digits> international format (no "+", no spaces).
-// While empty, the WhatsApp button is hidden so we never ship a dead/wrong link.
-const WHATSAPP_NUMBER: string = "996551180770";
-const WHATSAPP_URL: string = WHATSAPP_NUMBER ? `https://wa.me/${WHATSAPP_NUMBER}` : "";
-// "996551180770" → "+996 551 180 770"
+// "996709927895" → "+996 709 927 895"
 const formatPhone = (n: string) => (n ? `+${n.slice(0, 3)} ${n.slice(3, 6)} ${n.slice(6, 9)} ${n.slice(9)}` : "");
 
 const projectTypeOptions = (t: (k: string) => string) => [
