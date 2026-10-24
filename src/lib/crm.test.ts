@@ -68,6 +68,15 @@ const recognised: Record<string, [string, string][]> = {
     ["+7 777 123 45 67", "+77771234567"],
     ["8 701 123 45 67", "+77011234567"],
   ],
+  "+8 instead of 8 or +7: the 8 rule with a stray plus": [
+    ["+8 (912) 345-67-89", "+79123456789"],
+    ["+8 (701) 123-45-67", "+77011234567"],
+    ["+8 (495) 123-45-67", "+74951234567"], // Moscow: glued on, +84 would be Vietnam
+    ["+8 800 555 35 35", "+78005553535"],
+    ["+89123456789", "+79123456789"], // no country code starts with 83, 87 or 89
+    ["+87011234567", "+77011234567"],
+    ["+83431234567", "+73431234567"],
+  ],
   "other countries, written with +": [
     ["+1 (415) 555-0100", "+14155550100"],
     ["+90 532 123 45 67", "+905321234567"],
@@ -75,6 +84,22 @@ const recognised: Record<string, [string, string][]> = {
     ["+44 20 7946 0958", "+442079460958"],
     ["+971 50 123 4567", "+971501234567"],
     ["+84 912 345 678", "+84912345678"], // +8 and 10 digits is Vietnam, not a mistyped +7
+    ["+38 (050) 123-45-67", "+380501234567"], // Ukraine's code is 380 however it is split
+  ],
+  "a trunk 0 after a country code typed apart from it": [
+    ["+44 (0) 20 7946 0958", "+442079460958"],
+    ["+44 (0)7911 123456", "+447911123456"],
+    ["+49 (0)30 1234567", "+49301234567"],
+    ["+971 (0)50 123 4567", "+971501234567"],
+    ["+971 050 123 4567", "+971501234567"],
+    ["+90 (0532) 123 45 67", "+905321234567"],
+    ["0090 0532 123 45 67", "+905321234567"],
+    ["+86 (0)10 1234 5678", "+861012345678"],
+  ],
+  "a 0 after the code that is part of the number": [
+    ["+39 06 1234 5678", "+390612345678"], // Rome
+    ["+39 (0)6 1234 5678", "+390612345678"],
+    ["+225 07 12 34 56 78", "+2250712345678"], // Côte d'Ivoire
   ],
   "a number with words around it": [
     ["tel: +996 700 123 456", "+996700123456"],
@@ -97,6 +122,11 @@ const unrecognised: [string, string][] = [
   ["+7 912 345 67 8", "+7 one digit short"],
   ["8 912 345 67 8", "8 and only 9 digits"],
   ["+7 012 345 67 89", "+7 followed by 0"],
+  ["+8 (912) 345-67-8", "+8 and only 9 digits"],
+  ["+4402079460958", "a 0 glued to the code: trunk prefix or part of the number, no way to tell"],
+  ["+9005321234567", "the same for Türkiye"],
+  ["+88005553535", "«+8 800 …» with a stray plus, or «+880 0…»: no way to tell"],
+  ["+44 00 20 7946 0958", "two zeros after the code"],
   ["912 345 67 89", "Russian without 8 or +7: 10 digits, country unknown"],
   ["05321234567", "Turkish national format: 11 digits after 0, country unknown"],
   ["+0 700 123 456", "country code 0"],
