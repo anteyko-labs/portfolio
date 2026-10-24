@@ -1,32 +1,75 @@
 "use client";
 
-import { Fragment, useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import { EASE } from "@/components/motion/kit";
-import { useReducedMotion } from "@/lib/hooks";
+import { Fragment } from "react";
 import { useLanguage } from "@/lib/language-context";
 import { pick } from "@/lib/i18n-text";
-import { PACKAGE_SLUGS, SERVICE_GROUPS, type PackageId, type ServiceGroup } from "@/lib/service-slugs";
+import { PACKAGE_SLUGS, type PackageId, type ServiceGroup } from "@/lib/service-slugs";
 import { PKG_COLOR } from "./visual-frame";
 
-// /services hero: the headline centred on top, and under it a slowly turning
-// ring with one dot per service. The service at the top of the ring (or the
-// dot under the cursor, which stops the ring) shows in the centre: direction,
-// name, price. A click opens that card in the catalog below. The ring is moved
-// per frame with transforms only, paused off screen and still under reduced
-// motion.
+// /services hero: the headline centred on top, and under it two full-width rows
+// of service cards drifting in opposite directions (CSS only: transform, paused
+// on hover, off screen and under reduced motion). A click on a card opens it in
+// the catalog below.
 
-const TURN_MS = 75_000; // one full turn
+type Pkg = ReturnType<typeof useLanguage>["translations"]["packages"]["items"][number];
+
+function Card({ p, onPick, hidden }: { p: Pkg; onPick: (g: ServiceGroup, slug?: string) => void; hidden?: boolean }) {
+  const { language } = useLanguage();
+  const c = PKG_COLOR[p.id];
+  return (
+    <button
+      type="button"
+      // the second copy of each row is only there to close the loop
+      tabIndex={hidden ? -1 : undefined}
+      aria-hidden={hidden || undefined}
+      onClick={() => onPick(p.group, PACKAGE_SLUGS[p.id as PackageId])}
+      className="group relative flex w-[230px] shrink-0 flex-col overflow-hidden rounded-[20px] border border-white/[0.08] p-5 text-left transition-[transform,border-color,box-shadow] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 sm:w-[300px] sm:p-6"
+      style={{ background: "linear-gradient(180deg, #16161F 0%, #0E0E15 100%)", boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06), 0 24px 50px -36px rgba(0,0,0,0.9)" }}
+    >
+      <span aria-hidden="true" className="absolute inset-x-0 top-0 h-[2px]" style={{ background: `linear-gradient(90deg, rgb(${c}), transparent 75%)` }} />
+      <span aria-hidden="true" className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full opacity-0 transition-opacity duration-500 group-hover:opacity-100" style={{ background: `radial-gradient(closest-side, rgb(${c} / 0.22), transparent)` }} />
+      <span aria-hidden="true" className="pointer-events-none absolute inset-0 rounded-[20px] opacity-0 ring-1 transition-opacity duration-500 group-hover:opacity-100" style={{ ["--tw-ring-color" as string]: `rgb(${c} / 0.45)` }} />
+      <span className="flex items-center justify-between">
+        <span aria-hidden="true" className="h-2 w-2 rounded-full" style={{ background: `rgb(${c})`, boxShadow: `0 0 10px rgb(${c} / 0.7)` }} />
+        <span className="font-mono text-[11px] text-white/40">{pick(p.timeline, language)}</span>
+      </span>
+      <span className="mt-4 line-clamp-2 block min-h-[2.5em] font-brand text-[1.1rem] font-semibold leading-[1.25] text-white sm:text-[1.3rem]">{pick(p.title, language)}</span>
+      <span className="mt-2 line-clamp-2 block min-h-[2.7em] text-[13px] leading-snug text-white/55">{pick(p.description, language)}</span>
+      <span className="mt-5 flex items-center justify-between border-t border-white/[0.06] pt-4">
+        <span className="font-mono text-[12px] text-white/80">{pick(p.startingPrice, language)}</span>
+        <span aria-hidden="true" className="text-white/40 transition-transform duration-300 group-hover:translate-x-1">→</span>
+      </span>
+    </button>
+  );
+}
+
+function Row({ items, onPick, dur, reverse }: { items: Pkg[]; onPick: (g: ServiceGroup, slug?: string) => void; dur: number; reverse?: boolean }) {
+  return (
+    <div className="sv-marquee" style={{ ["--dur" as string]: `${dur}s`, ["--dir" as string]: reverse ? "reverse" : "normal" }}>
+      {[0, 1].map((copy) => (
+        <div key={copy} className="sv-marquee-track">
+          {items.map((p) => (
+            <Card key={`${copy}-${p.id}`} p={p} onPick={onPick} hidden={copy === 1} />
+          ))}
+        </div>
+      ))}
+    </div>
+  );
+}
 
 export function ServicesHero({ onPick }: { onPick: (g: ServiceGroup, slug?: string) => void }) {
-  const { language } = useLanguage();
+  const { translations, language } = useLanguage();
+  const packages = translations.packages.items;
+  // two rows, interleaved so neighbouring cards differ
+  const rowA = packages.filter((_, i) => i % 2 === 0);
+  const rowB = packages.filter((_, i) => i % 2 === 1);
   const lines = [
     pick({ en: "Services", ru: "Услуги", zh: "服务", tr: "Hizmetler", ar: "الخدمات" }, language),
     pick({ en: "end to end", ru: "под ключ", zh: "全流程交付", tr: "uçtan uca", ar: "من البداية إلى النهاية" }, language),
   ];
 
   return (
-    <section className="relative isolate overflow-hidden bg-[#06060B] pb-12 pt-14 text-white md:pb-16 md:pt-16">
+    <section className="relative isolate overflow-hidden bg-[#06060B] pb-14 pt-14 text-white md:pb-20 md:pt-16">
       <div aria-hidden="true" className="home-aurora pointer-events-none absolute inset-0 -z-10 opacity-50" />
       <div
         aria-hidden="true"
@@ -47,143 +90,13 @@ export function ServicesHero({ onPick }: { onPick: (g: ServiceGroup, slug?: stri
             </Fragment>
           ))}
         </h1>
+      </div>
 
-        <Ring onPick={onPick} />
+      {/* full width, edge to edge */}
+      <div className="hero-up mt-10 space-y-2 md:mt-14">
+        <Row items={rowA} onPick={onPick} dur={80} />
+        <Row items={rowB} onPick={onPick} dur={95} reverse />
       </div>
     </section>
-  );
-}
-
-/* ───────────── The ring of services ───────────── */
-
-function Ring({ onPick }: { onPick: (g: ServiceGroup, slug?: string) => void }) {
-  const { translations, language } = useLanguage();
-  const reduced = useReducedMotion();
-  const packages = translations.packages.items;
-  // filed by direction, so each direction's colours sit together on the ring
-  const cards = SERVICE_GROUPS.flatMap((g) => packages.filter((p) => p.group === g.id));
-  const n = cards.length;
-
-  const box = useRef<HTMLDivElement>(null);
-  const dots = useRef<(HTMLButtonElement | null)[]>([]);
-  const [hover, setHover] = useState<number | null>(null);
-  const [top, setTop] = useState(0);
-  const hovering = useRef(false);
-  useEffect(() => {
-    hovering.current = hover !== null;
-  }, [hover]);
-
-  useEffect(() => {
-    const el = box.current;
-    if (!el) return;
-    let raf = 0, last = 0, a = 0, speed = 0, visible = true, shownTop = -1;
-    const place = () => {
-      const r = el.clientWidth / 2 - (el.clientWidth < 480 ? 22 : 30);
-      let best = 0, bestY = Infinity;
-      for (let i = 0; i < n; i++) {
-        const node = dots.current[i];
-        if (!node) continue;
-        const t = a + (i / n) * Math.PI * 2 - Math.PI / 2;
-        const x = Math.cos(t) * r, y = Math.sin(t) * r;
-        node.style.transform = `translate(-50%, -50%) translate(${x}px, ${y}px)`;
-        if (y < bestY) { bestY = y; best = i; }
-      }
-      if (best !== shownTop) { shownTop = best; setTop(best); }
-    };
-    const frame = (now: number) => {
-      const dt = last ? Math.min(64, now - last) : 16;
-      last = now;
-      // ease to a stop while a dot is hovered, and back up after
-      const target = hovering.current ? 0 : (Math.PI * 2) / TURN_MS;
-      speed += (target - speed) * Math.min(1, dt / 260);
-      a -= speed * dt;
-      place();
-      raf = visible ? requestAnimationFrame(frame) : 0;
-    };
-    place();
-    if (reduced) return;
-    const io = new IntersectionObserver(([e]) => {
-      visible = e.isIntersecting;
-      if (visible && !raf) { last = 0; raf = requestAnimationFrame(frame); }
-    });
-    io.observe(el);
-    raf = requestAnimationFrame(frame);
-    return () => { cancelAnimationFrame(raf); io.disconnect(); };
-  }, [reduced, n]);
-
-  const active = hover ?? top;
-  const p = cards[active];
-  const c = PKG_COLOR[p.id];
-  const groupOf = (id: ServiceGroup) => SERVICE_GROUPS.find((g) => g.id === id)!;
-  const go = (k: number) => onPick(cards[k].group, PACKAGE_SLUGS[cards[k].id as PackageId]);
-
-  return (
-    <div ref={box} className="hero-up relative mx-auto mt-10 aspect-square w-full max-w-[340px] sm:max-w-[520px] lg:mt-12" onMouseLeave={() => setHover(null)}>
-      {/* soft glow in the active service's colour */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-[12%] rounded-full transition-[background] duration-1000" style={{ background: `radial-gradient(closest-side, rgb(${c} / 0.22), transparent)` }} />
-      {/* the track, a fainter outer ring and a marker at the top */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-[22px] rounded-full border border-white/10 sm:inset-[30px]" />
-      <div aria-hidden="true" className="pointer-events-none absolute inset-[4px] rounded-full border border-dashed border-white/[0.05]" />
-      <span aria-hidden="true" className="pointer-events-none absolute left-1/2 top-[2px] h-3 w-px -translate-x-1/2 bg-white/40 sm:top-[6px]" />
-
-      {/* the centre: the service at the top of the ring, or the one hovered */}
-      <button
-        type="button"
-        onClick={() => go(active)}
-        data-ring-centre=""
-        className="absolute inset-[22%] grid place-items-center rounded-full text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40"
-      >
-        <span aria-hidden="true" className="absolute inset-0 rounded-full border transition-colors duration-700" style={{ borderColor: `rgb(${c} / 0.25)`, background: "radial-gradient(circle at 50% 35%, rgba(255,255,255,0.05), rgba(10,10,16,0.6) 70%)" }} />
-        <AnimatePresence mode="wait" initial={false}>
-          <motion.span
-            key={p.id}
-            className="relative block px-4"
-            initial={reduced ? false : { opacity: 0, y: 6 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -4 }}
-            transition={{ duration: 0.4, ease: EASE }}
-          >
-            <span className="block font-mono text-[10px] uppercase tracking-[0.14em] sm:text-[11px]" style={{ color: `rgb(${c})` }}>{pick(groupOf(p.group).label, language)}</span>
-            <span className="mt-1.5 block font-brand text-[1.15rem] font-semibold leading-tight text-white sm:mt-2 sm:text-[1.6rem]">{pick(p.title, language)}</span>
-            <span className="mt-1.5 block font-mono text-[11px] text-white/50 sm:mt-2 sm:text-[12px]">
-              {pick(p.timeline, language)} · <span className="text-white/85">{pick(p.startingPrice, language)}</span>
-            </span>
-            <span className="mt-3 inline-flex items-center gap-1.5 text-[13px] font-medium sm:mt-4 sm:text-body-sm" style={{ color: `rgb(${c})` }}>
-              {pick({ en: "Open", ru: "Открыть", zh: "查看", tr: "Aç", ar: "افتح" }, language)} <span aria-hidden="true">→</span>
-            </span>
-          </motion.span>
-        </AnimatePresence>
-      </button>
-
-      {/* one dot per service */}
-      {cards.map((card, k) => {
-        const on = k === active;
-        const cc = PKG_COLOR[card.id];
-        return (
-          <button
-            key={card.id}
-            ref={(node) => { dots.current[k] = node; }}
-            type="button"
-            onMouseEnter={() => setHover(k)}
-            onFocus={() => setHover(k)}
-            onClick={() => go(k)}
-            aria-label={pick(card.title, language)}
-            data-ring-dot=""
-            className="absolute left-1/2 top-1/2 grid h-9 w-9 place-items-center rounded-full will-change-transform focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 sm:h-11 sm:w-11"
-          >
-            <span
-              aria-hidden="true"
-              className="block rounded-full transition-[width,height,box-shadow] duration-500 ease-out"
-              style={{
-                width: on ? 18 : 10,
-                height: on ? 18 : 10,
-                background: `radial-gradient(circle at 35% 30%, #fff 0 8%, rgb(${cc}) 45%)`,
-                boxShadow: on ? `0 0 0 5px rgb(${cc} / 0.18), 0 0 22px rgb(${cc})` : `0 0 10px rgb(${cc} / 0.6)`,
-              }}
-            />
-          </button>
-        );
-      })}
-    </div>
   );
 }

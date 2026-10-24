@@ -73,3 +73,13 @@
   .sv-ring, .sv-shimmer::after, .sv-bob, .sv-twinkle, .sv-flame, .sv-ping, .sv-spin, .sv-caret, .sv-float, .sv-orbit, .sv-sheen-panel::before { animation: none !important; }
   .sv-ping { opacity: 0; }
 }
+
+/* ───── /services hero: two endless rows of service cards ───── */
+.sv-marquee { --gap: 16px; display: flex; overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
+.sv-marquee-track { display: flex; flex-shrink: 0; gap: var(--gap); padding-right: var(--gap); padding-block: 10px; animation: sv-marquee var(--dur, 70s) linear infinite; animation-direction: var(--dir, normal); }
+.sv-marquee:hover .sv-marquee-track, .sv-marquee:focus-within .sv-marquee-track { animation-play-state: paused; }
+@keyframes sv-marquee { to { transform: translate3d(-100%, 0, 0); } }
+@media (prefers-reduced-motion: reduce) {
+  .sv-marquee { overflow-x: auto; }
+  .sv-marquee-track { animation: none; }
+}
