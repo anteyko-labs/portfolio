@@ -12,6 +12,7 @@ import { HomeWork } from "@/components/home/home-work";
 import { HomeL1 } from "@/components/home/home-l1";
 import { HomeProcess } from "@/components/home/home-process";
 import { HomeCta } from "@/components/home/home-cta";
+import { HomeSeo } from "@/components/home/home-seo";
 import { TrustedBySection } from "@/components/sections/trusted-by";
 import { TestimonialsSection } from "@/components/sections/testimonials";
 import { FAQPreviewSection } from "@/components/sections/faq-preview";
@@ -69,6 +70,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
       <Below><TestimonialsSection /></Below>
       <Below><FAQPreviewSection /></Below>
       <Below><HomeCta /></Below>
+      <Below><HomeSeo /></Below>
     </PageWrapper>
   );
 }
