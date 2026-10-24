@@ -250,8 +250,8 @@ export async function POST(request: NextRequest) {
     //
     // allSettled, а не await по очереди: отказ одного адресата не должен
     // лишать заявку второго. Ни один из них не влияет на ответ посетителю —
-    // заявка уже написана человеком, и наш даунтайм не его проблема. Именно
-    // поэтому оба результата только логируются.
+    // заявка уже написана человеком, и наш даунтайм не его проблема. Поэтому
+    // результаты только логируются, а об отказе CRM узнаёт ещё и чат (ниже).
     const [crm, telegram] = await Promise.allSettled([
       submitLeadToCrm({
         name: submission.name,
@@ -262,14 +262,26 @@ export async function POST(request: NextRequest) {
       sendTelegram(formatTelegramMessage(submission)),
     ]);
 
+    const telegramDelivered = telegram.status === "fulfilled" && telegram.value;
+
     if (crm.status === "fulfilled" && crm.value) {
       console.log("✅ CRM: беседа", crm.value.conversationId);
     } else {
-      const reason = crm.status === "rejected" ? crm.reason : "не настроено";
+      // Текст причины собирает crm.ts, без идентификатора инбокса и без данных
+      // клиента. Сам объект ошибки в лог не идёт.
+      const reason = crm.status === "rejected"
+        ? (crm.reason instanceof Error ? crm.reason.message : "неизвестная ошибка")
+        : "не настроено";
       console.error("❌ CRM: заявка не доехала —", reason, "| лид залогирован выше");
+      // Строку в логах Vercel никто не читает: 21.10.2026 заявка так и осталась
+      // только в Telegram. Поэтому отказ CRM объявляется в том же чате.
+      const who = `${submission.name} (${submission.email})`;
+      await sendTelegram(telegramDelivered
+        ? `⚠️ Заявка выше от ${who} НЕ попала в CRM: ${reason}. Заведите её вручную.`
+        : `⚠️ Заявка от ${who} НЕ попала в CRM: ${reason}. Её копия в этот чат тоже не дошла, полный текст — в логах Vercel. Заведите её вручную.`);
     }
 
-    if (telegram.status !== "fulfilled" || !telegram.value) {
+    if (!telegramDelivered) {
       console.warn("⚠️ Telegram: не доставлено — лид залогирован выше");
     }
 
