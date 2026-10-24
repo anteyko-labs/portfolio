@@ -1,0 +1,27 @@
+# Runs npm test on every pull request and on every push to main. Vercel only
+# builds, so nothing else runs src/lib/*.test.ts before a change reaches
+# production. Without branch protection a red run does not block the merge,
+# but it shows on the pull request.
+name: Tests
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      # The tests import only node: built-ins, so there is nothing to install.
+      # Node 22.18+ strips the TypeScript types itself; do not move this into
+      # the build, which Vercel may run on an older Node.
+      - run: npm test
