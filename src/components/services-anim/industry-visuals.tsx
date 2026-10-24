@@ -659,3 +659,193 @@ export function AudioRoom({ className }: { className?: string }) {
     </Frame>
   );
 }
+
+/* ───────────── AI chatbot: a question, the answer streams in, the lead goes to the CRM ───────────── */
+
+type QA = { ch: string; q: L5; a: [L5, L5] };
+type L5 = { en: string; ru: string; zh: string; tr: string; ar: string };
+const AI_QA: QA[] = [
+  {
+    ch: "Telegram",
+    q: { en: "How much is a landing page?", ru: "Сколько стоит лендинг?", zh: "落地页多少钱？", tr: "Açılış sayfası ne kadar?", ar: "كم تكلفة صفحة الهبوط؟" },
+    a: [
+      { en: "From $800, ready in 7–14 days.", ru: "От $800, готов за 7–14 дней.", zh: "$800 起，7–14 天完成。", tr: "800 $'dan, 7–14 günde hazır.", ar: "من $800 وجاهزة خلال 7–14 يومًا." },
+      { en: "Shall I book a call?", ru: "Записать вас на звонок?", zh: "要帮您预约通话吗？", tr: "Görüşme ayarlayayım mı?", ar: "هل أحجز لك مكالمة؟" },
+    ],
+  },
+  {
+    ch: "WhatsApp",
+    q: { en: "Do you deliver to Osh?", ru: "Есть доставка в Ош?", zh: "能送到奥什吗？", tr: "Oş'a teslimat var mı?", ar: "هل يوجد توصيل إلى أوش؟" },
+    a: [
+      { en: "Yes, delivery takes 1–2 days.", ru: "Да, доставка 1–2 дня.", zh: "可以，1–2 天送达。", tr: "Evet, teslimat 1–2 gün.", ar: "نعم، التوصيل خلال 1–2 يوم." },
+      { en: "Place the order now?", ru: "Оформить заказ сейчас?", zh: "现在下单吗？", tr: "Siparişi şimdi verelim mi?", ar: "هل نُكمل الطلب الآن؟" },
+    ],
+  },
+  {
+    ch: "Web",
+    q: { en: "Any slots tomorrow?", ru: "Можно записаться на завтра?", zh: "明天还有空位吗？", tr: "Yarın için yer var mı?", ar: "هل توجد مواعيد غدًا؟" },
+    a: [
+      { en: "Free at 11:00 and 15:30.", ru: "Свободно в 11:00 и 15:30.", zh: "11:00 和 15:30 有空。", tr: "11:00 ve 15:30 boş.", ar: "متاح الساعة 11:00 و15:30." },
+      { en: "Which one suits you?", ru: "Какое время удобно?", zh: "您方便哪个时间？", tr: "Hangisi uygun?", ar: "أي وقت يناسبك؟" },
+    ],
+  },
+];
+
+export function AiChat({ className }: { className?: string }) {
+  const { language } = useLanguage();
+  const { ref, tick, reduced } = useLoop<HTMLDivElement>(700);
+  const STEPS = 9;
+  const step = reduced ? STEPS - 1 : tick % STEPS;
+  const qa = AI_QA[reduced ? 0 : Math.floor(tick / STEPS) % AI_QA.length];
+  const asked = step >= 1;
+  const typing = step === 2;
+  // words of the answer shown so far
+  const words = [pick(qa.a[0], language).split(" "), pick(qa.a[1], language).split(" ")];
+  const total = words[0].length + words[1].length;
+  const shown = step < 3 ? 0 : Math.min(total, Math.ceil(((step - 2) / 4) * total));
+  const line1 = words[0].slice(0, shown).join(" ");
+  const line2 = words[1].slice(0, Math.max(0, shown - words[0].length)).join(" ");
+  const done = step >= 7;
+  const LIME = "#A3E635";
+  return (
+    <Frame id="ai-bots" svgRef={ref} className={className} label={pick({ en: "A customer asks, the AI assistant answers from the price list and sends the lead to AnteykoCRM", ru: "Клиент спрашивает, AI-ассистент отвечает по прайсу и передаёт заявку в AnteykoCRM", zh: "客户提问，AI 助手依据价目表作答并把线索发送到 AnteykoCRM", tr: "Müşteri soruyor, yapay zekâ asistanı fiyat listesinden yanıtlıyor ve talebi AnteykoCRM'e gönderiyor", ar: "يسأل العميل فيجيب المساعد الذكي من قائمة الأسعار ويرسل الطلب إلى AnteykoCRM" }, language)}>
+      {/* chat window */}
+      <rect x="8" y="14" width="196" height="122" rx="10" fill="rgba(255,255,255,0.03)" stroke={FAINT} />
+      <circle cx="20" cy="27" r="5" fill={LIME} opacity="0.9" />
+      <text x="20" y="29.3" fontSize="5.5" textAnchor="middle" fill="#0B0B14" fontWeight="700">AI</text>
+      <text x="30" y="26" fontSize="6.5" fill="rgba(255,255,255,0.85)">{pick({ en: "AI assistant", ru: "AI-ассистент", zh: "AI 助手", tr: "YZ asistanı", ar: "المساعد الذكي" }, language)}</text>
+      <text x="30" y="33" fontSize="5" fill="#4ADE80">● {pick({ en: "online", ru: "онлайн", zh: "在线", tr: "çevrimiçi", ar: "متصل" }, language)}</text>
+      <rect x="8" y="39" width="196" height="0.6" fill={FAINT} />
+      {/* the customer's question */}
+      <motion.g initial={false} animate={{ opacity: asked ? 1 : 0, y: asked ? 0 : 6 }} transition={T}>
+        <rect x="88" y="46" width="108" height="16" rx="6" fill="rgba(99,102,241,0.85)" />
+        <text x="94" y="56.5" fontSize="6.2" fill="#fff">{pick(qa.q, language)}</text>
+      </motion.g>
+      {/* typing dots, then the answer streaming in */}
+      <motion.g initial={false} animate={{ opacity: typing ? 1 : 0 }} transition={{ duration: 0.2 }}>
+        <rect x="16" y="68" width="30" height="14" rx="6" fill="rgba(255,255,255,0.08)" />
+        {[0, 1, 2].map((k) => (
+          <circle key={k} cx={25 + k * 6} cy="75" r="1.6" fill="rgba(255,255,255,0.7)" opacity={(tick + k) % 3 === 0 ? 1 : 0.35} />
+        ))}
+      </motion.g>
+      <motion.g initial={false} animate={{ opacity: shown > 0 ? 1 : 0 }} transition={{ duration: 0.25 }}>
+        <rect x="16" y="68" width="136" height="26" rx="6" fill="rgba(255,255,255,0.08)" />
+        <text x="22" y="78.5" fontSize="6.2" fill="rgba(255,255,255,0.9)">{line1}</text>
+        <text x="22" y="88.5" fontSize="6.2" fill="rgba(255,255,255,0.9)">{line2}</text>
+      </motion.g>
+      {/* where the answer came from */}
+      <motion.g initial={false} animate={{ opacity: done ? 1 : 0, y: done ? 0 : 4 }} transition={T}>
+        {[pick({ en: "Price list", ru: "Прайс", zh: "价目表", tr: "Fiyatlar", ar: "الأسعار" }, language), "FAQ"].map((src, k) => (
+          <g key={src}>
+            <rect x={16 + k * 46} y="100" width={k ? 26 : 42} height="11" rx="5.5" fill="rgba(163,230,53,0.12)" stroke="rgba(163,230,53,0.45)" strokeWidth="0.6" />
+            <text x={22 + k * 46} y="107.6" fontSize="5.2" fill={LIME}>{src}</text>
+          </g>
+        ))}
+      </motion.g>
+      <rect x="16" y="118" width="180" height="11" rx="5.5" fill="rgba(255,255,255,0.05)" />
+      <text x="22" y="125.5" fontSize="5.2" fill={MUTED}>{pick({ en: "Type a message…", ru: "Напишите сообщение…", zh: "输入消息…", tr: "Mesaj yazın…", ar: "اكتب رسالة…" }, language)}</text>
+
+      {/* channels and the CRM */}
+      <rect x="212" y="14" width="100" height="122" rx="10" fill="rgba(255,255,255,0.04)" stroke={FAINT} />
+      <text x="221" y="29" fontSize="6.5" fill="rgba(255,255,255,0.8)">{pick({ en: "Channels", ru: "Каналы", zh: "渠道", tr: "Kanallar", ar: "القنوات" }, language)}</text>
+      {AI_QA.map((c, k) => {
+        const on = c.ch === qa.ch;
+        return (
+          <g key={c.ch}>
+            <motion.rect x="219" y={36 + k * 16} width="86" height="12" rx="4" initial={false} animate={{ fill: on ? "rgba(163,230,53,0.16)" : "rgba(255,255,255,0.04)" }} transition={{ duration: 0.3 }} />
+            <circle cx="226" cy={42 + k * 16} r="2.2" fill={["#38BDF8", "#4ADE80", "#E879F9"][k]} />
+            <text x="232" y={44.2 + k * 16} fontSize="5.8" fill={on ? "#fff" : MUTED}>{c.ch === "Web" ? pick({ en: "Website", ru: "Сайт", zh: "网站", tr: "Web sitesi", ar: "الموقع" }, language) : c.ch}</text>
+          </g>
+        );
+      })}
+      <motion.g initial={false} animate={{ opacity: done ? 1 : 0, y: done ? 0 : 6 }} transition={T}>
+        <rect x="219" y="90" width="86" height="38" rx="6" fill="rgba(255,255,255,0.06)" stroke="rgba(163,230,53,0.4)" strokeWidth="0.6" />
+        <text x="225" y="101" fontSize="5.4" fill={MUTED}>{pick({ en: "New lead", ru: "Новая заявка", zh: "新线索", tr: "Yeni talep", ar: "طلب جديد" }, language)}</text>
+        <text x="225" y="111" fontSize="6.2" fill="#fff">→ AnteykoCRM</text>
+        <text x="298" y="122" fontSize="6" textAnchor="end" fill="#4ADE80">✓</text>
+      </motion.g>
+    </Frame>
+  );
+}
+
+/* ───────────── Telegram bot: menu, dish, payment with a fiscal receipt, order in the CRM ───────────── */
+
+const TG_ORDERS = [
+  { n: "#1042", d: { en: "Plov", ru: "Плов", zh: "抓饭", tr: "Pilav", ar: "بلوف" }, p: "350" },
+  { n: "#1043", d: { en: "Lagman", ru: "Лагман", zh: "拉条子", tr: "Lagman", ar: "لغمان" }, p: "320" },
+  { n: "#1044", d: { en: "Samsa ×2", ru: "Самса ×2", zh: "烤包子 ×2", tr: "Samsa ×2", ar: "سمبوسة ×2" }, p: "180" },
+];
+
+export function TgBot({ className }: { className?: string }) {
+  const { language } = useLanguage();
+  const { ref, tick, reduced } = useLoop<HTMLDivElement>(850);
+  const STEPS = 7;
+  const step = reduced ? STEPS - 1 : tick % STEPS;
+  const round = reduced ? 0 : Math.floor(tick / STEPS);
+  const order = TG_ORDERS[round % TG_ORDERS.length];
+  const som = pick({ en: "som", ru: "сом", zh: "索姆", tr: "som", ar: "سوم" }, language);
+  const tapMenu = step === 1;
+  const card = step >= 2;
+  const tapPay = step === 3;
+  const paid = step >= 4;
+  // orders already in the CRM list: earlier rounds plus this one once paid
+  const listed = reduced ? 2 : Math.min(3, (round % 3) + (step >= 5 ? 1 : 0));
+  const TG = "#38BDF8";
+  const btns = [
+    pick({ en: "Menu", ru: "Меню", zh: "菜单", tr: "Menü", ar: "القائمة" }, language),
+    pick({ en: "Order", ru: "Заказ", zh: "下单", tr: "Sipariş", ar: "طلب" }, language),
+    pick({ en: "Booking", ru: "Запись", zh: "预约", tr: "Randevu", ar: "حجز" }, language),
+    pick({ en: "Offers", ru: "Акции", zh: "优惠", tr: "Fırsatlar", ar: "عروض" }, language),
+  ];
+  return (
+    <Frame id="telegram-bots" svgRef={ref} className={className} label={pick({ en: "A Telegram bot shows the menu, takes an order and payment with a fiscal receipt, and the order lands in AnteykoCRM", ru: "Telegram-бот показывает меню, принимает заказ и оплату с чеком ККМ, заказ попадает в AnteykoCRM", zh: "Telegram 机器人展示菜单、接单并收款开票，订单进入 AnteykoCRM", tr: "Telegram botu menüyü gösteriyor, siparişi ve mali fişli ödemeyi alıyor, sipariş AnteykoCRM'e düşüyor", ar: "يعرض روبوت Telegram القائمة ويستلم الطلب والدفع مع إيصال مالي، ويصل الطلب إلى AnteykoCRM" }, language)}>
+      {/* the chat */}
+      <rect x="8" y="14" width="190" height="122" rx="10" fill="rgba(255,255,255,0.03)" stroke={FAINT} />
+      <circle cx="21" cy="27" r="5.5" fill={TG} />
+      <path d="M18.2 27.2l5.2-2.2-0.9 4.6-1.6-1.2-0.9 0.8 0.1-1.4 2-1.8-2.6 1.4z" fill="#fff" />
+      <text x="31" y="26" fontSize="6.5" fill="rgba(255,255,255,0.85)">@cafe_bot</text>
+      <text x="31" y="33" fontSize="5" fill={MUTED}>{pick({ en: "bot", ru: "бот", zh: "机器人", tr: "bot", ar: "روبوت" }, language)}</text>
+      <rect x="8" y="39" width="190" height="0.6" fill={FAINT} />
+      <rect x="14" y="44" width="112" height="12" rx="5" fill="rgba(255,255,255,0.08)" />
+      <text x="19" y="52" fontSize="5.8" fill="rgba(255,255,255,0.9)">{pick({ en: "Hi! What shall we order?", ru: "Привет! Что закажем?", zh: "你好！想点什么？", tr: "Merhaba! Ne sipariş edelim?", ar: "مرحبًا! ماذا نطلب؟" }, language)}</text>
+      {btns.map((b, k) => {
+        const on = k === 0 && tapMenu;
+        return (
+          <g key={b}>
+            <motion.rect x={14 + (k % 2) * 57} y={60 + Math.floor(k / 2) * 14} width="54" height="11" rx="4" initial={false} animate={{ fill: on ? "rgba(56,189,248,0.55)" : "rgba(56,189,248,0.14)" }} transition={{ duration: 0.2 }} />
+            <text x={41 + (k % 2) * 57} y={67.4 + Math.floor(k / 2) * 14} fontSize="5.6" textAnchor="middle" fill="#E0F2FE">{b}</text>
+          </g>
+        );
+      })}
+      {/* dish card with the pay button */}
+      <motion.g initial={false} animate={{ opacity: card ? 1 : 0, y: card ? 0 : 6 }} transition={T}>
+        <rect x="132" y="44" width="58" height="56" rx="6" fill="rgba(255,255,255,0.08)" />
+        <rect x="136" y="48" width="50" height="22" rx="4" fill="rgba(251,191,36,0.35)" />
+        <circle cx="161" cy="59" r="7" fill="rgba(251,191,36,0.75)" />
+        <text x="137" y="79" fontSize="5.8" fill="#fff">{pick(order.d, language)}</text>
+        <text x="137" y="87" fontSize="5.2" fill={MUTED}>{order.p} {som}</text>
+        <motion.rect x="136" y="90" width="50" height="7" rx="3" initial={false} animate={{ fill: tapPay ? "#38BDF8" : "rgba(56,189,248,0.4)" }} transition={{ duration: 0.2 }} />
+        <text x="161" y="95.3" fontSize="4.6" textAnchor="middle" fill="#fff">{pick({ en: "Pay", ru: "Оплатить", zh: "支付", tr: "Öde", ar: "ادفع" }, language)}</text>
+      </motion.g>
+      {/* paid, with a fiscal receipt */}
+      <motion.g initial={false} animate={{ opacity: paid ? 1 : 0, y: paid ? 0 : 6 }} transition={T}>
+        <rect x="14" y="106" width="176" height="22" rx="6" fill="rgba(74,222,128,0.1)" stroke="rgba(74,222,128,0.4)" strokeWidth="0.6" />
+        <text x="20" y="115" fontSize="5.8" fill="#4ADE80">✓ {pick({ en: "Paid", ru: "Оплачено", zh: "已支付", tr: "Ödendi", ar: "تم الدفع" }, language)} · {order.p} {som}</text>
+        <text x="20" y="123.5" fontSize="5" fill={MUTED}>{pick({ en: "Fiscal receipt (KKM) sent", ru: "Чек ККМ отправлен", zh: "电子发票（KKM）已发送", tr: "Mali fiş (KKM) gönderildi", ar: "أُرسل الإيصال المالي (KKM)" }, language)}</text>
+      </motion.g>
+
+      {/* orders in the CRM */}
+      <rect x="206" y="14" width="106" height="122" rx="10" fill="rgba(255,255,255,0.04)" stroke={FAINT} />
+      <text x="215" y="28" fontSize="6.2" fill="rgba(255,255,255,0.8)">{pick({ en: "Orders · today", ru: "Заказы · сегодня", zh: "订单 · 今日", tr: "Siparişler · bugün", ar: "الطلبات · اليوم" }, language)}</text>
+      <text x="215" y="36" fontSize="5" fill={MUTED}>AnteykoCRM</text>
+      {TG_ORDERS.map((o, k) => (
+        <motion.g key={o.n} initial={false} animate={{ opacity: k < listed ? 1 : 0, x: k < listed ? 0 : 8 }} transition={T}>
+          <rect x="212" y={44 + k * 22} width="94" height="17" rx="5" fill="rgba(255,255,255,0.05)" />
+          <text x="217" y={55 + k * 22} fontSize="5.6" fill={MUTED} fontFamily="var(--font-mono)">{o.n}</text>
+          <text x="238" y={55 + k * 22} fontSize="5.8" fill="rgba(255,255,255,0.85)">{pick(o.d, language)}</text>
+          <text x="301" y={55 + k * 22} fontSize="5.4" textAnchor="end" fill="#4ADE80">{o.p}</text>
+        </motion.g>
+      ))}
+    </Frame>
+  );
+}

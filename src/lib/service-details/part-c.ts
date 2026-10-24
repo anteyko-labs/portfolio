@@ -5,13 +5,13 @@ import type { ServiceDetails } from "./types";
 export const PART_C: ServiceDetails = {
   "time-access": {
     intro: {
-      en: "Paper timesheets and separate access systems leave gaps: nobody knows exactly who came when, and payroll is assembled by hand. We connect turnstiles, readers and Face ID into one system that keeps shifts and timesheets and sends the data to 1C and payroll.",
-      ru: "Бумажный табель и разрозненные системы доступа дают пробелы: непонятно, кто и когда пришёл, а зарплату считают вручную. Мы связываем турникеты, считыватели и Face ID в одну систему, которая ведёт смены и табель и передаёт данные в 1С и расчёт зарплаты.",
-      zh: "纸质考勤表和各自独立的门禁系统留下许多空白：谁何时到岗说不清，薪资只能手工汇总。我们把闸机、读卡器和人脸识别接入同一套系统，统一管理排班与考勤表，并将数据导出至 1C 和薪资系统。",
-      tr: "Kâğıt puantaj ve birbirinden kopuk geçiş sistemleri boşluk bırakır: kimin ne zaman geldiği belirsizdir, bordro elle hazırlanır. Turnikeleri, okuyucuları ve Face ID'yi vardiyaları ve puantajı tutan, verileri 1C'ye ve bordroya aktaran tek bir sisteme bağlıyoruz.",
-      ar: "سجلات الدوام الورقية وأنظمة الدخول المنفصلة تترك ثغرات: لا أحد يعرف بدقة من حضر ومتى، وتُحسب الرواتب يدويًا. نربط البوابات الدوّارة والقارئات وبصمة الوجه في نظام واحد يدير الورديات وسجلات الدوام ويرسل البيانات إلى 1C والرواتب.",
+      en: "Paper timesheets and separate access systems leave gaps: nobody knows exactly who came when, and payroll is assembled by hand. We connect turnstiles, readers and Face ID into one system that keeps shifts and timesheets and exports the timesheet for payroll calculation.",
+      ru: "Бумажный табель и разрозненные системы доступа дают пробелы: непонятно, кто и когда пришёл, а зарплату считают вручную. Мы связываем турникеты, считыватели и Face ID в одну систему, которая ведёт смены и табель и выгружает его для расчёта зарплаты.",
+      zh: "纸质考勤表和各自独立的门禁系统留下许多空白：谁何时到岗说不清，薪资只能手工汇总。我们把闸机、读卡器和人脸识别接入同一套系统，统一管理排班与考勤表，并导出考勤表用于薪资核算。",
+      tr: "Kâğıt puantaj ve birbirinden kopuk geçiş sistemleri boşluk bırakır: kimin ne zaman geldiği belirsizdir, bordro elle hazırlanır. Turnikeleri, okuyucuları ve Face ID'yi vardiyaları ve puantajı tutan, puantajı bordro hesabı için dışa aktaran tek bir sisteme bağlıyoruz.",
+      ar: "سجلات الدوام الورقية وأنظمة الدخول المنفصلة تترك ثغرات: لا أحد يعرف بدقة من حضر ومتى، وتُحسب الرواتب يدويًا. نربط البوابات الدوّارة والقارئات وبصمة الوجه في نظام واحد يدير الورديات وسجلات الدوام ويصدّر سجل الدوام لاحتساب الرواتب.",
     },
-    stack: ["Wiegand / OSDP", "Face recognition SDK", "QR access", "1C exchange", "PostgreSQL", "Node.js", "Next.js", "React Native"],
+    stack: ["Wiegand / OSDP", "Face recognition SDK", "QR access", "Payroll export", "PostgreSQL", "Node.js", "Next.js", "React Native"],
     steps: [
       {
         title: { en: "Site survey", ru: "Обследование объектов", zh: "现场调研", tr: "Saha incelemesi", ar: "دراسة المواقع" },
@@ -36,11 +36,11 @@ export const PART_C: ServiceDetails = {
       {
         title: { en: "Setup and integration", ru: "Настройка и интеграция", zh: "配置与集成", tr: "Kurulum ve entegrasyon", ar: "الإعداد والتكامل" },
         text: {
-          en: "We connect the equipment, set up cards, QR and Face ID, build the panel and app, and configure the 1C export.",
-          ru: "Подключаем оборудование, настраиваем карты, QR и Face ID, делаем панель и приложение, настраиваем выгрузку в 1С.",
-          zh: "接入设备，配置门禁卡、二维码和人脸识别，开发管理后台与 App，并配置 1C 导出。",
-          tr: "Ekipmanı bağlıyor, kart, QR ve Face ID'yi ayarlıyor, paneli ve uygulamayı geliştiriyor, 1C aktarımını yapılandırıyoruz.",
-          ar: "نربط الأجهزة ونهيّئ البطاقات وQR وبصمة الوجه، ونبني اللوحة والتطبيق، ونضبط التصدير إلى 1C.",
+          en: "We connect the equipment, set up cards, QR and Face ID, build the panel and app, and configure the timesheet export for payroll.",
+          ru: "Подключаем оборудование, настраиваем карты, QR и Face ID, делаем панель и приложение, настраиваем выгрузку табеля для расчёта зарплаты.",
+          zh: "接入设备，配置门禁卡、二维码和人脸识别，开发管理后台与 App，并配置考勤表导出用于薪资核算。",
+          tr: "Ekipmanı bağlıyor, kart, QR ve Face ID'yi ayarlıyor, paneli ve uygulamayı geliştiriyor, bordro için puantaj aktarımını yapılandırıyoruz.",
+          ar: "نربط الأجهزة ونهيّئ البطاقات وQR وبصمة الوجه، ونبني اللوحة والتطبيق، ونضبط تصدير سجل الدوام لاحتساب الرواتب.",
         },
       },
       {
@@ -151,18 +151,18 @@ export const PART_C: ServiceDetails = {
       },
       {
         q: {
-          en: "How does the data get to 1C and payroll?",
-          ru: "Как данные попадают в 1С и зарплату?",
-          zh: "数据如何进入 1C 和薪资系统？",
-          tr: "Veriler 1C'ye ve bordroya nasıl aktarılır?",
-          ar: "كيف تصل البيانات إلى 1C والرواتب؟",
+          en: "How does the data get to payroll?",
+          ru: "Как данные попадают в расчёт зарплаты?",
+          zh: "数据如何进入薪资核算？",
+          tr: "Veriler bordroya nasıl aktarılır?",
+          ar: "كيف تصل البيانات إلى احتساب الرواتب؟",
         },
         a: {
-          en: "The timesheet is exported to 1C in the agreed format, on a schedule or on demand. Payroll uses hours, shifts and absences already checked in the panel, so nothing is retyped by hand.",
-          ru: "Табель выгружается в 1С в согласованном формате — по расписанию или по кнопке. Зарплата считается по часам, сменам и неявкам, уже проверенным в панели, поэтому ничего не приходится переносить вручную.",
-          zh: "考勤表按约定格式导出至 1C，可定时导出，也可手动触发。薪资依据已在后台核对过的工时、班次和缺勤计算，无需手工重新录入。",
-          tr: "Puantaj, belirlenen formatta 1C'ye zamanlanmış olarak veya istendiğinde aktarılır. Bordro, panelde önceden kontrol edilmiş saat, vardiya ve devamsızlıklara göre hesaplanır; hiçbir şey elle yeniden girilmez.",
-          ar: "يُصدَّر سجل الدوام إلى 1C بالصيغة المتفق عليها، وفق جدول زمني أو عند الطلب. وتُحسب الرواتب بناءً على الساعات والورديات والغيابات التي رُوجعت في اللوحة، فلا حاجة لإعادة إدخال أي شيء يدويًا.",
+          en: "The timesheet is exported in the agreed format, for example Excel or the format of your payroll system, on a schedule or on demand. Payroll uses hours, shifts and absences already checked in the panel, so nothing is retyped by hand.",
+          ru: "Табель выгружается в согласованном формате — например, в Excel или в формате вашей зарплатной программы — по расписанию или по кнопке. Зарплата считается по часам, сменам и неявкам, уже проверенным в панели, поэтому ничего не приходится переносить вручную.",
+          zh: "考勤表按约定格式导出（例如 Excel 或您所用薪资系统的格式），可定时导出，也可手动触发。薪资依据已在后台核对过的工时、班次和缺勤计算，无需手工重新录入。",
+          tr: "Puantaj, belirlenen formatta (örneğin Excel veya bordro sisteminizin formatı) zamanlanmış olarak veya istendiğinde dışa aktarılır. Bordro, panelde önceden kontrol edilmiş saat, vardiya ve devamsızlıklara göre hesaplanır; hiçbir şey elle yeniden girilmez.",
+          ar: "يُصدَّر سجل الدوام بالصيغة المتفق عليها، مثل Excel أو صيغة نظام الرواتب لديكم، وفق جدول زمني أو عند الطلب. وتُحسب الرواتب بناءً على الساعات والورديات والغيابات التي رُوجعت في اللوحة، فلا حاجة لإعادة إدخال أي شيء يدويًا.",
         },
       },
     ],
@@ -307,11 +307,11 @@ export const PART_C: ServiceDetails = {
           ar: "هل يستطيع السكان الدفع من هواتفهم؟",
         },
         a: {
-          en: "Yes. Payment works by card, by QR and in the app, for single visits and for subscriptions. Residents can also issue guest passes in the app instead of calling security.",
-          ru: "Да. Оплата работает картой, по QR и в приложении — и за разовый заезд, и за абонемент. Гостевой пропуск жилец тоже оформляет в приложении, без звонка охране.",
-          zh: "可以。支持银行卡、二维码和 App 缴费，单次停车和月卡均可。业主还可以直接在 App 中为访客开通通行，无需联系保安。",
-          tr: "Evet. Ödeme kartla, QR ile ve uygulamadan yapılabilir; hem tek seferlik giriş hem abonelik için. Sakinler güvenliği aramadan misafir girişini de uygulamadan oluşturabilir.",
-          ar: "نعم. يعمل الدفع بالبطاقة وعبر QR ومن التطبيق، للزيارات المفردة وللاشتراكات. ويمكن للساكن أيضًا إصدار تصريح ضيف من التطبيق بدلًا من الاتصال بالأمن.",
+          en: "Yes. Payment works by card, by QR and in the app, for single visits and for subscriptions, with a fiscal receipt via online cash registers (KKM). Residents can also issue guest passes in the app instead of calling security.",
+          ru: "Да. Оплата работает картой, по QR и в приложении — и за разовый заезд, и за абонемент, с фискальным чеком через онлайн-ККМ. Гостевой пропуск жилец тоже оформляет в приложении, без звонка охране.",
+          zh: "可以。支持银行卡、二维码和 App 缴费，单次停车和月卡均可，并通过在线收银机（KKM）开具电子发票。业主还可以直接在 App 中为访客开通通行，无需联系保安。",
+          tr: "Evet. Ödeme kartla, QR ile ve uygulamadan yapılabilir; hem tek seferlik giriş hem abonelik için; çevrim içi yazar kasa (KKM) üzerinden mali fiş kesilir. Sakinler güvenliği aramadan misafir girişini de uygulamadan oluşturabilir.",
+          ar: "نعم. يعمل الدفع بالبطاقة وعبر QR ومن التطبيق، للزيارات المفردة وللاشتراكات، مع إيصال مالي عبر أجهزة الكاش الإلكترونية (KKM). ويمكن للساكن أيضًا إصدار تصريح ضيف من التطبيق بدلًا من الاتصال بالأمن.",
         },
       },
       {

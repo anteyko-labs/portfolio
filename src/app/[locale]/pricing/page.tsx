@@ -38,6 +38,8 @@ const PACKAGE_MIN_PRICE: Record<string, string> = {
   "startup-key": "5000",
   "web3-addon": "3000",
   "mobile-app": "5000",
+  "ai-bots": "1000",
+  "telegram-bots": "500",
   "time-access": "800",
   parking: "1000",
   cctv: "800",
