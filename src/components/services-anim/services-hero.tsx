@@ -3,66 +3,60 @@
 import { Fragment } from "react";
 import { useLanguage } from "@/lib/language-context";
 import { pick } from "@/lib/i18n-text";
-import { PACKAGE_SLUGS, type PackageId, type ServiceGroup } from "@/lib/service-slugs";
-import { PKG_COLOR } from "./visual-frame";
 
 // /services hero: the headline centred on top, and under it two full-width rows
-// of service cards drifting in opposite directions (CSS only: transform, paused
-// on hover, off screen and under reduced motion). A click on a card opens it in
-// the catalog below.
+// of abstract cards drifting in opposite directions, each card gently bobbing
+// with a slow sheen. Decorative only (the services are listed right below).
+// CSS only: transforms, paused off screen and under reduced motion.
 
-type Pkg = ReturnType<typeof useLanguage>["translations"]["packages"]["items"][number];
+// Decorative only: abstract cards (no text) in the accent colours of the site.
+const PALETTE = ["6 182 212", "99 102 241", "236 72 153", "249 115 22", "163 230 53", "56 189 248", "244 63 94", "20 184 166", "139 92 246", "234 179 8"];
 
-function Card({ p, onPick, hidden }: { p: Pkg; onPick: (g: ServiceGroup, slug?: string) => void; hidden?: boolean }) {
-  const { language } = useLanguage();
-  const c = PKG_COLOR[p.id];
+function GhostCard({ k }: { k: number }) {
+  const c = PALETTE[k % PALETTE.length];
+  // a few varied "text" lines so neighbouring cards don't look identical
+  const w = [[62, 88, 48], [74, 56, 80], [50, 82, 64], [86, 44, 70]][k % 4];
+  const wide = k % 3 === 1;
   return (
-    <button
-      type="button"
-      // the second copy of each row is only there to close the loop
-      tabIndex={hidden ? -1 : undefined}
-      aria-hidden={hidden || undefined}
-      onClick={() => onPick(p.group, PACKAGE_SLUGS[p.id as PackageId])}
-      className="group relative flex w-[230px] shrink-0 flex-col overflow-hidden rounded-[20px] border border-white/[0.08] p-5 text-left transition-[transform,border-color,box-shadow] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 sm:w-[300px] sm:p-6"
-      style={{ background: "linear-gradient(180deg, #16161F 0%, #0E0E15 100%)", boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06), 0 24px 50px -36px rgba(0,0,0,0.9)" }}
+    <div
+      className="sv-ghost relative h-[150px] shrink-0 overflow-hidden rounded-[20px] border border-white/[0.07] sm:h-[170px]"
+      style={{
+        width: wide ? 300 : 220,
+        background: "linear-gradient(180deg, rgba(24,24,34,0.9) 0%, rgba(13,13,20,0.9) 100%)",
+        boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06), 0 24px 50px -36px rgba(0,0,0,0.9)",
+        ["--bob" as string]: `${-(k * 0.9) % 6}s`,
+      }}
     >
-      <span aria-hidden="true" className="absolute inset-x-0 top-0 h-[2px]" style={{ background: `linear-gradient(90deg, rgb(${c}), transparent 75%)` }} />
-      <span aria-hidden="true" className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full opacity-0 transition-opacity duration-500 group-hover:opacity-100" style={{ background: `radial-gradient(closest-side, rgb(${c} / 0.22), transparent)` }} />
-      <span aria-hidden="true" className="pointer-events-none absolute inset-0 rounded-[20px] opacity-0 ring-1 transition-opacity duration-500 group-hover:opacity-100" style={{ ["--tw-ring-color" as string]: `rgb(${c} / 0.45)` }} />
-      <span className="flex items-center justify-between">
-        <span aria-hidden="true" className="h-2 w-2 rounded-full" style={{ background: `rgb(${c})`, boxShadow: `0 0 10px rgb(${c} / 0.7)` }} />
-        <span className="font-mono text-[11px] text-white/40">{pick(p.timeline, language)}</span>
+      <span className="absolute inset-x-0 top-0 h-[2px]" style={{ background: `linear-gradient(90deg, rgb(${c}), transparent 75%)` }} />
+      <span className="absolute -right-12 -top-12 h-32 w-32 rounded-full" style={{ background: `radial-gradient(closest-side, rgb(${c} / 0.16), transparent)` }} />
+      <span className="absolute left-5 top-5 h-2 w-2 rounded-full" style={{ background: `rgb(${c})`, boxShadow: `0 0 10px rgb(${c} / 0.7)` }} />
+      <span className="absolute right-5 top-5 h-1.5 w-10 rounded-full bg-white/[0.08]" />
+      <span className="absolute left-5 top-11 h-3 rounded-full bg-white/[0.14]" style={{ width: `${w[0] * 0.7}%` }} />
+      <span className="absolute left-5 top-[4.6rem] h-1.5 rounded-full bg-white/[0.07]" style={{ width: `${w[1] * 0.8}%` }} />
+      <span className="absolute left-5 top-[5.4rem] h-1.5 rounded-full bg-white/[0.07]" style={{ width: `${w[2] * 0.8}%` }} />
+      <span className="absolute inset-x-5 bottom-5 flex items-center justify-between border-t border-white/[0.06] pt-3">
+        <span className="h-1.5 w-12 rounded-full" style={{ background: `rgb(${c} / 0.5)` }} />
+        <span className="h-1.5 w-4 rounded-full bg-white/[0.12]" />
       </span>
-      <span className="mt-4 line-clamp-2 block min-h-[2.5em] font-brand text-[1.1rem] font-semibold leading-[1.25] text-white sm:text-[1.3rem]">{pick(p.title, language)}</span>
-      <span className="mt-2 line-clamp-2 block min-h-[2.7em] text-[13px] leading-snug text-white/55">{pick(p.description, language)}</span>
-      <span className="mt-5 flex items-center justify-between border-t border-white/[0.06] pt-4">
-        <span className="font-mono text-[12px] text-white/80">{pick(p.startingPrice, language)}</span>
-        <span aria-hidden="true" className="text-white/40 transition-transform duration-300 group-hover:translate-x-1">→</span>
-      </span>
-    </button>
+      <span className="sv-ghost-sheen absolute inset-0" />
+    </div>
   );
 }
 
-function Row({ items, onPick, dur, reverse }: { items: Pkg[]; onPick: (g: ServiceGroup, slug?: string) => void; dur: number; reverse?: boolean }) {
+function Row({ count, offset, dur, reverse }: { count: number; offset: number; dur: number; reverse?: boolean }) {
   return (
     <div className="sv-marquee" style={{ ["--dur" as string]: `${dur}s`, ["--dir" as string]: reverse ? "reverse" : "normal" }}>
       {[0, 1].map((copy) => (
         <div key={copy} className="sv-marquee-track">
-          {items.map((p) => (
-            <Card key={`${copy}-${p.id}`} p={p} onPick={onPick} hidden={copy === 1} />
-          ))}
+          {Array.from({ length: count }, (_, i) => <GhostCard key={i} k={i + offset} />)}
         </div>
       ))}
     </div>
   );
 }
 
-export function ServicesHero({ onPick }: { onPick: (g: ServiceGroup, slug?: string) => void }) {
-  const { translations, language } = useLanguage();
-  const packages = translations.packages.items;
-  // two rows, interleaved so neighbouring cards differ
-  const rowA = packages.filter((_, i) => i % 2 === 0);
-  const rowB = packages.filter((_, i) => i % 2 === 1);
+export function ServicesHero() {
+  const { language } = useLanguage();
   const lines = [
     pick({ en: "Services", ru: "Услуги", zh: "服务", tr: "Hizmetler", ar: "الخدمات" }, language),
     pick({ en: "end to end", ru: "под ключ", zh: "全流程交付", tr: "uçtan uca", ar: "من البداية إلى النهاية" }, language),
@@ -93,9 +87,9 @@ export function ServicesHero({ onPick }: { onPick: (g: ServiceGroup, slug?: stri
       </div>
 
       {/* full width, edge to edge */}
-      <div className="hero-up mt-10 space-y-2 md:mt-14">
-        <Row items={rowA} onPick={onPick} dur={80} />
-        <Row items={rowB} onPick={onPick} dur={95} reverse />
+      <div aria-hidden="true" className="hero-up pointer-events-none mt-10 space-y-2 md:mt-14">
+        <Row count={9} offset={0} dur={70} />
+        <Row count={9} offset={5} dur={85} reverse />
       </div>
     </section>
   );

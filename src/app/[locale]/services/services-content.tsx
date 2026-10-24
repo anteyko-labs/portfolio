@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useLanguage } from "@/lib/language-context";
-import { useReducedMotion } from "@/lib/hooks";
 import type { ServiceGroup } from "@/lib/service-slugs";
 import { pick } from "@/lib/i18n-text";
 import { Section } from "@/components/ui/section";
@@ -13,8 +12,7 @@ import { ServiceCabinet } from "@/components/services-anim/service-cabinet";
 
 export function ServicesContent() {
   const { t, language } = useLanguage();
-  const reduced = useReducedMotion();
-  // the open catalog folder; the hero's folders and the catalog's tabs both set it
+  // the open catalog folder
   const [tab, setTab] = useState<ServiceGroup>("build");
   // cards are dealt in when a folder is opened by hand, not on first paint
   const [opened, setOpened] = useState(false);
@@ -25,13 +23,7 @@ export function ServicesContent() {
 
   return (
     <>
-      <ServicesHero
-        onPick={(g, slug) => {
-          openFolder(g);
-          // the folder renders first, then its card can be scrolled to
-          window.setTimeout(() => document.getElementById(slug ?? "catalog")?.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" }), 60);
-        }}
-      />
+      <ServicesHero />
       <ServiceCabinet tab={tab} opened={opened} onTab={openFolder} />
       <div className="bg-bg-secondary pb-16">
         <p className="text-center text-body-md text-text-secondary">
