@@ -123,3 +123,18 @@ test("every WhatsApp link in src/ is built from src/lib/whatsapp.ts", () => {
   const hits = textFiles("src").filter((p) => p !== own && !p.endsWith(".test.ts") && link.test(text(p)));
   assert.deepEqual(hits, []);
 });
+
+test("no tel: link points at the WhatsApp number: it takes no calls", () => {
+  // The number is on the WhatsApp Cloud API with no phone behind it, so a call
+  // goes unanswered. The concept sites in public/demos/ used to offer one.
+  const national = WHATSAPP_NUMBER.slice(-9);
+  const calls = SCANNED.flatMap(textFiles).filter((p) =>
+    [...text(p).matchAll(/tel:([+\d\s().-]*)/gi)].some(([, n]) => n.replace(/\D/g, "").endsWith(national)));
+  assert.deepEqual(calls, []);
+});
+
+test("every wa.me link in public/ points at WHATSAPP_NUMBER", () => {
+  // Static pages cannot import src/lib/whatsapp.ts; this keeps them in step with it.
+  const stale = textFiles("public").filter((p) => [...text(p).matchAll(/wa\.me\/(\d+)/gi)].some(([, n]) => n !== WHATSAPP_NUMBER));
+  assert.deepEqual(stale, []);
+});
