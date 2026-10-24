@@ -73,11 +73,3 @@
   .sv-ring, .sv-shimmer::after, .sv-bob, .sv-twinkle, .sv-flame, .sv-ping, .sv-spin, .sv-caret, .sv-float, .sv-orbit, .sv-sheen-panel::before { animation: none !important; }
   .sv-ping { opacity: 0; }
 }
-
-/* ───── /services hero orb ───── */
-.sv-orb { animation: sv-orb-breathe 7s ease-in-out infinite; }
-@keyframes sv-orb-breathe { 50% { transform: scale(1.035); } }
-.sv-orb-sheen { animation: sv-spin 24s linear infinite; }
-@media (prefers-reduced-motion: reduce) {
-  .sv-orb, .sv-orb-sheen { animation: none !important; }
-}
