@@ -33,15 +33,42 @@ export interface CrmLead {
  */
 export const WEBSITE_FORM_SOURCE = "website_form";
 
+/** Убирает из объяснения CRM всё, что похоже на email или номер телефона. */
+const scrub = (text: string) =>
+  text.replace(/\S+@\S+/g, "…").replace(/\+?\d[\d\s().-]{5,}\d/g, "…").slice(0, 120);
+
+/**
+ * Текст ошибки уходит в логи Vercel и в Telegram. В path лежит
+ * CRM_INBOX_IDENTIFIER, а он секрет, поэтому текст называет только шаг
+ * (contacts, conversations или messages), код ответа и объяснение CRM.
+ */
 async function post(path: string, body: unknown): Promise<Record<string, unknown>> {
-  const res = await fetch(`${CRM_BASE}${path}`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-    signal: AbortSignal.timeout(TIMEOUT_MS),
-  });
-  if (!res.ok) throw new Error(`CRM ${path} → ${res.status}`);
-  return res.json();
+  const step = path.slice(path.lastIndexOf("/") + 1);
+  let res: Response;
+  try {
+    res = await fetch(`${CRM_BASE}${path}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+      signal: AbortSignal.timeout(TIMEOUT_MS),
+    });
+  } catch (e) {
+    // Не e.message: fetch вписывает туда сам URL («Failed to parse URL from …»).
+    const { name, cause } = (e ?? {}) as { name?: string; cause?: { code?: string } };
+    const why = name === "TimeoutError" ? `нет ответа за ${TIMEOUT_MS / 1000} с` : `сеть (${cause?.code || name || "ошибка"})`;
+    throw new Error(`CRM ${step} → ${why}`);
+  }
+  if (!res.ok) {
+    // «Phone number should be in e164 format» и подобное. Присланных значений
+    // Chatwoot в объяснение не вставляет, но scrub не полагается на это.
+    const why = await res.json().then((b) => b?.message || b?.error, () => undefined);
+    throw new Error(`CRM ${step} → ${res.status}${typeof why === "string" && why ? ` (${scrub(why)})` : ""}`);
+  }
+  try {
+    return await res.json();
+  } catch {
+    throw new Error(`CRM ${step} → ${res.status}, ответ не JSON`);
+  }
 }
 
 /**

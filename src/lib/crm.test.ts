@@ -5,7 +5,7 @@
 //
 // No request leaves the process: fetch is mocked in every test that sends, and
 // CRM_BASE_URL points at the reserved .test domain, which never resolves.
-import { test } from "node:test";
+import { test, type TestContext } from "node:test";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 
@@ -218,4 +218,85 @@ test("no phone: the request contract is unchanged", async (t) => {
   assert.deepEqual(conversation.body, { custom_attributes: { anteyko_source: "website_form" } });
   assert.equal(message.path, `/public/api/v1/inboxes/${IDENT}/contacts/${sourceId}/conversations/42/messages`);
   assert.deepEqual(message.body, { content: "Заявка с сайта" });
+});
+
+// route.ts prints a CRM failure with console.error and posts it to the team's
+// Telegram chat, so its text must hold neither the inbox identifier nor
+// anything the visitor typed.
+const SOURCE_ID = createHash("sha256").update("anteyko:v1:lead@example.com").digest("hex");
+const PRIVATE = [IDENT, SOURCE_ID, "lead@example.com", "Lead@Example.com", "Тест", "700123456", "700 123 456"];
+
+type Fetch = (url: string | URL, init?: RequestInit) => Promise<Response>;
+
+/** The text submitLeadToCrm rejects with when fetch behaves as given; checked for leaks. */
+async function failure(t: TestContext, fetch: Fetch): Promise<string> {
+  t.mock.method(globalThis, "fetch", fetch);
+  const error = await submitLeadToCrm(lead("0700 123 456")).then(
+    () => assert.fail("submitLeadToCrm should have rejected"),
+    (e: unknown) => e,
+  );
+  assert.ok(error instanceof Error);
+  for (const value of PRIVATE) assert.ok(!error.message.includes(value), `${JSON.stringify(error.message)} contains ${value}`);
+  return error.message;
+}
+
+const answer = (status: number, body: string, type = "application/json"): Fetch => async () =>
+  new Response(body, { status, headers: { "Content-Type": type } });
+
+test("a CRM refusal names the step, the status and the CRM's reason", async (t) => {
+  const refusal = { message: "Phone number should be in e164 format", attributes: ["phone_number"] };
+  assert.equal(await failure(t, answer(422, JSON.stringify(refusal))), "CRM contacts → 422 (Phone number should be in e164 format)");
+});
+
+test("a refusal after the contact names that step, not the path with the source_id", async (t) => {
+  const crm = fakeCrm();
+  const fetch: Fetch = async (url, init) =>
+    String(url).endsWith("/conversations")
+      ? new Response(JSON.stringify({ error: "Resource could not be found" }), { status: 404 })
+      : crm.fetch(url, init);
+  assert.equal(await failure(t, fetch), "CRM conversations → 404 (Resource could not be found)");
+});
+
+test("the CRM's reason is cleaned of emails and numbers and cut to 120 characters", async (t) => {
+  const reason = `Email lead@example.com and phone +996 700 123 456 are taken. ${"More details. ".repeat(20)}`;
+  const text = await failure(t, answer(422, JSON.stringify({ message: reason })));
+  assert.match(text, /^CRM contacts → 422 \(Email … and phone … are taken\. More details\./);
+  assert.equal(text.length, "CRM contacts → 422 ()".length + 120);
+});
+
+test("a network failure gives the cause code", async (t) => {
+  const offline = new TypeError("fetch failed", { cause: Object.assign(new Error("getaddrinfo ENOTFOUND crm.test"), { code: "ENOTFOUND" }) });
+  assert.equal(await failure(t, async () => { throw offline; }), "CRM contacts → сеть (ENOTFOUND)");
+});
+
+test("a malformed CRM_BASE_URL does not print fetch's text, which holds the URL with the identifier", async (t) => {
+  // Exactly what Node's fetch throws for a base URL without a scheme.
+  const invalid = new TypeError(`Failed to parse URL from intake.anteyko.com/public/api/v1/inboxes/${IDENT}/contacts`, {
+    cause: Object.assign(new TypeError("Invalid URL"), { code: "ERR_INVALID_URL" }),
+  });
+  assert.equal(await failure(t, async () => { throw invalid; }), "CRM contacts → сеть (ERR_INVALID_URL)");
+});
+
+test("a timeout says so", async (t) => {
+  const timeout = new DOMException("The operation was aborted due to timeout", "TimeoutError");
+  assert.equal(await failure(t, async () => { throw timeout; }), "CRM contacts → нет ответа за 8 с");
+});
+
+test("an error page instead of JSON gives just the status", async (t) => {
+  assert.equal(await failure(t, answer(502, "<html><body>502 Bad Gateway</body></html>", "text/html")), "CRM contacts → 502");
+});
+
+test("a success status with a body that is not JSON is a failure too", async (t) => {
+  assert.equal(await failure(t, answer(200, "<html>captive portal</html>", "text/html")), "CRM contacts → 200, ответ не JSON");
+});
+
+test("without CRM_INBOX_IDENTIFIER nothing is sent and the result is null", async (t) => {
+  // A second copy of the module, loaded with the identifier unset: route.ts reports this as «не настроено».
+  process.env.CRM_INBOX_IDENTIFIER = "";
+  const unconfigured = await import("./crm.ts?without-identifier");
+  process.env.CRM_INBOX_IDENTIFIER = IDENT;
+  const fetch = t.mock.method(globalThis, "fetch", async () => assert.fail("nothing may be sent without an identifier"));
+  t.mock.method(console, "error", () => {});
+  assert.equal(await unconfigured.submitLeadToCrm(lead("0700 123 456")), null);
+  assert.equal(fetch.mock.callCount(), 0);
 });
