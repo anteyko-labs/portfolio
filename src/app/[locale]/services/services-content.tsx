@@ -23,7 +23,13 @@ export function ServicesContent() {
 
   return (
     <>
-      <ServicesHero />
+      <ServicesHero
+        onPick={(g, slug) => {
+          openFolder(g);
+          // the folder renders first, then its card can be scrolled to
+          window.setTimeout(() => document.getElementById(slug ?? "catalog")?.scrollIntoView({ behavior: "smooth", block: "start" }), 60);
+        }}
+      />
       <ServiceCabinet tab={tab} opened={opened} onTab={openFolder} />
       <div className="bg-bg-secondary pb-16">
         <p className="text-center text-body-md text-text-secondary">

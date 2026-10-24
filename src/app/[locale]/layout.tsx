@@ -1,11 +1,11 @@
 import type { Metadata, Viewport } from "next";
-import { Manrope, Noto_Sans_Arabic, Unbounded } from "next/font/google";
 import { GeistMono } from "geist/font/mono";
 import Script from "next/script";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
+import "../fonts.css";
 import "../globals.css";
 import { LanguageProvider } from "@/lib/language-context";
 import { CustomCursor } from "@/components/effects/custom-cursor";
@@ -22,25 +22,9 @@ import { isRtl, pick, type Language } from "@/lib/i18n-text";
 import { SITE_DESCRIPTION, SITE_TITLE } from "@/i18n/site-copy";
 import { localeAlternates } from "@/i18n/metadata";
 
-// Refined-light type system: Manrope (geometric grotesque, RU+EN, premium)
-// for both UI and display weights; Geist Mono for technical labels.
-const manrope = Manrope({
-  variable: "--font-manrope",
-  subsets: ["latin", "cyrillic"],
-  weight: ["400", "500", "600", "700", "800"],
-  display: "swap",
-});
-
-// Arabic and Chinese glyphs: Manrope/Unbounded have no such scripts, so these
-// sit right after them in the font stacks (see --font-sans in globals.css).
-const notoArabic = Noto_Sans_Arabic({
-  variable: "--font-noto-arabic",
-  subsets: ["arabic"],
-  weight: ["400", "500", "600", "700"],
-  display: "swap",
-  // Not preloaded: only /ar needs it, and unicode-range fetches it there on demand
-  preload: false,
-});
+// Type: Manrope (UI and display), Unbounded (brand headings) and Noto Sans
+// Arabic are self-hosted in src/app/fonts.css; Chinese uses system CJK fonts;
+// Geist Mono for technical labels. See the font stacks in globals.css.
 
 // The page scale is locked: no pinch or double-tap zoom.
 export const viewport: Viewport = {
@@ -49,17 +33,6 @@ export const viewport: Viewport = {
   maximumScale: 1,
   userScalable: false,
 };
-
-// Display/brand personality — Unbounded (wide geometric display, RU+EN).
-// Exposed as --font-display-brand; mapped to the `font-family-brand` token and
-// the `.heading-brand` utility in globals.css. Used pointwise on the hero H1
-// and section H2s by the integration agent.
-const unbounded = Unbounded({
-  variable: "--font-display-brand",
-  subsets: ["latin", "cyrillic"],
-  weight: ["500", "600", "700"],
-  display: "swap",
-});
 
 export async function generateMetadata({
   params,
@@ -213,6 +186,11 @@ export default async function LocaleLayout({
   return (
     <html lang={locale} dir={isRtl(locale) ? "rtl" : "ltr"} suppressHydrationWarning>
       <head>
+        {/* the self-hosted fonts the first screen uses (fonts.css) */}
+        <link rel="preload" href="/fonts/manrope-latin-wght-normal.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+        <link rel="preload" href="/fonts/manrope-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+        <link rel="preload" href="/fonts/unbounded-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+        <link rel="preload" href="/fonts/unbounded-latin-wght-normal.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
         {/* favicon.ico / icon.png / apple-icon.png live in src/app/ and are wired by Next App Router. */}
         <link rel="manifest" href="/manifest.json" />
         {/* Blocks zoom, context menu, copying and dev-tools shortcuts (also loaded by every /demos page) */}
@@ -305,7 +283,7 @@ export default async function LocaleLayout({
         />
       </head>
       <body
-        className={`${manrope.variable} ${unbounded.variable} ${notoArabic.variable} ${GeistMono.variable} font-sans antialiased`}
+        className={`${GeistMono.variable} font-sans antialiased`}
       >
         {/* GTM noscript fallback */}
         {GTM_ID ? (
