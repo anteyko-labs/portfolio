@@ -29,6 +29,8 @@ const PROJECT_TYPES: Record<string, string> = {
   branding: "Брендинг",
   fintech: "Финтех",
   access: "УРВ и СКУД",
+  ai: "AI-бот",
+  telegram: "Telegram-бот",
   parking: "Система парковки",
   cctv: "Видеонаблюдение",
   av: "Акустика для конференц-залов",

@@ -6,13 +6,13 @@ import { useLanguage } from "@/lib/language-context";
 import { pick } from "@/lib/i18n-text";
 import "./services-anim.css";
 import { Frame, PKG_COLOR, T, r2 } from "./visual-frame";
-import { AppStore, AccessGate, AudioRoom, BrandBuild, CarbonLedger, CctvGrid, FinFlow, ParkingGate, UptimeWatch } from "./industry-visuals";
+import { AiChat, AppStore, AccessGate, AudioRoom, BrandBuild, CarbonLedger, CctvGrid, FinFlow, ParkingGate, TgBot, UptimeWatch } from "./industry-visuals";
 
 // One small looping scene per package, drawn in code: a site assembling itself,
 // a sprint board, a launch curve and a wallet signing a transaction. Each one
 // ticks only while on screen; with reduced motion it shows its finished frame.
 
-export type PackageKey = "launch-site" | "mvp-sprint" | "startup-key" | "web3-addon" | "mobile-app" | "time-access" | "parking" | "cctv" | "conference-av" | "fintech" | "carbon-credits" | "it-support" | "branding";
+export type PackageKey = "launch-site" | "mvp-sprint" | "startup-key" | "web3-addon" | "mobile-app" | "ai-bots" | "telegram-bots" | "time-access" | "parking" | "cctv" | "conference-av" | "fintech" | "carbon-credits" | "it-support" | "branding";
 
 export { PKG_COLOR };
 
@@ -345,6 +345,8 @@ export function PackageVisual({ id, className }: { id: string; className?: strin
   if (id === "startup-key") return <LaunchCurve className={className} />;
   if (id === "web3-addon") return <WalletTx className={className} />;
   if (id === "mobile-app") return <AppStore className={className} />;
+  if (id === "ai-bots") return <AiChat className={className} />;
+  if (id === "telegram-bots") return <TgBot className={className} />;
   if (id === "time-access") return <AccessGate className={className} />;
   if (id === "parking") return <ParkingGate className={className} />;
   if (id === "cctv") return <CctvGrid className={className} />;

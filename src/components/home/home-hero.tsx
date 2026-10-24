@@ -16,11 +16,11 @@ const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
 // "We build ___ end to end" — one word per service, in catalog order
 const WORDS = {
-  en: ["websites", "MVPs", "digital products", "mobile apps", "brands", "fintech", "access control", "parking systems", "video surveillance", "conference room audio", "carbon platforms", "Web3", "IT support"],
-  ru: ["сайты", "MVP", "цифровые продукты", "мобильные приложения", "брендинг", "финтех", "УРВ и СКУД", "системы парковки", "видеонаблюдение", "акустику для залов", "карбоновые платформы", "Web3", "IT-сопровождение"],
-  zh: ["网站", "MVP", "数字产品", "移动应用", "品牌", "金融科技", "考勤门禁", "停车系统", "视频监控", "会议室音响", "碳信用平台", "Web3", "IT 运维"],
-  tr: ["web siteleri", "MVP'ler", "dijital ürünler", "mobil uygulamalar", "markalar", "fintek çözümleri", "geçiş kontrol sistemleri", "otopark sistemleri", "video gözetim", "salon ses sistemleri", "karbon platformları", "Web3", "BT destek sistemleri"],
-  ar: ["مواقع ويب", "منتجات MVP", "منتجات رقمية", "تطبيقات جوال", "علامات تجارية", "حلول مالية", "أنظمة الدوام والدخول", "أنظمة المواقف", "المراقبة بالفيديو", "صوتيات القاعات", "منصات الكربون", "Web3", "الدعم التقني"],
+  en: ["websites", "MVPs", "digital products", "mobile apps", "AI chatbots", "Telegram bots", "brands", "fintech", "access control", "parking systems", "video surveillance", "conference room audio", "carbon platforms", "Web3", "IT support"],
+  ru: ["сайты", "MVP", "цифровые продукты", "мобильные приложения", "AI-боты", "Telegram-боты", "брендинг", "финтех", "УРВ и СКУД", "системы парковки", "видеонаблюдение", "акустику для залов", "карбоновые платформы", "Web3", "IT-сопровождение"],
+  zh: ["网站", "MVP", "数字产品", "移动应用", "AI 机器人", "Telegram 机器人", "品牌", "金融科技", "考勤门禁", "停车系统", "视频监控", "会议室音响", "碳信用平台", "Web3", "IT 运维"],
+  tr: ["web siteleri", "MVP'ler", "dijital ürünler", "mobil uygulamalar", "yapay zekâ botları", "Telegram botları", "markalar", "fintek çözümleri", "geçiş kontrol sistemleri", "otopark sistemleri", "video gözetim", "salon ses sistemleri", "karbon platformları", "Web3", "BT destek sistemleri"],
+  ar: ["مواقع ويب", "منتجات MVP", "منتجات رقمية", "تطبيقات جوال", "روبوتات ذكاء اصطناعي", "روبوتات Telegram", "علامات تجارية", "حلول مالية", "أنظمة الدوام والدخول", "أنظمة المواقف", "المراقبة بالفيديو", "صوتيات القاعات", "منصات الكربون", "Web3", "الدعم التقني"],
 };
 
 /**

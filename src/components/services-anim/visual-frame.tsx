@@ -9,6 +9,8 @@ export const PKG_COLOR: Record<string, string> = {
   "startup-key": "236 72 153",
   "web3-addon": "139 92 246",
   "mobile-app": "249 115 22",
+  "ai-bots": "163 230 53",
+  "telegram-bots": "56 189 248",
   "time-access": "20 184 166",
   parking: "14 165 233",
   cctv: "239 68 68",

@@ -10,6 +10,8 @@ export const PACKAGE_SLUGS = {
   "startup-key": "startup-under-key",
   "web3-addon": "web3-addon",
   "mobile-app": "mobile-apps",
+  "ai-bots": "ai-chatbots",
+  "telegram-bots": "telegram-bots",
   "time-access": "time-tracking-access-control",
   parking: "parking-system",
   cctv: "video-surveillance",
