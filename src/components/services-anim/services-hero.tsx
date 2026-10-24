@@ -1,7 +1,7 @@
 "use client";
 
-import { useRef, useState, useSyncExternalStore } from "react";
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { useState } from "react";
+import { AnimatePresence, motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { useLanguage } from "@/lib/language-context";
 import { pick, type L } from "@/lib/i18n-text";
 import { CountUp, EASE, useLoop } from "@/components/motion/kit";
@@ -32,13 +32,6 @@ const TAB: Record<ServiceGroup, L> = {
   care: { en: "Modules", ru: "Модули", zh: "模块", tr: "Modüller", ar: "الوحدات" },
 };
 
-const narrowQuery = "(max-width: 639px)";
-const subscribeNarrow = (cb: () => void) => {
-  const m = window.matchMedia(narrowQuery);
-  m.addEventListener("change", cb);
-  return () => m.removeEventListener("change", cb);
-};
-const useNarrow = () => useSyncExternalStore(subscribeNarrow, () => window.matchMedia(narrowQuery).matches, () => false);
 
 export function ServicesHero({ onPick }: { onPick: (g: ServiceGroup) => void }) {
   const { t, translations, language } = useLanguage();
@@ -153,7 +146,7 @@ export function ServicesHero({ onPick }: { onPick: (g: ServiceGroup) => void }) 
           {/* the whole fan tilts as one plane; no preserve-3d, which would sort the
               folders by depth and ignore their stacking order */}
           <motion.div style={reduced ? undefined : { rotateX: rotX, rotateY: rotY }}>
-            <Fan groups={groups} colors={colors} focus={focus} setHover={setHover} onPick={onPick} />
+            <Folder groups={groups} colors={colors} focus={focus} setHover={setHover} onPick={onPick} />
           </motion.div>
         </div>
       </div>
@@ -161,131 +154,128 @@ export function ServicesHero({ onPick }: { onPick: (g: ServiceGroup) => void }) 
   );
 }
 
-/* ───────────── The four directions, fanned out ───────────── */
+/* ───────────── One folder, four dividers sticking out of it ───────────── */
 
 type Group = (typeof SERVICE_GROUPS)[number] & { items: ReturnType<typeof useLanguage>["translations"]["packages"]["items"][number][] };
 
-function Fan({ groups, colors, focus, setHover, onPick }: { groups: Group[]; colors: string[]; focus: number; setHover: (i: number | null) => void; onPick: (g: ServiceGroup) => void }) {
+function Folder({ groups, colors, focus, setHover, onPick }: { groups: Group[]; colors: string[]; focus: number; setHover: (i: number | null) => void; onPick: (g: ServiceGroup) => void }) {
   const { language } = useLanguage();
-  const narrow = useNarrow();
+  const reduced = useReducedMotion();
   const n = groups.length;
-  const mid = (n - 1) / 2;
-  // cards in a hand: all turn around one point far below, so their tops (and
-  // tabs) fan apart and stay visible whichever folder is up
-  const step = narrow ? 5 : 9;
+  const g = groups[focus];
+  const color = colors[focus];
   const svc = pick({ en: "services", ru: "услуг", zh: "项服务", tr: "hizmet", ar: "خدمات" }, language);
-  const pending = useRef<number | null>(null);
-  const timer = useRef(0);
-  const zoneOf = (e: React.MouseEvent<HTMLElement>) => {
-    const r = e.currentTarget.getBoundingClientRect();
-    return Math.min(n - 1, Math.max(0, Math.floor(((e.clientX - r.left) / r.width) * n)));
-  };
+  const open = pick({ en: "Open", ru: "Открыть", zh: "打开", tr: "Aç", ar: "افتح" }, language);
 
   return (
-    <div
-      className="relative mx-auto h-[420px] cursor-pointer w-full max-w-[560px] sm:h-[470px]"
-      // the fan is split into one zone per folder across its width: the folder
-      // for the zone under the cursor comes up and covers that zone, so a click
-      // always lands on the folder you see (folders overlap, hit-testing alone
-      // would pick a neighbour)
-      // a short rest before a folder comes up, so sweeping across doesn't flicker
-      onMouseMove={(e) => {
-        const z = zoneOf(e);
-        if (z === pending.current) return;
-        pending.current = z;
-        window.clearTimeout(timer.current);
-        timer.current = window.setTimeout(() => setHover(z), 160);
-      }}
-      onMouseLeave={() => {
-        pending.current = null;
-        window.clearTimeout(timer.current);
-        setHover(null);
-      }}
-      // mouse clicks and taps go by zone too; keyboard Enter reaches the button
-      onClick={(e) => {
-        if (e.detail > 0) onPick(groups[zoneOf(e)].id);
-      }}
-    >
-      {/* sparks drifting around the fan */}
-      {[[10, 22], [90, 16], [6, 70]].map(([l, t], k) => (
-        <span key={k} aria-hidden="true" className="sv-float absolute h-1 w-1 rounded-full opacity-60" style={{ left: `${l}%`, top: `${t}%`, background: `rgb(${colors[k % n]})`, boxShadow: `0 0 8px rgb(${colors[k % n]})`, animationDelay: `${k * -2.3}s`, animationDuration: "11s" }} />
-      ))}
-      {groups.map((g, i) => {
+    <div className="relative mx-auto h-[400px] w-full max-w-[500px] sm:h-[440px]" onMouseLeave={() => setHover(null)}>
+      {/* back of the folder */}
+      <div aria-hidden="true" className="absolute inset-x-0 bottom-0 top-[64px] rounded-[22px] border border-white/[0.07] bg-[#0B0B12] shadow-[0_40px_80px_-40px_rgba(0,0,0,0.9)]" />
+
+      {/* the dividers' sheets: their top edges peek out of the pocket */}
+      {groups.map((d, i) => {
         const on = i === focus;
-        const off = i - mid;
-        const color = colors[i];
+        return (
+          <motion.div
+            key={d.id}
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-x-3 bottom-3 top-[104px] rounded-t-[16px] sm:inset-x-4"
+            style={{ zIndex: 1 + i, background: "linear-gradient(180deg, #1B1B27, #13131C)", boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06)" }}
+            initial={false}
+            animate={{ y: on ? -16 : 0 }}
+            transition={{ duration: 0.7, ease: EASE }}
+          >
+            <span className="absolute inset-x-0 top-0 h-px rounded-t-[16px] transition-opacity duration-700" style={{ background: `linear-gradient(90deg, transparent, rgb(${colors[i]}), transparent)`, opacity: on ? 0.9 : 0.2 }} />
+          </motion.div>
+        );
+      })}
+
+      {/* the tabs, in their own layer so no sheet ever covers one; each moves
+          with its sheet. A tab reaches down past its edge (after:), so when it
+          slides up it still sits under the cursor that raised it */}
+      {groups.map((d, i) => {
+        const on = i === focus;
+        const c = colors[i];
         return (
           <motion.button
-            key={g.id}
+            key={d.id}
             type="button"
-            onClick={(e) => {
-              if (e.detail === 0) onPick(g.id);
-            }}
+            onMouseEnter={() => setHover(i)}
             onFocus={() => setHover(i)}
-            aria-label={`${pick({ en: "Open", ru: "Открыть", zh: "打开", tr: "Aç", ar: "افتح" }, language)}: ${pick(g.label, language)}`}
-            className="absolute bottom-0 left-1/2 flex h-[300px] w-[196px] -ml-[98px] flex-col rounded-2xl border text-left sm:h-[350px] sm:w-[262px] sm:-ml-[131px] focus-visible:outline-none"
+            onClick={() => onPick(d.id)}
+            aria-label={`${open}: ${pick(d.label, language)}`}
+            aria-pressed={on}
+            className="absolute top-[74px] z-10 flex h-[30px] items-center gap-1.5 rounded-t-xl border border-b-0 px-2 font-mono text-[8px] uppercase tracking-[0.02em] transition-colors duration-500 after:absolute after:inset-x-0 after:top-full after:h-6 after:content-[''] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 sm:px-3 sm:text-[10px] sm:tracking-[0.08em]"
             style={{
-              zIndex: on ? n + 1 : i,
-              transformOrigin: "50% 190%",
-              background: "linear-gradient(180deg, #16161F 0%, #0F0F17 100%)",
-              borderColor: on ? `rgb(${color} / 0.38)` : "rgba(255,255,255,0.08)",
-              boxShadow: on ? `0 28px 60px -34px rgb(${color} / 0.5), inset 0 1px 0 rgba(255,255,255,0.06)` : "0 20px 44px -32px rgba(0,0,0,0.85), inset 0 1px 0 rgba(255,255,255,0.04)",
-              transition: "border-color 0.8s ease, box-shadow 0.8s ease",
+              left: `calc(${3 + i * 24.5}% + 4px)`,
+              width: "22.5%",
+              background: on ? `color-mix(in srgb, rgb(${c}) 16%, #1B1B27)` : "#1B1B27",
+              borderColor: on ? `rgb(${c} / 0.35)` : "rgba(255,255,255,0.07)",
+              color: on ? `rgb(${c})` : "rgba(255,255,255,0.55)",
             }}
             initial={false}
-            animate={{
-              rotate: off * step,
-              y: on ? -14 : 0,
-              scale: on ? 1.015 : 0.975,
-            }}
-            transition={{ duration: 0.9, ease: EASE }}
+            animate={{ y: on ? -16 : 0 }}
+            transition={{ duration: 0.7, ease: EASE }}
           >
-            {/* folder tab */}
-            <span className="absolute -top-7 left-4 flex h-7 items-center gap-1.5 rounded-t-xl px-3 font-mono text-[10px] uppercase tracking-[0.1em] transition-colors duration-700" style={{ background: on ? `color-mix(in srgb, rgb(${color}) 18%, #16161F)` : "#16161F", color: on ? `rgb(${color})` : "rgba(255,255,255,0.6)", border: "1px solid rgba(255,255,255,0.08)", borderBottom: 0 }}>
-              <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full" style={{ background: `rgb(${color})` }} />
-              {pick(TAB[g.id], language)}
-            </span>
-            <span aria-hidden="true" className="absolute inset-x-0 top-0 h-px rounded-t-2xl transition-opacity duration-700" style={{ background: `linear-gradient(90deg, rgb(${color}), transparent 70%)`, opacity: on ? 1 : 0.45 }} />
-
-            <span className="flex w-full flex-1 flex-col p-4 sm:p-6">
-              <span className="flex items-center justify-between font-mono text-[11px] text-white/40 transition-opacity duration-700" style={{ opacity: on ? 1 : 0.6 }}>
-                <span>{String(i + 1).padStart(2, "0")} / {String(n).padStart(2, "0")}</span>
-                <span>{g.items.length} {svc}</span>
-              </span>
-              <span className="mt-3 font-brand text-[1.2rem] font-semibold leading-tight text-white transition-opacity duration-700 sm:text-2xl" style={{ opacity: on ? 1 : 0.28 }}>
-                {pick(g.label, language)}
-              </span>
-              <span className="mt-4 space-y-2">
-                {g.items.slice(0, 6).map((p, k) => (
-                  <motion.span
-                    key={p.id}
-                    className="flex items-center justify-between gap-2 text-[12px] sm:gap-3 sm:text-[13px]"
-                    initial={false}
-                    animate={{ opacity: on ? 1 : 0.18 }}
-                    transition={{ duration: 0.6, delay: on ? 0.15 + k * 0.05 : 0, ease: "easeOut" }}
-                  >
-                    <span className="flex min-w-0 items-center gap-2 text-white/80">
-                      <span aria-hidden="true" className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: `rgb(${PKG_COLOR[p.id]})` }} />
-                      <span className="truncate">{pick(p.title, language)}</span>
-                    </span>
-                    <span className="shrink-0 font-mono text-[11px] text-white/45">{pick(p.startingPrice, language)}</span>
-                  </motion.span>
-                ))}
-              </span>
-              <motion.span
-                className="mt-auto inline-flex items-center gap-2 text-body-sm font-medium"
-                style={{ color: `rgb(${color})` }}
-                initial={false}
-                animate={{ opacity: on ? 1 : 0 }}
-                transition={{ duration: 0.6, delay: on ? 0.35 : 0, ease: "easeOut" }}
-              >
-                {pick({ en: "Open the folder", ru: "Открыть папку", zh: "打开文件夹", tr: "Klasörü aç", ar: "افتح المجلد" }, language)}
-                <span aria-hidden="true">→</span>
-              </motion.span>
-            </span>
+            <span aria-hidden="true" className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: `rgb(${c})`, boxShadow: on ? `0 0 8px rgb(${c})` : "none" }} />
+            <span className="truncate">{pick(TAB[d.id], language)}</span>
           </motion.button>
         );
       })}
+
+      {/* front of the folder, where the open divider's contents show */}
+      <button
+        type="button"
+        onClick={() => onPick(g.id)}
+        aria-label={`${open}: ${pick(g.label, language)}`}
+        className="absolute inset-x-0 bottom-0 top-[146px] z-20 overflow-hidden rounded-[22px] border text-left transition-[border-color,box-shadow] duration-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
+        style={{
+          background: "linear-gradient(180deg, #17171F 0%, #0E0E15 100%)",
+          borderColor: `rgb(${color} / 0.22)`,
+          boxShadow: `0 -18px 30px -22px rgba(0,0,0,0.9), 0 30px 70px -40px rgb(${color} / 0.45), inset 0 1px 0 rgba(255,255,255,0.07)`,
+        }}
+      >
+        {/* the pocket's lip */}
+        <span aria-hidden="true" className="absolute inset-x-6 top-0 h-px" style={{ background: `linear-gradient(90deg, transparent, rgb(${color} / 0.6), transparent)` }} />
+        <span aria-hidden="true" className="absolute -right-16 -top-16 h-48 w-48 rounded-full transition-colors duration-1000" style={{ background: `radial-gradient(closest-side, rgb(${color} / 0.16), transparent)` }} />
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.span
+            key={g.id}
+            className="relative flex h-full flex-col p-5 sm:p-7"
+            initial={reduced ? false : { opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            transition={{ duration: 0.45, ease: EASE }}
+          >
+            <span className="flex items-center justify-between font-mono text-[11px] text-white/40">
+              <span>{String(focus + 1).padStart(2, "0")} / {String(n).padStart(2, "0")}</span>
+              <span>{g.items.length} {svc}</span>
+            </span>
+            <span className="mt-2 font-brand text-[1.4rem] font-semibold leading-tight text-white sm:text-[1.7rem]">{pick(g.label, language)}</span>
+            <span className="mt-4 grid gap-x-6 gap-y-2 sm:grid-cols-2">
+              {g.items.slice(0, 6).map((p, k) => (
+                <motion.span
+                  key={p.id}
+                  className="flex items-center justify-between gap-3 text-[13px]"
+                  initial={reduced ? false : { opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.5, delay: 0.1 + k * 0.05, ease: "easeOut" }}
+                >
+                  <span className="flex min-w-0 items-center gap-2 text-white/80">
+                    <span aria-hidden="true" className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: `rgb(${PKG_COLOR[p.id]})` }} />
+                    <span className="truncate">{pick(p.title, language)}</span>
+                  </span>
+                  <span className="shrink-0 font-mono text-[11px] text-white/40">{pick(p.startingPrice, language)}</span>
+                </motion.span>
+              ))}
+            </span>
+            <span className="mt-auto inline-flex items-center gap-2 pt-4 text-body-sm font-medium" style={{ color: `rgb(${color})` }}>
+              {pick({ en: "Open the folder", ru: "Открыть папку", zh: "打开文件夹", tr: "Klasörü aç", ar: "افتح المجلد" }, language)}
+              <span aria-hidden="true">→</span>
+            </span>
+          </motion.span>
+        </AnimatePresence>
+      </button>
     </div>
   );
 }
