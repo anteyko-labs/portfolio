@@ -45,6 +45,50 @@ async function post(path: string, body: unknown): Promise<Record<string, unknown
 }
 
 /**
+ * Телефон из формы → E.164, как его принимает CRM, или null.
+ *
+ * CRM (Chatwoot, Contact#phone_number) пускает только /\+[1-9]\d{1,14}\z/, а на
+ * всё остальное отвечает 422 на создании контакта, и тогда в CRM не доходит
+ * ничего: ни беседы, ни сообщения. Так 21.10.2026 потерялась заявка с сайта.
+ * Поле в форме свободное, пишут «0700 123 456», «+996 (700) 12-34-56»,
+ * «996700123456».
+ *
+ * Правила решены владельцем:
+ * - без кода страны номер кыргызский: 0XXXXXXXXX или 9 цифр → +996XXXXXXXXX;
+ * - 8 или 7 и ещё 10 цифр → +7 и эти 10 цифр (Россия, Казахстан);
+ * - с «+» или «00» номер берётся как есть, если он похож на E.164;
+ * - всё остальное, в том числе номер с добавочным и два номера в одном поле, —
+ *   null. Такой номер в карточку не пишется, а уходит текстом в сообщение
+ *   (см. submitLeadToCrm), так что он не теряется.
+ */
+export function toE164(raw?: string | null): string | null {
+  if (!raw) return null;
+  const text = raw
+    .normalize("NFKC") // полноширинные ０-９ и ＋ → 0-9 и +
+    .replace(/[\u0660-\u0669]/g, (d) => String(d.charCodeAt(0) - 0x0660)) // арабские цифры
+    .replace(/[\u06f0-\u06f9]/g, (d) => String(d.charCodeAt(0) - 0x06f0)); // персидские цифры
+  // Слова вокруг номера не мешают («тел.: …», «… (WhatsApp)»). Внутри номера
+  // это добавочный или второй номер: из «0700 123 45 доб. 2» вышел бы чужой.
+  const core = text.match(/[+\d](?:[\s\S]*\d)?/)?.[0];
+  if (!core || /[^\d+\s.()/\-\u2010-\u2015\u2212]/.test(core)) return null;
+  let s = core.replace(/[^\d+]/g, "");
+  if (s.startsWith("00")) s = `+${s.slice(2)}`;
+  if (!s.startsWith("+")) {
+    if (/^996\d{9,10}$/.test(s)) s = `+${s}`;
+    else if (/^0\d{9}$/.test(s)) s = `+996${s.slice(1)}`;
+    else if (/^\d{9}$/.test(s)) s = `+996${s}`;
+    else if (/^[78]\d{10}$/.test(s)) s = `+7${s.slice(1)}`;
+    else return null;
+  }
+  s = s.replace(/^\+9960(?=\d{9}$)/, "+996"); // «+996 0700 …»: лишний ноль после кода
+  // После +996 ровно 9 цифр, после +7 ровно 10, и ноль первым не бывает ни там, ни там.
+  if (s.startsWith("+996")) return /^\+996[1-9]\d{8}$/.test(s) ? s : null;
+  if (s.startsWith("+7")) return /^\+7[1-9]\d{9}$/.test(s) ? s : null;
+  // Строже, чем у CRM: якорь в начале и не меньше 7 цифр.
+  return /^\+[1-9]\d{6,14}$/.test(s) ? s : null;
+}
+
+/**
  * Нормализация решает, склеятся ли две заявки от одного человека. Меняя её,
  * меняешь и все уже посчитанные source_id — отсюда версия в префиксе хеша.
  */
@@ -73,6 +117,14 @@ export async function submitLeadToCrm(lead: CrmLead): Promise<{ conversationId: 
    */
   const sourceId = createHash("sha256").update(`anteyko:v1:${identifier}`).digest("hex");
 
+  // Телефон едет в карточку только в E.164: любой другой формат CRM отклоняет
+  // вместе со всей заявкой. Нераспознанный номер уходит в текст сообщения.
+  const phone = toE164(lead.phone);
+  const rawPhone = (lead.phone || "").replace(/\s+/g, " ").trim();
+  const unrecognizedPhone = !phone && rawPhone
+    ? (rawPhone.length > 64 ? `${rawPhone.slice(0, 64)}…` : rawPhone)
+    : "";
+
   const contact = await post(`/public/api/v1/inboxes/${CRM_IDENT}/contacts`, {
     source_id: sourceId,
     identifier,
@@ -80,7 +132,7 @@ export async function submitLeadToCrm(lead: CrmLead): Promise<{ conversationId: 
     email: lead.email || undefined,
     // Телефон склеивает контакты: поиск идёт identifier → email → телефон, и
     // общий офисный номер из формы слил бы двух разных людей в один контакт.
-    phone_number: lead.phone || undefined,
+    phone_number: phone ?? undefined,
     ...(CRM_HMAC_TOKEN && {
       identifier_hash: createHmac("sha256", CRM_HMAC_TOKEN).update(identifier).digest("hex"),
     }),
@@ -102,7 +154,11 @@ export async function submitLeadToCrm(lead: CrmLead): Promise<{ conversationId: 
    */
   await post(
     `/public/api/v1/inboxes/${CRM_IDENT}/contacts/${sid}/conversations/${conversation.id}/messages`,
-    { content: lead.message },
+    {
+      content: unrecognizedPhone
+        ? `${lead.message}\n\nТелефон из формы (не распознан, в карточку не записан): ${unrecognizedPhone}`
+        : lead.message,
+    },
   );
 
   return { conversationId: Number(conversation.id) };
