@@ -7,6 +7,7 @@ import { LANGUAGES, LANGUAGE_LABELS, pick } from "@/lib/i18n-text";
 import { ButtonLink } from "@/components/ui/link";
 import { OFFICES, localTime } from "@/lib/locations";
 import { FooterWordmark, useNow } from "@/components/layout/footer-wordmark";
+import { FOOTER_SEARCH_LINKS } from "@/lib/footer-search-links";
 
 const navLinks = [
   { href: "/services", key: "services" },
@@ -146,6 +147,19 @@ export function Footer() {
         </div>
 
         <FooterWordmark />
+
+        {/* Services worded the way people search for them, one link per page */}
+        <nav aria-label={pick({ en: "Services", ru: "Услуги", zh: "服务", tr: "Hizmetler", ar: "الخدمات" }, language)} className="border-t border-border py-6">
+          <ul className="flex flex-wrap gap-x-5 gap-y-2">
+            {FOOTER_SEARCH_LINKS.map((l) => (
+              <li key={l.href}>
+                <NextLink href={l.href} className="text-caption text-text-tertiary transition-colors hover:text-text-secondary">
+                  {pick(l.label, language)}
+                </NextLink>
+              </li>
+            ))}
+          </ul>
+        </nav>
 
         {/* Bottom Bar */}
         <div className="py-6 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
