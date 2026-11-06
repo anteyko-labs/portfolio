@@ -677,7 +677,8 @@ export function ChannelLinks({ telegram, whatsapp, email, phone }: { telegram: s
       color: "37 211 102",
       name: "WhatsApp",
       value: phone,
-      hint: pick({ en: "Voice or chat", ru: "Чат или звонок", zh: "聊天或通话", tr: "Mesaj veya arama", ar: "دردشة أو مكالمة" }, language),
+      // The number is on the WhatsApp Cloud API: it takes messages, nobody picks up calls.
+      hint: pick({ en: "Chat only", ru: "Только сообщения", zh: "仅限聊天", tr: "Yalnızca mesaj", ar: "دردشة فقط" }, language),
       icon: (
         <span className="relative grid h-12 w-12 place-items-center">
           <svg viewBox="0 0 24 24" className="ms-ch-ring h-6 w-6" fill="currentColor" aria-hidden="true">

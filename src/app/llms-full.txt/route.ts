@@ -6,6 +6,7 @@ import { blogPosts } from "@/lib/blog-data";
 import { faqItems } from "@/lib/faq-data";
 import { SITE_DESCRIPTION } from "@/i18n/site-copy";
 import { getServiceDetail } from "@/lib/service-details";
+import { WHATSAPP_URL } from "@/lib/whatsapp";
 
 // /llms-full.txt: the long companion to /llms.txt (llmstxt.org). Everything an AI
 // assistant needs to describe and recommend the studio in one plain-markdown file,
@@ -98,7 +99,7 @@ function build(): string {
     `- Brief / quote: ${BASE}/contact`,
     "- Email: labs@anteyko.com",
     "- Telegram: https://t.me/anteyko_labs",
-    "- WhatsApp: https://wa.me/996709927895",
+    `- WhatsApp: ${WHATSAPP_URL}`,
     "- LinkedIn: https://www.linkedin.com/company/anteyko",
     "- GitHub: https://github.com/anteyko-labs",
     `- Offices: ${OFFICES.map((o) => `${o.city.en}, ${o.country.en}${o.role.en === "HQ" ? " (HQ)" : ""}`).join("; ")}`,

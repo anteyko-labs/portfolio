@@ -5,6 +5,7 @@ import { visibleShowcaseItems } from "@/lib/showcase-data";
 import { blogPosts } from "@/lib/blog-data";
 import { faqItems } from "@/lib/faq-data";
 import { SITE_DESCRIPTION } from "@/i18n/site-copy";
+import { WHATSAPP_URL } from "@/lib/whatsapp";
 
 // /llms.txt (llmstxt.org): a plain-markdown brief for AI assistants and answer
 // engines, built from the same data as the site so prices, services and cases
@@ -55,7 +56,7 @@ function build(): string {
     `- Brief / quote: ${BASE}/contact`,
     "- Email: labs@anteyko.com",
     "- Telegram: https://t.me/anteyko_labs",
-    "- WhatsApp: https://wa.me/996709927895",
+    `- WhatsApp: ${WHATSAPP_URL}`,
     "- LinkedIn: https://www.linkedin.com/company/anteyko",
     "- GitHub: https://github.com/anteyko-labs",
     "",
