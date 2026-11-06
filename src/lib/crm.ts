@@ -33,15 +33,122 @@ export interface CrmLead {
  */
 export const WEBSITE_FORM_SOURCE = "website_form";
 
+/** Убирает из объяснения CRM всё, что похоже на email или номер телефона. */
+const scrub = (text: string) =>
+  text.replace(/\S+@\S+/g, "…").replace(/\+?\d[\d\s().-]{5,}\d/g, "…").slice(0, 120);
+
+/**
+ * Текст ошибки уходит в логи Vercel и в Telegram. В path лежит
+ * CRM_INBOX_IDENTIFIER, а он секрет, поэтому текст называет только шаг
+ * (contacts, conversations или messages), код ответа и объяснение CRM.
+ */
 async function post(path: string, body: unknown): Promise<Record<string, unknown>> {
-  const res = await fetch(`${CRM_BASE}${path}`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-    signal: AbortSignal.timeout(TIMEOUT_MS),
-  });
-  if (!res.ok) throw new Error(`CRM ${path} → ${res.status}`);
-  return res.json();
+  const step = path.slice(path.lastIndexOf("/") + 1);
+  let res: Response;
+  try {
+    res = await fetch(`${CRM_BASE}${path}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+      signal: AbortSignal.timeout(TIMEOUT_MS),
+    });
+  } catch (e) {
+    // Не e.message: fetch вписывает туда сам URL («Failed to parse URL from …»).
+    const { name, cause } = (e ?? {}) as { name?: string; cause?: { code?: string } };
+    const why = name === "TimeoutError" ? `нет ответа за ${TIMEOUT_MS / 1000} с` : `сеть (${cause?.code || name || "ошибка"})`;
+    throw new Error(`CRM ${step} → ${why}`);
+  }
+  if (!res.ok) {
+    // «Phone number should be in e164 format» и подобное. Присланных значений
+    // Chatwoot в объяснение не вставляет, но scrub не полагается на это.
+    const why = await res.json().then((b) => b?.message || b?.error, () => undefined);
+    throw new Error(`CRM ${step} → ${res.status}${typeof why === "string" && why ? ` (${scrub(why)})` : ""}`);
+  }
+  try {
+    return await res.json();
+  } catch {
+    throw new Error(`CRM ${step} → ${res.status}, ответ не JSON`);
+  }
+}
+
+/**
+ * Коды стран по ITU-T E.164 не бывают началом друг друга: у 1 и 7 одна цифра,
+ * у этих двузначных две, у остальных три. По ним видно, где кончается код.
+ */
+const TWO_DIGIT_CODES = new Set(
+  "20 27 30 31 32 33 34 36 39 40 41 43 44 45 46 47 48 49 51 52 53 54 55 56 57 58 60 61 62 63 64 65 66 81 82 84 86 90 91 92 93 94 95 98".split(" "),
+);
+
+/**
+ * Страны, где ноль после кода — часть номера, а не префикс: Италия, Сан-Марино
+ * и Ватикан (городские), Кот-д'Ивуар, Бенин, Габон и Республика Конго.
+ */
+const ZERO_KEPT = new Set(["39", "378", "379", "225", "229", "241", "242"]);
+
+/**
+ * Телефон из формы → E.164, как его принимает CRM, или null.
+ *
+ * CRM (Chatwoot, Contact#phone_number) пускает только /\+[1-9]\d{1,14}\z/, а на
+ * всё остальное отвечает 422 на создании контакта, и тогда в CRM не доходит
+ * ничего: ни беседы, ни сообщения. Так 21.10.2026 потерялась заявка с сайта.
+ * Поле в форме свободное, пишут «0700 123 456», «+996 (700) 12-34-56»,
+ * «996700123456».
+ *
+ * Правила решены владельцем:
+ * - без кода страны номер кыргызский: 0XXXXXXXXX или 9 цифр → +996XXXXXXXXX;
+ * - 8 или 7 и ещё 10 цифр → +7 и эти 10 цифр (Россия, Казахстан);
+ * - с «+» или «00» номер берётся как есть, если он похож на E.164;
+ * - всё остальное, в том числе номер с добавочным и два номера в одном поле, —
+ *   null. Такой номер в карточку не пишется, а уходит текстом в сообщение
+ *   (см. submitLeadToCrm), так что он не теряется.
+ *
+ * Номер с кодом бывает записан так, что «как есть» дало бы чужой номер, а CRM
+ * его примет. Поэтому две частые записи читаются по смыслу:
+ * - ноль сразу после кода — междугородний префикс, его набирают только внутри
+ *   страны: «+44 (0)20 …», «+90 (0532) …» — и он отбрасывается. Кроме стран,
+ *   где этот ноль часть номера (ZERO_KEPT), и кроме кода, набранного слитно
+ *   с номером: «+88005553535» может быть и «+880 0…», и «+8 800 …», — null;
+ * - «+8 (912) …» — та же восьмёрка России и Казахстана с лишним плюсом, то
+ *   есть правило 8 → +7.
+ */
+export function toE164(raw?: string | null): string | null {
+  if (!raw) return null;
+  const text = raw
+    .normalize("NFKC") // полноширинные ０-９ и ＋ → 0-9 и +
+    .replace(/[\u0660-\u0669]/g, (d) => String(d.charCodeAt(0) - 0x0660)) // арабские цифры
+    .replace(/[\u06f0-\u06f9]/g, (d) => String(d.charCodeAt(0) - 0x06f0)); // персидские цифры
+  // Слова вокруг номера не мешают («тел.: …», «… (WhatsApp)»). Внутри номера
+  // это добавочный или второй номер: из «0700 123 45 доб. 2» вышел бы чужой.
+  const core = text.match(/[+\d](?:[\s\S]*\d)?/)?.[0];
+  if (!core || /[^\d+\s.()/\-\u2010-\u2015\u2212]/.test(core)) return null;
+  // Код страны, если его набрали отдельно от номера: «+44 (0)20 …», «+8 (912) …».
+  const typedCode = core.match(/^(?:\+|00)[\s.-]*\(?(\d{1,3})(?!\d)/)?.[1];
+  let s = core.replace(/[^\d+]/g, "");
+  if (s.startsWith("00")) s = `+${s.slice(2)}`;
+  if (!s.startsWith("+")) {
+    if (/^996\d{9,10}$/.test(s)) s = `+${s}`;
+    else if (/^0\d{9}$/.test(s)) s = `+996${s.slice(1)}`;
+    else if (/^\d{9}$/.test(s)) s = `+996${s}`;
+    else if (/^[78]\d{10}$/.test(s)) s = `+7${s.slice(1)}`;
+    else return null;
+  }
+  // Кода страны 8 нет, и ни одна страна не начинается на 83, 87 или 89.
+  if (typedCode === "8" || /^\+8[379]/.test(s)) {
+    if (!/^\+8\d{10}$/.test(s)) return null;
+    s = `+7${s.slice(2)}`;
+  }
+  s = s.replace(/^\+9960(?=\d{9}$)/, "+996"); // «+996 0700 …»: лишний ноль после кода
+  // После +996 ровно 9 цифр, после +7 ровно 10, и ноль первым не бывает ни там, ни там.
+  if (s.startsWith("+996")) return /^\+996[1-9]\d{8}$/.test(s) ? s : null;
+  if (s.startsWith("+7")) return /^\+7[1-9]\d{9}$/.test(s) ? s : null;
+  const digits = s.slice(1);
+  const code = digits.slice(0, /^[17]/.test(digits) ? 1 : TWO_DIGIT_CODES.has(digits.slice(0, 2)) ? 2 : 3);
+  if (digits[code.length] === "0" && !ZERO_KEPT.has(code)) {
+    if (typedCode !== code || digits[code.length + 1] === "0") return null;
+    s = `+${code}${digits.slice(code.length + 1)}`;
+  }
+  // Строже, чем у CRM: якорь в начале и не меньше 7 цифр.
+  return /^\+[1-9]\d{6,14}$/.test(s) ? s : null;
 }
 
 /**
@@ -73,6 +180,14 @@ export async function submitLeadToCrm(lead: CrmLead): Promise<{ conversationId: 
    */
   const sourceId = createHash("sha256").update(`anteyko:v1:${identifier}`).digest("hex");
 
+  // Телефон едет в карточку только в E.164: любой другой формат CRM отклоняет
+  // вместе со всей заявкой. Нераспознанный номер уходит в текст сообщения.
+  const phone = toE164(lead.phone);
+  const rawPhone = (lead.phone || "").replace(/\s+/g, " ").trim();
+  const unrecognizedPhone = !phone && rawPhone
+    ? (rawPhone.length > 64 ? `${rawPhone.slice(0, 64)}…` : rawPhone)
+    : "";
+
   const contact = await post(`/public/api/v1/inboxes/${CRM_IDENT}/contacts`, {
     source_id: sourceId,
     identifier,
@@ -80,7 +195,7 @@ export async function submitLeadToCrm(lead: CrmLead): Promise<{ conversationId: 
     email: lead.email || undefined,
     // Телефон склеивает контакты: поиск идёт identifier → email → телефон, и
     // общий офисный номер из формы слил бы двух разных людей в один контакт.
-    phone_number: lead.phone || undefined,
+    phone_number: phone ?? undefined,
     ...(CRM_HMAC_TOKEN && {
       identifier_hash: createHmac("sha256", CRM_HMAC_TOKEN).update(identifier).digest("hex"),
     }),
@@ -102,7 +217,11 @@ export async function submitLeadToCrm(lead: CrmLead): Promise<{ conversationId: 
    */
   await post(
     `/public/api/v1/inboxes/${CRM_IDENT}/contacts/${sid}/conversations/${conversation.id}/messages`,
-    { content: lead.message },
+    {
+      content: unrecognizedPhone
+        ? `${lead.message}\n\nТелефон из формы (не распознан, в карточку не записан): ${unrecognizedPhone}`
+        : lead.message,
+    },
   );
 
   return { conversationId: Number(conversation.id) };

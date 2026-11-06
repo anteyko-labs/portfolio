@@ -12,6 +12,7 @@ import { Link as NextLink } from "@/i18n/navigation";
 import { CalEmbed } from "@/components/ui/cal-embed";
 import { CountUp, DrawCheck, EASE } from "@/components/motion/kit";
 import { useReducedMotion } from "@/lib/hooks";
+import { getStoredUtm } from "@/lib/analytics";
 import {
   FormProgress,
   LiveDesk,
@@ -220,6 +221,8 @@ export function ContactContent() {
           email: formData.email,
           phone: formData.phone,
           message: formData.message,
+          // UTM of the visit, captured on landing (AnalyticsBootstrap); the API keeps only the known keys.
+          utm: getStoredUtm(),
           website: formData.website,
         }),
       });
