@@ -1,4 +1,5 @@
 import { GoMarketScene } from "./go-market-scene";
+import { CLIENT_SCENES } from "./client-scenes";
 import { L1Terminal } from "./l1-terminal";
 
 // Illustrated covers for case studies that have no screenshots (NDA work).
@@ -343,5 +344,6 @@ export const GENERATIVE_COVERS: Record<string, (p: CoverProps) => React.ReactEle
   "analytics-pro-enterprise-bi": AnalyticsBi,
   "geo-heatmap-backend": GeoHeatmap,
   "go-market": GoMarketScene,
+  ...CLIENT_SCENES,
   "web3-l1-dex": ({ active }) => <L1Terminal active={active} />,
 };

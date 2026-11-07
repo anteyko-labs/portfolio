@@ -20,6 +20,23 @@ export const FOOTER_CASE_LINKS: { slug: string; format: L; sphere: L }[] = [
     }
   },
   {
+    "slug": "akmou",
+    "format": {
+      "en": "B2B showcase with a catalog, buyer accounts and an admin panel",
+      "ru": "B2B-витрина с каталогом, кабинетом байера и админкой",
+      "zh": "带产品目录、买家账户和管理后台的 B2B 展示网站",
+      "tr": "Katalog, alıcı hesabı ve yönetim paneli olan B2B vitrin sitesi",
+      "ar": "واجهة B2B مع كتالوج وحسابات للمشترين ولوحة إدارة"
+    },
+    "sphere": {
+      "en": "Fashion manufacturing",
+      "ru": "Fashion-производство",
+      "zh": "服装制造",
+      "tr": "Moda üretimi",
+      "ar": "تصنيع الأزياء"
+    }
+  },
+  {
     "slug": "kyrgyz-soul-travel",
     "format": {
       "en": "Multilingual marketing website with a tour catalog",
@@ -105,6 +122,40 @@ export const FOOTER_CASE_LINKS: { slug: string; format: L; sphere: L }[] = [
     }
   },
   {
+    "slug": "avtodom",
+    "format": {
+      "en": "Accounting PWA for the till, warehouse and owner, with a Telegram bot",
+      "ru": "Учётная PWA для кассы, склада и владельца с Телеграм-ботом",
+      "zh": "面向收银台、仓库和老板的记账 PWA，附 Telegram 机器人",
+      "tr": "Kasa, depo ve işletme sahibi için Telegram botlu muhasebe PWA'sı",
+      "ar": "تطبيق PWA محاسبي للصندوق والمستودع والمالك مع بوت Telegram"
+    },
+    "sphere": {
+      "en": "Car service",
+      "ru": "Автосервис",
+      "zh": "汽车服务",
+      "tr": "Oto servis",
+      "ar": "خدمة السيارات"
+    }
+  },
+  {
+    "slug": "anarmarket",
+    "format": {
+      "en": "PWA storefront, staff panel and a Microinvest sync agent",
+      "ru": "PWA-витрина, панель сотрудников и агент связи с Microinvest",
+      "zh": "PWA 商城、员工后台与 Microinvest 同步代理",
+      "tr": "PWA vitrin, personel paneli ve Microinvest senkronizasyon ajanı",
+      "ar": "متجر PWA ولوحة للموظفين ووكيل مزامنة مع Microinvest"
+    },
+    "sphere": {
+      "en": "Wholesale trade",
+      "ru": "Оптовая торговля",
+      "zh": "批发贸易",
+      "tr": "Toptan ticaret",
+      "ar": "تجارة الجملة"
+    }
+  },
+  {
     "slug": "shoestreet",
     "format": {
       "en": "Online store with admin panel",
@@ -119,57 +170,6 @@ export const FOOTER_CASE_LINKS: { slug: string; format: L; sphere: L }[] = [
       "zh": "零售",
       "tr": "Perakende",
       "ar": "التجزئة"
-    }
-  },
-  {
-    "slug": "erp-garment",
-    "format": {
-      "en": "Cloud ERP with a local print agent",
-      "ru": "Облачная ERP с локальным агентом печати",
-      "zh": "带本地打印代理的云端 ERP",
-      "tr": "Yerel yazdırma ajanlı bulut ERP",
-      "ar": "نظام ERP سحابي مع وكيل طباعة محلي"
-    },
-    "sphere": {
-      "en": "Garment manufacturing",
-      "ru": "Швейное производство",
-      "zh": "服装制造",
-      "tr": "Hazır giyim üretimi",
-      "ar": "تصنيع الملابس"
-    }
-  },
-  {
-    "slug": "djal",
-    "format": {
-      "en": "Guest Wi-Fi portal, promos and feedback survey with admin panel",
-      "ru": "Wi-Fi портал, акции и опрос гостей с панелью управления",
-      "zh": "访客 Wi-Fi 门户、促销活动与反馈问卷，附管理后台",
-      "tr": "Misafir Wi-Fi portalı, promosyonlar ve yönetim panelli geri bildirim anketi",
-      "ar": "بوابة Wi-Fi للضيوف وعروض واستبيان آراء مع لوحة إدارة"
-    },
-    "sphere": {
-      "en": "Restaurants",
-      "ru": "Общепит",
-      "zh": "餐饮",
-      "tr": "Restoranlar",
-      "ar": "المطاعم"
-    }
-  },
-  {
-    "slug": "anteyko-pwa",
-    "format": {
-      "en": "Branded ordering and booking PWA template",
-      "ru": "Шаблон брендированной PWA для заказов и записи",
-      "zh": "品牌化点单与预约 PWA 模板",
-      "tr": "Markalı sipariş ve rezervasyon PWA şablonu",
-      "ar": "قالب PWA بهوية تجارية للطلبات والحجز"
-    },
-    "sphere": {
-      "en": "Small business, food & services",
-      "ru": "Малый бизнес, общепит и услуги",
-      "zh": "小微企业，餐饮与服务",
-      "tr": "Küçük işletme, yeme-içme ve hizmetler",
-      "ar": "المشاريع الصغيرة والمطاعم والخدمات"
     }
   }
 ];

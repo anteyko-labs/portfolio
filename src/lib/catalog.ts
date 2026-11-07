@@ -48,8 +48,11 @@ const EXCLUDED_CASES = ["web3-l1-dex", "utility-token-uae"];
 // representative projects first. Everything not listed follows by year.
 const FEATURED: string[] = [
   "gran",
+  "akmou",
   "paddock",
+  "anarmarket",
   "web3-l1-dex",
+  "avtodom",
   "kyrgyz-soul-travel",
   "asaki-sushi",
   "lumo",
@@ -61,7 +64,6 @@ const FEATURED: string[] = [
   "go-market",
   "erp-garment",
   "alatoo",
-  "avtodom",
   "multi-location-restaurant-management",
   "djal",
   "aera",
