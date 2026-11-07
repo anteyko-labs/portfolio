@@ -20,6 +20,23 @@ export const FOOTER_CASE_LINKS: { slug: string; format: L; sphere: L }[] = [
     }
   },
   {
+    "slug": "padd-r",
+    "format": {
+      "en": "Token, staking dashboard and NFT tiers",
+      "ru": "Токен, кабинет стейкинга и NFT-уровни",
+      "zh": "代币、质押看板与 NFT 等级",
+      "tr": "Token, staking paneli ve NFT seviyeleri",
+      "ar": "رمز ولوحة تخزين ومستويات NFT"
+    },
+    "sphere": {
+      "en": "Web3",
+      "ru": "Web3",
+      "zh": "Web3",
+      "tr": "Web3",
+      "ar": "Web3"
+    }
+  },
+  {
     "slug": "akmou",
     "format": {
       "en": "B2B showcase with a catalog, buyer accounts and an admin panel",
@@ -153,23 +170,6 @@ export const FOOTER_CASE_LINKS: { slug: string; format: L; sphere: L }[] = [
       "zh": "批发贸易",
       "tr": "Toptan ticaret",
       "ar": "تجارة الجملة"
-    }
-  },
-  {
-    "slug": "shoestreet",
-    "format": {
-      "en": "Online store with admin panel",
-      "ru": "Интернет-магазин с админ-панелью",
-      "zh": "带管理后台的在线商店",
-      "tr": "Yönetim panelli online mağaza",
-      "ar": "متجر إلكتروني مع لوحة إدارة"
-    },
-    "sphere": {
-      "en": "Retail",
-      "ru": "Розница",
-      "zh": "零售",
-      "tr": "Perakende",
-      "ar": "التجزئة"
     }
   }
 ];

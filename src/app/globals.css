@@ -988,7 +988,7 @@ html[data-consent] .cookie-consent { display: none; }
 }
 
 /* Avtodom scene (client-scenes.tsx): dashboard, till printer, oil stock, offline till */
-.av-scene .av-grid {
+.av-scene .av-grid, .pr-scene .av-grid {
   background-image: linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
   background-size: 4cqw 4cqw;
   mask-image: radial-gradient(circle at 45% 40%, #000 25%, transparent 80%);
@@ -1052,6 +1052,34 @@ html[data-consent] .cookie-consent { display: none; }
   .an-scene .an-row, .an-scene .an-weight { opacity: 1; }
   .an-scene .an-strike { transform: scaleX(1); }
   .an-scene .an-scan { display: none; }
+}
+
+/* PADD-R scene (client-scenes.tsx): spinning coin, wallet connect, tokenomics ring, tier NFTs */
+.pr-scene .pr-coin { animation: pr-spin 7s linear infinite; }
+.pr-scene[data-active="true"] .pr-coin { animation-duration: 2.6s; }
+@keyframes pr-spin { from { transform: rotateX(10deg) rotateY(0deg); } to { transform: rotateX(10deg) rotateY(360deg); } }
+.pr-scene .pr-glow { background: radial-gradient(circle, rgba(16, 185, 129, 0.5), transparent 62%); animation: pr-glow 3.2s ease-in-out infinite; }
+@keyframes pr-glow { 50% { opacity: 0.55; transform: scale(0.92); } }
+.pr-scene .pr-card { animation: gm-float 7s ease-in-out infinite; transition: scale 0.9s cubic-bezier(.22,1,.36,1); }
+.pr-scene .pr-card--right { animation-delay: -3s; }
+.pr-scene[data-active="true"] .pr-card { scale: 1.03; }
+.pr-scene .pr-wallet { animation: av-net 6s infinite; }
+.pr-scene .pr-wallet--on { animation-delay: -3s; }
+.pr-scene .pr-net { animation: pr-net 6s infinite; }
+@keyframes pr-net { 0%, 48% { opacity: 0.3; } 55%, 95% { opacity: 1; } 100% { opacity: 0.3; } }
+.pr-scene .pr-seg { stroke-dasharray: var(--p) calc(100 - var(--p)); animation: pr-seg 8s cubic-bezier(.22,1,.36,1) infinite; }
+@keyframes pr-seg { 0% { stroke-dasharray: 0 100; } 22%, 88% { stroke-dasharray: var(--p) calc(100 - var(--p)); } 100% { stroke-dasharray: 0 100; } }
+.pr-scene .pr-nft {
+  transform: translateX(calc(-50% + var(--i) * 40%)) rotate(calc(var(--i) * 7deg));
+  transform-origin: 50% 130%;
+  transition: transform 1s cubic-bezier(.22,1,.36,1);
+  animation: gm-float 6s ease-in-out infinite;
+  animation-delay: calc(var(--i) * 0.6s);
+}
+.pr-scene[data-active="true"] .pr-nft { transform: translateX(calc(-50% + var(--i) * 50%)) translateY(-8%) rotate(calc(var(--i) * 5deg)); }
+@media (prefers-reduced-motion: reduce) {
+  .pr-scene *, .pr-scene { animation: none !important; }
+  .pr-scene .pr-wallet--off { opacity: 0; }
 }
 
 /* Geo heatmap 3D columns: rise in a wave from the hotspots, then breathe */
