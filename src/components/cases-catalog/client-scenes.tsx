@@ -267,7 +267,167 @@ export function AnarMarketScene({ active }: SceneProps) {
   );
 }
 
+/* ── PADD-R ────────────────────────────────────────────────────────────
+   The client's own coin spins in the middle; the wallet connects and lands
+   on BNB Smart Chain; the tokenomics ring draws itself; the four tier NFTs
+   fan out — staking is membership, each tier is a card. */
+
+const BOLT = "M13 2 3 14h9l-1 8 10-12h-9l1-8z";
+
+const PADDR_TIERS = [
+  { name: "Bronze", from: "#E8A066", to: "#7C3F14" },
+  { name: "Silver", from: "#F3F4F6", to: "#6B7280" },
+  { name: "Gold", from: "#FDE68A", to: "#A16207" },
+  { name: "Platinum", from: "#99F6E4", to: "#0F766E" },
+];
+
+/** Tokenomics shares, drawn clockwise from the top (circumference 100) */
+const PADDR_SPLIT = [
+  { p: 65, c: "#EAB308", l: { en: "Liquidity", ru: "Ликвидность", zh: "流动性", tr: "Likidite", ar: "السيولة" } },
+  { p: 20, c: "#A855F7", l: { en: "Ecosystem", ru: "Экосистема", zh: "生态系统", tr: "Ekosistem", ar: "النظام البيئي" } },
+  { p: 10, c: "#3B82F6", l: { en: "Early investors", ru: "Ранние инвесторы", zh: "早期投资者", tr: "Erken yatırımcılar", ar: "المستثمرون الأوائل" } },
+  { p: 5, c: "#10B981", l: { en: "Team", ru: "Команда", zh: "团队", tr: "Ekip", ar: "الفريق" } },
+];
+/** Each share starts where the previous ones end */
+const PADDR_RING = PADDR_SPLIT.map((s, i) => ({ ...s, offset: -PADDR_SPLIT.slice(0, i).reduce((sum, x) => sum + x.p, 0) }));
+
+function BoltBadge({ className, from = "#34D399", to = "#059669" }: { className: string; from?: string; to?: string }) {
+  return (
+    <span className={`grid place-items-center ${className}`} style={{ background: `linear-gradient(135deg, ${from}, ${to})` }}>
+      <svg viewBox="0 0 24 24" className="h-[58%] w-[58%]" fill="#fff">
+        <path d={BOLT} />
+      </svg>
+    </span>
+  );
+}
+
+export function PaddrScene({ active }: SceneProps) {
+  const { language } = useLanguage();
+  const t = (l: L) => pick(l, language);
+  return (
+    <div
+      className="pr-scene @container absolute inset-0 overflow-hidden text-white"
+      data-active={active}
+      aria-hidden="true"
+      style={{
+        background:
+          "radial-gradient(circle at 46% 46%, rgba(16,185,129,0.32), transparent 40%), radial-gradient(circle at 88% 12%, rgba(168,85,247,0.22), transparent 36%), radial-gradient(circle at 8% 92%, rgba(234,179,8,0.16), transparent 34%), #05070A",
+      }}
+    >
+      <div className="av-grid absolute inset-0" />
+
+      {/* the coin */}
+      <div className="absolute left-1/2 top-[38%] aspect-square w-[27%] -translate-x-[62%] -translate-y-1/2 [perspective:900px]">
+        <span className="pr-glow absolute inset-[-25%] rounded-full" />
+        <div className="pr-coin relative h-full w-full [transform-style:preserve-3d]">
+          {Array.from({ length: 9 }, (_, i) => (
+            <span key={i} className="absolute inset-0 rounded-full bg-[#065F46]" style={{ transform: `translateZ(${(i - 4) * 0.28}cqw)` }} />
+          ))}
+          {[0, 180].map((r) => (
+            <span
+              key={r}
+              className="absolute inset-0 grid place-items-center rounded-full border-[0.5cqw] border-[#6EE7B7]/70 [backface-visibility:hidden]"
+              style={{
+                transform: `rotateY(${r}deg) translateZ(1.2cqw)`,
+                background: "radial-gradient(circle at 35% 30%, #6EE7B7, #10B981 45%, #047857 75%, #064E3B)",
+              }}
+            >
+              <svg viewBox="0 0 24 24" className="h-[46%] w-[46%] drop-shadow-[0_0.4cqw_0.6cqw_rgba(0,0,0,0.35)]" fill="#F0FDF4">
+                <path d={BOLT} />
+              </svg>
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* wallet: connect → address on BNB Smart Chain */}
+      <div className="pr-card absolute left-[4%] top-[14%] grid w-[31%] rounded-[1.2cqw] border border-white/10 bg-[#0B1117]/90 p-[1.4cqw] shadow-2xl backdrop-blur">
+        <p className="font-mono text-[clamp(6px,1.05cqw,13px)] uppercase tracking-wider text-white/50">
+          {t({ en: "Wallet", ru: "Кошелёк", zh: "钱包", tr: "Cüzdan", ar: "المحفظة" })}
+        </p>
+        <div className="mt-[0.9cqw] grid text-[clamp(7px,1.35cqw,16px)] font-semibold">
+          <span className="pr-wallet pr-wallet--off col-start-1 row-start-1 flex items-center justify-center rounded-[0.8cqw] bg-[#10B981] px-[1cqw] py-[0.7cqw] text-[#04130D]">
+            {t({ en: "Connect wallet", ru: "Подключить кошелёк", zh: "连接钱包", tr: "Cüzdan bağla", ar: "ربط المحفظة" })}
+          </span>
+          <span className="pr-wallet pr-wallet--on col-start-1 row-start-1 flex items-center gap-[0.8cqw] rounded-[0.8cqw] bg-white/[0.06] px-[1cqw] py-[0.7cqw] ring-1 ring-white/10">
+            <i className="aspect-square w-[0.9cqw] rounded-full bg-[#10B981] shadow-[0_0_0.8cqw_#10B981]" />
+            <span className="font-mono">0xE5E0…6cCa</span>
+          </span>
+        </div>
+        <p className="pr-net mt-[0.8cqw] inline-flex items-center gap-[0.6cqw] justify-self-start rounded-full bg-[#EAB308]/15 px-[1cqw] py-[0.3cqw] text-[clamp(6px,1.1cqw,13px)] font-semibold text-[#FACC15]">
+          ⬢ BNB Smart Chain
+        </p>
+      </div>
+
+      {/* tokenomics ring */}
+      <div className="pr-card pr-card--right absolute right-[4%] top-[9%] w-[31%] rounded-[1.2cqw] border border-white/10 bg-[#0B1117]/90 p-[1.4cqw] shadow-2xl backdrop-blur">
+        <p className="font-mono text-[clamp(6px,1.05cqw,13px)] uppercase tracking-wider text-white/50">
+          {t({ en: "Tokenomics", ru: "Токеномика", zh: "代币经济", tr: "Tokenomik", ar: "اقتصاديات الرمز" })}
+        </p>
+        <div className="mt-[0.8cqw] flex items-center gap-[1.4cqw]">
+          <div className="relative aspect-square w-[42%] shrink-0">
+            <svg viewBox="0 0 42 42" className="h-full w-full -rotate-90">
+              <circle cx="21" cy="21" r="15.915" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="6" />
+              {PADDR_RING.map((s, i) => (
+                <circle
+                  key={s.c}
+                  className="pr-seg"
+                  cx="21"
+                  cy="21"
+                  r="15.915"
+                  fill="none"
+                  stroke={s.c}
+                  strokeWidth="6"
+                  strokeDashoffset={s.offset}
+                  style={{ ["--p" as string]: s.p, animationDelay: `${i * 0.25}s` }}
+                />
+              ))}
+            </svg>
+            <span className="absolute inset-0 grid place-items-center text-center font-bold leading-none">
+              <span>
+                <span className="block text-[clamp(8px,1.9cqw,22px)]">1B</span>
+                <span className="block text-[clamp(5px,0.85cqw,10px)] font-medium text-white/50">PADD-R</span>
+              </span>
+            </span>
+          </div>
+          <ul className="min-w-0 flex-1 space-y-[0.45cqw] text-[clamp(6px,1.1cqw,13px)]">
+            {PADDR_SPLIT.map((s) => (
+              <li key={s.c} className="flex items-center gap-[0.6cqw]">
+                <i className="aspect-square w-[0.8cqw] shrink-0 rounded-full" style={{ background: s.c }} />
+                <span className="truncate text-white/70">{t(s.l)}</span>
+                <span className="ml-auto font-semibold tabular-nums">{s.p}%</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      {/* staking = membership: four tier NFTs */}
+      <div className="absolute bottom-[-6%] left-[52%] h-[46%] w-[44%] [perspective:900px]">
+        {PADDR_TIERS.map((tier, i) => (
+          <div
+            key={tier.name}
+            className="pr-nft absolute bottom-0 left-1/2 flex aspect-[3/4] h-full flex-col items-start gap-[0.7cqw] rounded-[1.1cqw] border border-white/15 p-[1.3cqw] shadow-[0_24px_40px_-18px_rgba(0,0,0,0.8)]"
+            style={{ ["--i" as string]: i - 1.5, background: `linear-gradient(160deg, ${tier.from}40, transparent 60%), #0B1117` }}
+          >
+            <BoltBadge className="aspect-square w-[30%] rounded-[0.8cqw] shadow-lg" from={tier.from} to={tier.to} />
+            <span className="text-[clamp(6px,1.15cqw,14px)] font-bold uppercase tracking-[0.12em]" style={{ color: tier.from }}>
+              {tier.name}
+            </span>
+          </div>
+        ))}
+      </div>
+
+      {/* fixed amount, fixed term → tier NFT */}
+      <p className="pr-card absolute bottom-[9%] left-[4%] rounded-full border border-[#10B981]/40 bg-[#10B981]/15 px-[1.6cqw] py-[0.8cqw] text-[clamp(7px,1.3cqw,15px)] font-semibold text-[#A7F3D0] backdrop-blur">
+        {t({ en: "Stake 1,000 PADD-R · 3 mo → Silver NFT", ru: "Стейкинг 1 000 PADD-R · 3 мес → Silver NFT", zh: "质押 1,000 PADD-R · 3 个月 → Silver NFT", tr: "1.000 PADD-R stake · 3 ay → Silver NFT", ar: "تخزين 1,000 PADD-R · 3 أشهر ← Silver NFT" })}
+      </p>
+    </div>
+  );
+}
+
 export const CLIENT_SCENES: Record<string, (p: SceneProps) => React.ReactElement> = {
+  "padd-r": PaddrScene,
   akmou: AkmouScene,
   avtodom: AvtodomScene,
   anarmarket: AnarMarketScene,

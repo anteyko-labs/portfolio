@@ -51,6 +51,7 @@ const FEATURED: string[] = [
   "akmou",
   "paddock",
   "anarmarket",
+  "padd-r",
   "web3-l1-dex",
   "avtodom",
   "kyrgyz-soul-travel",
