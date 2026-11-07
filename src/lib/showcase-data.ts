@@ -50,8 +50,12 @@ export interface ShowcaseItem {
   stage?: string;
   /** Emoji floating around the phones, e.g. produce for a grocery app */
   decor?: string[];
+  /** The case page opens with the card's animated scene (client-scenes.tsx) instead of the screenshot viewer */
+  heroScene?: boolean;
   /** The signature animation — such works get a highlighted card */
   signature?: L;
+  /** Key figures under the title (3–4), e.g. { value: "42", label: { … "screens" } } — counted up on the case page */
+  metrics?: { value: string; label: L }[];
   summary: L;
   review: Record<Language, string[]>;
   features: { title: L; text: L }[];
@@ -153,6 +157,69 @@ export const showcaseItems: ShowcaseItem[] = [
     ],
     tags: { en: ["Catalog", "Filters", "Multi-currency"], ru: ["Каталог", "Фильтры", "Мультивалютность"], zh: ["车型目录", "筛选", "多币种"], tr: ["Katalog", "Filtreler", "Çoklu para birimi"], ar: ["الكتالوج", "الفلاتر", "تعدد العملات"] },
     palette: ["#0B0B0C", "#F4F1EA", "#E4252A", "#8C8A84"],
+  },
+  {
+    slug: "akmou",
+    title: { en: "AKMOU", ru: "AKMOU", zh: "AKMOU", tr: "AKMOU", ar: "AKMOU" },
+    client: { en: "A garment factory in Bishkek producing for European labels", ru: "Швейная фабрика в Бишкеке, которая шьёт для европейских марок", zh: "比什凯克一家为欧洲品牌代工的服装工厂", tr: "Avrupa markaları için üretim yapan Bişkek'teki bir hazır giyim fabrikası", ar: "مصنع ملابس في بيشكيك ينتج لعلامات أزياء أوروبية" },
+    status: "live",
+    category: "web",
+    sphere: { en: "Fashion manufacturing", ru: "Fashion-производство", zh: "服装制造", tr: "Moda üretimi", ar: "تصنيع الأزياء" },
+    format: { en: "B2B showcase with a catalog, buyer accounts and an admin panel", ru: "B2B-витрина с каталогом, кабинетом байера и админкой", zh: "带产品目录、买家账户和管理后台的 B2B 展示网站", tr: "Katalog, alıcı hesabı ve yönetim paneli olan B2B vitrin sitesi", ar: "واجهة B2B مع كتالوج وحسابات للمشترين ولوحة إدارة" },
+    year: 2026,
+    url: "https://www.akmou.com",
+    domain: "akmou.com",
+    cover: "/images/showcase/akmou/cover.jpg",
+    heroScene: true,
+    admin: [
+      { src: "/images/showcase/akmou/admin-1.jpg", title: { en: "Model editor: photos and texts in four languages", ru: "Карточка модели: фото и тексты на четырёх языках", zh: "款式编辑：照片与四种语言的文案", tr: "Model düzenleyici: fotoğraflar ve dört dilde metinler", ar: "محرّر الموديل: الصور والنصوص بأربع لغات" } },
+      { src: "/images/showcase/akmou/admin-2.jpg", title: { en: "Media library: photos, video and PDF", ru: "Медиатека: фото, видео и PDF", zh: "媒体库：照片、视频和 PDF", tr: "Medya kütüphanesi: fotoğraf, video ve PDF", ar: "مكتبة الوسائط: صور وفيديو وPDF" } },
+    ],
+    signature: { en: "Photos pull into focus", ru: "Кадры наводятся на резкость", zh: "画面随滚动对焦", tr: "Kareler kaydırınca netleşiyor", ar: "الصور تتّضح مع التمرير" },
+    metrics: [
+      { value: "4", label: { en: "content languages in every field", ru: "языка контента в каждом поле", zh: "种内容语言，覆盖每个字段", tr: "her alanda içerik dili", ar: "لغات للمحتوى في كل حقل" } },
+      { value: "10", label: { en: "home-page block types", ru: "типов блоков на главной", zh: "种首页区块类型", tr: "ana sayfa blok türü", ar: "أنواع لأقسام الصفحة الرئيسية" } },
+      { value: "683", label: { en: "studio shots sorted for the catalog", ru: "студийных снимка разобрано для каталога", zh: "张棚拍照片为目录筛选", tr: "katalog için ayıklanan stüdyo çekimi", ar: "صورة استوديو فُرزت للكتالوج" } },
+      { value: "11", label: { en: "admin panel sections", ru: "разделов в админке", zh: "个后台模块", tr: "yönetim paneli bölümü", ar: "قسمًا في لوحة الإدارة" } },
+    ],
+    summary: {
+      en: "A B2B showcase for the AKMOU garment factory aimed at European labels: the factory's own shoot and film on the home page, a WhiteLabel catalog with a request button on every model, and an admin panel where all content is kept in four languages.",
+      ru: "B2B-витрина швейной фабрики AKMOU для европейских марок: съёмка и фильм фабрики на главной, каталог WhiteLabel с запросом на каждой модели и админка, где весь контент ведётся на четырёх языках.",
+      zh: "为 AKMOU 服装工厂打造、面向欧洲品牌的 B2B 展示网站：首页是工厂自己的拍摄与影片，WhiteLabel 目录中每款都可直接询价，所有内容在后台以四种语言维护。",
+      tr: "AKMOU hazır giyim fabrikası için Avrupa markalarına yönelik bir B2B vitrin: ana sayfada fabrikanın kendi çekimi ve filmi, her modelde talep düğmesi olan WhiteLabel kataloğu ve tüm içeriğin dört dilde yönetildiği bir yönetim paneli.",
+      ar: "واجهة B2B لمصنع الملابس AKMOU موجّهة إلى العلامات الأوروبية: تصوير المصنع وفيلمه في الصفحة الرئيسية، وكتالوج WhiteLabel مع زر طلب لكل موديل، ولوحة إدارة يُدار فيها كل المحتوى بأربع لغات.",
+    },
+    review: {
+      en: [
+        "A white page and small Montserrat capitals — colour comes only from photos and video. The client's vertical film became a first screen of three clips side by side, each slowed to half speed and looped forward and back so there is no seam. Frames pull out of a blur as they scroll in, and under the pointer neighbouring shots drift out of focus.",
+        "Next.js 15, Prisma and PostgreSQL. Every text is stored in EN, RU, DE and PL at once, the home page is assembled from ten block types, and a European buyer requests a model with one button — the inquiry lands in the admin panel tagged with that model.",
+      ],
+      ru: [
+        "Белая страница и мелкий капс Montserrat — цвет дают только фото и видео. Вертикальный фильм клиента стал первым экраном из трёх роликов рядом: каждый замедлен вдвое и закольцован вперёд-назад, поэтому склейки не видно. Кадры проявляются из размытия при прокрутке, а под курсором соседние снимки уходят из фокуса.",
+        "Next.js 15, Prisma и PostgreSQL. Каждый текст хранится сразу на EN, RU, DE и PL, главная собирается из десяти типов блоков, а байер из Европы запрашивает модель одной кнопкой — заявка приходит в админку с пометкой модели.",
+      ],
+      zh: [
+        "白色页面、小号 Montserrat 大写字母——色彩只来自照片和视频。客户竖拍的影片变成了由三段并排短片组成的首屏，每段都放慢至半速并正放倒放循环，看不出衔接。图片在滚动进入时由模糊变清晰，鼠标悬停时相邻照片会虚化。",
+        "技术栈为 Next.js 15、Prisma 和 PostgreSQL。每段文字同时以 EN、RU、DE、PL 存储，首页由十种区块拼装而成，欧洲买家一键即可询问某款服装——询价会带着款式标记进入管理后台。",
+      ],
+      tr: [
+        "Beyaz bir sayfa ve küçük Montserrat büyük harfleri — renk yalnızca fotoğraf ve videodan geliyor. Müşterinin dikey filmi yan yana üç klipten oluşan bir ilk ekrana dönüştü; her biri yarı hıza düşürüldü ve ileri-geri döngüye alındı, ek yeri görünmüyor. Kareler kaydırdıkça bulanıklıktan netleşiyor, imlecin altında ise komşu kareler flulaşıyor.",
+        "Next.js 15, Prisma ve PostgreSQL. Her metin aynı anda EN, RU, DE ve PL olarak saklanıyor, ana sayfa on blok türünden kuruluyor ve Avrupalı alıcı bir modeli tek düğmeyle talep ediyor — talep, modelle işaretlenmiş olarak yönetim paneline düşüyor.",
+      ],
+      ar: [
+        "صفحة بيضاء وأحرف Montserrat كبيرة بحجم صغير، واللون يأتي من الصور والفيديو وحدهما. تحوّل فيلم العميل العمودي إلى شاشة أولى من ثلاثة مقاطع متجاورة، كل منها مُبطّأ إلى نصف السرعة ويدور ذهابًا وإيابًا فلا يظهر موضع الوصل. تخرج الصور من الضبابية عند التمرير، وتحت المؤشر تفقد الصور المجاورة حدّتها.",
+        "Next.js 15 وPrisma وPostgreSQL. يُخزَّن كل نص بـ EN وRU وDE وPL دفعة واحدة، وتُركَّب الصفحة الرئيسية من عشرة أنواع من الأقسام، ويطلب المشتري الأوروبي الموديل بزر واحد فيصل الطلب إلى لوحة الإدارة موسومًا بالموديل.",
+      ],
+    },
+    features: [
+      { title: { en: "Home page from ten block types", ru: "Главная из десяти типов блоков", zh: "由十种区块组成的首页", tr: "On blok türünden ana sayfa", ar: "صفحة رئيسية من عشرة أنواع من الأقسام" }, text: { en: "Two-frame cover, chessboard, photo with text, triptych, wide frame, featured models, line sheet, social and more. The client changes media, order and visibility with arrows in the admin panel.", ru: "Обложка из двух кадров, шахматка, фото с текстом, триптих, широкий кадр, избранные модели, линшит, соцсети и другие. Клиент меняет медиа, порядок и видимость блоков стрелками в админке.", zh: "双画面封面、棋盘格、图文、三联画、通栏大图、精选款式、产品线手册、社交媒体等。客户在后台用箭头调整区块的媒体、顺序和显示状态。", tr: "İki kareli kapak, dama tahtası, metinli fotoğraf, triptik, geniş kare, öne çıkan modeller, line sheet, sosyal medya ve diğerleri. Müşteri medyayı, sırayı ve görünürlüğü yönetim panelinde oklarla değiştiriyor.", ar: "غلاف بلقطتين، ورقعة شطرنج، وصورة مع نص، وثلاثية، ولقطة عريضة، وموديلات مختارة، وline sheet، ووسائل التواصل وغيرها. يغيّر العميل الوسائط والترتيب والظهور بالأسهم في لوحة الإدارة." } },
+      { title: { en: "Four languages in every field", ru: "Четыре языка в каждом поле", zh: "每个字段四种语言", tr: "Her alanda dört dil", ar: "أربع لغات في كل حقل" }, text: { en: "EN, RU, DE and PL live in one database row, a missing translation falls back to English, and the admin panel marks an empty language with a dot. The site interface has 163 strings in each language.", ru: "EN, RU, DE и PL хранятся в одной строке базы, недостающий перевод подменяется английским, а в админке пустой язык отмечен точкой. Интерфейс сайта — 163 строки на каждом языке.", zh: "EN、RU、DE 和 PL 存于数据库的同一行，缺失的译文自动回退为英文，后台以圆点标出未填写的语言。网站界面每种语言各有 163 条文案。", tr: "EN, RU, DE ve PL aynı veritabanı satırında duruyor, eksik çevirinin yerine İngilizcesi gösteriliyor, yönetim panelinde boş dil bir noktayla işaretleniyor. Site arayüzünde her dilde 163 metin var.", ar: "تُحفَظ EN وRU وDE وPL في سجل واحد من قاعدة البيانات، وتحلّ الإنجليزية محل الترجمة الناقصة، وتُعلّم لوحة الإدارة اللغة الفارغة بنقطة. وتضم واجهة الموقع 163 نصًا بكل لغة." } },
+      { title: { en: "Buyer account", ru: "Кабинет байера", zh: "买家账户", tr: "Alıcı hesabı", ar: "حساب المشتري" }, text: { en: "Sign-up with admin approval, orders with statuses, history and documents, and GDPR export and deletion requests that the admin carries out from the panel.", ru: "Регистрация с одобрением админом, заказы со статусами, историей и документами, запросы на выгрузку и удаление данных по GDPR, которые админ исполняет из панели.", zh: "注册需经管理员审核，订单带有状态、历史记录和文件，GDPR 数据导出与删除请求由管理员在后台执行。", tr: "Yönetici onaylı kayıt; durum, geçmiş ve belgelerle siparişler; yöneticinin panelden yerine getirdiği GDPR veri dışa aktarma ve silme talepleri.", ar: "تسجيل بموافقة المدير، وطلبات بحالاتها وسجلّها ومستنداتها، وطلبات تصدير البيانات وحذفها وفق GDPR ينفّذها المدير من اللوحة." } },
+    ],
+    tags: { en: ["Next.js 15", "Prisma", "PostgreSQL"], ru: ["Next.js 15", "Prisma", "PostgreSQL"], zh: ["Next.js 15", "Prisma", "PostgreSQL"], tr: ["Next.js 15", "Prisma", "PostgreSQL"], ar: ["Next.js 15", "Prisma", "PostgreSQL"] },
+    stack: ["Next.js 15", "Prisma", "PostgreSQL", "next-intl", "React 19", "TypeScript", "Tailwind CSS 4", "Vercel Blob", "sharp", "Zod", "jose (JWT)"],
+    palette: ["#FFFFFF", "#0A0A0A", "#A98A66", "#5A1A20"],
+    fonts: "Montserrat",
   },
   {
     slug: "lumo",
@@ -674,6 +741,122 @@ export const showcaseItems: ShowcaseItem[] = [
     tags: { en: ["Next.js 16","React 19","TypeScript"], ru: ["Next.js 16","React 19","TypeScript"], zh: ["Next.js 16", "React 19", "TypeScript"], tr: ["Next.js 16", "React 19", "TypeScript"], ar: ["Next.js 16", "React 19", "TypeScript"] },
     stack: ["Next.js 16","React 19","TypeScript","PostgreSQL","Drizzle ORM","Tailwind CSS 4","Konsta UI","Radix UI","zod","Web Push (VAPID)","Vitest","PGlite","Playwright"],
     palette: ["#F5F5F7","#1C1C1E","#0062CC","#00A700"],
+  },
+  {
+    slug: "avtodom",
+    title: { en: "Avtodom", ru: "Avtodom", zh: "Avtodom", tr: "Avtodom", ar: "Avtodom" },
+    client: { en: "An oil-change station with a motor-oil shop", ru: "Точка замены масла с магазином автомасел", zh: "一家带机油商店的换油站", tr: "Motor yağı mağazası olan bir yağ değişim noktası", ar: "محطة لتغيير الزيت مع متجر لزيوت المحركات" },
+    status: "built",
+    category: "product",
+    sphere: { en: "Car service / oil change", ru: "Автосервис / замена масла", zh: "汽车服务 / 换油", tr: "Oto servis / yağ değişimi", ar: "خدمة السيارات / تغيير الزيت" },
+    format: { en: "Accounting PWA for the till, warehouse and owner, with a Telegram bot", ru: "Учётная PWA для кассы, склада и владельца с Телеграм-ботом", zh: "面向收银台、仓库和老板的记账 PWA，附 Telegram 机器人", tr: "Kasa, depo ve işletme sahibi için Telegram botlu muhasebe PWA'sı", ar: "تطبيق PWA محاسبي للصندوق والمستودع والمالك مع بوت Telegram" },
+    year: 2026,
+    domain: "avtodom",
+    signature: { en: "Oil-change log from every receipt", ru: "Масляная книжка из каждого чека", zh: "每张小票自动写入换油记录", tr: "Her fişten yağ değişim defteri", ar: "سجل تغيير الزيت من كل إيصال" },
+    metrics: [
+      { value: "1 670", label: { en: "automated tests, server and client", ru: "автотестов на сервере и клиенте", zh: "项服务端与客户端自动化测试", tr: "sunucu ve istemci otomatik testi", ar: "اختبارًا آليًا للخادم والعميل" } },
+      { value: "196", label: { en: "recorded architecture decisions", ru: "записанных архитектурных решений", zh: "条已记录的架构决策", tr: "kayıtlı mimari karar", ar: "قرارًا معماريًا موثقًا" } },
+      { value: "263", label: { en: "server API routes", ru: "маршрута серверного API", zh: "个服务端 API 路由", tr: "sunucu API rotası", ar: "مسارًا في واجهة الخادم" } },
+      { value: "95", label: { en: "event types in owner's Telegram feed", ru: "событий в телеграм-ленте владельца", zh: "类老板 Telegram 推送事件", tr: "sahibin Telegram akışında olay", ar: "نوع حدث في موجز المالك" } },
+    ],
+    cover: "/images/showcase/avtodom/cover.jpg",
+    heroScene: true,
+    admin: [
+      { src: "/images/showcase/avtodom/screen-2.jpg", title: { en: "Till: an oil change with the car's history", ru: "Касса: замена масла с историей машины", zh: "收银台：带车辆历史的换油单", tr: "Kasa: aracın geçmişiyle yağ değişimi", ar: "الصندوق: تغيير زيت مع سجل السيارة" } },
+      { src: "/images/showcase/avtodom/screen-3.jpg", title: { en: "Customer car's oil-change log", ru: "Масляная книжка машины клиента", zh: "客户车辆的换油记录本", tr: "Müşteri aracının yağ değişim defteri", ar: "سجل تغيير الزيت لسيارة العميل" } },
+      { src: "/images/showcase/avtodom/screen-4.jpg", title: { en: "Shift, cash accounts and staff earnings", ru: "Смена, кассы и заработок сотрудников", zh: "班次、资金账户与员工收入", tr: "Vardiya, kasalar ve personel kazancı", ar: "الوردية والصناديق وأرباح الموظفين" } },
+    ],
+    summary: { en: "An accounting system for an oil-change station with a motor-oil shop: till, warehouse, customers with an electronic oil-change log, staff pay and the owner's daily profit. It runs on the till PC, the warehouse laptop and the owner's phone, and the till keeps selling without internet.", ru: "Учётная система для точки замены масла и магазина автомасел: касса, склад, клиенты с электронной масляной книжкой, расчёт сотрудников и прибыль владельца за день. Работает на моноблоке кассы, ноутбуке склада и телефоне владельца, а касса продаёт и без интернета.", zh: "为换油站及机油商店打造的记账系统：收银、仓库、带电子换油记录本的客户档案、员工结算以及老板的每日利润。它运行在收银一体机、仓库笔记本和老板的手机上，断网时收银台也能继续销售。", tr: "Motor yağı mağazası olan bir yağ değişim noktası için muhasebe sistemi: kasa, depo, elektronik yağ değişim defterli müşteriler, personel hesabı ve sahibin günlük kârı. Kasadaki bilgisayarda, depo dizüstüsünde ve sahibin telefonunda çalışıyor; kasa internet olmadan da satış yapıyor.", ar: "نظام محاسبة لمحطة تغيير زيت مع متجر لزيوت المحركات: الصندوق والمستودع والعملاء مع سجل إلكتروني لتغيير الزيت وحساب أجور الموظفين وربح المالك اليومي. يعمل على حاسوب الصندوق وحاسوب المستودع المحمول وهاتف المالك، ويواصل الصندوق البيع دون إنترنت." },
+    review: {
+      en: [
+        "The server is Rust (Axum, SQLx) on PostgreSQL 16; one React PWA serves the till, the warehouse and the owner's phone. Money is stored in whole tyiyn and oil in millilitres, so a canister and oil poured by the litre come from the same stock, and stock and cost are always the sum of movements. Around the core sit a Telegram bot, WhatsApp messages, Optima bank QR payments, supplier-invoice photo parsing and print stations for receipts, oil-log stickers and labels.",
+        "Posted documents cannot be edited or deleted: 48 tables are protected by database triggers, a mistake is fixed with a reversal, and repeating an operation with the same op_id never creates a duplicate. The till first puts every receipt into a queue on the device, so sales do not stop when the connection drops. The rules live in 40 specifications and 196 ADRs and are checked by about 1,700 automated tests, 250 of them end-to-end in the browser.",
+      ],
+      ru: [
+        "Сервер на Rust (Axum, SQLx) с PostgreSQL 16, одно PWA на React работает на кассе, на складе и в телефоне владельца. Деньги хранятся в целых тыйынах, масло — в миллилитрах: канистра и розлив списываются с одного остатка, а остаток и себестоимость всегда равны сумме движений. Вокруг ядра — Телеграм-бот, сообщения в WhatsApp, QR-оплата банка Optima, разбор фото накладных и станции печати чеков, наклеек книжки и этикеток.",
+        "Проведённый документ нельзя изменить или удалить: 48 таблиц защищены триггерами базы, ошибку исправляет сторно, а повтор операции с тем же op_id не создаёт дубль. Касса сначала кладёт чек в очередь на устройстве, поэтому продажа не останавливается при обрыве связи. Правила записаны в 40 спецификациях и 196 ADR, их проверяют около 1 700 автотестов, из них 250 — сквозные в браузере.",
+      ],
+      zh: [
+        "服务端采用 Rust（Axum、SQLx）和 PostgreSQL 16，同一个 React PWA 同时用于收银台、仓库和老板的手机。金额以整数提因（tyiyn）存储，机油以毫升计量：整桶销售和按升散装从同一库存扣减，库存和成本始终等于各项变动之和。核心之外还有 Telegram 机器人、WhatsApp 消息、Optima 银行二维码收款、供应商发票照片识别，以及打印小票、换油记录贴纸和商品标签的打印站。",
+        "已过账的单据无法修改或删除：48 张数据表由数据库触发器保护，错误通过冲销单据更正，使用相同 op_id 重复提交的操作不会产生重复记录。收银台先把每张小票放进设备上的队列，因此断网时销售也不会中断。业务规则写在 40 份规格说明和 196 条 ADR 中，并由约 1,700 个自动化测试校验，其中 250 个是浏览器端到端测试。",
+      ],
+      tr: [
+        "Sunucu Rust (Axum, SQLx) ve PostgreSQL 16 üzerinde; tek bir React PWA kasada, depoda ve sahibin telefonunda çalışıyor. Para tam tyiyn, yağ mililitre olarak saklanıyor: bidonla ve litreyle açık satış aynı stoktan düşüyor, stok ve maliyet her zaman hareketlerin toplamına eşit. Çekirdeğin etrafında bir Telegram botu, WhatsApp mesajları, Optima bankası QR ödemeleri, tedarikçi faturası fotoğraflarının okunması ve fiş, defter etiketi ve ürün etiketi baskı istasyonları yer alıyor.",
+        "Kaydedilmiş bir belge değiştirilemiyor ve silinemiyor: 48 tablo veritabanı tetikleyicileriyle korunuyor, hata ters kayıtla düzeltiliyor ve aynı op_id ile tekrarlanan işlem kopya oluşturmuyor. Kasa her fişi önce cihazdaki bir kuyruğa koyuyor; bu yüzden bağlantı kopsa da satış durmuyor. Kurallar 40 spesifikasyon ve 196 ADR'de yazılı; bunları 250'si tarayıcıda uçtan uca olmak üzere yaklaşık 1.700 otomatik test denetliyor.",
+      ],
+      ar: [
+        "الخادم مكتوب بلغة Rust (Axum وSQLx) مع PostgreSQL 16، وتطبيق PWA واحد بـ React يعمل على الصندوق وفي المستودع وعلى هاتف المالك. تُخزَّن الأموال بوحدات التيين الصحيحة والزيت بالمليلتر: فالعبوة والزيت المسكوب باللتر يُخصمان من المخزون نفسه، ويساوي المخزون والتكلفة دائمًا مجموع الحركات. وحول النواة بوت Telegram ورسائل WhatsApp ومدفوعات QR من بنك Optima وقراءة صور فواتير الموردين ومحطات لطباعة الإيصالات وملصقات السجل وبطاقات الأسعار.",
+        "لا يمكن تعديل المستند المُرحَّل أو حذفه: 48 جدولًا محمية بمشغّلات قاعدة البيانات، ويُصحَّح الخطأ بقيد عكسي، ولا يُنشئ تكرار العملية بالمعرّف op_id نفسه نسخة مكررة. يضع الصندوق كل إيصال أولًا في طابور على الجهاز، لذلك لا يتوقف البيع عند انقطاع الاتصال. القواعد مدوّنة في 40 مواصفة و196 قرارًا معماريًا (ADR)، ويتحقق منها نحو 1,700 اختبار آلي، منها 250 اختبارًا شاملًا في المتصفح.",
+      ],
+    },
+    features: [
+      { title: { en: "Oil-change till", ru: "Касса для замены масла", zh: "换油收银台", tr: "Yağ değişimi kasası", ar: "صندوق لتغيير الزيت" }, text: { en: "Canister or oil by the litre, service type, master and his rate, customer, car and mileage in one receipt. The barcode scanner works as a keyboard, a second screen shows the bank QR and takes the customer's signature for a debt, and receipts queue on the device when offline.", ru: "Канистра или розлив в литрах, вид замены, мастер и его ставка, клиент, машина и пробег — в одном чеке. Сканер штрихкодов работает как клавиатура, второй экран показывает QR банка и принимает подпись клиента за долг, без сети чеки копятся в очереди устройства.", zh: "整桶或按升散装、服务类型、技师及其提成、客户、车辆和里程，全部在一张小票中完成。扫码枪以键盘模式工作，第二块屏幕显示银行二维码并采集客户的赊账签名，断网时小票在设备队列中排队。", tr: "Bidon ya da litreyle açık yağ, hizmet türü, usta ve ücreti, müşteri, araç ve kilometre tek fişte. Barkod okuyucu klavye gibi çalışıyor, ikinci ekran banka QR'ını gösterip borç için müşteri imzasını alıyor, internet yokken fişler cihazdaki kuyrukta bekliyor.", ar: "العبوة أو الزيت باللتر ونوع الخدمة والفني وأجره والعميل والسيارة وعدد الكيلومترات في إيصال واحد. يعمل ماسح الباركود كلوحة مفاتيح، وتعرض الشاشة الثانية رمز QR البنكي وتأخذ توقيع العميل على الدين، ومن دون اتصال تنتظر الإيصالات في طابور الجهاز." } },
+      { title: { en: "Electronic oil-change log", ru: "Электронная масляная книжка", zh: "电子换油记录本", tr: "Elektronik yağ değişim defteri", ar: "سجل إلكتروني لتغيير الزيت" }, text: { en: "Every service receipt writes the oil, filters, mileage and next change into the car's log; old paper records can be added by hand. The log prints as stickers on the till printer, and customers see their cars, reminders and loyalty points in the Telegram bot.", ru: "Каждый чек «в сервис» записывает в книжку машины масло, фильтры, пробег и следующую замену; старые записи из тетради вносятся вручную. Книжка печатается наклейками на чековом принтере, а клиент видит свои машины, напоминания и баллы в Телеграм-боте.", zh: "每张维修小票都会把机油、滤芯、里程和下次更换写入车辆记录本；旧的纸质记录可手动补录。记录本可在小票打印机上打印成贴纸，客户在 Telegram 机器人中查看自己的车辆、提醒和积分。", tr: "Her servis fişi yağı, filtreleri, kilometreyi ve bir sonraki değişimi aracın defterine yazıyor; eski kâğıt kayıtlar elle ekleniyor. Defter fiş yazıcısında etiket olarak basılıyor, müşteri araçlarını, hatırlatmaları ve puanlarını Telegram botunda görüyor.", ar: "كل إيصال خدمة يكتب في سجل السيارة الزيت والفلاتر وعدد الكيلومترات والتغيير التالي، وتُضاف السجلات الورقية القديمة يدويًا. يُطبع السجل ملصقات على طابعة الإيصالات، ويرى العميل سياراته والتذكيرات ونقاط الولاء في بوت Telegram." } },
+      { title: { en: "Owner's money and profit", ru: "Деньги и прибыль владельца", zh: "老板的资金与利润", tr: "Sahibin parası ve kârı", ar: "أموال المالك وأرباحه" }, text: { en: "Shifts and cash accounts, master and cashier pay, expenses, debts and reconciliation acts, profit by day and period. Admins get 35 separate permissions and never receive cost or margin from the server; the owner gets a phone dashboard and a Telegram feed of 95 event types.", ru: "Смены и кассы, расчёт мастеров и кассиров, расходы, долги и акты сверки, прибыль за день и период. У администраторов 35 отдельных прав, себестоимость и маржу сервер им не отдаёт; владельцу — сводка на телефоне и лента из 95 видов событий в Телеграме.", zh: "班次与资金账户、技师和收银员结算、费用、欠款与对账单、按日和按期间的利润。管理员有 35 项独立权限，服务端从不向其返回成本和毛利；老板则有手机端概览和包含 95 类事件的 Telegram 推送。", tr: "Vardiyalar ve kasalar, usta ve kasiyer ödemeleri, giderler, borçlar ve mutabakat tutanakları, günlük ve dönemlik kâr. Yöneticilerin 35 ayrı yetkisi var ve sunucu onlara maliyet ve marj göndermiyor; sahibe telefonda özet ve 95 olay türlü bir Telegram akışı.", ar: "الورديات والصناديق وأجور الفنيين وأمناء الصندوق والمصروفات والديون ومحاضر المطابقة والربح باليوم والفترة. للمسؤولين 35 صلاحية منفصلة ولا يرسل لهم الخادم التكلفة أو الهامش أبدًا، وللمالك لوحة على الهاتف وموجز Telegram بـ 95 نوعًا من الأحداث." } },
+    ],
+    tags: { en: ["Rust","PostgreSQL","React"], ru: ["Rust","PostgreSQL","React"], zh: ["Rust", "PostgreSQL", "React"], tr: ["Rust", "PostgreSQL", "React"], ar: ["Rust", "PostgreSQL", "React"] },
+    stack: ["Rust","PostgreSQL 16","React 19","Axum","SQLx","TypeScript","Vite","Tailwind CSS 4","PWA (Workbox, IndexedDB)","Playwright","Telegram Bot API","WhatsApp Cloud API","Docker Compose","Caddy"],
+    palette: ["#F1F5F9","#0F172A","#0284C7","#047857"],
+  },
+  {
+    slug: "anarmarket",
+    signature: { en: "Invoice photo → Microinvest request", ru: "Фото накладной → заявка в Microinvest", zh: "发票照片 → Microinvest 采购单", tr: "Fatura fotoğrafı → Microinvest talebi", ar: "صورة الفاتورة ← طلب في Microinvest" },
+    stage: "radial-gradient(circle at 20% 22%, #F2C14E 0%, transparent 38%), radial-gradient(circle at 84% 80%, #7BB661 0%, transparent 42%), radial-gradient(circle at 82% 14%, #E8553A 0%, transparent 30%), linear-gradient(135deg, #3A0D14 0%, #6B1A26 55%, #A8323F 100%)",
+    decor: ["🥔", "🧅", "🥕", "🍅", "🥒", "🍋", "🥚", "🧈", "🌾", "🫒", "🧽", "🧻"],
+    title: { en: "AnarMarket", ru: "Анар Маркет", zh: "AnarMarket", tr: "AnarMarket", ar: "AnarMarket" },
+    client: { en: "A wholesale supplier of food and household goods for restaurants, cafés and private buyers in Bishkek", ru: "Оптовый поставщик продуктов и хозтоваров для ресторанов, кафе и частных покупателей в Бишкеке", zh: "比什凯克一家为餐厅、咖啡馆和个人买家供应食品与日用品的批发商", tr: "Bişkek'te restoranlara, kafelere ve bireysel alıcılara gıda ve ev ürünleri sağlayan bir toptancı", ar: "مورّد جملة للمواد الغذائية والسلع المنزلية للمطاعم والمقاهي والمشترين الأفراد في بيشكيك" },
+    status: "built",
+    category: "product",
+    sphere: { en: "Wholesale trade / HoReCa", ru: "Оптовая торговля / HoReCa", zh: "批发贸易 / 餐饮业", tr: "Toptan ticaret / HoReCa", ar: "تجارة الجملة / قطاع الضيافة" },
+    format: { en: "PWA storefront, staff panel and a Microinvest sync agent", ru: "PWA-витрина, панель сотрудников и агент связи с Microinvest", zh: "PWA 商城、员工后台与 Microinvest 同步代理", tr: "PWA vitrin, personel paneli ve Microinvest senkronizasyon ajanı", ar: "متجر PWA ولوحة للموظفين ووكيل مزامنة مع Microinvest" },
+    year: 2026,
+    domain: "anarmarket",
+    cover: "/images/showcase/anarmarket/cover.jpg",
+    heroScene: true,
+    phones: ["/images/showcase/anarmarket/phone-1.jpg", "/images/showcase/anarmarket/phone-2.jpg", "/images/showcase/anarmarket/phone-3.jpg"],
+    admin: [
+      { src: "/images/showcase/anarmarket/admin-1.jpg", title: { en: "Order: weight from the Microinvest sale, overweight flagged", ru: "Заказ: вес из продажи Microinvest и перевес", zh: "订单：重量取自 Microinvest 销售单，超重已标记", tr: "Sipariş: ağırlık Microinvest satışından, fazla ağırlık işaretli", ar: "الطلب: الوزن من بيع Microinvest مع تمييز الوزن الزائد" } },
+      { src: "/images/showcase/anarmarket/admin-2.jpg", title: { en: "Supplier invoice photo parsed by AI", ru: "Фото накладной поставщика, разобранное ИИ", zh: "AI 解析的供应商发票照片", tr: "Yapay zekânın okuduğu tedarikçi faturası fotoğrafı", ar: "صورة فاتورة المورّد بعد تحليلها بالذكاء الاصطناعي" } },
+      { src: "/images/showcase/anarmarket/admin-3.jpg", title: { en: "Customer balance: payment terms and overdue invoices", ru: "Расчёты покупателя: отсрочка и просрочка", zh: "客户结算：账期与逾期发票", tr: "Müşteri hesabı: vade ve gecikmiş faturalar", ar: "حساب العميل: مهلة السداد والفواتير المتأخرة" } },
+    ],
+    metrics: [
+      { value: "22", label: { en: "staff panel sections", ru: "раздела в панели", zh: "个后台功能模块", tr: "panel bölümü", ar: "قسمًا في لوحة الموظفين" } },
+      { value: "51", label: { en: "data models", ru: "модель данных", zh: "个数据模型", tr: "veri modeli", ar: "نموذج بيانات" } },
+      { value: "196", label: { en: "API routes", ru: "маршрутов API", zh: "个 API 路由", tr: "API rotası", ar: "مسارًا في API" } },
+      { value: "380", label: { en: "automated tests", ru: "автотестов", zh: "项自动化测试", tr: "otomatik test", ar: "اختبارًا آليًا" } },
+    ],
+    summary: { en: "An order intake system for a wholesale supplier of food and household goods: a PWA storefront for restaurants and private buyers, a staff panel, a courier app and a WhatsApp/Telegram bot. Orders reach the client's Microinvest accounting system through an agent, and the final amount follows the actual weight from the warehouse.", ru: "Система приёма заказов для оптового поставщика продуктов и хозтоваров: PWA-витрина для заведений и частных покупателей, панель сотрудников, приложение курьера и бот в WhatsApp и Telegram. Заказы уходят в учётную систему клиента Microinvest через агента, а итог считается по фактическому весу со склада.", zh: "为食品与日用品批发商打造的订单接收系统：面向餐厅和个人买家的 PWA 商城、员工后台、骑手应用以及 WhatsApp/Telegram 机器人。订单通过代理写入客户的 Microinvest 记账系统，最终金额按仓库实际称重计算。", tr: "Gıda ve ev ürünleri toptancısı için bir sipariş alma sistemi: restoranlar ve bireysel alıcılar için PWA vitrin, personel paneli, kurye uygulaması ve WhatsApp/Telegram botu. Siparişler bir ajan aracılığıyla müşterinin Microinvest muhasebe sistemine gidiyor, nihai tutar depodaki gerçek ağırlığa göre hesaplanıyor.", ar: "نظام لاستقبال الطلبات لمورّد جملة للمواد الغذائية والسلع المنزلية: متجر PWA للمطاعم والمشترين الأفراد، ولوحة للموظفين، وتطبيق للمندوب، وبوت في WhatsApp وTelegram. تصل الطلبات إلى نظام المحاسبة Microinvest لدى العميل عبر وكيل، ويُحسب المبلغ النهائي حسب الوزن الفعلي في المستودع." },
+    review: {
+      en: [
+        "A TypeScript monorepo: rules for money, discounts, debts and weight tolerance live in a separate tested package, the server is NestJS with PostgreSQL, and the storefront, staff panel and courier app are one React PWA. An agent on the client's PC connects out to the server over a versioned protocol and opens no inbound ports; it writes each order into Microinvest as a customer order per department. Microinvest stays the source of truth for goods, stock and weight, while buyers, orders and debts are kept on our side.",
+        "Weight was the hardest part: the warehouse never packs exactly what was ordered, so the total comes from the Microinvest sale, the invoice is recalculated and overweight beyond tolerance is flagged to the manager. Debts follow each buyer's payment terms, with reconciliation acts and opening balances carried over from Microinvest. AI parses lists from WhatsApp and Telegram and photos of supplier invoices, products are matched by code, and if the model is unavailable the list is parsed by rules.",
+      ],
+      ru: [
+        "Монорепозиторий на TypeScript: правила денег, скидок, долгов и допуска по весу вынесены в отдельный пакет с тестами, сервер — NestJS с PostgreSQL, а витрина, панель и приложение курьера — одна PWA на React. Агент на компьютере клиента сам ходит на сервер по версионированному протоколу и не открывает входящих портов, а каждый заказ записывает в Microinvest «Клиентским заказом» по отделам. Microinvest остаётся источником правды для товаров, остатков и веса, а покупатели, заказы и долги живут у нас.",
+        "Сложнее всего — вес: склад кладёт не ровно заказанное, поэтому итог берётся из продажи Microinvest, накладная пересчитывается, а перевес сверх допуска отмечается менеджеру. Долги считаются по отсрочке каждого покупателя, с актом сверки и переносом сальдо из Microinvest. ИИ разбирает списки из WhatsApp и Telegram и фото накладных, товар подбирает код, а если модель недоступна, список разбирается правилами.",
+      ],
+      zh: [
+        "项目是一个 TypeScript monorepo：金额、折扣、欠款和称重容差的规则放在独立且有测试的包中，服务端为 NestJS + PostgreSQL，商城、员工后台和骑手应用是同一个 React PWA。客户电脑上的代理通过带版本号的协议主动连接服务器，不开放任何入站端口，并把每个订单按部门写入 Microinvest 的“客户订单”。商品、库存和重量以 Microinvest 为准，买家、订单和欠款则保存在我们这边。",
+        "最难的是重量：仓库不会按订单精确装货，因此最终金额取自 Microinvest 的销售单，发票随之重算，超出容差的超重会提示给经理。欠款按每位买家的账期计算，支持对账单，并可从 Microinvest 迁移期初余额。AI 解析来自 WhatsApp 和 Telegram 的清单以及供应商发票照片，商品由代码匹配；模型不可用时，清单由规则解析。",
+      ],
+      tr: [
+        "TypeScript monorepo: para, indirim, borç ve ağırlık toleransı kuralları testli ayrı bir pakette, sunucu PostgreSQL ile NestJS, vitrin, personel paneli ve kurye uygulaması ise tek bir React PWA. Müşterinin bilgisayarındaki ajan, sürümlü bir protokolle sunucuya kendisi bağlanıyor, gelen port açmıyor ve her siparişi Microinvest'e departman bazında müşteri siparişi olarak yazıyor. Ürünler, stok ve ağırlık için doğruluk kaynağı Microinvest; alıcılar, siparişler ve borçlar ise bizde tutuluyor.",
+        "En zor kısım ağırlıktı: depo hiçbir zaman tam sipariş edilen miktarı koymuyor, bu yüzden toplam Microinvest satışından alınıyor, fatura yeniden hesaplanıyor ve toleransı aşan fazla ağırlık yöneticiye işaretleniyor. Borçlar her alıcının vadesine göre hesaplanıyor; mutabakat belgeleri ve Microinvest'ten aktarılan açılış bakiyeleri var. Yapay zekâ WhatsApp ve Telegram'dan gelen listeleri ve tedarikçi faturası fotoğraflarını okuyor, ürünleri kod eşleştiriyor; model erişilemezse liste kurallarla ayrıştırılıyor.",
+      ],
+      ar: [
+        "المشروع مستودع موحّد بلغة TypeScript: قواعد المبالغ والخصومات والديون وهامش الوزن في حزمة مستقلة مغطاة بالاختبارات، والخادم NestJS مع PostgreSQL، أما المتجر ولوحة الموظفين وتطبيق المندوب فهي تطبيق PWA واحد بـ React. يتصل وكيل على حاسوب العميل بالخادم بنفسه عبر بروتوكول بإصدارات ولا يفتح أي منافذ واردة، ويسجّل كل طلب في Microinvest كـ«طلب عميل» لكل قسم. يبقى Microinvest المرجع للسلع والمخزون والوزن، بينما يُحفظ المشترون والطلبات والديون لدينا.",
+        "أصعب ما في المشروع هو الوزن: المستودع لا يجهّز الكمية المطلوبة بالضبط، لذلك يؤخذ المجموع من عملية البيع في Microinvest، وتُعاد حسبة الفاتورة، ويُنبَّه المدير إلى الوزن الزائد عن الهامش. تُحسب الديون حسب مهلة السداد لكل مشترٍ، مع كشوف مطابقة وأرصدة افتتاحية منقولة من Microinvest. يحلّل الذكاء الاصطناعي القوائم الواردة من WhatsApp وTelegram وصور فواتير الموردين، ويطابق الكود السلع، وإذا تعذّر الوصول إلى النموذج تُحلَّل القائمة بالقواعد.",
+      ],
+    },
+    features: [
+      { title: { en: "Per-department orders in Microinvest", ru: "Заказ по отделам в Microinvest", zh: "按部门写入 Microinvest 的订单", tr: "Microinvest'te departman bazlı sipariş", ar: "طلبات حسب القسم في Microinvest" }, text: { en: "An order is split by department database; the agent writes a customer order for each and brings back the weight from the sale, and overweight beyond tolerance is shown to the manager.", ru: "Заказ делится по отделам-базам, агент пишет по каждому «Клиентский заказ» и приносит вес из продажи, а перевес сверх допуска виден менеджеру.", zh: "订单按部门数据库拆分，代理为每个部门写入客户订单并带回销售单中的重量，超出容差的超重会显示给经理。", tr: "Sipariş departman veritabanlarına bölünüyor; ajan her biri için müşteri siparişi yazıp satıştaki ağırlığı geri getiriyor, toleransı aşan fazla ağırlık yöneticiye gösteriliyor.", ar: "يُقسَّم الطلب حسب قاعدة بيانات كل قسم، ويكتب الوكيل لكلٍّ منها «طلب عميل» ويعيد الوزن من عملية البيع، ويظهر للمدير الوزن الزائد عن الهامش." } },
+      { title: { en: "AI parsing of lists and invoices", ru: "ИИ-разбор списков и накладных", zh: "AI 解析清单与发票", tr: "Listelerin ve faturaların yapay zekâyla okunması", ar: "تحليل القوائم والفواتير بالذكاء الاصطناعي" }, text: { en: "A list from a messenger becomes a draft order and an invoice photo becomes a supplier request; products are matched by code, and rules take over when the AI fails.", ru: "Список из мессенджера становится черновиком заказа, фото накладной — заявкой поставщику; товар подбирает код, а при сбое ИИ список разбирают правила.", zh: "来自即时通讯的清单变成订单草稿，发票照片变成供应商采购单；商品由代码匹配，AI 失败时由规则接手解析。", tr: "Mesajlaşma uygulamasından gelen liste sipariş taslağına, fatura fotoğrafı tedarikçi talebine dönüşüyor; ürünleri kod eşleştiriyor, yapay zekâ başarısız olursa kurallar devreye giriyor.", ar: "تتحول القائمة الواردة من تطبيق المراسلة إلى مسودة طلب، وصورة الفاتورة إلى طلب للمورّد؛ ويطابق الكود السلع، وعند تعثّر الذكاء الاصطناعي تتولى القواعد التحليل." } },
+      { title: { en: "Debts, payment terms and reconciliation", ru: "Долги, отсрочка и акты сверки", zh: "欠款、账期与对账", tr: "Borçlar, vadeler ve mutabakat", ar: "الديون ومهل السداد والمطابقة" }, text: { en: "Each buyer has their own payment term and discount; the panel shows overdue invoices, takes partial payments and exports reconciliation acts to PDF and Excel.", ru: "У каждого покупателя своя отсрочка и скидка; панель показывает просроченные накладные, принимает оплаты частями и выгружает акт сверки в PDF и Excel.", zh: "每位买家有各自的账期和折扣；后台显示逾期发票，接受分期付款，并可将对账单导出为 PDF 和 Excel。", tr: "Her alıcının kendi vadesi ve indirimi var; panel gecikmiş faturaları gösteriyor, kısmi ödemeleri kabul ediyor ve mutabakat belgelerini PDF ve Excel olarak dışa aktarıyor.", ar: "لكل مشترٍ مهلة سداد وخصم خاصان به؛ وتعرض اللوحة الفواتير المتأخرة، وتقبل الدفعات الجزئية، وتصدّر كشوف المطابقة بصيغتي PDF وExcel." } },
+    ],
+    tags: { en: ["NestJS", "React 19", "PostgreSQL"], ru: ["NestJS", "React 19", "PostgreSQL"], zh: ["NestJS", "React 19", "PostgreSQL"], tr: ["NestJS", "React 19", "PostgreSQL"], ar: ["NestJS", "React 19", "PostgreSQL"] },
+    stack: ["NestJS 11", "React 19", "PostgreSQL (Neon)", "Prisma 7", "TypeScript", "pnpm monorepo", "Vite 6", "PWA (Workbox)", "Web Push (VAPID)", "zod 4", "Leaflet / OpenStreetMap", "ExcelJS", "PDFKit", "Node SEA agent (.exe)", "MS SQL (Microinvest)", "OpenRouter + Gemini", "WhatsApp Cloud API", "Telegram Bot API", "Vitest", "Jest", "Vercel"],
+    palette: ["#F7F6F2", "#2A1A1D", "#6B1A26", "#4F7A2F"],
+    fonts: "Lora / Manrope",
   },
   {
     slug: "shoestreet",

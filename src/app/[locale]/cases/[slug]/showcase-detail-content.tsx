@@ -1,12 +1,16 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useRef, useState } from "react";
+import { motion, useInView } from "framer-motion";
+import { CLIENT_SCENES } from "@/components/cases-catalog/client-scenes";
+import { useTouchDevice } from "@/lib/hooks";
 import { Link as NextLink } from "@/i18n/navigation";
 import { pick } from "@/lib/i18n-text";
 import { useLanguage } from "@/lib/language-context";
 import { useReducedMotion } from "@/lib/hooks";
 import { AnimatedItem, Section } from "@/components/ui/section";
 import { CaseBottomCTA } from "@/components/case-bottom-cta";
+import { CountUp } from "@/components/motion/kit";
 import { ShowcaseViewer } from "@/components/cases-catalog/showcase-viewer";
 import { AdminShowcase } from "@/components/cases-catalog/admin-showcase";
 import { CATEGORY_LABEL, pad } from "@/components/cases-catalog/labels";
@@ -14,6 +18,24 @@ import type { CatalogEntry } from "@/lib/catalog";
 import type { ShowcaseItem } from "@/lib/showcase-data";
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
+
+/** The card's animated scene, large: plays its hover state under the mouse, or while on screen on touch devices */
+function SceneStage({ Scene }: { Scene: (p: { active: boolean }) => React.ReactElement }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { amount: 0.6 });
+  const touch = useTouchDevice();
+  const [hover, setHover] = useState(false);
+  return (
+    <div
+      ref={ref}
+      onPointerEnter={(e) => e.pointerType === "mouse" && setHover(true)}
+      onPointerLeave={() => setHover(false)}
+      className="relative aspect-[16/10] overflow-hidden rounded-2xl border border-border bg-bg-tertiary shadow-[0_40px_80px_-40px_rgba(10,10,10,0.35)]"
+    >
+      <Scene active={hover || (touch === true && inView)} />
+    </div>
+  );
+}
 
 export function ShowcaseDetailContent({
   item,
@@ -31,6 +53,7 @@ export function ShowcaseDetailContent({
   const reduced = useReducedMotion();
 
   const external = item.url && /^https?:/.test(item.url);
+  const Scene = item.heroScene ? CLIENT_SCENES[item.slug] : undefined;
 
   const meta: [string, string][] = [
     [pick({ en: "Industry", ru: "Сфера", zh: "行业", tr: "Sektör", ar: "القطاع" }, language), item.sphere[language]],
@@ -108,6 +131,30 @@ export function ShowcaseDetailContent({
               </a>
             )}
           </div>
+
+          {item.metrics?.length ? (
+            <ul className="mt-8 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-border bg-border lg:grid-cols-4">
+              {item.metrics.map((m, i) => (
+                <motion.li
+                  key={m.label.en}
+                  initial={reduced ? false : { opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.7, delay: 0.35 + i * 0.08, ease: EASE }}
+                  className="group relative bg-bg-primary p-5 md:p-6"
+                >
+                  <span
+                    aria-hidden="true"
+                    className="absolute inset-x-0 top-0 h-[2px] origin-left scale-x-0 transition-transform duration-700 group-hover:scale-x-100"
+                    style={{ background: `linear-gradient(90deg, ${item.palette[2]}, ${item.palette[3]})` }}
+                  />
+                  <p className="font-brand text-4xl font-semibold tabular-nums leading-none tracking-[-0.03em] text-text-primary md:text-5xl">
+                    <CountUp value={m.value} duration={1.8} />
+                  </p>
+                  <p className="mt-3 text-body-sm text-text-secondary">{m.label[language]}</p>
+                </motion.li>
+              ))}
+            </ul>
+          ) : null}
         </div>
       </section>
 
@@ -118,7 +165,7 @@ export function ShowcaseDetailContent({
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2, ease: EASE }}
           >
-            <ShowcaseViewer item={item} />
+            {Scene ? <SceneStage Scene={Scene} /> : <ShowcaseViewer item={item} />}
           </motion.div>
         </div>
       </section>
