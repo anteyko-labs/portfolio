@@ -54,6 +54,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     entries("/about", "monthly", 0.8),
     entries("/contact", "monthly", 0.9),
     entries("/incubator", "monthly", 0.6, { locales: ["en", "ru"] }),
+    entries("/incubator/program", "monthly", 0.5, { locales: ["en", "ru"] }),
     entries("/privacy", "yearly", 0.3, { locales: ["en", "ru"] }),
     entries("/terms", "yearly", 0.3, { locales: ["en", "ru"] }),
   ];
