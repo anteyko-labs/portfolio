@@ -19,23 +19,57 @@ const SERVICES = [
   { id: 2, y: 180 },
 ];
 
-export function ArchitectureScene({ tx }: { tx: Tx }) {
-  const { ref, tick, run } = useLoop<HTMLDivElement>(1300);
+/** Calls onSolve once, the first time `solved` turns true */
+function useSolved(solved: boolean, onSolve?: () => void) {
+  const fired = useRef(false);
+  useEffect(() => {
+    if (solved && !fired.current) {
+      fired.current = true;
+      onSolve?.();
+    }
+  }, [solved, onSolve]);
+}
+
+/** The mission line on top of every scene; turns green when it is done */
+function Mission({ text, done, tx }: { text: string; done: boolean; tx: Tx }) {
+  return (
+    <motion.div
+      animate={{ borderColor: done ? "rgba(52,211,153,0.55)" : "rgba(129,140,248,0.35)", backgroundColor: done ? "rgba(52,211,153,0.10)" : "rgba(99,102,241,0.08)" }}
+      className="mb-4 flex items-start gap-2.5 rounded-xl border px-3 py-2.5 text-body-sm"
+    >
+      <span className={`mt-px shrink-0 font-mono text-[11px] uppercase tracking-[0.14em] ${done ? "text-emerald-300" : "text-indigo-300"}`}>
+        {done ? "✓ " + tx({ en: "done", ru: "готово" }) : tx({ en: "mission", ru: "задача" })}
+      </span>
+      <span className={done ? "text-emerald-100" : "text-white/85"}>{text}</span>
+    </motion.div>
+  );
+}
+
+export function ArchitectureScene({ tx, onSolve }: { tx: Tx; onSolve?: () => void }) {
+  const [spike, setSpike] = useState(false);
+  const { ref, tick, run } = useLoop<HTMLDivElement>(spike ? 520 : 1300);
   const [down, setDown] = useState<number[]>([]);
   const [cache, setCache] = useState(false);
   const up = SERVICES.filter((s) => !down.includes(s.id));
   const outage = up.length === 0;
-  const latency = outage ? null : Math.round((cache ? 38 : 120) * (3 / up.length) ** 0.7);
+  const latency = outage ? null : Math.round((cache ? 38 : 120) * (3 / up.length) ** 0.7 * (spike ? 2 : 1));
   const target = up.length ? up[tick % up.length] : null;
   const toggle = (id: number) => setDown((d) => (d.includes(id) ? d.filter((x) => x !== id) : [...d, id]));
+  const solved = spike && down.length > 0 && latency !== null && latency < 150;
+  useSolved(solved, onSolve);
 
   return (
     <div ref={ref} className="rounded-2xl border border-white/10 bg-white/[0.03] p-4 sm:p-5">
+      <Mission
+        tx={tx}
+        done={solved}
+        text={tx({ en: "Traffic spike and a dead server at once. Keep p95 under 150 ms.", ru: "Наплыв трафика и упавший сервер одновременно. Удержите p95 ниже 150 мс." })}
+      />
       <div className="mb-3 flex flex-wrap items-center justify-between gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-white/50">
         <span>{tx({ en: "Click a service to take it down", ru: "Нажмите на сервис, чтобы «уронить» его" })}</span>
-        <span className={outage ? "text-rose-400" : latency! > 150 ? "text-amber-300" : "text-emerald-400"}>
+        <motion.span key={latency ?? -1} initial={{ scale: 1.25 }} animate={{ scale: 1 }} className={outage ? "text-rose-400" : latency! >= 150 ? "text-amber-300" : "text-emerald-400"}>
           {outage ? "503 · outage" : `p95 ${latency} ms`}
-        </span>
+        </motion.span>
       </div>
       <svg viewBox="0 0 400 220" className="h-auto w-full" role="img" aria-label={tx({ en: "Architecture diagram", ru: "Схема архитектуры" })}>
         <defs>
@@ -92,15 +126,20 @@ export function ArchitectureScene({ tx }: { tx: Tx }) {
         )}
       </svg>
       <div className="mt-3 flex flex-wrap gap-2">
+        <Chip active={spike} onClick={() => setSpike((s) => !s)}>{tx({ en: "🔥 Traffic spike ×2", ru: "🔥 Наплыв трафика ×2" })}</Chip>
         <Chip active={cache} onClick={() => setCache((c) => !c)}>{tx({ en: "Add a cache", ru: "Добавить кэш" })}</Chip>
-        <Chip onClick={() => { setDown([]); setCache(false); }}>{tx({ en: "Reset", ru: "Сбросить" })}</Chip>
+        <Chip onClick={() => { setDown([]); setCache(false); setSpike(false); }}>{tx({ en: "Reset", ru: "Сбросить" })}</Chip>
       </div>
       <p className="mt-3 text-body-sm text-white/55">
-        {outage
-          ? tx({ en: "All instances are down. In the trainer you will design so that this does not happen.", ru: "Упали все инстансы. В тренажёре вы спроектируете систему так, чтобы этого не случилось." })
-          : down.length
-            ? tx({ en: "The balancer routes around the failed node, latency grows. Try adding a cache.", ru: "Балансировщик обходит упавший узел, задержка растёт. Попробуйте добавить кэш." })
-            : tx({ en: "Requests are spread across three instances.", ru: "Запросы распределяются по трём инстансам." })}
+        {solved
+          ? tx({ en: "The cache took the reads off the database, so two servers hold double traffic. This is the trade-off you design for.", ru: "Кэш снял чтения с базы, и два сервера держат двойной трафик. Именно такие компромиссы вы будете проектировать." })
+          : outage
+            ? tx({ en: "All instances are down. In the trainer you will design so that this does not happen.", ru: "Упали все инстансы. В тренажёре вы спроектируете систему так, чтобы этого не случилось." })
+            : spike && latency! >= 150
+              ? tx({ en: "Too slow under load. What takes the reads off the database?", ru: "Под нагрузкой слишком медленно. Что снимет чтения с базы?" })
+              : down.length
+                ? tx({ en: "The balancer routes around the failed node, latency grows.", ru: "Балансировщик обходит упавший узел, задержка растёт." })
+                : tx({ en: "Requests are spread across three instances. Turn on the spike and drop a server.", ru: "Запросы распределяются по трём инстансам. Включите наплыв и уроните сервер." })}
       </p>
     </div>
   );
@@ -119,13 +158,17 @@ function Node({ x, y, w, label, accent }: { x: number; y: number; w: number; lab
 
 const STAGES = ["commit", "build", "test", "deploy", "monitor"] as const;
 
-export function DevOpsScene({ tx }: { tx: Tx }) {
+export function DevOpsScene({ tx, onSolve }: { tx: Tx; onSolve?: () => void }) {
   const reduced = useReducedMotion();
   const [stage, setStage] = useState(-1);
   const [broken, setBroken] = useState(false);
   const [failed, setFailed] = useState(false);
   const [log, setLog] = useState<string[]>([]);
+  const [shipped, setShipped] = useState(false);
   const timers = useRef<number[]>([]);
+  // Mission: ship once cleanly, then catch a broken test before it reaches prod
+  const solved = shipped && failed;
+  useSolved(solved, onSolve);
 
   useEffect(() => () => timers.current.forEach(clearTimeout), []);
 
@@ -155,6 +198,7 @@ export function DevOpsScene({ tx }: { tx: Tx }) {
           }
           setStage(i);
           setLog((l) => [...l, lines[s]]);
+          if (i === STAGES.length - 1) setShipped(true);
         }, i * step),
       );
     });
@@ -164,6 +208,15 @@ export function DevOpsScene({ tx }: { tx: Tx }) {
 
   return (
     <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4 sm:p-5">
+      <Mission
+        tx={tx}
+        done={solved}
+        text={
+          shipped || solved
+            ? tx({ en: "Step 2 of 2: break a test and make sure the bug never reaches production.", ru: "Шаг 2 из 2: сломайте тест и убедитесь, что баг не доедет до продакшена." })
+            : tx({ en: "Step 1 of 2: ship the release to production with git push.", ru: "Шаг 1 из 2: выкатите релиз в продакшен через git push." })
+        }
+      />
       <div className="flex items-center gap-1.5 sm:gap-2">
         {STAGES.map((s, i) => {
           const done = stage >= i && !(failed && i === stage);
@@ -230,16 +283,22 @@ const FEATURES = [
 ];
 const BUDGET_WEEKS = 4;
 
-export function MvpScene({ tx, lang }: { tx: Tx; lang: "en" | "ru" }) {
+export function MvpScene({ tx, lang, onSolve }: { tx: Tx; lang: "en" | "ru"; onSolve?: () => void }) {
   const [picked, setPicked] = useState<string[]>(FEATURES.map((f) => f.id));
   const weeks = useMemo(() => FEATURES.filter((f) => picked.includes(f.id)).reduce((s, f) => s + f.w, 0), [picked]);
   const over = weeks > BUDGET_WEEKS;
   const coreMissing = FEATURES.some((f) => f.core && !picked.includes(f.id));
   const ready = !over && !coreMissing;
   const toggle = (id: string) => setPicked((p) => (p.includes(id) ? p.filter((x) => x !== id) : [...p, id]));
+  useSolved(ready, onSolve);
 
   return (
     <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4 sm:p-5">
+      <Mission
+        tx={tx}
+        done={ready}
+        text={tx({ en: "The founder wants everything. Cut the scope to 4 weeks without breaking the product.", ru: "Основатель хочет всё и сразу. Урежьте объём до 4 недель и не сломайте продукт." })}
+      />
       <div className="mb-3 flex items-baseline justify-between font-mono text-[11px] uppercase tracking-[0.14em] text-white/50">
         <span>{tx({ en: "Fit the MVP into 4 weeks", ru: "Уложите MVP в 4 недели" })}</span>
         <span className={over ? "text-rose-400" : "text-emerald-400"}>
