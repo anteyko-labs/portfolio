@@ -1,16 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
 
 // Applications to the IT incubator (/incubator). Students, not clients, so they
-// skip the CRM and go to their own Telegram chat and, when it is set up, to a
-// Google Sheet through an Apps Script web app (docs/incubator.md).
+// skip the CRM and go to their own Telegram group and, when it is set up, to a
+// Google Sheet through an Apps Script web app.
 //
 // Env:
-//   INCUBATOR_TELEGRAM_CHAT_ID  chat for applications; falls back to TELEGRAM_CHAT_ID
+//   INCUBATOR_TELEGRAM_CHAT_ID  group for applications (default: the incubator group below)
 //   INCUBATOR_SHEET_URL         Apps Script /exec URL that appends a row (optional)
 //   TELEGRAM_BOT_TOKEN          the site's existing bot
+//   TELEGRAM_CHAT_ID            the site's lead chat, used only if the group is unreachable
+
+// Telegram group "tt" for incubator applications. A chat ID is not a secret;
+// it lives here because the Vercel env of this project is not editable by
+// everyone who maintains the page.
+const INCUBATOR_GROUP_ID = "-5413215005";
 
 const BOT = process.env.TELEGRAM_BOT_TOKEN || "";
-const CHAT = process.env.INCUBATOR_TELEGRAM_CHAT_ID || process.env.TELEGRAM_CHAT_ID || "";
+const CHAT = process.env.INCUBATOR_TELEGRAM_CHAT_ID || INCUBATOR_GROUP_ID;
+const FALLBACK_CHAT = process.env.TELEGRAM_CHAT_ID || "";
 const SHEET = process.env.INCUBATOR_SHEET_URL || "";
 
 const INTERESTS: Record<string, string> = {
@@ -66,19 +73,37 @@ function telegramText(a: IncubatorApplication): string {
   return L.join("\n");
 }
 
-async function toTelegram(text: string): Promise<boolean> {
-  if (!BOT || !CHAT) return false;
+type TgResult = { ok: boolean; migrateTo?: number; error?: string };
+
+async function send(chatId: string | number, text: string): Promise<TgResult> {
   try {
     const res = await fetch(`https://api.telegram.org/bot${BOT}/sendMessage`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ chat_id: CHAT, text, parse_mode: "HTML", disable_web_page_preview: true }),
+      body: JSON.stringify({ chat_id: chatId, text, parse_mode: "HTML", disable_web_page_preview: true }),
     });
-    return res.ok;
+    const data = await res.json().catch(() => ({}));
+    return { ok: res.ok && data.ok !== false, migrateTo: data.parameters?.migrate_to_chat_id, error: data.description };
   } catch (e) {
-    console.error("incubator: telegram error", e);
-    return false;
+    return { ok: false, error: String(e) };
   }
+}
+
+async function toTelegram(text: string): Promise<boolean> {
+  if (!BOT) return false;
+  let r = await send(CHAT, text);
+  // A basic group gets a new ID when Telegram upgrades it to a supergroup
+  if (!r.ok && r.migrateTo) {
+    console.warn(`incubator: group moved to ${r.migrateTo}, update INCUBATOR_GROUP_ID`);
+    r = await send(r.migrateTo, text);
+  }
+  if (r.ok) return true;
+  console.error("incubator: group unreachable:", r.error);
+  // Bot removed from the group or similar: keep the lead in the site's lead chat
+  if (FALLBACK_CHAT && FALLBACK_CHAT !== CHAT) {
+    return (await send(FALLBACK_CHAT, `⚠️ Группа инкубатора недоступна (${esc(r.error ?? "?")}), заявка пришла сюда.\n\n${text}`)).ok;
+  }
+  return false;
 }
 
 async function toSheet(a: IncubatorApplication): Promise<boolean> {
