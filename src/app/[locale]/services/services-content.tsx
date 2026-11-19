@@ -9,6 +9,7 @@ import { Link } from "@/components/ui/link";
 import { AuroraCta } from "@/components/services-anim/parts";
 import { ServicesHero } from "@/components/services-anim/services-hero";
 import { ServiceCabinet } from "@/components/services-anim/service-cabinet";
+import { TurnkeySection } from "@/components/services-anim/turnkey-kits";
 
 export function ServicesContent() {
   const { t, language } = useLanguage();
@@ -39,6 +40,8 @@ export function ServicesContent() {
           </Link>
         </p>
       </div>
+
+      <TurnkeySection />
 
       <Section background="primary" padding="lg">
         {/* CTA section */}
