@@ -10,6 +10,7 @@ import { ButtonLink, Link } from "@/components/ui/link";
 import { EASE, SpotlightCard } from "@/components/motion/kit";
 import { PKG_COLOR, PackageVisual } from "@/components/services-anim/package-visuals";
 import { AuroraCta, CheckList, ShineBadge } from "@/components/services-anim/parts";
+import { ServiceKits } from "@/components/services-anim/turnkey-kits";
 import { ServiceDeepDive } from "@/components/services-anim/service-deep-dive";
 import { FOOTER_SEARCH_LINKS } from "@/lib/footer-search-links";
 import { PACKAGE_SLUGS, type PackageId } from "@/lib/service-slugs";
@@ -146,6 +147,8 @@ export function ServiceDetailContent({ packageId, detail }: { packageId: string;
           </div>
         </AnimatedItem>
       </Section>
+
+      <ServiceKits packageId={pkg.id} />
 
       {detail ? <ServiceDeepDive id={pkg.id} detail={detail} /> : null}
 
