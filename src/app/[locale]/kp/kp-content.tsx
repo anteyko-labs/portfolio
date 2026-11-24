@@ -32,7 +32,7 @@ import {
   ClockIcon,
 } from './icons';
 
-const TELEGRAM_LINK = 'https://t.me/Anteyko_labs';
+const TELEGRAM_LINK = 'https://t.me/Anteyko_Labs_Orders_bot';
 
 function tgLink(message: string): string {
   return `${TELEGRAM_LINK}?text=${encodeURIComponent(message)}`;

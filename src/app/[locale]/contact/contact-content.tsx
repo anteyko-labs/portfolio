@@ -32,7 +32,7 @@ import { WHATSAPP_NUMBER, WHATSAPP_URL } from "@/lib/whatsapp";
 // link lives in the CalEmbed component (src/components/ui/cal-embed.tsx), the
 // WhatsApp number in src/lib/whatsapp.ts, shared with the floating button.
 const CONTACT_EMAIL = "labs@anteyko.com";
-const TELEGRAM_URL = "https://t.me/Anteyko_labs";
+const TELEGRAM_URL = "https://t.me/Anteyko_Labs_Orders_bot";
 // "996709927895" → "+996 709 927 895"
 const formatPhone = (n: string) => (n ? `+${n.slice(0, 3)} ${n.slice(3, 6)} ${n.slice(6, 9)} ${n.slice(9)}` : "");
 
