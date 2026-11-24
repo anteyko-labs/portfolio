@@ -256,7 +256,7 @@ export default async function LocaleLayout({
               email: "labs@anteyko.com",
               address: OFFICES.map((o) => ({ "@type": "PostalAddress", addressLocality: o.city.en, addressCountry: o.countryCode })),
               areaServed: "Worldwide",
-              sameAs: ["https://www.linkedin.com/company/anteyko", "https://github.com/anteyko-labs", "https://t.me/anteyko_labs"],
+              sameAs: ["https://www.linkedin.com/company/anteyko", "https://github.com/anteyko-labs", "https://t.me/Anteyko_Labs_Orders_bot"],
               contactPoint: {
                 "@type": "ContactPoint",
                 contactType: "sales",

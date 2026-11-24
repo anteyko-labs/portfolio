@@ -74,7 +74,7 @@ export function HomeCta() {
             </NextLink>
           </MagneticButton>
           <MagneticButton>
-            <a href="https://t.me/anteyko_labs" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-white/5 px-8 py-4 text-body-lg font-medium text-white backdrop-blur hover:bg-white/10">
+            <a href="https://t.me/Anteyko_Labs_Orders_bot" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-white/5 px-8 py-4 text-body-lg font-medium text-white backdrop-blur hover:bg-white/10">
               Telegram <span aria-hidden="true">↗</span>
             </a>
           </MagneticButton>

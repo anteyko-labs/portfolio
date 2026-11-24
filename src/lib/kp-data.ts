@@ -210,8 +210,8 @@ export const LEGAL_INFO = {
 // Контакты для клиента.
 export const CONTACT_INFO = {
   email: 'labs@anteyko.com',
-  telegram: '@Anteyko_labs',
-  telegramUrl: 'https://t.me/Anteyko_labs',
+  telegram: '@Anteyko_Labs_Orders_bot',
+  telegramUrl: 'https://t.me/Anteyko_Labs_Orders_bot',
   website: 'anteyko.com',
   websiteUrl: 'https://anteyko.com',
 };

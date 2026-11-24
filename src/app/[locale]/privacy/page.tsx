@@ -5,7 +5,7 @@ import { pick, type Language } from "@/lib/i18n-text";
 import { privacyCopy, type Block } from "./privacy-content";
 
 const EMAIL = "labs@anteyko.com";
-const TELEGRAM = "https://t.me/Anteyko_labs";
+const TELEGRAM = "https://t.me/Anteyko_Labs_Orders_bot";
 const LINK = "text-accent-primary hover:text-accent-secondary";
 
 export async function generateMetadata({
@@ -42,7 +42,7 @@ function withLinks(text: string) {
           target="_blank"
           rel="noopener noreferrer"
         >
-          @Anteyko_labs
+          @Anteyko_Labs_Orders_bot
         </a>
       );
     }
